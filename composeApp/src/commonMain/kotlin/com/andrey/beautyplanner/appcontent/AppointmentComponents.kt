@@ -14,8 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
@@ -198,12 +202,15 @@ fun AppointmentCard(
                 ) {
                     Text(
                         text = appt.clientName,
-                        fontSize = (15 * fontScale).sp,
+                        fontSize = (17 * fontScale).sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = MaterialTheme.colors.onSurface.copy(alpha = 1f)
                     )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = serviceDisplay,
                         fontSize = (13 * fontScale).sp,
@@ -257,7 +264,9 @@ fun AppointmentDetailsDialog(
 
     val serviceDisplay = apptServiceDisplay(appt)
     val priceText = appt.price.trim().let { p -> if (p.isBlank()) "" else "$p €" }
-    val dateTimeText = "${ddMMyyyy(appt.dateString)} $startHm–$endHm"
+
+    val dateTextColor = MaterialTheme.colors.primary.copy(alpha = 0.95f)
+    val timeTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.72f)
 
     val editTransferEnabled = status != LiveStatusKey.DONE
 
@@ -277,19 +286,40 @@ fun AppointmentDetailsDialog(
                     Text(
                         text = appt.clientName,
                         fontWeight = FontWeight.Bold,
-                        fontSize = (18 * fontScale).sp,
+                        fontStyle = FontStyle.Italic,
+                        fontSize = (22 * fontScale).sp,
                         color = MaterialTheme.colors.onSurface
                     )
 
                     Spacer(Modifier.height(10.dp))
 
                     Text(
-                        text = dateTimeText,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+                        text = buildAnnotatedString {
+                            withStyle(
+                                SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    color = dateTextColor,
+                                    fontSize = (15 * fontScale).sp
+                                )
+                            ) {
+                                append(ddMMyyyy(appt.dateString))
+                            }
+
+                            append("  ")
+
+                            withStyle(
+                                SpanStyle(
+                                    fontWeight = FontWeight.Normal,
+                                    color = timeTextColor,
+                                    fontSize = (14 * fontScale).sp
+                                )
+                            ) {
+                                append("$startHm–$endHm")
+                            }
+                        }
                     )
 
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(12.dp))
 
                     Text(
                         text = "${Locales.t("service")}: $serviceDisplay",

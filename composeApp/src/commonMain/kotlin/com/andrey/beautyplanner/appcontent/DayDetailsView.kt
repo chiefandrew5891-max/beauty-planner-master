@@ -1,18 +1,13 @@
 package com.andrey.beautyplanner.appcontent
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -20,15 +15,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.getCurrentTimeHm
-import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.getLiveStatus
+import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.coroutines.delay
 import kotlinx.datetime.*
@@ -45,10 +39,6 @@ private fun nextHourBoundary(mins: Int): Int {
     return if (mod == 0) mins + 60 else mins + (60 - mod)
 }
 
-private fun apptDurationMinutesCompat(appt: Appointment): Int {
-    return if (appt.durationMinutes > 0) appt.durationMinutes else appt.durationHours.coerceAtLeast(1) * 60
-}
-
 private data class Block(
     val kind: Kind,
     val startMin: Int,
@@ -58,19 +48,18 @@ private data class Block(
     enum class Kind { FREE, APPOINTMENT }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DayDetailsView(
     date: LocalDate,
     appointments: List<Appointment>,
     onDateChange: (LocalDate) -> Unit,
     onTimeClick: (String) -> Unit,
-    onAppointmentLongPress: (Appointment, LiveStatusKey) -> Unit,
     onEditClick: (Appointment) -> Unit,
-    onTransferClick: (Appointment) -> Unit,
-    onDeleteClick: (Appointment) -> Unit
+    onDeleteClick: (Appointment) -> Unit,
+    onTransferClick: (Appointment) -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
+
     val today = remember { Clock.System.todayIn(TimeZone.currentSystemDefault()) }
 
     var nowTimeHm by remember { mutableStateOf(getCurrentTimeHm()) }
@@ -109,7 +98,7 @@ fun DayDetailsView(
             .filter { it.dateString == date.toString() }
             .mapNotNull { a ->
                 val s = parseHmToMinutes(a.time) ?: return@mapNotNull null
-                val d = apptDurationMinutesCompat(a)
+                val d = if (a.durationMinutes > 0) a.durationMinutes else a.durationHours.coerceAtLeast(1) * 60
                 val e = s + d
                 Triple(a, s, e)
             }
@@ -152,7 +141,6 @@ fun DayDetailsView(
         out
     }
 
-    // ----- view dialog state -----
     var viewingAppt by remember { mutableStateOf<Appointment?>(null) }
     var viewingStartHm by remember { mutableStateOf("") }
     var viewingEndHm by remember { mutableStateOf("") }
@@ -169,7 +157,7 @@ fun DayDetailsView(
             Text(
                 text = formattedDate,
                 fontSize = (24 * fontScale).sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                 color = MaterialTheme.colors.onBackground
             )
 
@@ -177,18 +165,10 @@ fun DayDetailsView(
                 val arrowTint = MaterialTheme.colors.primary
 
                 IconButton(onClick = { onDateChange(date.minus(1, DateTimeUnit.DAY)) }) {
-                    Icon(
-                        imageVector = Icons.Filled.KeyboardArrowLeft,
-                        contentDescription = null,
-                        tint = arrowTint
-                    )
+                    Icon(Icons.Filled.KeyboardArrowLeft, null, tint = arrowTint)
                 }
                 IconButton(onClick = { onDateChange(date.plus(1, DateTimeUnit.DAY)) }) {
-                    Icon(
-                        imageVector = Icons.Filled.KeyboardArrowRight,
-                        contentDescription = null,
-                        tint = arrowTint
-                    )
+                    Icon(Icons.Filled.KeyboardArrowRight, null, tint = arrowTint)
                 }
             }
         }
@@ -200,23 +180,19 @@ fun DayDetailsView(
             contentPadding = PaddingValues(bottom = 32.dp)
         ) {
             items(blocks.size) { idx ->
-                val block = blocks[idx]
+                val b = blocks[idx]
                 val interactionSource = remember { MutableInteractionSource() }
 
-                val startHm = minutesToHm(block.startMin)
-                val endHm = minutesToHm(block.endMin)
+                val startHm = minutesToHm(b.startMin)
+                val endHm = minutesToHm(b.endMin)
 
-                if (block.kind == Block.Kind.APPOINTMENT && block.appt != null) {
-                    val appt = block.appt
+                if (b.kind == Block.Kind.APPOINTMENT && b.appt != null) {
+                    val appt = b.appt
 
-                    val apptStartMin = parseHmToMinutes(appt.time) ?: block.startMin
-                    val apptEndMin = apptStartMin + apptDurationMinutesCompat(appt)
-
-                    val liveStatus = getLiveStatus(
-                        appt = appt,
-                        nowDate = today,
-                        nowMinutes = nowMin
-                    )
+                    val durationMin =
+                        if (appt.durationMinutes > 0) appt.durationMinutes else appt.durationHours.coerceAtLeast(1) * 60
+                    val apptStartMin = parseHmToMinutes(appt.time) ?: b.startMin
+                    val apptEndMin = apptStartMin + durationMin
 
                     val cardBg = when {
                         date < today -> if (AppSettings.isDarkMode) Color(0xFF1F2A36) else Color(0xFFECECEC)
@@ -224,7 +200,13 @@ fun DayDetailsView(
                         else -> if (AppSettings.isDarkMode) Color(0xFF253548) else Color(0xFFF2F2F2)
                     }
 
-                    val isPastOrFinished = (date < today || apptEndMin <= nowMin)
+                    val liveStatus = getLiveStatus(
+                        appt = appt,
+                        nowDate = today,
+                        nowMinutes = nowMin
+                    )
+
+                    val isPastOrFinished = date < today || apptEndMin <= nowMin
 
                     AppointmentCard(
                         appt = appt,
@@ -241,11 +223,13 @@ fun DayDetailsView(
                             viewingStatus = liveStatus
                         },
                         onLongClick = {
-                            onAppointmentLongPress(appt, liveStatus)
+                            viewingAppt = appt
+                            viewingStartHm = startHm
+                            viewingEndHm = endHm
+                            viewingStatus = liveStatus
                         }
                     )
                 } else {
-                    // FREE SLOT (как было)
                     Card(
                         elevation = 0.dp,
                         shape = RoundedCornerShape(14.dp),
@@ -253,7 +237,7 @@ fun DayDetailsView(
                             .fillMaxWidth()
                             .padding(vertical = 6.dp)
                             .height(78.dp)
-                            .combinedClickable(
+                            .clickable(
                                 interactionSource = interactionSource,
                                 indication = LocalIndication.current,
                                 onClick = { onTimeClick(startHm) }
@@ -274,7 +258,7 @@ fun DayDetailsView(
                                 Text(
                                     text = startHm,
                                     fontSize = (16 * fontScale).sp,
-                                    fontWeight = FontWeight.Bold,
+                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.55f)
                                 )
                             }
@@ -290,15 +274,14 @@ fun DayDetailsView(
         }
     }
 
-    // ----- common details dialog -----
     val apptToView = viewingAppt
-    val statusToView = viewingStatus
-    if (apptToView != null && statusToView != null) {
+    val liveStatusToView = viewingStatus
+    if (apptToView != null && liveStatusToView != null) {
         AppointmentDetailsDialog(
             appt = apptToView,
             startHm = viewingStartHm,
             endHm = viewingEndHm,
-            status = statusToView,
+            status = liveStatusToView,
             onDismiss = {
                 viewingAppt = null
                 viewingStatus = null
