@@ -112,6 +112,9 @@ fun AppRootContent(
                     ) {
                         state.showClearDbBackupPrompt = true
                     }
+                },
+                onOpenPrivacyPolicy = {
+                    state.currentScreen = Screen.PRIVACY_POLICY
                 }
             )
 
@@ -303,7 +306,9 @@ fun AppRootContent(
                                 val startMin =
                                     com.andrey.beautyplanner.utils.parseHmToMinutes(appt.time) ?: 0
                                 val endMin = startMin + durationMin
-                                val endHm = "%02d:%02d".format((endMin / 60) % 24, endMin % 60)
+                                val endHour = ((endMin / 60) % 24).toString().padStart(2, '0')
+                                val endMinute = (endMin % 60).toString().padStart(2, '0')
+                                val endHm = "$endHour:$endMinute"
 
                                 val status = getLiveStatus(
                                     appt = appt,
@@ -358,6 +363,12 @@ fun AppRootContent(
                     state.transferA = appt
                     state.showTransferPickDialog = true
                     state.bookingReadOnly = false
+                }
+            )
+            Screen.PRIVACY_POLICY -> PrivacyPolicyScreen(
+                languageCode = Locales.currentLanguage,
+                onBack = {
+                    state.currentScreen = Screen.SETTINGS
                 }
             )
         }

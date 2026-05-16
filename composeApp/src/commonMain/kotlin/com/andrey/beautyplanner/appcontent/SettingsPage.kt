@@ -1,9 +1,10 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,7 +32,8 @@ fun SettingsPage(
     onImport: () -> Unit,
     onSetOrChangePin: () -> Unit,
     onRemovePin: () -> Unit,
-    onClearDatabase: () -> Unit
+    onClearDatabase: () -> Unit,
+    onOpenPrivacyPolicy: () -> Unit
 ) {
     val languages = AppSettings.languageCodes.keys.toList()
     val themeOptions = listOf(Locales.t("theme_light"), Locales.t("theme_dark"))
@@ -61,7 +64,6 @@ fun SettingsPage(
 
     val dbOpsAllowed = AppSettings.pinEnabled && AppSettings.isPinSet()
 
-    // === Имя пользователя (Добавлен режим редактирования по аналогии) ===
     var nameEditMode by remember { mutableStateOf(false) }
     var userNameDraft by remember { mutableStateOf(AppSettings.ownerName) }
 
@@ -237,7 +239,6 @@ fun SettingsPage(
         Spacer(modifier = Modifier.height(10.dp))
         Divider()
 
-        // -------------------- Notifications --------------------
         Column {
             Text(
                 text = Locales.t("notifications_section"),
@@ -365,7 +366,6 @@ fun SettingsPage(
 
         Divider()
 
-        // -------------------- Support phone --------------------
         Column {
             Text(
                 text = Locales.t("support_section"),
@@ -418,7 +418,6 @@ fun SettingsPage(
 
         Divider()
 
-        // ------------- Имя пользователя (С КНОПКОЙ СОХРАНЕНИЯ) -------------
         Column {
             Text(
                 text = Locales.t("user_name_label"),
@@ -468,7 +467,6 @@ fun SettingsPage(
 
         Divider()
 
-        // -------------------- Backup --------------------
         Column {
             Text(
                 text = Locales.t("backup_section"),
@@ -528,7 +526,6 @@ fun SettingsPage(
 
         Divider()
 
-        // -------------------- Security --------------------
         Column {
             Text(
                 text = Locales.t("security_section"),
@@ -543,7 +540,11 @@ fun SettingsPage(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = Locales.t("pin_enabled"), fontSize = (16 * fontScale).sp, color = onSurface)
+                Text(
+                    text = Locales.t("pin_enabled"),
+                    fontSize = (16 * fontScale).sp,
+                    color = onSurface
+                )
 
                 Switch(
                     checked = pendingPinEnabledValue,
@@ -566,39 +567,62 @@ fun SettingsPage(
                 )
             }
 
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(12.dp))
 
-            val pinBtnText = if (AppSettings.isPinSet()) Locales.t("pin_change") else Locales.t("pin_set")
-            Button(
-                onClick = onSetOrChangePin,
-                modifier = Modifier.fillMaxWidth().height(44.dp),
-                shape = RoundedCornerShape(12.dp),
-                enabled = true
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(pinBtnText)
-            }
+                val pinBtnText =
+                    if (AppSettings.isPinSet()) Locales.t("pin_change") else Locales.t("pin_set")
 
-            Spacer(Modifier.height(10.dp))
+                Button(
+                    onClick = onSetOrChangePin,
+                    modifier = Modifier.weight(0.45f).height(38.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = true,
+                    elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                ) {
+                    Text(
+                        text = pinBtnText,
+                        fontSize = (13 * fontScale).sp,
+                        maxLines = 1
+                    )
+                }
 
-            OutlinedButton(
-                onClick = onRemovePin,
-                modifier = Modifier.fillMaxWidth().height(44.dp),
-                shape = RoundedCornerShape(12.dp),
-                enabled = AppSettings.isPinSet()
-            ) {
-                Text(Locales.t("pin_remove"), color = onSurface)
+                Spacer(modifier = Modifier.weight(0.1f))
+
+                OutlinedButton(
+                    onClick = onRemovePin,
+                    modifier = Modifier.weight(0.45f).height(38.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = AppSettings.isPinSet(),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                ) {
+                    Text(
+                        text = Locales.t("pin_remove"),
+                        color = onSurface,
+                        fontSize = (13 * fontScale).sp,
+                        maxLines = 1
+                    )
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
-        OutlinedButton(
-            onClick = { /* TODO */ },
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text(text = Locales.t("privacy_policy"), fontSize = (16 * fontScale).sp, color = onSurface)
-        }
+        Text(
+            text = Locales.t("privacy_policy"),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 2.dp, bottom = 4.dp)
+                .clickable { onOpenPrivacyPolicy() },
+            color = onSurface.copy(alpha = 0.60f),
+            fontSize = (11 * fontScale).sp,
+            textDecoration = TextDecoration.Underline
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
     }

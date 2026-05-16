@@ -19,4 +19,4 @@ data class Appointment(
     val durationHours: Int = 1
 )
 
-enum class Screen { MONTH, DAY_DETAILS, SETTINGS, STATS, FEEDBACK }
+enum class Screen { MONTH, DAY_DETAILS, SETTINGS, STATS, FEEDBACK, PRIVACY_POLICY }

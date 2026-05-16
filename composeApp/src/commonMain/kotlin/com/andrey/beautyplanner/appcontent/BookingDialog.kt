@@ -1,7 +1,11 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -10,13 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
+import com.andrey.beautyplanner.ContactSuggestion
+import com.andrey.beautyplanner.ContactsAutocomplete
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.ServicesCatalog
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -49,16 +57,13 @@ fun BookingDialog(
     var editEnabled by remember(readOnly, initialData) { mutableStateOf(!readOnly) }
     var showEnableEditConfirm by remember { mutableStateOf(false) }
 
-    // ✅ КЛЮЧ (чтобы поля не “обнулялись” и не тащили старые значения между разн��ми записями)
     val initKey = remember(time, initialData?.id) { initialData?.id ?: "new:$time" }
 
-    // --------- fields ----------
     var name by remember(initKey) { mutableStateOf(initialData?.clientName ?: "") }
     var phone by remember(initKey) { mutableStateOf(initialData?.phone ?: "") }
     var serviceKey by remember(initKey) { mutableStateOf(initialData?.serviceName ?: "") }
     var price by remember(initKey) { mutableStateOf(initialData?.price ?: "") }
 
-    // ✅ режим “Другое” (ручной ввод)
     val otherKey = "service_other"
     var serviceIsOther by remember(initKey) {
         mutableStateOf(serviceKey.isNotBlank() && !serviceKey.startsWith("service_"))
@@ -67,20 +72,20 @@ fun BookingDialog(
         mutableStateOf(if (serviceIsOther) serviceKey else "")
     }
 
-    // --------- start time ----------
     val initialStart = remember(initKey) { initialData?.time ?: time }
     val startBaseHour = remember(initKey) { initialStart.substringBefore(":").toIntOrNull() ?: 0 }
     val initialStartMinRaw = remember(initKey) { initialStart.substringAfter(":", "00").toIntOrNull() ?: 0 }
     val minuteOptions = remember { listOf(0, 10, 20, 30, 40, 50) }
 
-    var startMinutesPart by remember(initKey) { mutableStateOf(minuteOptions.lastOrNull { it <= initialStartMinRaw } ?: 0) }
+    var startMinutesPart by remember(initKey) {
+        mutableStateOf(minuteOptions.lastOrNull { it <= initialStartMinRaw } ?: 0)
+    }
 
     val startTime = remember(startBaseHour, startMinutesPart) {
         "${startBaseHour.toString().padStart(2, '0')}:${startMinutesPart.toString().padStart(2, '0')}"
     }
     val startAbsMinutes = remember(startTime) { parseHmToMinutes(startTime) ?: (startBaseHour * 60) }
 
-    // --------- end time options ----------
     val endOptions = remember(startAbsMinutes) {
         val list = mutableListOf<String>()
         val minEnd = startAbsMinutes + 10
@@ -109,7 +114,6 @@ fun BookingDialog(
         mutableStateOf(if (endOptions.contains(proposed)) proposed else defaultEnd())
     }
 
-    // --------- validation ----------
     var triedSave by remember { mutableStateOf(false) }
 
     val nameOk = name.trim().isNotBlank()
@@ -125,6 +129,34 @@ fun BookingDialog(
     val endOk = endAbs != null && endAbs > startAbsMinutes
 
     val formOk = nameOk && phoneOk && serviceOk && priceOk && endOk
+
+    var contactSuggestions by remember { mutableStateOf<List<ContactSuggestion>>(emptyList()) }
+    var showSuggestions by remember { mutableStateOf(false) }
+
+    val contactsPermissionGranted by remember {
+        derivedStateOf { ContactsAutocomplete.isPermissionGranted() }
+    }
+
+    LaunchedEffect(name, editEnabled, contactsPermissionGranted) {
+        if (!editEnabled || !contactsPermissionGranted) {
+            contactSuggestions = emptyList()
+            showSuggestions = false
+            return@LaunchedEffect
+        }
+
+        val query = name.trim()
+        if (query.length < 2) {
+            contactSuggestions = emptyList()
+            showSuggestions = false
+            return@LaunchedEffect
+        }
+
+        delay(180)
+
+        val found = ContactsAutocomplete.findSuggestions(query, limit = 8)
+        contactSuggestions = found
+        showSuggestions = found.isNotEmpty()
+    }
 
     if (showEnableEditConfirm) {
         AlertDialog(
@@ -151,11 +183,13 @@ fun BookingDialog(
             backgroundColor = MaterialTheme.colors.surface
         ) {
             Column(
-                modifier = Modifier.padding(24.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(24.dp)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-
                     Text(
                         "${Locales.t("start_time")}: $startTime • ${Locales.t("end_time")}: $endTime",
                         fontSize = (14 * fontScale).sp,
@@ -167,7 +201,7 @@ fun BookingDialog(
                         onClick = onDismiss,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .offset(x = (10).dp, y = -10.dp)
+                            .offset(x = 10.dp, y = (-10).dp)
                     ) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
                     }
@@ -179,7 +213,6 @@ fun BookingDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // START
                     Column(modifier = Modifier.weight(1f)) {
                         Text(Locales.t("start_time"), fontSize = (12 * fontScale).sp, color = Color.Gray)
 
@@ -211,7 +244,6 @@ fun BookingDialog(
                         }
                     }
 
-                    // END
                     Column(modifier = Modifier.weight(1f)) {
                         Text(Locales.t("end_time"), fontSize = (12 * fontScale).sp, color = Color.Gray)
 
@@ -244,13 +276,11 @@ fun BookingDialog(
 
                 if (triedSave && editEnabled && !endOk) {
                     Text(
-                        text = "End must be after start".let {
-                            when (Locales.currentLanguage) {
-                                "ru" -> "Конец должен быть позже начала"
-                                "uk" -> "Кінець має бути пізніше початку"
-                                "it" -> "La fine deve essere dopo l'inizio"
-                                else -> "End must be after start"
-                            }
+                        text = when (Locales.currentLanguage) {
+                            "ru" -> "Конец должен быть позже начала"
+                            "uk" -> "Кінець має бути пізніше початку"
+                            "it" -> "La fine deve essere dopo l'inizio"
+                            else -> "End must be after start"
                         },
                         color = MaterialTheme.colors.error,
                         fontSize = (12 * fontScale).sp,
@@ -262,14 +292,77 @@ fun BookingDialog(
 
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = {
+                        name = it
+                        showSuggestions = true
+                    },
                     enabled = editEnabled,
                     label = { Text(Locales.t("client_name")) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
                     leadingIcon = { Icon(Icons.Default.Person, null) },
-                    isError = triedSave && editEnabled && !nameOk
+                    isError = triedSave && editEnabled && !nameOk,
+                    trailingIcon = {
+                        if (editEnabled && !contactsPermissionGranted) {
+                            IconButton(onClick = { ContactsAutocomplete.requestPermission() }) {
+                                Icon(Icons.Default.Contacts, contentDescription = null)
+                            }
+                        }
+                    }
                 )
+
+                if (editEnabled && !contactsPermissionGranted) {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = Locales.t("contacts_permission_hint"),
+                        fontSize = (11 * fontScale).sp,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.55f),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (editEnabled && contactsPermissionGranted && showSuggestions && contactSuggestions.isNotEmpty()) {
+                    Spacer(Modifier.height(6.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = 4.dp,
+                        shape = RoundedCornerShape(14.dp),
+                        backgroundColor = MaterialTheme.colors.surface
+                    ) {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            contactSuggestions.forEachIndexed { index, suggestion ->
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            name = suggestion.displayName
+                                            phone = suggestion.phone
+                                            showSuggestions = false
+                                        }
+                                        .padding(horizontal = 14.dp, vertical = 10.dp)
+                                ) {
+                                    Text(
+                                        text = suggestion.displayName,
+                                        fontSize = (14 * fontScale).sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Text(
+                                        text = suggestion.phone,
+                                        fontSize = (12 * fontScale).sp,
+                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                                if (index != contactSuggestions.lastIndex) {
+                                    Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f))
+                                }
+                            }
+                        }
+                    }
+                }
 
                 Spacer(Modifier.height(12.dp))
 
@@ -286,9 +379,7 @@ fun BookingDialog(
 
                 Spacer(Modifier.height(12.dp))
 
-                // --------- SERVICE: dropdown OR manual ----------
                 val services = remember {
-                    // + “Другое” внизу
                     ServicesCatalog.keys + otherKey
                 }
 
@@ -318,7 +409,6 @@ fun BookingDialog(
                                 DropdownMenuItem(onClick = {
                                     serviceExpanded = false
                                     if (key == otherKey) {
-                                        // ✅ включаем ручной ввод
                                         serviceIsOther = true
                                         customServiceText = ""
                                         serviceKey = ""
@@ -331,12 +421,10 @@ fun BookingDialog(
                         }
                     }
                 } else {
-                    // ✅ ручной ��вод процедуры
                     OutlinedTextField(
                         value = customServiceText,
                         onValueChange = {
                             customServiceText = it
-                            // если человек “передумал” и очистил поле — вернём выпадающий список
                             if (it.isBlank()) {
                                 serviceIsOther = false
                                 serviceKey = ""
@@ -348,7 +436,6 @@ fun BookingDialog(
                         shape = RoundedCornerShape(14.dp),
                         leadingIcon = { Icon(Icons.Default.Brush, null) },
                         trailingIcon = {
-                            // кнопка “вернуться к списку”
                             IconButton(
                                 enabled = editEnabled,
                                 onClick = {
@@ -394,13 +481,11 @@ fun BookingDialog(
                 if (editEnabled) {
                     if (triedSave && !formOk) {
                         Text(
-                            text = "Fill required fields".let {
-                                when (Locales.currentLanguage) {
-                                    "ru" -> "Заполните обязательные поля"
-                                    "uk" -> "Заповніть обовʼязкові поля"
-                                    "it" -> "Compila i campi obbligatori"
-                                    else -> "Fill required fields"
-                                }
+                            text = when (Locales.currentLanguage) {
+                                "ru" -> "Заполните обязательные поля"
+                                "uk" -> "Заповніть обовʼязкові поля"
+                                "it" -> "Compila i campi obbligatori"
+                                else -> "Fill required fields"
                             },
                             color = MaterialTheme.colors.error,
                             fontSize = (13 * fontScale).sp,

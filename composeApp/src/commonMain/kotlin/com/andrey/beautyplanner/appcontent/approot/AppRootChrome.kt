@@ -85,71 +85,78 @@ fun AppRootChrome(
                 }
             }
         ) {
+            val isPrivacyScreen = state.currentScreen == Screen.PRIVACY_POLICY
+
             Scaffold(
                 modifier = Modifier.statusBarsPadding(),
                 topBar = {
-                    TopAppBar(
-                        backgroundColor = MaterialTheme.colors.surface,
-                        elevation = 2.dp,
-                        contentPadding = PaddingValues(horizontal = 8.dp)
-                    ) {
-                        Box(Modifier.fillMaxSize()) {
-                            IconButton(
-                                onClick = { state.openDrawer() },
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            ) {
-                                Icon(
-                                    Icons.Default.Menu,
-                                    contentDescription = Locales.t("cd_menu"),
-                                    tint = MaterialTheme.colors.primary
-                                )
-                            }
-
-                            val titleText = when (state.currentScreen) {
-                                Screen.MONTH -> Locales.t("nav_main")
-                                Screen.SETTINGS -> Locales.t("nav_settings")
-                                Screen.DAY_DETAILS -> Locales.t("nav_day")
-                                Screen.STATS -> Locales.t("nav_stats")
-                                Screen.FEEDBACK -> Locales.t("nav_feedback")
-                            }
-
-                            Text(
-                                text = titleText,
-                                modifier = Modifier.fillMaxWidth().align(Alignment.Center),
-                                textAlign = TextAlign.Center,
-                                fontSize = (18 * state.fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.onSurface
-                            )
-
-                            Row(
-                                modifier = Modifier.align(Alignment.CenterEnd),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                if (state.currentScreen != Screen.MONTH) {
-                                    IconButton(onClick = { state.currentScreen = Screen.MONTH }) {
-                                        Icon(
-                                            Icons.AutoMirrored.Filled.Reply,
-                                            contentDescription = Locales.t("cd_back"),
-                                            tint = MaterialTheme.colors.primary,
-                                            modifier = Modifier.size(26.dp)
-                                        )
-                                    }
+                    if (!isPrivacyScreen) {
+                        TopAppBar(
+                            backgroundColor = MaterialTheme.colors.surface,
+                            elevation = 2.dp,
+                            contentPadding = PaddingValues(horizontal = 8.dp)
+                        ) {
+                            Box(Modifier.fillMaxSize()) {
+                                IconButton(
+                                    onClick = { state.openDrawer() },
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                ) {
+                                    Icon(
+                                        Icons.Default.Menu,
+                                        contentDescription = Locales.t("cd_menu"),
+                                        tint = MaterialTheme.colors.primary
+                                    )
                                 }
 
-                                Spacer(Modifier.width(4.dp))
+                                val titleText = when (state.currentScreen) {
+                                    Screen.MONTH -> Locales.t("nav_main")
+                                    Screen.SETTINGS -> Locales.t("nav_settings")
+                                    Screen.DAY_DETAILS -> Locales.t("nav_day")
+                                    Screen.STATS -> Locales.t("nav_stats")
+                                    Screen.FEEDBACK -> Locales.t("nav_feedback")
+                                    Screen.PRIVACY_POLICY -> Locales.t("privacy_policy")
+                                }
 
-                                IconButton(onClick = {
-                                    state.currentScreen =
-                                        if (state.currentScreen == Screen.SETTINGS) Screen.MONTH else Screen.SETTINGS
-                                }) {
-                                    Icon(
-                                        Icons.Default.Settings,
-                                        contentDescription = Locales.t("cd_settings"),
-                                        tint = if (state.currentScreen == Screen.SETTINGS)
-                                            MaterialTheme.colors.primary.copy(alpha = 0.5f)
-                                        else MaterialTheme.colors.primary
-                                    )
+                                Text(
+                                    text = titleText,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.Center),
+                                    textAlign = TextAlign.Center,
+                                    fontSize = (18 * state.fontScale).sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.onSurface
+                                )
+
+                                Row(
+                                    modifier = Modifier.align(Alignment.CenterEnd),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    if (state.currentScreen != Screen.MONTH) {
+                                        IconButton(onClick = { state.currentScreen = Screen.MONTH }) {
+                                            Icon(
+                                                Icons.AutoMirrored.Filled.Reply,
+                                                contentDescription = Locales.t("cd_back"),
+                                                tint = MaterialTheme.colors.primary,
+                                                modifier = Modifier.size(26.dp)
+                                            )
+                                        }
+                                    }
+
+                                    Spacer(Modifier.width(4.dp))
+
+                                    IconButton(onClick = {
+                                        state.currentScreen =
+                                            if (state.currentScreen == Screen.SETTINGS) Screen.MONTH else Screen.SETTINGS
+                                    }) {
+                                        Icon(
+                                            Icons.Default.Settings,
+                                            contentDescription = Locales.t("cd_settings"),
+                                            tint = if (state.currentScreen == Screen.SETTINGS)
+                                                MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                                            else MaterialTheme.colors.primary
+                                        )
+                                    }
                                 }
                             }
                         }

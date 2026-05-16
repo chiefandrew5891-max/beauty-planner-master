@@ -18,6 +18,12 @@ class MainActivity : ComponentActivity() {
             // MVP: nothing
         }
 
+    private val requestContactsPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            ContactsAutocompleteAndroid.permissionGranted = granted
+            ContactsAutocompleteAndroid.permissionRequestedOnce = true
+        }
+
     // --- Backup: Android system pickers ---
     private var pendingExportJson: String? = null
     private val exportLauncher = registerForActivityResult(
@@ -66,6 +72,19 @@ class MainActivity : ComponentActivity() {
 
         AndroidAppContext.context = applicationContext
         AndroidAppContext.activity = this
+
+        ContactsAutocompleteAndroid.init(
+            context = applicationContext,
+            permissionChecker = {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_CONTACTS
+                ) == PackageManager.PERMISSION_GRANTED
+            },
+            requestPermission = {
+                requestContactsPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            }
+        )
 
         // Bind BackupFilePicker implementations (IMPORTANT)
         BackupFilePicker.exportImpl = { suggestedFileName, json ->

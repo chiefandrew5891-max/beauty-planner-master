@@ -128,6 +128,7 @@ object Locales {
             // User name satting
             "user_name_label" to "Имя пользователя",
             "user_name_hint" to "Введите имя",
+            "contacts_permission_hint" to "Для автопоиска по контактам нужно разрешение на доступ к контактам. Его можно выдать в настройках устройства.",
             // Stats
             "stats_period_day" to "День",
             "stats_period_week" to "Неделя",
@@ -333,6 +334,7 @@ object Locales {
             // User name satting
             "user_name_label" to "User name",
             "user_name_hint" to "Enter your name",
+            "contacts_permission_hint" to "Contact access permission is required for autocomplete. You can enable it in device settings.",
 
             "stats_period_day" to "Day",
             "stats_period_week" to "Week",
@@ -534,6 +536,7 @@ object Locales {
             // User name satting
             "user_name_label" to "Nome utent",
             "user_name_hint" to "Inserisci il tuo nome",
+            "contacts_permission_hint" to "Per la ricerca automatica serve il permesso di accesso ai contatti. Puoi abilitarlo nelle impostazioni del dispositivo.",
 
             "stats_period_day" to "Giorno",
             "stats_period_week" to "Settimana",
@@ -734,6 +737,7 @@ object Locales {
             // User name satting
             "user_name_label" to "Ім’я користувача",
             "user_name_hint" to "Введіть ім’я",
+            "contacts_permission_hint" to "Для автопошуку потрібен дозвіл на доступ до контактів. Його можна надати в налаштуваннях пристрою.",
 
             "stats_period_day" to "День",
             "stats_period_week" to "Тиждень",

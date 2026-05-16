@@ -1,11 +1,13 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -115,8 +117,10 @@ fun StatsPage(
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             PeriodChip(Locales.t("stats_period_day"), period == StatsPeriod.DAY) {
                 period = StatsPeriod.DAY
@@ -124,25 +128,15 @@ fun StatsPage(
             PeriodChip(Locales.t("stats_period_week"), period == StatsPeriod.WEEK) {
                 period = StatsPeriod.WEEK
             }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
             PeriodChip(Locales.t("stats_period_month"), period == StatsPeriod.MONTH) {
                 period = StatsPeriod.MONTH
             }
             PeriodChip(Locales.t("stats_period_year"), period == StatsPeriod.YEAR) {
                 period = StatsPeriod.YEAR
             }
-        }
-
-        PeriodChip(
-            text = Locales.t("stats_period_custom"),
-            selected = period == StatsPeriod.CUSTOM
-        ) {
-            period = StatsPeriod.CUSTOM
+            PeriodChip(Locales.t("stats_period_custom"), period == StatsPeriod.CUSTOM) {
+                period = StatsPeriod.CUSTOM
+            }
         }
 
         if (period == StatsPeriod.CUSTOM) {
@@ -159,16 +153,24 @@ fun StatsPage(
             ) {
                 OutlinedButton(
                     onClick = { showFromDatePicker = true },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
-                    Text("${Locales.t("stats_date_from")}: $customFromDate")
+                    Text(
+                        text = "${Locales.t("stats_date_from")}: $customFromDate",
+                        maxLines = 1
+                    )
                 }
 
                 OutlinedButton(
                     onClick = { showToDatePicker = true },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
-                    Text("${Locales.t("stats_date_to")}: $customToDate")
+                    Text(
+                        text = "${Locales.t("stats_date_to")}: $customToDate",
+                        maxLines = 1
+                    )
                 }
             }
         }
@@ -245,19 +247,26 @@ fun StatsPage(
 
 @Composable
 private fun PeriodChip(text: String, selected: Boolean, onClick: () -> Unit) {
+    val modifier = Modifier.height(38.dp)
+
     if (selected) {
         Button(
             onClick = onClick,
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+            modifier = modifier,
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+            elevation = ButtonDefaults.elevation(defaultElevation = 0.dp)
         ) {
-            Text(text)
+            Text(text, maxLines = 1)
         }
     } else {
         OutlinedButton(
             onClick = onClick,
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+            modifier = modifier,
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
         ) {
-            Text(text)
+            Text(text, maxLines = 1)
         }
     }
 }
@@ -266,7 +275,7 @@ private fun PeriodChip(text: String, selected: Boolean, onClick: () -> Unit) {
 private fun StatRow(
     label: String,
     value: String,
-    primaryText: androidx.compose.ui.graphics.Color
+    primaryText: Color
 ) {
     Row(
         Modifier.fillMaxWidth(),
@@ -283,8 +292,8 @@ private fun ServiceRow(
     count: Int,
     revenue: Double,
     fontScale: Float,
-    primaryText: androidx.compose.ui.graphics.Color,
-    secondaryText: androidx.compose.ui.graphics.Color
+    primaryText: Color,
+    secondaryText: Color
 ) {
     Column(
         Modifier
