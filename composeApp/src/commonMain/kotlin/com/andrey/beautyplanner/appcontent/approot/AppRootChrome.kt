@@ -85,12 +85,14 @@ fun AppRootChrome(
                 }
             }
         ) {
-            val isPrivacyScreen = state.currentScreen == Screen.PRIVACY_POLICY
+            val hideTopBar =
+                state.currentScreen == Screen.PRIVACY_POLICY ||
+                state.currentScreen == Screen.PREMIUM_ACCESS
 
             Scaffold(
                 modifier = Modifier.statusBarsPadding(),
                 topBar = {
-                    if (!isPrivacyScreen) {
+                    if (!hideTopBar) {
                         TopAppBar(
                             backgroundColor = MaterialTheme.colors.surface,
                             elevation = 2.dp,
@@ -115,6 +117,7 @@ fun AppRootChrome(
                                     Screen.STATS -> Locales.t("nav_stats")
                                     Screen.FEEDBACK -> Locales.t("nav_feedback")
                                     Screen.PRIVACY_POLICY -> Locales.t("privacy_policy")
+                                    Screen.PREMIUM_ACCESS -> Locales.t("premium_access_title")
                                 }
 
                                 Text(

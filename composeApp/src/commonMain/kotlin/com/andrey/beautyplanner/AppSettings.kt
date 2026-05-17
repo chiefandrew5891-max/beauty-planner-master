@@ -32,11 +32,13 @@ private data class SettingsSnapshot(
 
     val servicePhone: String = "",
 
+    val trialStartedAtMillis: Long = 0L,
+    val premiumUnlocked: Boolean = false,
+
     // --- security ---
     val pinEnabled: Boolean = false,
     val adminPinHash: String = "" // stored hash, not pin
 )
-
 object AppSettings {
 
     private val storage: SettingsStorage by lazy { createSettingsStorage() }
@@ -65,6 +67,8 @@ object AppSettings {
     var reminderHoursBefore by mutableStateOf(1)  // 0..12
 
     var servicePhone by mutableStateOf("")
+    var trialStartedAtMillis by mutableStateOf(0L)
+    var premiumUnlocked by mutableStateOf(false)
 
     // --- security ---
     var pinEnabled by mutableStateOf(false)
@@ -154,6 +158,9 @@ object AppSettings {
         servicePhone = snapshot.servicePhone
         ownerName = snapshot.ownerName
 
+        trialStartedAtMillis = snapshot.trialStartedAtMillis
+        premiumUnlocked = snapshot.premiumUnlocked
+
         pinEnabled = snapshot.pinEnabled
         adminPinHash = snapshot.adminPinHash
 
@@ -175,6 +182,9 @@ object AppSettings {
             reminderHoursBefore = reminderHoursBefore,
 
             servicePhone = servicePhone,
+
+            trialStartedAtMillis = trialStartedAtMillis,
+            premiumUnlocked = premiumUnlocked,
 
             pinEnabled = pinEnabled,
             adminPinHash = adminPinHash

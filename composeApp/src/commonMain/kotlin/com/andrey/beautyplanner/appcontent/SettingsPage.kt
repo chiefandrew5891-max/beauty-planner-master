@@ -24,16 +24,24 @@ import com.andrey.beautyplanner.notifications.Notifications
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlin.math.roundToInt
+import com.andrey.beautyplanner.AccessState
+import com.andrey.beautyplanner.AccessTier
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsPage(
+    accessState: AccessState,
     onExport: () -> Unit,
     onImport: () -> Unit,
     onSetOrChangePin: () -> Unit,
     onRemovePin: () -> Unit,
     onClearDatabase: () -> Unit,
-    onOpenPrivacyPolicy: () -> Unit
+    onOpenPrivacyPolicy: () -> Unit,
+    onOpenPremiumScreen: () -> Unit,
+    onEnablePremiumForTesting: () -> Unit,
+    onDisablePremiumForTesting: () -> Unit,
+    onResetTrialForTesting: () -> Unit,
+    onExpireTrialForTesting: () -> Unit
 ) {
     val languages = AppSettings.languageCodes.keys.toList()
     val themeOptions = listOf(Locales.t("theme_light"), Locales.t("theme_dark"))
@@ -235,6 +243,67 @@ fun SettingsPage(
                 AppSettings.persist()
             }
         )
+
+        Divider()
+
+        Column {
+            Text(
+                text = Locales.t("premium_section_title"),
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = onSurface.copy(alpha = 0.85f),
+                modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
+            )
+
+            val premiumStatusText = when (accessState.tier) {
+                AccessTier.TRIAL -> Locales.t("premium_status_trial")
+                AccessTier.FREE_LIMITED -> Locales.t("premium_status_free")
+                AccessTier.PREMIUM -> Locales.t("premium_status_premium")
+            }
+
+            val premiumHintText = when (accessState.tier) {
+                AccessTier.TRIAL -> Locales.t("premium_trial_active_hint")
+                AccessTier.FREE_LIMITED -> Locales.t("premium_free_limited_hint")
+                AccessTier.PREMIUM -> Locales.t("premium_active_hint")
+            }
+
+            Text(
+                text = "${Locales.t("premium_status_label")}: $premiumStatusText",
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.Medium,
+                color = onSurface
+            )
+
+            if (accessState.tier == AccessTier.TRIAL) {
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = "${Locales.t("premium_trial_days_left")}: ${accessState.trialDaysLeft}",
+                    fontSize = (14 * fontScale).sp,
+                    color = onSurface.copy(alpha = 0.80f)
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = premiumHintText,
+                fontSize = (13 * fontScale).sp,
+                color = onSurface.copy(alpha = 0.70f),
+                lineHeight = (19 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Button(
+                onClick = onOpenPremiumScreen,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(Locales.t("premium_open_screen_btn"))
+            }
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
         Divider()
@@ -623,6 +692,101 @@ fun SettingsPage(
             fontSize = (11 * fontScale).sp,
             textDecoration = TextDecoration.Underline
         )
+        Divider()
+
+        Column {
+            Text(
+                text = "Developer Access Test",
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = onSurface.copy(alpha = 0.85f),
+                modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
+            )
+
+            val tierText = when (accessState.tier) {
+                AccessTier.TRIAL -> "TRIAL"
+                AccessTier.FREE_LIMITED -> "FREE_LIMITED"
+                AccessTier.PREMIUM -> "PREMIUM"
+            }
+
+            Text(
+                text = "Current tier: $tierText",
+                color = onSurface,
+                fontSize = (14 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(6.dp))
+
+            Text(
+                text = "Trial active: ${accessState.isTrialActive}",
+                color = onSurface.copy(alpha = 0.80f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(
+                text = "Trial days left: ${accessState.trialDaysLeft}",
+                color = onSurface.copy(alpha = 0.80f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(
+                text = "Trial started at: ${AppSettings.trialStartedAtMillis}",
+                color = onSurface.copy(alpha = 0.65f),
+                fontSize = (12 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(
+                text = "Premium unlocked: ${AppSettings.premiumUnlocked}",
+                color = onSurface.copy(alpha = 0.65f),
+                fontSize = (12 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Button(
+                onClick = onEnablePremiumForTesting,
+                modifier = Modifier.fillMaxWidth().height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Enable Premium (test)")
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = onDisablePremiumForTesting,
+                modifier = Modifier.fillMaxWidth().height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Disable Premium", color = onSurface)
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = onResetTrialForTesting,
+                modifier = Modifier.fillMaxWidth().height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Reset Trial to Now", color = onSurface)
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = onExpireTrialForTesting,
+                modifier = Modifier.fillMaxWidth().height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Expire Trial", color = onSurface)
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
     }

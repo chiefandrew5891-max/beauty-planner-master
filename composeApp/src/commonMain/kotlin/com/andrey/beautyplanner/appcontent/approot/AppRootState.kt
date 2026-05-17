@@ -25,6 +25,12 @@ class AppRootState(
 ) {
     var currentScreen by mutableStateOf(Screen.MONTH)
 
+    var accessState by mutableStateOf(
+        AccessManager.getAccessState(
+            nowMillis = Clock.System.now().toEpochMilliseconds()
+        )
+    )
+
     var calendarViewDate by mutableStateOf(LocalDate(today.year, today.month, 1))
     var selectedDate by mutableStateOf(today)
 
@@ -54,6 +60,7 @@ class AppRootState(
     var pendingImportText by mutableStateOf<String?>(null)
     var showImportConfirm by mutableStateOf(false)
     var showImportError by mutableStateOf<String?>(null)
+    var premiumRequiredMessage by mutableStateOf("")
 
     // --------- PIN / Security flow ---------
     var mustCreatePin by mutableStateOf(!AppSettings.isPinSet())
@@ -110,7 +117,9 @@ class AppRootState(
             h6 = TextStyle(fontSize = (20 * fontScale).sp, fontWeight = FontWeight.Bold),
             subtitle1 = TextStyle(fontSize = (14 * fontScale).sp)
         )
-
+    fun refreshAccessState(nowMillis: Long = Clock.System.now().toEpochMilliseconds()) {
+        accessState = AccessManager.getAccessState(nowMillis)
+    }
     fun openDrawer() = scope.launch { drawerState.open() }
     fun closeDrawer() = scope.launch { drawerState.close() }
 
@@ -129,6 +138,10 @@ class AppRootState(
         pinDialogConfirmText = confirmText
         pinDialogOnSuccess = action
         showPinDialog = true
+    }
+    fun showPremiumRequired(message: String) {
+        premiumRequiredMessage = message
+        currentScreen = Screen.PREMIUM_ACCESS
     }
 
     fun parseHmToMinutes(hm: String): Int? {
@@ -160,13 +173,16 @@ class AppRootState(
     fun saveAll() {
         DataManager.saveToDatabase(appointments.toList())
 
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+        refreshAccessState(nowMillis)
+
         val mins = AppSettings.reminderMinutesComputed()
         if (AppSettings.notificationsEnabled && mins.isNotEmpty()) {
             Notifications.rescheduleAll(
                 appointments = appointments.toList(),
                 reminderMinutes = mins,
                 sound = AppSettings.notificationSound,
-                nowEpochMillis = Clock.System.now().toEpochMilliseconds()
+                nowEpochMillis = nowMillis
             )
         } else {
             Notifications.cancelAll()
@@ -265,6 +281,11 @@ fun rememberAppRootState(): AppRootState {
     val state = remember { AppRootState(appointments, today, drawerState, scope) }
 
     LaunchedEffect(Unit) {
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+
+        AccessManager.ensureTrialInitialized(nowMillis)
+        state.refreshAccessState(nowMillis)
+
         runCatching { DataManager.loadFromDatabase() }
             .onSuccess { loaded ->
                 if (loaded.isNotEmpty()) {
@@ -272,6 +293,8 @@ fun rememberAppRootState(): AppRootState {
                     appointments.addAll(loaded)
                 }
             }
+
+        state.refreshAccessState(nowMillis)
     }
 
     return state

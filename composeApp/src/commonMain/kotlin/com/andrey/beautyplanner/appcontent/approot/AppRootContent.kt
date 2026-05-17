@@ -28,6 +28,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import androidx.compose.material.Button
 
 @Composable
 fun AppRootContent(
@@ -65,7 +66,14 @@ fun AppRootContent(
     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
         when (state.currentScreen) {
             Screen.SETTINGS -> SettingsPage(
+                accessState = state.accessState,
                 onExport = {
+                    val nowMillis = Clock.System.now().toEpochMilliseconds()
+                    if (!AccessManager.hasFeature(PremiumFeature.BACKUP_EXPORT, nowMillis)) {
+                        state.showPremiumRequired(Locales.t("premium_required_export"))
+                        return@SettingsPage
+                    }
+
                     state.runProtected(
                         title = Locales.t("pin_required"),
                         text = Locales.t("export_requires_pin"),
@@ -76,6 +84,12 @@ fun AppRootContent(
                     }
                 },
                 onImport = {
+                    val nowMillis = Clock.System.now().toEpochMilliseconds()
+                    if (!AccessManager.hasFeature(PremiumFeature.BACKUP_IMPORT, nowMillis)) {
+                        state.showPremiumRequired(Locales.t("premium_required_import"))
+                        return@SettingsPage
+                    }
+
                     state.runProtected(
                         title = Locales.t("pin_required"),
                         text = Locales.t("import_requires_pin"),
@@ -115,13 +129,73 @@ fun AppRootContent(
                 },
                 onOpenPrivacyPolicy = {
                     state.currentScreen = Screen.PRIVACY_POLICY
-                }
+                },
+                onEnablePremiumForTesting = {
+                    AppSettings.premiumUnlocked = true
+                    AppSettings.persist()
+                    state.refreshAccessState()
+                },
+                onDisablePremiumForTesting = {
+                    AppSettings.premiumUnlocked = false
+                    AppSettings.persist()
+                    state.refreshAccessState()
+                },
+                onResetTrialForTesting = {
+                    AppSettings.trialStartedAtMillis = Clock.System.now().toEpochMilliseconds()
+                    AppSettings.premiumUnlocked = false
+                    AppSettings.persist()
+                    state.refreshAccessState()
+                },
+                onExpireTrialForTesting = {
+                    val now = Clock.System.now().toEpochMilliseconds()
+                    val fifteenDaysMillis = 15L * 24L * 60L * 60L * 1000L
+                    AppSettings.trialStartedAtMillis = now - fifteenDaysMillis
+                    AppSettings.premiumUnlocked = false
+                    AppSettings.persist()
+                    state.refreshAccessState()
+                },
+                onOpenPremiumScreen = {
+                    state.premiumRequiredMessage = Locales.t("premium_required_default")
+                    state.currentScreen = Screen.PREMIUM_ACCESS
+                },
             )
 
-            Screen.STATS -> StatsPage(
-                appointments = state.appointments,
-                today = state.today
-            )
+            Screen.STATS -> {
+                val nowMillis = Clock.System.now().toEpochMilliseconds()
+                val statsMessage = Locales.t("premium_required_stats")
+
+                if (AccessManager.hasFeature(PremiumFeature.STATS, nowMillis)) {
+                    StatsPage(
+                        appointments = state.appointments,
+                        today = state.today
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Text(
+                                text = statsMessage,
+                                color = MaterialTheme.colors.onBackground,
+                                fontSize = (16 * state.fontScale).sp
+                            )
+
+                            Button(
+                                onClick = {
+                                    state.showPremiumRequired(statsMessage)
+                                }
+                            ) {
+                                Text(Locales.t("premium_learn_more_btn"))
+                            }
+                        }
+                    }
+                }
+            }
 
             Screen.FEEDBACK -> FeedbackPage(
                 phone = AppSettings.servicePhone,
@@ -346,6 +420,17 @@ fun AppRootContent(
                 appointments = state.appointments,
                 onDateChange = { state.selectedDate = it },
                 onTimeClick = { time ->
+                    val nowMillis = Clock.System.now().toEpochMilliseconds()
+                    val canCreate = AccessManager.canCreateAppointment(
+                        currentAppointmentsCount = state.appointments.size,
+                        nowMillis = nowMillis
+                    )
+
+                    if (!canCreate) {
+                        state.showPremiumRequired(Locales.t("premium_required_limit"))
+                        return@DayDetailsView
+                    }
+
                     state.selectedTimeSlot = time
                     state.editingAppointment = null
                     state.bookingReadOnly = false
@@ -369,6 +454,16 @@ fun AppRootContent(
                 languageCode = Locales.currentLanguage,
                 onBack = {
                     state.currentScreen = Screen.SETTINGS
+                }
+            )
+            Screen.PREMIUM_ACCESS -> PremiumAccessScreen(
+                accessState = state.accessState,
+                message = state.premiumRequiredMessage,
+                onContinueFree = {
+                    state.currentScreen = Screen.SETTINGS
+                },
+                onUnlockPremium = {
+                    state.premiumRequiredMessage = Locales.t("premium_billing_coming_soon")
                 }
             )
         }
@@ -482,3 +577,4 @@ fun AppRootContent(
         }
     }
 }
+//Create new Animation_screen fix11
