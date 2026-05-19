@@ -38,6 +38,8 @@ fun SettingsPage(
     onClearDatabase: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit,
     onOpenPremiumScreen: () -> Unit,
+    onOpenServiceTemplates: () -> Unit,
+    onOpenWorkSchedule: () -> Unit,
     onEnablePremiumForTesting: () -> Unit,
     onDisablePremiumForTesting: () -> Unit,
     onResetTrialForTesting: () -> Unit,
@@ -306,6 +308,67 @@ fun SettingsPage(
         }
 
         Spacer(modifier = Modifier.height(10.dp))
+        Divider()
+
+        Column {
+            Text(
+                text = Locales.t("my_services"),
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = onSurface.copy(alpha = 0.85f),
+                modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
+            )
+
+            Text(
+                text = Locales.t("my_services_hint"),
+                fontSize = (13 * fontScale).sp,
+                color = onSurface.copy(alpha = 0.70f),
+                lineHeight = (19 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Button(
+                onClick = onOpenServiceTemplates,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(Locales.t("my_services"))
+            }
+        }
+
+        Divider()
+        Column {
+            Text(
+                text = Locales.t("work_schedule"),
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = onSurface.copy(alpha = 0.85f),
+                modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
+            )
+
+            Text(
+                text = Locales.t("work_schedule_hint"),
+                fontSize = (13 * fontScale).sp,
+                color = onSurface.copy(alpha = 0.70f),
+                lineHeight = (19 * fontScale).sp
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Button(
+                onClick = onOpenWorkSchedule,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(Locales.t("work_schedule"))
+            }
+        }
+
         Divider()
 
         Column {

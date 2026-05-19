@@ -47,7 +47,26 @@ private data class Block(
 ) {
     enum class Kind { FREE, APPOINTMENT }
 }
+private fun hmToHourInt(hm: String): Int {
+    return hm.substringBefore(":").toIntOrNull() ?: 0
+}
 
+private fun isBlockedByWorkSchedule(
+    date: kotlinx.datetime.LocalDate,
+    startHm: String
+): Boolean {
+    val dayOfWeek = date.dayOfWeek.isoDayNumber
+    val hour = hmToHourInt(startHm)
+
+    return AppSettings.getActiveWeeklyBlockedIntervals().any { interval ->
+        if (interval.dayOfWeek != dayOfWeek) return@any false
+
+        val startHour = hmToHourInt(interval.startTime)
+        val endHour = hmToHourInt(interval.endTime)
+
+        hour >= startHour && hour < endHour
+    }
+}
 @Composable
 fun DayDetailsView(
     date: LocalDate,
@@ -185,6 +204,10 @@ fun DayDetailsView(
 
                 val startHm = minutesToHm(b.startMin)
                 val endHm = minutesToHm(b.endMin)
+                val blockedBySchedule =
+                    b.kind == Block.Kind.FREE &&
+                            date >= today &&
+                            isBlockedByWorkSchedule(date, startHm)
 
                 if (b.kind == Block.Kind.APPOINTMENT && b.appt != null) {
                     val appt = b.appt
@@ -240,10 +263,18 @@ fun DayDetailsView(
                             .clickable(
                                 interactionSource = interactionSource,
                                 indication = LocalIndication.current,
+                                enabled = date >= today && !blockedBySchedule,
                                 onClick = { onTimeClick(startHm) }
                             ),
                         backgroundColor = Color.Transparent,
-                        border = BorderStroke(1.dp, MaterialTheme.colors.onSurface.copy(alpha = 0.12f))
+                        border = BorderStroke(
+                            1.dp,
+                            if (date < today || blockedBySchedule) {
+                                MaterialTheme.colors.onSurface.copy(alpha = 0.06f)
+                            } else {
+                                MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+                            }
+                        )
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -259,12 +290,24 @@ fun DayDetailsView(
                                     text = startHm,
                                     fontSize = (16 * fontScale).sp,
                                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.55f)
+                                    color = if (date < today || blockedBySchedule) {
+                                        MaterialTheme.colors.onSurface.copy(alpha = 0.28f)
+                                    } else {
+                                        MaterialTheme.colors.onSurface.copy(alpha = 0.55f)
+                                    }
                                 )
                             }
                             Text(
-                                text = Locales.t("free"),
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.35f),
+                                text = if (date < today || blockedBySchedule) {
+                                    Locales.t("unavailable")
+                                } else {
+                                    Locales.t("free")
+                                },
+                                color = if (date < today || blockedBySchedule) {
+                                    MaterialTheme.colors.onSurface.copy(alpha = 0.18f)
+                                } else {
+                                    MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
+                                },
                                 fontSize = (14 * fontScale).sp
                             )
                         }
@@ -277,26 +320,32 @@ fun DayDetailsView(
     val apptToView = viewingAppt
     val liveStatusToView = viewingStatus
     if (apptToView != null && liveStatusToView != null) {
+        val actionsEnabled = date >= today
+
         AppointmentDetailsDialog(
             appt = apptToView,
             startHm = viewingStartHm,
             endHm = viewingEndHm,
             status = liveStatusToView,
+            actionsEnabled = actionsEnabled,
             onDismiss = {
                 viewingAppt = null
                 viewingStatus = null
             },
             onEditClick = {
+                if (!actionsEnabled) return@AppointmentDetailsDialog
                 viewingAppt = null
                 viewingStatus = null
                 onEditClick(apptToView)
             },
             onTransferClick = {
+                if (!actionsEnabled) return@AppointmentDetailsDialog
                 viewingAppt = null
                 viewingStatus = null
                 onTransferClick(apptToView)
             },
             onDeleteClick = {
+                if (!actionsEnabled) return@AppointmentDetailsDialog
                 viewingAppt = null
                 viewingStatus = null
                 onDeleteClick(apptToView)

@@ -66,6 +66,7 @@ class AppRootState(
     var showImportConfirm by mutableStateOf(false)
     var showImportError by mutableStateOf<String?>(null)
     var premiumRequiredMessage by mutableStateOf("")
+    var premiumReturnScreen by mutableStateOf(Screen.SETTINGS)
 
     var mustCreatePin by mutableStateOf(!AppSettings.isPinSet())
     var locked by mutableStateOf(AppSettings.pinEnabled && AppSettings.isPinSet())
@@ -281,8 +282,16 @@ class AppRootState(
         showPinDialog = true
     }
 
-    fun showPremiumRequired(message: String) {
+    fun closePremiumScreen() {
+        currentScreen = premiumReturnScreen
+    }
+
+    fun showPremiumRequired(
+        message: String,
+        returnTo: Screen = currentScreen
+    ) {
         premiumRequiredMessage = message
+        premiumReturnScreen = returnTo
         currentScreen = Screen.PREMIUM_ACCESS
     }
 

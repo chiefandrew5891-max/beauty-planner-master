@@ -255,6 +255,7 @@ fun AppointmentDetailsDialog(
     startHm: String,
     endHm: String,
     status: LiveStatusKey,
+    actionsEnabled: Boolean = true,
     onDismiss: () -> Unit,
     onEditClick: () -> Unit,
     onTransferClick: () -> Unit,
@@ -268,7 +269,11 @@ fun AppointmentDetailsDialog(
     val dateTextColor = MaterialTheme.colors.primary.copy(alpha = 0.95f)
     val timeTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.72f)
 
-    val editTransferEnabled = status != LiveStatusKey.DONE
+    val editTransferEnabled = actionsEnabled && status != LiveStatusKey.DONE
+    val deleteEnabled = actionsEnabled
+
+    val disabledButtonTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
+    val enabledDeleteColor = Color.Red
 
     AppDialogTheme {
         AlertDialog(
@@ -342,6 +347,15 @@ fun AppointmentDetailsDialog(
                         fontSize = (13 * fontScale).sp
                     )
 
+                    if (!actionsEnabled) {
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = Locales.t("past_date_actions_disabled"),
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f),
+                            fontSize = (12 * fontScale).sp
+                        )
+                    }
+
                     Spacer(Modifier.height(18.dp))
 
                     Column(
@@ -352,27 +366,59 @@ fun AppointmentDetailsDialog(
                             onClick = onEditClick,
                             enabled = editTransferEnabled,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                disabledBackgroundColor = MaterialTheme.colors.onSurface.copy(alpha = 0.08f),
+                                disabledContentColor = disabledButtonTextColor
+                            )
                         ) {
-                            Text(Locales.t("edit"))
+                            Text(
+                                text = Locales.t("edit"),
+                                color = if (editTransferEnabled) {
+                                    MaterialTheme.colors.onPrimary
+                                } else {
+                                    disabledButtonTextColor
+                                }
+                            )
                         }
 
                         OutlinedButton(
                             onClick = onTransferClick,
                             enabled = editTransferEnabled,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                disabledContentColor = disabledButtonTextColor
+                            )
                         ) {
-                            Text(Locales.t("transfer_appt"))
+                            Text(
+                                text = Locales.t("transfer_appt"),
+                                color = if (editTransferEnabled) {
+                                    MaterialTheme.colors.primary
+                                } else {
+                                    disabledButtonTextColor
+                                }
+                            )
                         }
 
                         OutlinedButton(
                             onClick = onDeleteClick,
+                            enabled = deleteEnabled,
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(14.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = enabledDeleteColor,
+                                disabledContentColor = disabledButtonTextColor
+                            )
                         ) {
-                            Text(Locales.t("delete_btn"), color = Color.Red)
+                            Text(
+                                text = Locales.t("delete_btn"),
+                                color = if (deleteEnabled) {
+                                    enabledDeleteColor
+                                } else {
+                                    disabledButtonTextColor
+                                }
+                            )
                         }
                     }
                 }

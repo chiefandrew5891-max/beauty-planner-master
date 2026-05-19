@@ -18,7 +18,27 @@ data class Appointment(
     // OLD: keep for old data / fallback
     val durationHours: Int = 1
 )
-
+@Serializable
+data class ServiceTemplate(
+    val id: String,
+    val title: String,
+    val defaultPrice: String = "",
+    val isActive: Boolean = true
+)
+@Serializable
+data class WeeklyBlockedInterval(
+    val id: String,
+    val dayOfWeek: Int, // 1..7 (Mon..Sun)
+    val startTime: String,
+    val endTime: String,
+    val isActive: Boolean = true
+)
+@Serializable
+data class ScheduleDateOverride(
+    val id: String,
+    val date: String, // YYYY-MM-DD
+    val unblockAll: Boolean = true
+)
 enum class Screen {
     MONTH,
     DAY_DETAILS,
@@ -26,5 +46,7 @@ enum class Screen {
     STATS,
     FEEDBACK,
     PRIVACY_POLICY,
-    PREMIUM_ACCESS
+    PREMIUM_ACCESS,
+    SERVICE_TEMPLATES,
+    WORK_SCHEDULE
 }

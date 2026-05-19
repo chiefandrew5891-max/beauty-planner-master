@@ -23,9 +23,16 @@ import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.ContactSuggestion
 import com.andrey.beautyplanner.ContactsAutocomplete
 import com.andrey.beautyplanner.Locales
-import com.andrey.beautyplanner.ServicesCatalog
+import com.andrey.beautyplanner.ServiceTemplate
 import kotlinx.coroutines.delay
 
+private fun displayServiceTitle(title: String): String {
+    return if (title.startsWith("service_")) {
+        Locales.t(title)
+    } else {
+        title
+    }
+}
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookingDialog(
@@ -58,6 +65,7 @@ fun BookingDialog(
     var showEnableEditConfirm by remember { mutableStateOf(false) }
 
     val initKey = remember(time, initialData?.id) { initialData?.id ?: "new:$time" }
+    val isNewAppointment = initialData == null
 
     var name by remember(initKey) { mutableStateOf(initialData?.clientName ?: "") }
     var phone by remember(initKey) { mutableStateOf(initialData?.phone ?: "") }
@@ -66,10 +74,10 @@ fun BookingDialog(
 
     val otherKey = "service_other"
     var serviceIsOther by remember(initKey) {
-        mutableStateOf(serviceKey.isNotBlank() && !serviceKey.startsWith("service_"))
+        mutableStateOf(false)
     }
     var customServiceText by remember(initKey) {
-        mutableStateOf(if (serviceIsOther) serviceKey else "")
+        mutableStateOf("")
     }
 
     val initialStart = remember(initKey) { initialData?.time ?: time }
@@ -379,8 +387,23 @@ fun BookingDialog(
 
                 Spacer(Modifier.height(12.dp))
 
-                val services = remember {
-                    ServicesCatalog.keys + otherKey
+                val services = remember(AppSettings.serviceTemplates) {
+                    AppSettings.getActiveServiceTemplates() + ServiceTemplate(
+                        id = otherKey,
+                        title = otherKey,
+                        defaultPrice = "",
+                        isActive = true
+                    )
+                }
+                LaunchedEffect(initKey) {
+                    val existing = AppSettings.getActiveServiceTemplates().any { it.title == serviceKey }
+                    val builtIn = serviceKey.startsWith("service_")
+                    val empty = serviceKey.isBlank()
+
+                    if (!empty && !builtIn && !existing) {
+                        serviceIsOther = true
+                        customServiceText = serviceKey
+                    }
                 }
 
                 if (!serviceIsOther) {
@@ -390,7 +413,7 @@ fun BookingDialog(
                         expanded = serviceExpanded,
                         onExpandedChange = { if (editEnabled) serviceExpanded = !serviceExpanded }
                     ) {
-                        val displayText = if (serviceKey.isBlank()) "" else Locales.t(serviceKey)
+                        val displayText = if (serviceKey.isBlank()) "" else displayServiceTitle(serviceKey)
 
                         OutlinedTextField(
                             value = displayText,
@@ -404,19 +427,42 @@ fun BookingDialog(
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = serviceExpanded) },
                             isError = triedSave && editEnabled && !serviceOk
                         )
-                        ExposedDropdownMenu(expanded = serviceExpanded, onDismissRequest = { serviceExpanded = false }) {
-                            services.forEach { key ->
-                                DropdownMenuItem(onClick = {
-                                    serviceExpanded = false
-                                    if (key == otherKey) {
-                                        serviceIsOther = true
-                                        customServiceText = ""
-                                        serviceKey = ""
-                                    } else {
-                                        serviceIsOther = false
-                                        serviceKey = key
+
+                        ExposedDropdownMenu(
+                            expanded = serviceExpanded,
+                            onDismissRequest = { serviceExpanded = false }
+                        ) {
+                            services.forEach { item ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        serviceExpanded = false
+
+                                        if (item.id == otherKey) {
+                                            serviceIsOther = true
+                                            customServiceText = ""
+                                            serviceKey = ""
+                                        } else {
+                                            serviceIsOther = false
+                                            serviceKey = item.title
+
+                                            val shouldAutofillPrice =
+                                                item.defaultPrice.isNotBlank() &&
+                                                        (price.isBlank() || isNewAppointment)
+
+                                            if (shouldAutofillPrice) {
+                                                price = item.defaultPrice
+                                            }
+                                        }
                                     }
-                                }) { Text(Locales.t(key)) }
+                                ) {
+                                    Text(
+                                        text = if (item.id == otherKey) {
+                                            Locales.t(otherKey)
+                                        } else {
+                                            displayServiceTitle(item.title)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

@@ -118,6 +118,8 @@ fun AppRootChrome(
                                     Screen.FEEDBACK -> Locales.t("nav_feedback")
                                     Screen.PRIVACY_POLICY -> Locales.t("privacy_policy")
                                     Screen.PREMIUM_ACCESS -> Locales.t("premium_access_title")
+                                    Screen.SERVICE_TEMPLATES -> Locales.t("my_services")
+                                    Screen.WORK_SCHEDULE -> Locales.t("work_schedule")
                                 }
 
                                 Text(

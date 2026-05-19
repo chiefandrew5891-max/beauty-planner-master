@@ -15,7 +15,44 @@ private val settingsJson = Json {
     encodeDefaults = true
     prettyPrint = true
 }
-
+private fun defaultServiceTemplates(): List<ServiceTemplate> = listOf(
+    ServiceTemplate(
+        id = "service_gel_polish",
+        title = "service_gel_polish",
+        defaultPrice = "",
+        isActive = true
+    ),
+    ServiceTemplate(
+        id = "service_gel_strengthening",
+        title = "service_gel_strengthening",
+        defaultPrice = "",
+        isActive = true
+    ),
+    ServiceTemplate(
+        id = "service_nail_extensions",
+        title = "service_nail_extensions",
+        defaultPrice = "",
+        isActive = true
+    ),
+    ServiceTemplate(
+        id = "service_lash_extensions",
+        title = "service_lash_extensions",
+        defaultPrice = "",
+        isActive = true
+    ),
+    ServiceTemplate(
+        id = "service_correction",
+        title = "service_correction",
+        defaultPrice = "",
+        isActive = true
+    ),
+    ServiceTemplate(
+        id = "service_repair",
+        title = "service_repair",
+        defaultPrice = "",
+        isActive = true
+    )
+)
 @Serializable
 private data class SettingsSnapshot(
     val isDarkMode: Boolean = false,
@@ -37,6 +74,10 @@ private data class SettingsSnapshot(
     val premiumProductId: String = "",
     val premiumPurchaseToken: String = "",
 
+    val serviceTemplates: List<ServiceTemplate> = emptyList(),
+    val weeklyBlockedIntervals: List<WeeklyBlockedInterval> = emptyList(),
+    val scheduleDateOverrides: List<ScheduleDateOverride> = emptyList(),
+
     // --- security ---
     val pinEnabled: Boolean = false,
     val adminPinHash: String = ""
@@ -44,7 +85,7 @@ private data class SettingsSnapshot(
 
 object AppSettings {
 
-    const val SHOW_DEVELOPER_PREMIUM_TOOLS = false
+    const val SHOW_DEVELOPER_PREMIUM_TOOLS = true
     private val storage: SettingsStorage by lazy { createSettingsStorage() }
 
     var isDarkMode by mutableStateOf(false)
@@ -66,8 +107,59 @@ object AppSettings {
     var premiumProductId by mutableStateOf("")
     var premiumPurchaseToken by mutableStateOf("")
 
+    var serviceTemplates by mutableStateOf(defaultServiceTemplates())
+    var weeklyBlockedIntervals by mutableStateOf<List<WeeklyBlockedInterval>>(emptyList())
+    var scheduleDateOverrides by mutableStateOf<List<ScheduleDateOverride>>(emptyList())
+
     var pinEnabled by mutableStateOf(false)
     private var adminPinHash by mutableStateOf("")
+
+    fun getActiveServiceTemplates(): List<ServiceTemplate> =
+        serviceTemplates.filter { it.isActive }
+
+    fun upsertServiceTemplate(template: ServiceTemplate) {
+        val idx = serviceTemplates.indexOfFirst { it.id == template.id }
+        serviceTemplates =
+            if (idx >= 0) {
+                serviceTemplates.toMutableList().apply { set(idx, template) }
+            } else {
+                serviceTemplates + template
+            }
+        persist()
+    }
+
+    fun removeServiceTemplate(id: String) {
+        serviceTemplates = serviceTemplates.filterNot { it.id == id }
+        persist()
+    }
+    fun getActiveWeeklyBlockedIntervals(): List<WeeklyBlockedInterval> =
+        weeklyBlockedIntervals.filter { it.isActive }
+
+    fun upsertWeeklyBlockedInterval(interval: WeeklyBlockedInterval) {
+        val idx = weeklyBlockedIntervals.indexOfFirst { it.id == interval.id }
+        weeklyBlockedIntervals =
+            if (idx >= 0) {
+                weeklyBlockedIntervals.toMutableList().apply { set(idx, interval) }
+            } else {
+                weeklyBlockedIntervals + interval
+            }
+        persist()
+    }
+
+    fun removeWeeklyBlockedInterval(id: String) {
+        weeklyBlockedIntervals = weeklyBlockedIntervals.filterNot { it.id == id }
+        persist()
+    }
+
+    fun addScheduleDateOverride(override: ScheduleDateOverride) {
+        scheduleDateOverrides = scheduleDateOverrides + override
+        persist()
+    }
+
+    fun removeScheduleDateOverride(id: String) {
+        scheduleDateOverrides = scheduleDateOverrides.filterNot { it.id == id }
+        persist()
+    }
 
     fun reminderMinutesComputed(): List<Int> {
         val total = reminderDaysBefore * 24 * 60 + reminderHoursBefore * 60
@@ -151,6 +243,15 @@ object AppSettings {
         premiumProductId = snapshot.premiumProductId
         premiumPurchaseToken = snapshot.premiumPurchaseToken
 
+        serviceTemplates = if (snapshot.serviceTemplates.isNotEmpty()) {
+            snapshot.serviceTemplates
+        } else {
+            defaultServiceTemplates()
+        }
+
+        weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals
+        scheduleDateOverrides = snapshot.scheduleDateOverrides
+
         pinEnabled = snapshot.pinEnabled
         adminPinHash = snapshot.adminPinHash
 
@@ -177,6 +278,10 @@ object AppSettings {
             premiumUnlocked = premiumUnlocked,
             premiumProductId = premiumProductId,
             premiumPurchaseToken = premiumPurchaseToken,
+
+            serviceTemplates = serviceTemplates,
+            weeklyBlockedIntervals = weeklyBlockedIntervals,
+            scheduleDateOverrides = scheduleDateOverrides,
 
             pinEnabled = pinEnabled,
             adminPinHash = adminPinHash

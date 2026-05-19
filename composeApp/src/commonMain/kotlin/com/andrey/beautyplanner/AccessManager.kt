@@ -58,6 +58,8 @@ object AccessManager {
             PremiumFeature.BACKUP_IMPORT -> false
             PremiumFeature.UNLIMITED_APPOINTMENTS -> false
             PremiumFeature.PREMIUM_NOTIFICATIONS -> false
+            PremiumFeature.CUSTOM_SERVICES -> false
+            PremiumFeature.WORK_SCHEDULE -> false
         }
     }
 

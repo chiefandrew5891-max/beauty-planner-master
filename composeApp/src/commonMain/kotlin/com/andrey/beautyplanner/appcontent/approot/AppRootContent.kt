@@ -29,6 +29,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import androidx.compose.material.Button
+import com.andrey.beautyplanner.appcontent.ServiceTemplatesScreen
+import com.andrey.beautyplanner.appcontent.WorkScheduleScreen
 
 @Composable
 fun AppRootContent(
@@ -70,7 +72,10 @@ fun AppRootContent(
                 onExport = {
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
                     if (!AccessManager.hasFeature(PremiumFeature.BACKUP_EXPORT, nowMillis)) {
-                        state.showPremiumRequired(Locales.t("premium_required_export"))
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_export"),
+                            returnTo = Screen.SETTINGS
+                        )
                         return@SettingsPage
                     }
 
@@ -86,7 +91,10 @@ fun AppRootContent(
                 onImport = {
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
                     if (!AccessManager.hasFeature(PremiumFeature.BACKUP_IMPORT, nowMillis)) {
-                        state.showPremiumRequired(Locales.t("premium_required_import"))
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_import"),
+                            returnTo = Screen.SETTINGS
+                        )
                         return@SettingsPage
                     }
 
@@ -155,8 +163,34 @@ fun AppRootContent(
                     state.refreshAccessState()
                 },
                 onOpenPremiumScreen = {
-                    state.premiumRequiredMessage = Locales.t("premium_required_default")
-                    state.currentScreen = Screen.PREMIUM_ACCESS
+                    state.showPremiumRequired(
+                        message = Locales.t("premium_required_default"),
+                        returnTo = Screen.SETTINGS
+                    )
+                },
+                onOpenServiceTemplates = {
+                    val nowMillis = Clock.System.now().toEpochMilliseconds()
+                    if (!AccessManager.hasFeature(PremiumFeature.CUSTOM_SERVICES, nowMillis)) {
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_services"),
+                            returnTo = Screen.SETTINGS
+                        )
+                        return@SettingsPage
+                    }
+
+                    state.currentScreen = Screen.SERVICE_TEMPLATES
+                },
+                onOpenWorkSchedule = {
+                    val nowMillis = Clock.System.now().toEpochMilliseconds()
+                    if (!AccessManager.hasFeature(PremiumFeature.WORK_SCHEDULE, nowMillis)) {
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_work_schedule"),
+                            returnTo = Screen.SETTINGS
+                        )
+                        return@SettingsPage
+                    }
+
+                    state.currentScreen = Screen.WORK_SCHEDULE
                 },
             )
 
@@ -187,7 +221,10 @@ fun AppRootContent(
 
                             Button(
                                 onClick = {
-                                    state.showPremiumRequired(statsMessage)
+                                    state.showPremiumRequired(
+                                        message = statsMessage,
+                                        returnTo = Screen.STATS
+                                    )
                                 }
                             ) {
                                 Text(Locales.t("premium_learn_more_btn"))
@@ -427,7 +464,10 @@ fun AppRootContent(
                     )
 
                     if (!canCreate) {
-                        state.showPremiumRequired(Locales.t("premium_required_limit"))
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_limit"),
+                            returnTo = Screen.DAY_DETAILS
+                        )
                         return@DayDetailsView
                     }
 
@@ -460,8 +500,11 @@ fun AppRootContent(
                 accessState = state.accessState,
                 message = state.premiumRequiredMessage,
                 billingUiState = state.billingUiState,
+                onBack = {
+                    state.closePremiumScreen()
+                },
                 onContinueFree = {
-                    state.currentScreen = Screen.SETTINGS
+                    state.closePremiumScreen()
                 },
                 onUnlockPremium = {
                     state.buyPremium()
@@ -470,6 +513,8 @@ fun AppRootContent(
                     state.restorePremium()
                 }
             )
+            Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
+            Screen.WORK_SCHEDULE -> WorkScheduleScreen()
         }
 
         if (state.showBookingDialog) {
@@ -549,16 +594,21 @@ fun AppRootContent(
         val apptToView = viewingAppt
         val statusToView = viewingStatus
         if (apptToView != null && statusToView != null) {
+            val apptDate = runCatching { kotlinx.datetime.LocalDate.parse(apptToView.dateString) }.getOrNull()
+            val actionsEnabled = apptDate == null || apptDate >= state.today
+
             AppointmentDetailsDialog(
                 appt = apptToView,
                 startHm = viewingStartHm,
                 endHm = viewingEndHm,
                 status = statusToView,
+                actionsEnabled = actionsEnabled,
                 onDismiss = {
                     viewingAppt = null
                     viewingStatus = null
                 },
                 onEditClick = {
+                    if (!actionsEnabled) return@AppointmentDetailsDialog
                     viewingAppt = null
                     viewingStatus = null
                     state.editingAppointment = apptToView
@@ -566,6 +616,7 @@ fun AppRootContent(
                     state.showBookingDialog = true
                 },
                 onTransferClick = {
+                    if (!actionsEnabled) return@AppointmentDetailsDialog
                     viewingAppt = null
                     viewingStatus = null
                     state.transferA = apptToView
@@ -573,6 +624,7 @@ fun AppRootContent(
                     state.bookingReadOnly = false
                 },
                 onDeleteClick = {
+                    if (!actionsEnabled) return@AppointmentDetailsDialog
                     viewingAppt = null
                     viewingStatus = null
                     state.showDeleteConfirm = apptToView
