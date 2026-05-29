@@ -138,6 +138,7 @@ fun AppRootChrome(
                         state.currentScreen == Screen.DEVELOPER_ACCESS ||
                         state.currentScreen == Screen.BACKUP_SETTINGS ||
                         state.currentScreen == Screen.PRIVACY_POLICY ||
+                        state.currentScreen == Screen.NOTIFICATION_SETTINGS ||
                         state.currentScreen == Screen.PREMIUM_ACCESS
 
             val showBackButton = !isHomeScreen
@@ -175,32 +176,6 @@ fun AppRootChrome(
                                     tint = MaterialTheme.colors.primary
                                 )
                             }
-
-                            val titleText = when (state.currentScreen) {
-                                Screen.MONTH -> Locales.t("nav_main")
-                                Screen.SETTINGS -> Locales.t("nav_settings")
-                                Screen.DAY_DETAILS -> Locales.t("nav_day")
-                                Screen.STATS -> Locales.t("nav_stats")
-                                Screen.FEEDBACK -> Locales.t("nav_feedback")
-                                Screen.PRIVACY_POLICY -> Locales.t("privacy_policy")
-                                Screen.PREMIUM_ACCESS -> Locales.t("premium_access_title")
-                                Screen.SERVICE_TEMPLATES -> ""
-                                Screen.WORK_SCHEDULE -> ""
-                                Screen.APPEARANCE_SETTINGS -> ""
-                                Screen.DEVELOPER_ACCESS -> ""
-                                Screen.BACKUP_SETTINGS -> ""
-                            }
-
-                            Text(
-                                text = titleText,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.Center),
-                                textAlign = TextAlign.Center,
-                                fontSize = (18 * state.fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.onSurface
-                            )
 
                             Row(
                                 modifier = Modifier.align(Alignment.CenterEnd),

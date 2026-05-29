@@ -21,6 +21,15 @@ object Locales {
             "backup_import_password_title" to "Пароль резервной копии",
             "backup_import_password_hint" to "Введите пароль для расшифровки файла",
             "backup_import_password_invalid" to "Не удалось расшифровать файл. Проверьте пароль.",
+            "notifications_settings_hint" to "Управление уведомлениями, звуком и временем напоминаний.",
+            "notifications_settings_open" to "Открыть настройки уведомлений",
+
+            "stats_client_filter" to "Клиент",
+            "stats_client_picker_title" to "Выбрать клиента",
+            "stats_open_client_picker" to "Выбрать из базы клиентов",
+            "stats_clear_client_filter" to "Сбросить фильтр клиента",
+            "stats_client_filter_button" to "Фильтр по клиенту",
+            "stats_selected_client" to "Выбранный клиент",
 
             "app_name" to "Beauty Planner",
             "nav_main" to "Главная",
@@ -329,6 +338,15 @@ object Locales {
             "backup_import_password_title" to "Backup password",
             "backup_import_password_hint" to "Enter password to decrypt the file",
             "backup_import_password_invalid" to "Could not decrypt file. Check the password.",
+            "notifications_settings_hint" to "Manage notifications, sound, and reminder timing.",
+            "notifications_settings_open" to "Open notification settings",
+
+            "stats_client_filter" to "Client",
+            "stats_client_picker_title" to "Select client",
+            "stats_open_client_picker" to "Choose from client database",
+            "stats_clear_client_filter" to "Clear client filter",
+            "stats_client_filter_button" to "Filter by client",
+            "stats_selected_client" to "Selected client",
 
             "app_name" to "Beauty Planner",
             "nav_main" to "Main",
@@ -632,6 +650,15 @@ object Locales {
             "backup_import_password_title" to "Password del backup",
             "backup_import_password_hint" to "Inserisci la password per decifrare il file",
             "backup_import_password_invalid" to "Impossibile decifrare il file. Controlla la password.",
+            "notifications_settings_hint" to "Gestisci notifiche, suono e tempi dei promemoria.",
+            "notifications_settings_open" to "Apri impostazioni notifiche",
+
+            "stats_client_filter" to "Cliente",
+            "stats_client_picker_title" to "Seleziona cliente",
+            "stats_open_client_picker" to "Scegli dalla lista clienti",
+            "stats_clear_client_filter" to "Reimposta filtro cliente",
+            "stats_client_filter_button" to "Filtro per cliente",
+            "stats_selected_client" to "Cliente selezionato",
 
             "app_name" to "Beauty Planner",
             "nav_main" to "Home",
@@ -931,6 +958,15 @@ object Locales {
             "backup_import_password_title" to "Пароль резервної копії",
             "backup_import_password_hint" to "Введіть пароль для розшифрування файлу",
             "backup_import_password_invalid" to "Не вдалося розшифрувати файл. Перевірте пароль.",
+            "notifications_settings_hint" to "Керуйте сповіщеннями, звуком і часом нагадувань.",
+            "notifications_settings_open" to "Відкрити налаштування сповіщень",
+
+            "stats_client_filter" to "Клієнт",
+            "stats_client_picker_title" to "Обрати клієнта",
+            "stats_open_client_picker" to "Обрати з бази клієнтів",
+            "stats_clear_client_filter" to "Скинути фільтр клієнта",
+            "stats_client_filter_button" to "Фільтр за клієнтом",
+            "stats_selected_client" to "Обраний клієнт",
 
             "app_name" to "Beauty Planner",
             "nav_main" to "Головна",

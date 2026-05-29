@@ -25,6 +25,8 @@ import com.andrey.beautyplanner.ContactsAutocomplete
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.ServiceTemplate
 import kotlinx.coroutines.delay
+import com.andrey.beautyplanner.ClientSuggestion
+import com.andrey.beautyplanner.ClientSuggestions
 
 private fun displayServiceTitle(title: String): String {
     return if (title.startsWith("service_")) {
@@ -39,6 +41,7 @@ fun BookingDialog(
     time: String,
     initialData: Appointment?,
     readOnly: Boolean,
+    localClientSuggestions: List<ClientSuggestion>,
     onDismiss: () -> Unit,
     onSave: (String, Int, String, String, String, String) -> Unit,
     onTransferRequest: (Appointment) -> Unit
@@ -138,32 +141,49 @@ fun BookingDialog(
 
     val formOk = nameOk && phoneOk && serviceOk && priceOk && endOk
 
-    var contactSuggestions by remember { mutableStateOf<List<ContactSuggestion>>(emptyList()) }
+    var mergedSuggestions by remember { mutableStateOf<List<ClientSuggestion>>(emptyList()) }
     var showSuggestions by remember { mutableStateOf(false) }
 
     val contactsPermissionGranted by remember {
         derivedStateOf { ContactsAutocomplete.isPermissionGranted() }
     }
 
-    LaunchedEffect(name, editEnabled, contactsPermissionGranted) {
-        if (!editEnabled || !contactsPermissionGranted) {
-            contactSuggestions = emptyList()
+    LaunchedEffect(name, editEnabled, contactsPermissionGranted, localClientSuggestions) {
+        if (!editEnabled) {
+            mergedSuggestions = emptyList()
             showSuggestions = false
             return@LaunchedEffect
         }
 
         val query = name.trim()
-        if (query.length < 2) {
-            contactSuggestions = emptyList()
+        if (query.length < 1) {
+            mergedSuggestions = emptyList()
             showSuggestions = false
             return@LaunchedEffect
         }
 
         delay(180)
 
-        val found = ContactsAutocomplete.findSuggestions(query, limit = 8)
-        contactSuggestions = found
-        showSuggestions = found.isNotEmpty()
+        val localFound = ClientSuggestions.filter(
+            clients = localClientSuggestions,
+            query = query,
+            limit = 8
+        )
+
+        val contactsFound = if (contactsPermissionGranted) {
+            ContactsAutocomplete.findSuggestions(query, limit = 8)
+        } else {
+            emptyList()
+        }
+
+        val merged = ClientSuggestions.merge(
+            local = localFound,
+            contacts = contactsFound,
+            limit = 8
+        )
+
+        mergedSuggestions = merged
+        showSuggestions = merged.isNotEmpty()
     }
 
     if (showEnableEditConfirm) {
@@ -329,7 +349,7 @@ fun BookingDialog(
                     )
                 }
 
-                if (editEnabled && contactsPermissionGranted && showSuggestions && contactSuggestions.isNotEmpty()) {
+                if (editEnabled && showSuggestions && mergedSuggestions.isNotEmpty()) {
                     Spacer(Modifier.height(6.dp))
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -338,13 +358,15 @@ fun BookingDialog(
                         backgroundColor = MaterialTheme.colors.surface
                     ) {
                         Column(modifier = Modifier.fillMaxWidth()) {
-                            contactSuggestions.forEachIndexed { index, suggestion ->
+                            mergedSuggestions.forEachIndexed { index, suggestion ->
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
                                             name = suggestion.displayName
-                                            phone = suggestion.phone
+                                            if (suggestion.phone.isNotBlank()) {
+                                                phone = suggestion.phone
+                                            }
                                             showSuggestions = false
                                         }
                                         .padding(horizontal = 14.dp, vertical = 10.dp)
@@ -356,16 +378,22 @@ fun BookingDialog(
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    Text(
-                                        text = suggestion.phone,
-                                        fontSize = (12 * fontScale).sp,
-                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
+
+                                    if (suggestion.phone.isNotBlank()) {
+                                        Text(
+                                            text = suggestion.phone,
+                                            fontSize = (12 * fontScale).sp,
+                                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
                                 }
-                                if (index != contactSuggestions.lastIndex) {
-                                    Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f))
+
+                                if (index != mergedSuggestions.lastIndex) {
+                                    Divider(
+                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f)
+                                    )
                                 }
                             }
                         }

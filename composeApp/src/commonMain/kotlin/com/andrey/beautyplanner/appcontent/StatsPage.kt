@@ -1,11 +1,30 @@
 package com.andrey.beautyplanner.appcontent
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -13,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
+import com.andrey.beautyplanner.ClientSuggestion
+import com.andrey.beautyplanner.ClientSuggestions
 import com.andrey.beautyplanner.Locales
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -38,9 +59,17 @@ fun StatsPage(
 
     var showFromDatePicker by remember { mutableStateOf(false) }
     var showToDatePicker by remember { mutableStateOf(false) }
+    var showClientPickerDialog by remember { mutableStateOf(false) }
 
     var customFromDate by remember { mutableStateOf(today.minus(30, DateTimeUnit.DAY)) }
     var customToDate by remember { mutableStateOf(today) }
+
+    var clientQuery by remember { mutableStateOf("") }
+    var selectedClient by remember { mutableStateOf<ClientSuggestion?>(null) }
+
+    val allClients = remember(appointments) {
+        ClientSuggestions.fromAppointments(appointments, limit = 1000)
+    }
 
     val (fromDate, toDateInclusive) = remember(today, period, customFromDate, customToDate) {
         when (period) {
@@ -56,15 +85,32 @@ fun StatsPage(
         }
     }
 
-    val filtered = remember(appointments, fromDate, toDateInclusive) {
+    val filtered = remember(
+        appointments,
+        fromDate,
+        toDateInclusive,
+        clientQuery,
+        selectedClient
+    ) {
+        val clientFilter = selectedClient?.displayName?.trim()?.lowercase()
+            ?: clientQuery.trim().lowercase().takeIf { it.isNotBlank() }
+
         appointments
             .asSequence()
             .mapNotNull { a ->
-                val d = runCatching { LocalDate.parse(a.dateString) }.getOrNull() ?: return@mapNotNull null
+                val d = runCatching { LocalDate.parse(a.dateString) }.getOrNull()
+                    ?: return@mapNotNull null
                 d to a
             }
             .filter { (d, _) -> d >= fromDate && d <= toDateInclusive }
             .map { it.second }
+            .filter { appt ->
+                if (clientFilter.isNullOrBlank()) {
+                    true
+                } else {
+                    appt.clientName.trim().lowercase().contains(clientFilter)
+                }
+            }
             .toList()
     }
 
@@ -79,7 +125,11 @@ fun StatsPage(
         a.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
     }
 
-    data class ServiceStat(val service: String, val count: Int, val revenue: Double)
+    data class ServiceStat(
+        val service: String,
+        val count: Int,
+        val revenue: Double
+    )
 
     val byService = remember(filtered) {
         filtered
@@ -89,10 +139,19 @@ fun StatsPage(
             }
             .map { (service, list) ->
                 val count = list.size
-                val serviceRevenue = list.sumOf { it.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0 }
-                ServiceStat(service = service, count = count, revenue = serviceRevenue)
+                val serviceRevenue =
+                    list.sumOf { it.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0 }
+
+                ServiceStat(
+                    service = service,
+                    count = count,
+                    revenue = serviceRevenue
+                )
             }
-            .sortedWith(compareByDescending<ServiceStat> { it.revenue }.thenByDescending { it.count })
+            .sortedWith(
+                compareByDescending<ServiceStat> { it.revenue }
+                    .thenByDescending { it.count }
+            )
     }
 
     Column(
@@ -175,6 +234,53 @@ fun StatsPage(
             }
         }
 
+        OutlinedButton(
+            onClick = { showClientPickerDialog = true },
+            modifier = Modifier.fillMaxWidth(),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+        ) {
+            Text(Locales.t("stats_client_filter_button"))
+        }
+
+        if (clientQuery.isNotBlank()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = 0.dp,
+                backgroundColor = MaterialTheme.colors.surface,
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = Locales.t("stats_selected_client"),
+                        fontSize = (12 * fontScale).sp,
+                        color = secondaryText
+                    )
+
+                    Text(
+                        text = clientQuery,
+                        fontSize = (15 * fontScale).sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = primaryText
+                    )
+                }
+            }
+
+            TextButton(
+                onClick = {
+                    clientQuery = ""
+                    selectedClient = null
+                },
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Text(Locales.t("stats_clear_client_filter"))
+            }
+        }
+
         Text(
             text = "${Locales.t("stats_range")}: $fromDate — $toDateInclusive",
             fontSize = (13 * fontScale).sp,
@@ -183,9 +289,23 @@ fun StatsPage(
 
         Divider()
 
-        StatRow(Locales.t("stats_revenue"), formatMoneyEur(revenue), primaryText)
-        StatRow(Locales.t("stats_count"), totalCount.toString(), primaryText)
-        StatRow(Locales.t("stats_hours"), Locales.hoursCount(totalHours), primaryText)
+        StatRow(
+            label = Locales.t("stats_revenue"),
+            value = formatMoneyEur(revenue),
+            primaryText = primaryText
+        )
+
+        StatRow(
+            label = Locales.t("stats_count"),
+            value = totalCount.toString(),
+            primaryText = primaryText
+        )
+
+        StatRow(
+            label = Locales.t("stats_hours"),
+            value = Locales.hoursCount(totalHours),
+            primaryText = primaryText
+        )
 
         Divider()
 
@@ -218,6 +338,24 @@ fun StatsPage(
         Spacer(modifier = Modifier.height(16.dp))
     }
 
+    if (showClientPickerDialog) {
+        ClientPickerDialog(
+            clients = allClients,
+            selectedClientName = selectedClient?.displayName ?: clientQuery.takeIf { it.isNotBlank() },
+            onDismiss = { showClientPickerDialog = false },
+            onClear = {
+                clientQuery = ""
+                selectedClient = null
+                showClientPickerDialog = false
+            },
+            onSelect = { client ->
+                selectedClient = client
+                clientQuery = client.displayName
+                showClientPickerDialog = false
+            }
+        )
+    }
+
     if (showFromDatePicker) {
         StatsDatePickerDialog(
             title = Locales.t("stats_pick_start_date"),
@@ -246,7 +384,11 @@ fun StatsPage(
 }
 
 @Composable
-private fun PeriodChip(text: String, selected: Boolean, onClick: () -> Unit) {
+private fun PeriodChip(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     val modifier = Modifier.height(38.dp)
 
     if (selected) {
@@ -278,11 +420,19 @@ private fun StatRow(
     primaryText: Color
 ) {
     Row(
-        Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(label, fontWeight = FontWeight.Medium, color = primaryText)
-        Text(value, fontWeight = FontWeight.SemiBold, color = primaryText)
+        Text(
+            text = label,
+            fontWeight = FontWeight.Medium,
+            color = primaryText
+        )
+        Text(
+            text = value,
+            fontWeight = FontWeight.SemiBold,
+            color = primaryText
+        )
     }
 }
 
@@ -296,17 +446,25 @@ private fun ServiceRow(
     secondaryText: Color
 ) {
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
     ) {
         Row(
-            Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(service, fontWeight = FontWeight.SemiBold, color = primaryText)
-            Text(formatMoneyEur(revenue), color = primaryText)
+            Text(
+                text = service,
+                fontWeight = FontWeight.SemiBold,
+                color = primaryText
+            )
+            Text(
+                text = formatMoneyEur(revenue),
+                color = primaryText
+            )
         }
+
         Text(
             text = "${Locales.t("stats_procedures_done")}: $count",
             color = secondaryText,
@@ -317,6 +475,10 @@ private fun ServiceRow(
 
 private fun formatMoneyEur(v: Double): String {
     val rounded = (v * 100).roundToInt() / 100.0
-    val s = if (rounded % 1.0 == 0.0) rounded.toInt().toString() else rounded.toString()
+    val s = if (rounded % 1.0 == 0.0) {
+        rounded.toInt().toString()
+    } else {
+        rounded.toString()
+    }
     return "$s €"
 }

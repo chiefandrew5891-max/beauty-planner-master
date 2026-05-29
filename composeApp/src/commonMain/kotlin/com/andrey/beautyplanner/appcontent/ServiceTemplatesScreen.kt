@@ -33,6 +33,7 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.ServiceTemplate
 import kotlinx.datetime.Clock
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun ServiceTemplatesScreen() {
@@ -53,6 +54,7 @@ fun ServiceTemplatesScreen() {
         Text(
             text = Locales.t("my_services"),
             fontSize = (22 * fontScale).sp,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.onBackground
         )
 

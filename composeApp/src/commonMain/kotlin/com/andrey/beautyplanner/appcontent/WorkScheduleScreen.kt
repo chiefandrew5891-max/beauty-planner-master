@@ -25,6 +25,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -80,6 +81,7 @@ fun WorkScheduleScreen() {
         Text(
             text = Locales.t("work_schedule"),
             fontSize = (22 * fontScale).sp,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.onBackground
         )
 

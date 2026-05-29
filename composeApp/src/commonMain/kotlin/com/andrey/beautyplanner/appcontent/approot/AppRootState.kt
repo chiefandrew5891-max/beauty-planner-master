@@ -323,6 +323,11 @@ class AppRootState(
     ) {
         premiumRequiredMessage = message
         premiumReturnScreen = returnTo
+
+        if (currentScreen != Screen.PREMIUM_ACCESS) {
+            screenHistory = screenHistory + currentScreen
+        }
+
         currentScreen = Screen.PREMIUM_ACCESS
     }
 

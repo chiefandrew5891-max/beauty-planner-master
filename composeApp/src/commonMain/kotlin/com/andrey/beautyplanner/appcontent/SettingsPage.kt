@@ -1,6 +1,8 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,27 +17,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Slider
-import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.AlertDialog
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,13 +49,7 @@ import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AccessState
 import com.andrey.beautyplanner.AccessTier
 import com.andrey.beautyplanner.AppSettings
-import com.andrey.beautyplanner.DataManager
 import com.andrey.beautyplanner.Locales
-import com.andrey.beautyplanner.notifications.NotificationSound
-import com.andrey.beautyplanner.notifications.Notifications
-import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
-import kotlin.math.roundToInt
 
 @Composable
 fun SettingsPage(
@@ -70,23 +62,13 @@ fun SettingsPage(
     onOpenWorkSchedule: () -> Unit,
     onOpenAppearanceSettings: () -> Unit,
     onOpenBackupSettings: () -> Unit,
+    onOpenNotificationSettings: () -> Unit,
     onOpenDeveloperAccess: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
-
     val onSurface = MaterialTheme.colors.onSurface
     val onBg = MaterialTheme.colors.onBackground
-
-    val labelSpacingDp = 10.dp
     val sectionTitlePaddingBottomDp = 10.dp
-
-    var daysSlider by remember { mutableStateOf(AppSettings.reminderDaysBefore.toFloat()) }
-    var hoursSlider by remember { mutableStateOf(AppSettings.reminderHoursBefore.toFloat()) }
-
-    val notificationsEnabled = AppSettings.notificationsEnabled
-    val notificationSound = AppSettings.notificationSound
-    val reminderDays = AppSettings.reminderDaysBefore
-    val reminderHours = AppSettings.reminderHoursBefore
 
     var supportEditMode by remember { mutableStateOf(false) }
     var supportPhoneDraft by remember { mutableStateOf(AppSettings.servicePhone) }
@@ -101,24 +83,6 @@ fun SettingsPage(
     var developerPasswordError by remember { mutableStateOf(false) }
 
     val dbOpsAllowed = AppSettings.pinEnabled && AppSettings.isPinSet()
-
-    LaunchedEffect(notificationsEnabled, notificationSound, reminderDays, reminderHours) {
-        delay(600)
-        val all = runCatching { DataManager.loadFromDatabase() }.getOrNull().orEmpty()
-        val mins = AppSettings.reminderMinutesComputed()
-        runCatching {
-            if (AppSettings.notificationsEnabled && mins.isNotEmpty()) {
-                Notifications.rescheduleAll(
-                    appointments = all,
-                    reminderMinutes = mins,
-                    sound = AppSettings.notificationSound,
-                    nowEpochMillis = Clock.System.now().toEpochMilliseconds()
-                )
-            } else {
-                Notifications.cancelAll()
-            }
-        }
-    }
 
     if (showSupportEditConfirm) {
         AlertDialog(
@@ -303,16 +267,13 @@ fun SettingsPage(
                 color = onSurface.copy(alpha = 0.85f),
                 modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
             )
-
             Text(
                 text = Locales.t("appearance_settings_hint"),
                 fontSize = (13 * fontScale).sp,
                 color = onSurface.copy(alpha = 0.70f),
                 lineHeight = (19 * fontScale).sp
             )
-
             Spacer(Modifier.height(12.dp))
-
             Button(
                 onClick = onOpenAppearanceSettings,
                 modifier = Modifier
@@ -385,7 +346,6 @@ fun SettingsPage(
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
         Divider()
 
         Column {
@@ -396,16 +356,13 @@ fun SettingsPage(
                 color = onSurface.copy(alpha = 0.85f),
                 modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
             )
-
             Text(
                 text = Locales.t("my_services_hint"),
                 fontSize = (13 * fontScale).sp,
                 color = onSurface.copy(alpha = 0.70f),
                 lineHeight = (19 * fontScale).sp
             )
-
             Spacer(Modifier.height(12.dp))
-
             Button(
                 onClick = onOpenServiceTemplates,
                 modifier = Modifier
@@ -427,16 +384,13 @@ fun SettingsPage(
                 color = onSurface.copy(alpha = 0.85f),
                 modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
             )
-
             Text(
                 text = Locales.t("work_schedule_hint"),
                 fontSize = (13 * fontScale).sp,
                 color = onSurface.copy(alpha = 0.70f),
                 lineHeight = (19 * fontScale).sp
             )
-
             Spacer(Modifier.height(12.dp))
-
             Button(
                 onClick = onOpenWorkSchedule,
                 modifier = Modifier
@@ -458,124 +412,22 @@ fun SettingsPage(
                 color = onSurface.copy(alpha = 0.85f),
                 modifier = Modifier.padding(bottom = sectionTitlePaddingBottomDp)
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = Locales.t("notifications_enabled"),
-                    fontSize = (16 * fontScale).sp,
-                    color = onSurface
-                )
-                Switch(
-                    checked = AppSettings.notificationsEnabled,
-                    onCheckedChange = {
-                        AppSettings.notificationsEnabled = it
-                        AppSettings.persist()
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colors.primary,
-                        checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.35f),
-                        uncheckedThumbColor = onSurface.copy(alpha = 0.45f),
-                        uncheckedTrackColor = onSurface.copy(alpha = 0.20f)
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            val soundItems = listOf(
-                Locales.t("notif_sound_default") to NotificationSound.DEFAULT,
-                Locales.t("notif_sound_silent") to NotificationSound.SILENT
-            )
-
-            SettingsDropdown(
-                label = Locales.t("notif_sound_label"),
-                selected = soundItems.firstOrNull { it.second == AppSettings.notificationSound }?.first
-                    ?: Locales.t("notif_sound_default"),
-                items = soundItems.map { it.first },
-                labelSpacing = labelSpacingDp,
-                onSelect = { selected ->
-                    val sound =
-                        soundItems.firstOrNull { it.first == selected }?.second ?: NotificationSound.DEFAULT
-                    AppSettings.notificationSound = sound
-                    AppSettings.persist()
-                }
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
-
             Text(
-                text = Locales.t("reminders_when"),
-                fontSize = (14 * fontScale).sp,
-                fontWeight = FontWeight.SemiBold,
-                color = onSurface.copy(alpha = 0.75f)
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "${Locales.t("remind_days")}: ${Locales.daysCount(AppSettings.reminderDaysBefore)}",
-                fontSize = (15 * fontScale).sp,
-                fontWeight = FontWeight.SemiBold,
-                color = onSurface
-            )
-
-            Slider(
-                value = daysSlider,
-                onValueChange = { daysSlider = it },
-                onValueChangeFinished = {
-                    AppSettings.reminderDaysBefore = daysSlider.roundToInt().coerceIn(0, 3)
-                    AppSettings.persist()
-                },
-                valueRange = 0f..3f,
-                steps = 0,
-                colors = SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colors.primary,
-                    activeTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.85f),
-                    inactiveTrackColor = onSurface.copy(alpha = 0.20f)
-                )
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "${Locales.t("remind_hours")}: ${Locales.hoursCount(AppSettings.reminderHoursBefore)}",
-                fontSize = (15 * fontScale).sp,
-                fontWeight = FontWeight.SemiBold,
-                color = onSurface
-            )
-
-            Slider(
-                value = hoursSlider,
-                onValueChange = { hoursSlider = it },
-                onValueChangeFinished = {
-                    AppSettings.reminderHoursBefore = hoursSlider.roundToInt().coerceIn(0, 12)
-                    AppSettings.persist()
-                },
-                valueRange = 0f..12f,
-                steps = 0,
-                colors = SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colors.primary,
-                    activeTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.85f),
-                    inactiveTrackColor = onSurface.copy(alpha = 0.20f)
-                )
-            )
-
-            val totalMinutes = AppSettings.reminderDaysBefore * 24 * 60 + AppSettings.reminderHoursBefore * 60
-            val summary = if (totalMinutes <= 0) {
-                Locales.t("remind_off")
-            } else {
-                "${Locales.daysCount(AppSettings.reminderDaysBefore)} • ${Locales.hoursCount(AppSettings.reminderHoursBefore)}"
-            }
-
-            Text(
-                text = "${Locales.t("remind_summary")}: $summary",
+                text = Locales.t("notifications_settings_hint"),
                 fontSize = (13 * fontScale).sp,
-                color = onSurface.copy(alpha = 0.60f)
+                color = onSurface.copy(alpha = 0.70f),
+                lineHeight = (19 * fontScale).sp
             )
+            Spacer(Modifier.height(12.dp))
+            Button(
+                onClick = onOpenNotificationSettings,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(Locales.t("notifications_settings_open"))
+            }
         }
 
         Divider()
@@ -691,9 +543,7 @@ fun SettingsPage(
                     .padding(bottom = sectionTitlePaddingBottomDp)
                     .clickable(
                         indication = null,
-                        interactionSource = remember {
-                            androidx.compose.foundation.interaction.MutableInteractionSource()
-                        }
+                        interactionSource = remember { MutableInteractionSource() }
                     ) {
                         securityTapCount += 1
                         if (securityTapCount >= 10) {
@@ -753,7 +603,6 @@ fun SettingsPage(
                         .weight(0.45f)
                         .height(38.dp),
                     shape = RoundedCornerShape(12.dp),
-                    enabled = true,
                     elevation = ButtonDefaults.elevation(0.dp, 0.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
                 ) {
@@ -844,8 +693,7 @@ fun SettingsDropdown(
     var expanded by remember { mutableStateOf(false) }
     val fontScale = AppSettings.getFontScale()
     val onSurface = MaterialTheme.colors.onSurface
-    val interactionSource =
-        remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column {
         Text(
@@ -889,7 +737,6 @@ fun SettingsDropdown(
                         color = onSurface,
                         maxLines = 1
                     )
-
                     Text(
                         text = "▼",
                         fontSize = (12 * fontScale).sp,

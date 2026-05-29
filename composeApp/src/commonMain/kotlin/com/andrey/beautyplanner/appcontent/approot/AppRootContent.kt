@@ -119,6 +119,9 @@ fun AppRootContent(
 
                     state.navigateTo(Screen.WORK_SCHEDULE)
                 },
+                onOpenNotificationSettings = {
+                    state.navigateTo(Screen.NOTIFICATION_SETTINGS)
+                },
                 onOpenAppearanceSettings = {
                     state.navigateTo(Screen.APPEARANCE_SETTINGS)
                 },
@@ -539,6 +542,7 @@ fun AppRootContent(
                     state.navigateBack()
                 }
             )
+            Screen.NOTIFICATION_SETTINGS -> NotificationsSettingsScreen()
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()
             Screen.APPEARANCE_SETTINGS -> AppearanceSettingsScreen()
@@ -549,6 +553,7 @@ fun AppRootContent(
                 time = state.editingAppointment?.time ?: state.selectedTimeSlot,
                 initialData = state.editingAppointment ?: state.transferA,
                 readOnly = state.bookingReadOnly && state.editingAppointment != null,
+                localClientSuggestions = ClientSuggestions.fromAppointments(state.appointments),
                 onDismiss = {
                     state.showBookingDialog = false
                     state.editingAppointment = null
@@ -574,7 +579,11 @@ fun AppRootContent(
                         durationHours = ((durationMinutes + 59) / 60).coerceAtLeast(1)
                     )
 
-                    state.transferA?.let { state.appointments.remove(it); state.transferA = null }
+                    state.transferA?.let {
+                        state.appointments.remove(it)
+                        state.transferA = null
+                    }
+
                     state.replaceById(newAppt)
                     state.saveAll()
 
