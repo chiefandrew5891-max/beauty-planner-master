@@ -35,7 +35,7 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.billing.BillingStatus
 import com.andrey.beautyplanner.billing.BillingUiState
-import com.andrey.beautyplanner.billing.PREMIUM_LIFETIME_PRODUCT_ID
+import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_ID
 
 @Composable
 fun PremiumAccessScreen(
@@ -62,7 +62,7 @@ fun PremiumAccessScreen(
     }
 
     val premiumProduct = billingUiState.products.firstOrNull {
-        it.productId == PREMIUM_LIFETIME_PRODUCT_ID
+        it.productId == PREMIUM_SUBS_PRODUCT_ID
     }
 
     val buyButtonText = when {

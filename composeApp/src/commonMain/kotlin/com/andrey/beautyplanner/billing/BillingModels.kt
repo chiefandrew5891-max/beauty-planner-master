@@ -38,3 +38,21 @@ data class BillingUiState(
     val errorMessage: String? = null,
     val ownedPremium: Boolean = false
 )
+enum class SubscriptionState {
+    NONE,
+    ACTIVE,
+    EXPIRED,
+    CANCELED,
+    IN_GRACE_PERIOD,
+    ON_HOLD
+}
+
+data class SubscriptionInfo(
+    val state: SubscriptionState = SubscriptionState.NONE,
+    val productId: String = "",
+    val purchaseToken: String = "",
+    val isAutoRenewing: Boolean = false,
+    val startTimeMillis: Long? = null,
+    val expiryTimeMillis: Long? = null,
+    val lastVerifiedAtMillis: Long? = null
+)

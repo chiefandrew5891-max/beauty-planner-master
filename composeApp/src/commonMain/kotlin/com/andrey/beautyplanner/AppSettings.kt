@@ -76,6 +76,14 @@ private data class SettingsSnapshot(
     val premiumProductId: String = "",
     val premiumPurchaseToken: String = "",
 
+    val premiumSubscriptionState: String = "NONE",
+    val premiumSubscribedProductId: String = "",
+    val premiumSubscriptionToken: String = "",
+    val premiumSubscriptionStartMillis: Long = 0L,
+    val premiumSubscriptionExpiryMillis: Long = 0L,
+    val premiumSubscriptionAutoRenewing: Boolean = false,
+    val premiumLastVerifiedAtMillis: Long = 0L,
+
     val serviceTemplates: List<ServiceTemplate> = emptyList(),
     val weeklyBlockedIntervals: List<WeeklyBlockedInterval> = emptyList(),
     val scheduleDateOverrides: List<ScheduleDateOverride> = emptyList(),
@@ -192,6 +200,14 @@ object AppSettings {
         "Українська" to "uk"
     )
 
+    var premiumSubscriptionState by mutableStateOf("NONE")
+    var premiumSubscribedProductId by mutableStateOf("")
+    var premiumSubscriptionToken by mutableStateOf("")
+    var premiumSubscriptionStartMillis by mutableStateOf(0L)
+    var premiumSubscriptionExpiryMillis by mutableStateOf(0L)
+    var premiumSubscriptionAutoRenewing by mutableStateOf(false)
+    var premiumLastVerifiedAtMillis by mutableStateOf(0L)
+
     fun getFontScale(): Float = when (fontSizeMode) {
         "Мелкий" -> 0.80f
         "Крупный" -> 1.22f
@@ -276,6 +292,14 @@ object AppSettings {
         premiumProductId = snapshot.premiumProductId
         premiumPurchaseToken = snapshot.premiumPurchaseToken
 
+        premiumSubscriptionState = snapshot.premiumSubscriptionState
+        premiumSubscribedProductId = snapshot.premiumSubscribedProductId
+        premiumSubscriptionToken = snapshot.premiumSubscriptionToken
+        premiumSubscriptionStartMillis = snapshot.premiumSubscriptionStartMillis
+        premiumSubscriptionExpiryMillis = snapshot.premiumSubscriptionExpiryMillis
+        premiumSubscriptionAutoRenewing = snapshot.premiumSubscriptionAutoRenewing
+        premiumLastVerifiedAtMillis = snapshot.premiumLastVerifiedAtMillis
+
         serviceTemplates = if (snapshot.serviceTemplates.isNotEmpty()) {
             snapshot.serviceTemplates
         } else {
@@ -316,6 +340,14 @@ object AppSettings {
             serviceTemplates = serviceTemplates,
             weeklyBlockedIntervals = weeklyBlockedIntervals,
             scheduleDateOverrides = scheduleDateOverrides,
+
+            premiumSubscriptionState = premiumSubscriptionState,
+            premiumSubscribedProductId = premiumSubscribedProductId,
+            premiumSubscriptionToken = premiumSubscriptionToken,
+            premiumSubscriptionStartMillis = premiumSubscriptionStartMillis,
+            premiumSubscriptionExpiryMillis = premiumSubscriptionExpiryMillis,
+            premiumSubscriptionAutoRenewing = premiumSubscriptionAutoRenewing,
+            premiumLastVerifiedAtMillis = premiumLastVerifiedAtMillis,
 
             pinEnabled = pinEnabled,
             adminPinHash = adminPinHash,

@@ -185,7 +185,23 @@ class AppRootState(
 
             loadBillingProducts()
             restorePremium(silent = true)
+            syncSubscriptionState()
         }
+    }
+    private suspend fun syncSubscriptionState() {
+        val info = billingManager.getSubscriptionInfo()
+        val now = Clock.System.now().toEpochMilliseconds()
+
+        AppSettings.premiumSubscriptionState = info.state.name
+        AppSettings.premiumSubscribedProductId = info.productId
+        AppSettings.premiumSubscriptionToken = info.purchaseToken
+        AppSettings.premiumSubscriptionStartMillis = info.startTimeMillis ?: 0L
+        AppSettings.premiumSubscriptionExpiryMillis = info.expiryTimeMillis ?: 0L
+        AppSettings.premiumSubscriptionAutoRenewing = info.isAutoRenewing
+        AppSettings.premiumLastVerifiedAtMillis = info.lastVerifiedAtMillis ?: now
+        AppSettings.persist()
+
+        refreshAccessState(now)
     }
 
     private suspend fun loadBillingProducts() {
@@ -195,7 +211,7 @@ class AppRootState(
         )
 
         val products = billingManager.loadProducts(
-            listOf(PREMIUM_LIFETIME_PRODUCT_ID)
+            listOf(PREMIUM_SUBS_PRODUCT_ID)
         )
 
         billingUiState = billingUiState.copy(
@@ -209,7 +225,7 @@ class AppRootState(
     fun buyPremium() {
         scope.launch {
             val product = billingUiState.products.firstOrNull {
-                it.productId == PREMIUM_LIFETIME_PRODUCT_ID
+                it.productId == PREMIUM_SUBS_PRODUCT_ID
             }
 
             if (product == null) {

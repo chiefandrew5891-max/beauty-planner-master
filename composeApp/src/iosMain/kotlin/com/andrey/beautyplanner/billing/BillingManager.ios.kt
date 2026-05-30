@@ -13,6 +13,9 @@ actual class BillingManager actual constructor() {
     actual suspend fun restorePurchases(): RestoreResult {
         return RestoreResult.Error("Restore is not available on iOS in this version.")
     }
+    actual suspend fun getSubscriptionInfo(): SubscriptionInfo {
+        return SubscriptionInfo(state = SubscriptionState.NONE)
+    }
 
     actual fun dispose() = Unit
 }

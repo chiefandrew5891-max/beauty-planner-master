@@ -38,7 +38,7 @@ actual class BillingManager actual constructor() {
 
                 handleSuccessfulPurchase(
                     purchase = purchase,
-                    productId = PREMIUM_LIFETIME_PRODUCT_ID
+                    productId = PREMIUM_SUBS_PRODUCT_ID
                 ) { ok, message ->
                     pendingPurchaseContinuation = null
                     if (ok) callback(PurchaseResult.Success)
@@ -106,7 +106,7 @@ actual class BillingManager actual constructor() {
                 productIds.map { productId ->
                     QueryProductDetailsParams.Product.newBuilder()
                         .setProductId(productId)
-                        .setProductType(ProductType.INAPP)
+                        .setProductType(ProductType.SUBS)
                         .build()
                 }
             )
@@ -182,7 +182,7 @@ actual class BillingManager actual constructor() {
         }
 
         val params = QueryPurchasesParams.newBuilder()
-            .setProductType(ProductType.INAPP)
+            .setProductType(ProductType.SUBS)
             .build()
 
         return suspendCancellableCoroutine { cont ->
@@ -197,7 +197,7 @@ actual class BillingManager actual constructor() {
                 }
 
                 val premiumPurchase = purchases.firstOrNull { purchase ->
-                    purchase.products.contains(PREMIUM_LIFETIME_PRODUCT_ID) &&
+                    purchase.products.contains(PREMIUM_SUBS_PRODUCT_ID) &&
                             purchase.purchaseState == Purchase.PurchaseState.PURCHASED
                 }
 
@@ -208,7 +208,7 @@ actual class BillingManager actual constructor() {
 
                 handleSuccessfulPurchase(
                     purchase = premiumPurchase,
-                    productId = PREMIUM_LIFETIME_PRODUCT_ID
+                    productId = PREMIUM_SUBS_PRODUCT_ID
                 ) { ok, message ->
                     if (ok) cont.resume(RestoreResult.Restored)
                     else cont.resume(
@@ -230,9 +230,22 @@ actual class BillingManager actual constructor() {
         }
 
         fun finalizeEntitlement() {
-            AppSettings.premiumUnlocked = true
-            AppSettings.premiumProductId = productId
-            AppSettings.premiumPurchaseToken = purchase.purchaseToken
+            val now = System.currentTimeMillis()
+            val isAutoRenewing = purchase.isAutoRenewing
+
+            AppSettings.premiumSubscribedProductId = productId
+            AppSettings.premiumSubscriptionToken = purchase.purchaseToken
+            AppSettings.premiumSubscriptionStartMillis = now
+            AppSettings.premiumSubscriptionAutoRenewing = isAutoRenewing
+            AppSettings.premiumSubscriptionState = "ACTIVE"
+            AppSettings.premiumLastVerifiedAtMillis = now
+
+            // ВАЖНО:
+            // на клиенте точную expiry дату для subscription надёжно не вычисляем.
+            // временно можно поставить эвристику 365 дней,
+            // но лучше потом получать с backend / Play Developer API.
+            AppSettings.premiumSubscriptionExpiryMillis = now + 365L * 24L * 60L * 60L * 1000L
+
             AppSettings.persist()
             done(true, null)
         }
@@ -262,6 +275,54 @@ actual class BillingManager actual constructor() {
         pendingPurchaseContinuation = null
         if (billingClient.isReady) {
             billingClient.endConnection()
+        }
+    }
+    actual suspend fun getSubscriptionInfo(): SubscriptionInfo {
+        if (!billingClient.isReady) {
+            return SubscriptionInfo(state = SubscriptionState.NONE)
+        }
+
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(ProductType.SUBS)
+            .build()
+
+        return suspendCancellableCoroutine { cont ->
+            billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+                if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                    cont.resume(SubscriptionInfo(state = SubscriptionState.NONE))
+                    return@queryPurchasesAsync
+                }
+
+                val subPurchase = purchases.firstOrNull { purchase ->
+                    purchase.products.contains(PREMIUM_SUBS_PRODUCT_ID) &&
+                            purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                }
+
+                if (subPurchase == null) {
+                    cont.resume(SubscriptionInfo(state = SubscriptionState.NONE))
+                    return@queryPurchasesAsync
+                }
+
+                val now = System.currentTimeMillis()
+                val cachedExpiry = AppSettings.premiumSubscriptionExpiryMillis
+                val expiry = if (cachedExpiry > now) cachedExpiry else null
+
+                cont.resume(
+                    SubscriptionInfo(
+                        state = if (expiry == null || expiry > now) {
+                            SubscriptionState.ACTIVE
+                        } else {
+                            SubscriptionState.EXPIRED
+                        },
+                        productId = PREMIUM_SUBS_PRODUCT_ID,
+                        purchaseToken = subPurchase.purchaseToken,
+                        isAutoRenewing = subPurchase.isAutoRenewing,
+                        startTimeMillis = subPurchase.purchaseTime,
+                        expiryTimeMillis = expiry,
+                        lastVerifiedAtMillis = now
+                    )
+                )
+            }
         }
     }
 }

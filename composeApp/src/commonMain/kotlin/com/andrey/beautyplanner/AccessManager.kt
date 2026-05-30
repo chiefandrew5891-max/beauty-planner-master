@@ -20,21 +20,29 @@ object AccessManager {
 
         val trialStart = AppSettings.trialStartedAtMillis
         val trialEnd = trialStart + TRIAL_DURATION_DAYS * MILLIS_PER_DAY
-        val hasPremium = AppSettings.premiumUnlocked
-        val trialActive = nowMillis < trialEnd
+        //val hasPremium = AppSettings.premiumUnlocked
+        //val trialActive = nowMillis < trialEnd
+        //val tier = when {
+        //    hasPremium -> AccessTier.PREMIUM
+        //    trialActive -> AccessTier.TRIAL
+        //    else -> AccessTier.FREE_LIMITED
+        //}
+        val subscriptionActive =
+            AppSettings.premiumSubscriptionState == "ACTIVE" &&
+                    AppSettings.premiumSubscriptionExpiryMillis > nowMillis
 
+        val hasPremium = subscriptionActive || AppSettings.premiumUnlocked
+        val trialActive = !hasPremium && nowMillis < trialEnd
         val daysLeft = if (trialActive) {
             ceil((trialEnd - nowMillis).toDouble() / MILLIS_PER_DAY.toDouble()).toInt().coerceAtLeast(0)
         } else {
             0
         }
-
         val tier = when {
             hasPremium -> AccessTier.PREMIUM
             trialActive -> AccessTier.TRIAL
             else -> AccessTier.FREE_LIMITED
         }
-
         return AccessState(
             tier = tier,
             trialStartedAtMillis = trialStart,
