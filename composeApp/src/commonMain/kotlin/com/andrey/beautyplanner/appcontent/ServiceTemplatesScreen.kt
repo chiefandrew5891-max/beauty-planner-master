@@ -100,7 +100,7 @@ fun ServiceTemplatesScreen() {
                                     if (item.defaultPrice.isNotBlank()) {
                                         Spacer(Modifier.height(4.dp))
                                         Text(
-                                            text = "${Locales.t("service_default_price")}: ${item.defaultPrice} €",
+                                            text = "${Locales.t("service_default_price")}: ${item.defaultPrice} ${AppSettings.currencySymbol()}",
                                             color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f),
                                             fontSize = (13 * fontScale).sp
                                         )

@@ -291,7 +291,7 @@ fun StatsPage(
 
         StatRow(
             label = Locales.t("stats_revenue"),
-            value = formatMoneyEur(revenue),
+            value = formatMoney(revenue),
             primaryText = primaryText
         )
 
@@ -460,7 +460,7 @@ private fun ServiceRow(
                 color = primaryText
             )
             Text(
-                text = formatMoneyEur(revenue),
+                text = formatMoney(revenue),
                 color = primaryText
             )
         }
@@ -473,12 +473,12 @@ private fun ServiceRow(
     }
 }
 
-private fun formatMoneyEur(v: Double): String {
+private fun formatMoney(v: Double): String {
     val rounded = (v * 100).roundToInt() / 100.0
     val s = if (rounded % 1.0 == 0.0) {
         rounded.toInt().toString()
     } else {
         rounded.toString()
     }
-    return "$s €"
+    return "$s ${AppSettings.currencySymbol()}"
 }

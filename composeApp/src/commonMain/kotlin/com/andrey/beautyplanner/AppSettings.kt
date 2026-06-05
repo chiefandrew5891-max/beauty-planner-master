@@ -66,6 +66,8 @@ private data class SettingsSnapshot(
     val notificationsEnabled: Boolean = true,
     val notificationSound: String = NotificationSound.DEFAULT.name,
 
+    val selectedCurrency: String = "EUR",
+
     val reminderDaysBefore: Int = 0,
     val reminderHoursBefore: Int = 1,
 
@@ -101,6 +103,8 @@ object AppSettings {
     const val SHOW_DEVELOPER_PREMIUM_TOOLS = true
     private val storage: SettingsStorage by lazy { createSettingsStorage() }
 
+    var selectedCurrency by mutableStateOf("EUR")
+
     var isDarkMode by mutableStateOf(false)
     var selectedLanguage by mutableStateOf("Русский")
 
@@ -127,6 +131,13 @@ object AppSettings {
     var pinEnabled by mutableStateOf(false)
     private var adminPinHash by mutableStateOf("")
     var developerModeUnlocked by mutableStateOf(false)
+
+    fun currencySymbol(): String = when (selectedCurrency) {
+        "USD" -> "$"
+        "UAH" -> "₴"
+        "RUB" -> "₽"
+        else -> "€"
+    }
 
     fun getActiveServiceTemplates(): List<ServiceTemplate> =
         serviceTemplates.filter { it.isActive }
@@ -276,6 +287,7 @@ object AppSettings {
         isDarkMode = snapshot.isDarkMode
         selectedLanguage = snapshot.selectedLanguage
         fontSizeMode = snapshot.fontSizeMode
+        selectedCurrency = snapshot.selectedCurrency
 
         notificationsEnabled = snapshot.notificationsEnabled
         notificationSound = runCatching { NotificationSound.valueOf(snapshot.notificationSound) }
@@ -349,9 +361,12 @@ object AppSettings {
             premiumSubscriptionAutoRenewing = premiumSubscriptionAutoRenewing,
             premiumLastVerifiedAtMillis = premiumLastVerifiedAtMillis,
 
+            selectedCurrency = selectedCurrency,
+
             pinEnabled = pinEnabled,
             adminPinHash = adminPinHash,
             developerModeUnlocked = developerModeUnlocked
+
         )
 
         runCatching {
