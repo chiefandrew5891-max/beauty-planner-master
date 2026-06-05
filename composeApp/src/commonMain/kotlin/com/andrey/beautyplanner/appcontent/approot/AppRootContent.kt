@@ -540,7 +540,7 @@ fun AppRootContent(
             Screen.NOTIFICATION_SETTINGS -> NotificationsSettingsScreen()
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()
-            Screen.APPEARANCE_SETTINGS -> AppearanceSettingsScreen()
+            Screen.APPEARANCE_SETTINGS -> AppearanceSettingsScreen(state = state)
         }
 
         if (state.showBookingDialog) {
@@ -555,13 +555,11 @@ fun AppRootContent(
                     state.transferA = null
                     state.bookingReadOnly = false
                 },
-                onSave = { startTime, durationMinutes, name, phone, service, price ->
+                onSave = { startTime, durationMinutes, name, phone, service, price, currencyCode -> // <-- Добавили currencyCode
                     val id = state.editingAppointment?.id
                         ?: state.transferA?.id
                         ?: Clock.System.now().toEpochMilliseconds().toString()
-
                     val targetDate = state.selectedDate.toString()
-
                     val newAppt = Appointment(
                         id = id,
                         dateString = targetDate,
@@ -571,17 +569,15 @@ fun AppRootContent(
                         serviceName = service,
                         price = price,
                         durationMinutes = durationMinutes,
-                        durationHours = ((durationMinutes + 59) / 60).coerceAtLeast(1)
+                        durationHours = ((durationMinutes + 59) / 60).coerceAtLeast(1),
+                        currency = currencyCode // <-- Намертво привязываем переданную валюту к объекту!
                     )
-
                     state.transferA?.let {
                         state.appointments.remove(it)
                         state.transferA = null
                     }
-
                     state.replaceById(newAppt)
                     state.saveAll()
-
                     state.showBookingDialog = false
                     state.editingAppointment = null
                     state.bookingReadOnly = false

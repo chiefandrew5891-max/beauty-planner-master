@@ -16,6 +16,13 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.Font
+import com.andrey.beautyplanner.generated.resources.Res
+import com.andrey.beautyplanner.generated.resources.inter_extralight
+import com.andrey.beautyplanner.generated.resources.inter_regular
+import com.andrey.beautyplanner.generated.resources.inter_medium
+import com.andrey.beautyplanner.generated.resources.inter_bold
 
 @Stable
 class AppRootState(
@@ -101,8 +108,10 @@ class AppRootState(
     var shiftChain by mutableStateOf<List<ShiftItem>>(emptyList())
     var shiftBlockedApptId by mutableStateOf<String?>(null)
 
+    var currentLiveDarkMode by mutableStateOf(AppSettings.isDarkMode)
+
     val colors: Colors
-        get() = if (AppSettings.isDarkMode) {
+        get() = if (currentLiveDarkMode) {
             darkColors(
                 primary = Color(0xFF8AB4F8),
                 background = Color(0xFF121212),
@@ -120,14 +129,34 @@ class AppRootState(
             )
         }
 
-    val fontScale: Float get() = AppSettings.getFontScale()
+    var fontScale by mutableStateOf(AppSettings.getFontScale())
 
     val customTypography: Typography
-        get() = Typography(
-            body1 = TextStyle(fontSize = (16 * fontScale).sp),
-            h6 = TextStyle(fontSize = (20 * fontScale).sp, fontWeight = FontWeight.Bold),
-            subtitle1 = TextStyle(fontSize = (14 * fontScale).sp)
+    @Composable
+    get() {
+        val appFontFamily = FontFamily(
+            org.jetbrains.compose.resources.Font(Res.font.inter_extralight, FontWeight.ExtraLight),
+            org.jetbrains.compose.resources.Font(Res.font.inter_regular, FontWeight.Normal),
+            org.jetbrains.compose.resources.Font(Res.font.inter_medium, FontWeight.Medium),
+            org.jetbrains.compose.resources.Font(Res.font.inter_bold, FontWeight.Bold)
         )
+        return Typography(
+            body1 = TextStyle(
+                fontFamily = appFontFamily,
+                fontSize = (16 * fontScale).sp
+            ),
+            h6 = TextStyle(
+                fontFamily = appFontFamily,
+                fontSize = (20 * fontScale).sp,
+                fontWeight = FontWeight.Bold
+            ),
+            subtitle1 = TextStyle(
+                fontFamily = appFontFamily,
+                fontSize = (14 * fontScale).sp
+            )
+        )
+    }
+
 
     fun refreshAccessState(nowMillis: Long = Clock.System.now().toEpochMilliseconds()) {
         accessState = AccessManager.getAccessState(nowMillis)
@@ -156,6 +185,11 @@ class AppRootState(
     fun navigateHome() {
         screenHistory = emptyList()
         currentScreen = Screen.MONTH
+    }
+
+    fun resetLivePreviews() {
+        currentLiveDarkMode = AppSettings.isDarkMode
+        fontScale = AppSettings.getFontScale()
     }
 
     fun openDrawer() = scope.launch { drawerState.open() }
@@ -487,6 +521,8 @@ fun rememberAppRootState(): AppRootState {
     val state = remember { AppRootState(appointments, today, drawerState, scope) }
 
     LaunchedEffect(Unit) {
+        val startCode = AppSettings.languageCodes[AppSettings.selectedLanguage] ?: "en"
+        Locales.currentLanguage = startCode
         val nowMillis = Clock.System.now().toEpochMilliseconds()
 
         AccessManager.ensureTrialInitialized(nowMillis)

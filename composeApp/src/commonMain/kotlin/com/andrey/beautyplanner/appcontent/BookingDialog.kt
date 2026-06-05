@@ -43,7 +43,7 @@ fun BookingDialog(
     readOnly: Boolean,
     localClientSuggestions: List<ClientSuggestion>,
     onDismiss: () -> Unit,
-    onSave: (String, Int, String, String, String, String) -> Unit,
+    onSave: (String, Int, String, String, String, String, String) -> Unit,
     onTransferRequest: (Appointment) -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
@@ -543,7 +543,7 @@ fun BookingDialog(
                     value = price,
                     onValueChange = { price = it },
                     enabled = editEnabled,
-                    label = { Text(Locales.t("price") + " (€)") },
+                    label = { Text(Locales.t("price") + " (${AppSettings.currencySymbol()})") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
                     leadingIcon = { Icon(Icons.Default.Payments, null) },
@@ -586,7 +586,8 @@ fun BookingDialog(
                                 name.trim(),
                                 phone.trim(),
                                 serviceToStore,
-                                price.trim()
+                                price.trim(),
+                                initialData?.currency ?: AppSettings.selectedCurrency // <-- Передаем валюту записи
                             )
                         },
                         modifier = Modifier.fillMaxWidth().height(56.dp),

@@ -11,12 +11,10 @@ data class Appointment(
     val phone: String,
     val serviceName: String,
     val price: String,
-
-    // NEW: preferred duration
     val durationMinutes: Int = 0,
-
-    // OLD: keep for old data / fallback
-    val durationHours: Int = 1
+    val durationHours: Int = 1,
+    val notes: String = "",
+    val currency: String = "EUR"
 )
 @Serializable
 data class ServiceTemplate(

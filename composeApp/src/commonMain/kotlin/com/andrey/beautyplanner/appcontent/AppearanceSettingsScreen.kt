@@ -13,6 +13,8 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role.Companion.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,7 +23,7 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 
 @Composable
-fun AppearanceSettingsScreen() {
+fun AppearanceSettingsScreen(state: com.andrey.beautyplanner.appcontent.approot.AppRootState) {
     val languages = AppSettings.languageCodes.keys.toList()
     val themeOptions = listOf(Locales.t("theme_light"), Locales.t("theme_dark"))
     val fontOptions = listOf(
@@ -30,7 +32,7 @@ fun AppearanceSettingsScreen() {
         Locales.t("font_large")
     )
 
-    val fontScale = AppSettings.getFontScale()
+    val fontScale = state.fontScale
     val onSurface = MaterialTheme.colors.onSurface
     val onBg = MaterialTheme.colors.onBackground
 
@@ -53,7 +55,25 @@ fun AppearanceSettingsScreen() {
             }
         )
     }
+    var selectedCurrencyDraft by remember {
+        mutableStateOf(
+            when (AppSettings.selectedCurrency) {
+                "USD" -> "USD ($)"
+                "RUB" -> "RUB (₽)"
+                "UAH" -> "UAH (₴)"
+                else -> "EUR (€)"
+            }
+        )
+    }
     var userNameDraft by remember { mutableStateOf(AppSettings.ownerName) }
+    var useShortTextCurrencyDraft by remember { mutableStateOf(AppSettings.useShortTextCurrency) }
+
+    // Если мастер выходит назад или переключает вкладку не сохранившись — сбрасываем живое превью на исходные
+    DisposableEffect(Unit) {
+        onDispose {
+            state.resetLivePreviews()
+        }
+    }
 
     val currentThemeValue =
         if (AppSettings.isDarkMode) Locales.t("theme_dark") else Locales.t("theme_light")
@@ -64,10 +84,19 @@ fun AppearanceSettingsScreen() {
         else -> Locales.t("font_medium")
     }
 
+    val currentCurrencyValue = when (AppSettings.selectedCurrency) {
+        "USD" -> "USD ($)"
+        "RUB" -> "RUB (₽)"
+        "UAH" -> "UAH (₴)"
+        else -> "EUR (€)"
+    }
+
     val hasChanges =
         selectedLanguageDraft != AppSettings.selectedLanguage ||
                 selectedThemeDraft != currentThemeValue ||
                 selectedFontDraft != currentFontValue ||
+                selectedCurrencyDraft != currentCurrencyValue ||
+                useShortTextCurrencyDraft != AppSettings.useShortTextCurrency ||
                 userNameDraft.trim() != AppSettings.ownerName.trim()
 
     CenteredNarrowContentContainer {
@@ -108,6 +137,8 @@ fun AppearanceSettingsScreen() {
                 items = themeOptions,
                 onSelect = { newValue ->
                     selectedThemeDraft = newValue
+                    // Мгновенно перекрашиваем корень всего приложения для превью
+                    state.currentLiveDarkMode = (newValue == Locales.t("theme_dark"))
                 }
             )
 
@@ -117,8 +148,48 @@ fun AppearanceSettingsScreen() {
                 items = fontOptions,
                 onSelect = { newValue ->
                     selectedFontDraft = newValue
+                    // Мгновенно масштабируем шрифты всего приложения для превью
+                    state.fontScale = when (newValue) {
+                        Locales.t("font_small") -> 0.85f
+                        Locales.t("font_large") -> 1.2f
+                        else -> 1.0f
+                    }
                 }
             )
+
+            SettingsDropdown(
+                label = Locales.t("currency_label"),
+                selected = selectedCurrencyDraft,
+                items = listOf("EUR (€)", "USD ($)", "RUB (₽)", "UAH (₴)"),
+                onSelect = { newValue ->
+                    selectedCurrencyDraft = newValue
+                }
+            )
+            androidx.compose.foundation.layout.Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                Text(
+                    text = when (Locales.currentLanguage) {
+                        "uk" -> "Текстовий формат валюти (USD/UAH)"
+                        "it" -> "Formato testo valuta (USD/UAH)"
+                        else -> "Текстовый формат валюты (USD/UAH)"
+                    },
+                    fontSize = (16 * fontScale).sp,
+                    color = onSurface
+                )
+                androidx.compose.material.Switch(
+                    checked = useShortTextCurrencyDraft,
+                    onCheckedChange = { useShortTextCurrencyDraft = it },
+                    colors = androidx.compose.material.SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colors.primary,
+                        checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                    )
+                )
+            }
 
             androidx.compose.material.Divider()
 
@@ -155,20 +226,31 @@ fun AppearanceSettingsScreen() {
             PrimaryActionButton(
                 text = Locales.t("save"),
                 onClick = {
-                    AppSettings.selectedLanguage = selectedLanguageDraft
+                    // Теперь строки условий посимвольно совпадают со значениями из списка items
+                    val targetCurrencyCode = when (selectedCurrencyDraft) {
+                        "USD ($)" -> "USD"
+                        "RUB (₽)" -> "RUB"
+                        "UAH (₴)" -> "UAH" // <-- Теперь строка совпадает со списком идеально!
+                        else -> "EUR"
+                    }
 
-                    val code = AppSettings.languageCodes[selectedLanguageDraft] ?: "en"
-                    Locales.currentLanguage = code
-
+                    // Сохраняем остальные параметры оформления
                     AppSettings.isDarkMode = (selectedThemeDraft == Locales.t("theme_dark"))
-
                     AppSettings.fontSizeMode = when (selectedFontDraft) {
                         Locales.t("font_small") -> "Мелкий"
                         Locales.t("font_large") -> "Крупный"
                         else -> "Средний"
                     }
-
                     AppSettings.ownerName = userNameDraft.trim()
+
+                    // Синхронно пишем в settings.json и код валюты, и состояние чекбокса альтернативного текста
+                    AppSettings.saveCurrencySynchronously(targetCurrencyCode, useShortTextCurrencyDraft)
+
+                    // В последнюю очередь меняем локаль
+                    AppSettings.selectedLanguage = selectedLanguageDraft
+                    val code = AppSettings.languageCodes[selectedLanguageDraft] ?: "en"
+                    Locales.currentLanguage = code
+
                     AppSettings.persist()
                 },
                 enabled = hasChanges

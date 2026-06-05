@@ -104,9 +104,21 @@ object AppSettings {
     private val storage: SettingsStorage by lazy { createSettingsStorage() }
 
     var selectedCurrency by mutableStateOf("EUR")
+    var useShortTextCurrency by mutableStateOf(false)
 
     var isDarkMode by mutableStateOf(false)
-    var selectedLanguage by mutableStateOf("Русский")
+    var selectedLanguage by mutableStateOf(
+        run {
+            // Получаем код языка системы (например, "it", "ru", "uk") через системную локаль Android/iOS
+            val systemLanguageCode = androidx.compose.ui.text.intl.Locale.current.language.lowercase()
+            when (systemLanguageCode) {
+                "it" -> "Italiano"
+                "uk" -> "Українська"
+                "ru" -> "Русский"
+                else -> "English" // Если язык немецкий, испанский и т.д. — включаем Английский по умолчанию
+            }
+        }
+    )
 
     var fontSizeMode by mutableStateOf("Средний")
 
@@ -132,11 +144,27 @@ object AppSettings {
     private var adminPinHash by mutableStateOf("")
     var developerModeUnlocked by mutableStateOf(false)
 
-    fun currencySymbol(): String = when (selectedCurrency) {
-        "USD" -> "$"
-        "UAH" -> "₴"
-        "RUB" -> "₽"
-        else -> "€"
+    fun currencySymbol(): String {
+        return if (useShortTextCurrency) {
+            when (selectedCurrency) {
+                "USD" -> "USD"
+                "RUB" -> "RUB"
+                "UAH" -> "UAH"
+                else -> "EUR"
+            }
+        } else {
+            when (selectedCurrency) {
+                "USD" -> "$"
+                "RUB" -> "₽"
+                "UAH" -> "₴"
+                else -> "€"
+            }
+        }
+    }
+    fun saveCurrencySynchronously(newCurrency: String, useShortText: Boolean) {
+        selectedCurrency = newCurrency
+        useShortTextCurrency = useShortText
+        persist()
     }
 
     fun getActiveServiceTemplates(): List<ServiceTemplate> =

@@ -65,6 +65,7 @@ fun StatsPage(
     var customToDate by remember { mutableStateOf(today) }
 
     var clientQuery by remember { mutableStateOf("") }
+    var isMultiCurrencyMode by remember { mutableStateOf(false) }
     var selectedClient by remember { mutableStateOf<ClientSuggestion?>(null) }
 
     val allClients = remember(appointments) {
@@ -86,24 +87,25 @@ fun StatsPage(
     }
 
     val filtered = remember(
-        appointments,
-        fromDate,
-        toDateInclusive,
-        clientQuery,
-        selectedClient
+        appointments, fromDate, toDateInclusive, clientQuery, selectedClient, isMultiCurrencyMode
     ) {
-        val clientFilter = selectedClient?.displayName?.trim()?.lowercase()
-            ?: clientQuery.trim().lowercase().takeIf { it.isNotBlank() }
-
+        val clientFilter = selectedClient?.displayName?.trim()?.lowercase() ?: clientQuery.trim().lowercase().takeIf { it.isNotBlank() }
         appointments
             .asSequence()
             .mapNotNull { a ->
-                val d = runCatching { LocalDate.parse(a.dateString) }.getOrNull()
-                    ?: return@mapNotNull null
+                val d = runCatching { LocalDate.parse(a.dateString) }.getOrNull() ?: return@mapNotNull null
                 d to a
             }
             .filter { (d, _) -> d >= fromDate && d <= toDateInclusive }
             .map { it.second }
+            .filter { appt ->
+                // Если свитч мультивалютности ВЫКЛЮЧЕН, показываем только процедуры текущей валюты системы
+                if (!isMultiCurrencyMode) {
+                    appt.currency == AppSettings.selectedCurrency
+                } else {
+                    true // Если включен — показываем абсолютно все валюты
+                }
+            }
             .filter { appt ->
                 if (clientFilter.isNullOrBlank()) {
                     true
@@ -175,6 +177,34 @@ fun StatsPage(
             color = primaryText
         )
 
+        // НАШ SWITCH (Мультивалютный режим) — Сразу после заголовка фильтров
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ) {
+            Text(
+                text = when (Locales.currentLanguage) {
+                    "uk" -> "Мультивалютний режим (всі процедури)"
+                    "it" -> "Modalità multivaluta (tutti i servizi)"
+                    else -> "Мультивалютный режим (все процедуры)"
+                },
+                fontSize = (15 * fontScale).sp,
+                color = primaryText
+            )
+            androidx.compose.material.Switch(
+                checked = isMultiCurrencyMode,
+                onCheckedChange = { isMultiCurrencyMode = it },
+                colors = androidx.compose.material.SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colors.primary,
+                    checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                )
+            )
+        }
+
+        // Горизонтальный скролл чипсов времени — Тут День, Неделя, Месяц, Год
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -193,9 +223,25 @@ fun StatsPage(
             PeriodChip(Locales.t("stats_period_year"), period == StatsPeriod.YEAR) {
                 period = StatsPeriod.YEAR
             }
-            PeriodChip(Locales.t("stats_period_custom"), period == StatsPeriod.CUSTOM) {
-                period = StatsPeriod.CUSTOM
-            }
+        }
+
+        // КНОПКА «ПЕРИОД» — Убрали принудительный fontWeight, теперь стиль шрифта один в один как у остальных кнопок
+        OutlinedButton(
+            onClick = { period = StatsPeriod.CUSTOM },
+            modifier = Modifier.fillMaxWidth(),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                backgroundColor = if (period == StatsPeriod.CUSTOM) MaterialTheme.colors.primary.copy(alpha = 0.08f) else Color.Transparent
+            ),
+            border = androidx.compose.foundation.BorderStroke(
+                width = 1.dp,
+                color = if (period == StatsPeriod.CUSTOM) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+            )
+        ) {
+            Text(
+                text = Locales.t("stats_period_custom"),
+                color = MaterialTheme.colors.primary
+            )
         }
 
         if (period == StatsPeriod.CUSTOM) {
@@ -461,7 +507,8 @@ private fun ServiceRow(
             )
             Text(
                 text = formatMoney(revenue),
-                color = primaryText
+                color = primaryText,
+                fontWeight = FontWeight.SemiBold
             )
         }
 

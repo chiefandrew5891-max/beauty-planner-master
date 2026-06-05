@@ -282,7 +282,7 @@ object Locales {
             "splash_for" to "для",
             //Settings
             "appearance_settings" to "Настройка оформления и темы",
-            "appearance_settings_hint" to "Язык, тема, размер шрифта и имя пользователя.",
+            "appearance_settings_hint" to "Язык, тема, размер шрифта, валюта и имя пользователя.",
 
             // --------- Security / PIN ---------
             "pin_create_hint" to "Придумайте PIN-код и подтвердите его.",
@@ -601,7 +601,7 @@ object Locales {
             "splash_for" to "for",
             //Settings
             "appearance_settings" to "Appearance & Theme",
-            "appearance_settings_hint" to "Language, theme, font size, and user name.",
+            "appearance_settings_hint" to "Language, theme, font size, currency and username.",
             //Settings
             // --------- Security / PIN ---------
             "pin_create_hint" to "Create a PIN code and confirm it.",
@@ -912,7 +912,7 @@ object Locales {
             "splash_for" to "per",
             //Settings
             "appearance_settings" to "Aspetto e tema",
-            "appearance_settings_hint" to "Lingua, tema, dimensione del carattere e nome utente.",
+            "appearance_settings_hint" to "Lingua, tema, dimensione del carattere, valuta e nome utente.",
             // --------- Security / PIN ---------
             "pin_create_hint" to "Crea un PIN e confermalo.",
             "pin_create_label" to "Crea PIN",
@@ -1237,7 +1237,7 @@ object Locales {
             "splash_for" to "для",
             //Settings
             "appearance_settings" to "Налаштування оформлення і теми",
-            "appearance_settings_hint" to "Мова, тема, розмір шрифту та ім’я користувача.",
+            "appearance_settings_hint" to "Мова, тема, розмір шрифту, валюта та ім'я користувача.",
             // --------- Security / PIN ---------
             "pin_create_hint" to "Придумайте PIN-код і підтвердьте його.",
             "pin_create_label" to "Придумайте PIN",

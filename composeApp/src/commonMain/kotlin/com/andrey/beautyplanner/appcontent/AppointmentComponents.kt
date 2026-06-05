@@ -106,7 +106,7 @@ fun AppointmentCard(
     val interactionSource = remember { MutableInteractionSource() }
 
     val serviceDisplay = apptServiceDisplay(appt)
-    val priceText = appt.price.trim().let { p -> if (p.isBlank()) "" else "$p€" }
+    val priceText = appt.price.trim().let { p -> if (p.isBlank()) "" else "$p ${AppSettings.currencySymbol()}" }
 
     if (showDateInCard) {
         val formattedDate = ddMMyyyy(appt.dateString)
@@ -199,7 +199,7 @@ fun AppointmentCard(
                     }
 
                     Text(
-                        text = "${appt.price}€",
+                        text = "${appt.price} ${AppSettings.currencySymbol()}",
                         fontSize = (13 * fontScale).sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
@@ -371,7 +371,7 @@ fun AppointmentDetailsDialog(
     val fontScale = AppSettings.getFontScale()
 
     val serviceDisplay = apptServiceDisplay(appt)
-    val priceText = appt.price.trim().let { p -> if (p.isBlank()) "" else "$p €" }
+    val priceText = appt.price.trim().let { p -> if (p.isBlank()) "" else "$p ${AppSettings.currencySymbol()}" }
 
     val dateTextColor = MaterialTheme.colors.primary.copy(alpha = 0.95f)
     val timeTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.72f)
