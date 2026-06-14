@@ -55,7 +55,8 @@ actual object Notifications {
     actual fun rescheduleAll(
         appointments: List<Appointment>,
         reminderMinutes: List<Int>,
-        sound: NotificationSound,
+        soundType: String,
+        soundId: String,
         nowEpochMillis: Long
     ) {
         val context = ctx()
@@ -81,7 +82,8 @@ actual object Notifications {
                         "${appt.clientName}: ${appt.serviceName} • ${appt.dateString} ${appt.time}"
                     )
                     putExtra(ReminderReceiver.EXTRA_NOTIFICATION_ID, requestCode)
-                    putExtra(ReminderReceiver.EXTRA_SOUND_MODE, sound.name)
+                    putExtra(ReminderReceiver.EXTRA_SOUND_MODE, soundType)
+                    putExtra(ReminderReceiver.EXTRA_SOUND_ID, soundId)
                 }
 
                 val pi = PendingIntent.getBroadcast(
@@ -138,7 +140,8 @@ actual object Notifications {
             rescheduleAll(
                 appointments = appointments,
                 reminderMinutes = reminderMinutes,
-                sound = AppSettings.notificationSound,
+                soundType = AppSettings.notificationSoundType,
+                soundId = AppSettings.notificationSoundId,
                 nowEpochMillis = now
             )
         } else {

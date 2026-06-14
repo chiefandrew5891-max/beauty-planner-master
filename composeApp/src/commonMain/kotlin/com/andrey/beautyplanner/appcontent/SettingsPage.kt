@@ -381,9 +381,7 @@ fun SettingsPage(
                         },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colors.primary,
-                            checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.35f),
-                            uncheckedThumbColor = onSurface.copy(alpha = 0.45f),
-                            uncheckedTrackColor = onSurface.copy(alpha = 0.20f)
+                            checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
                         )
                     )
                 }

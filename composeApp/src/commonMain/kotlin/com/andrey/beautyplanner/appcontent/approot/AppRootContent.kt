@@ -44,7 +44,7 @@ fun AppRootContent(
 ) {
     var showSplash by rememberSaveable { mutableStateOf(true) }
     var pendingPinAfterSplash by rememberSaveable { mutableStateOf(false) }
-    val ownerName = remember { AppSettings.ownerName ?: "" }
+    val ownerName = AppSettings.ownerName.trim()
 
     var viewingAppt by remember { mutableStateOf<Appointment?>(null) }
     var viewingStartHm by remember { mutableStateOf("") }
@@ -53,7 +53,7 @@ fun AppRootContent(
 
     if (showSplash) {
         AnimatedSplashScreen(
-            ownerName = if (ownerName.isBlank()) "Evgi" else ownerName,
+            ownerName = ownerName,
             onAnimationFinished = {
                 showSplash = false
                 if (state.mustCreatePin || (state.locked && !state.mustCreatePin)) {

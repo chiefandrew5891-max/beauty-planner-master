@@ -21,7 +21,8 @@ actual object Notifications {
     actual fun rescheduleAll(
         appointments: List<Appointment>,
         reminderMinutes: List<Int>,
-        sound: NotificationSound,
+        soundType: String,
+        soundId: String,
         nowEpochMillis: Long
     ) {
         val center = UNUserNotificationCenter.currentNotificationCenter()
@@ -41,10 +42,18 @@ actual object Notifications {
                     setTitle("Beauty Planner")
                     setBody("${appt.clientName}: ${appt.serviceName} • ${appt.dateString} ${appt.time}")
 
-                    val iosSound = when (sound) {
-                        NotificationSound.SILENT -> null
-                        NotificationSound.DEFAULT -> UNNotificationSound.defaultSound()
+                    val iosSound = when (soundType) {
+                        "SILENT" -> null
+                        "BUNDLED" -> {
+                            if (soundId.isNotBlank()) {
+                                UNNotificationSound.soundNamed(soundId)
+                            } else {
+                                UNNotificationSound.defaultSound()
+                            }
+                        }
+                        else -> UNNotificationSound.defaultSound()
                     }
+                    setSound(iosSound)
                     setSound(iosSound)
                 }
 

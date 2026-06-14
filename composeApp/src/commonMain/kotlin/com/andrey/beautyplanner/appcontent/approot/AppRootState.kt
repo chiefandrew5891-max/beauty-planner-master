@@ -428,7 +428,8 @@ class AppRootState(
             Notifications.rescheduleAll(
                 appointments = appointments.toList(),
                 reminderMinutes = mins,
-                sound = AppSettings.notificationSound,
+                soundType = AppSettings.notificationSoundType,
+                soundId = AppSettings.notificationSoundId,
                 nowEpochMillis = nowMillis
             )
         } else {

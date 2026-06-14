@@ -13,7 +13,8 @@ expect object Notifications {
     fun rescheduleAll(
         appointments: List<Appointment>,
         reminderMinutes: List<Int>,
-        sound: NotificationSound,
+        soundType: String,
+        soundId: String,
         nowEpochMillis: Long
     )
 

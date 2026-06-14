@@ -3,7 +3,7 @@ package com.andrey.beautyplanner
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.andrey.beautyplanner.notifications.NotificationSound
+import com.andrey.beautyplanner.notifications.NotificationSoundType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -64,13 +64,16 @@ private data class SettingsSnapshot(
     val ownerName: String = "",
 
     val notificationsEnabled: Boolean = true,
-    val notificationSound: String = NotificationSound.DEFAULT.name,
+    val notificationSoundType: String = NotificationSoundType.DEFAULT.name,
+    val notificationSoundId: String = "",
+    val notificationSoundDisplayName: String = "",
 
     val selectedCurrency: String = "EUR",
     val useShortTextCurrency: Boolean = false,
 
     val reminderDaysBefore: Int = 0,
     val reminderHoursBefore: Int = 1,
+    val reminderMinutesBefore: Int = 0,
 
     val servicePhone: String = "",
 
@@ -126,10 +129,13 @@ object AppSettings {
     var ownerName by mutableStateOf("")
 
     var notificationsEnabled by mutableStateOf(true)
-    var notificationSound by mutableStateOf(NotificationSound.DEFAULT)
+    var notificationSoundType by mutableStateOf("DEFAULT")
+    var notificationSoundId by mutableStateOf("")
+    var notificationSoundDisplayName by mutableStateOf("")
 
     var reminderDaysBefore by mutableStateOf(0)
     var reminderHoursBefore by mutableStateOf(1)
+    var reminderMinutesBefore by mutableStateOf(0)
 
     var servicePhone by mutableStateOf("")
     var trialStartedAtMillis by mutableStateOf(0L)
@@ -260,8 +266,35 @@ object AppSettings {
     }
 
     fun reminderMinutesComputed(): List<Int> {
-        val total = reminderDaysBefore * 24 * 60 + reminderHoursBefore * 60
+        val total =
+            reminderDaysBefore * 24 * 60 +
+                    reminderHoursBefore * 60 +
+                    reminderMinutesBefore
+
         return if (total > 0) listOf(total) else emptyList()
+    }
+    fun isSilentNotificationSound(): Boolean {
+        return notificationSoundType == "SILENT"
+    }
+
+    fun isDefaultNotificationSound(): Boolean {
+        return notificationSoundType == "DEFAULT"
+    }
+
+    fun selectedNotificationSoundLabel(): String {
+        return when (notificationSoundType) {
+            "SILENT" -> Locales.t("notif_sound_silent")
+            "BUNDLED", "IMPORTED" -> notificationSoundDisplayName.ifBlank { Locales.t("notif_sound_custom") }
+            else -> Locales.t("notif_sound_default")
+        }
+    }
+    fun notificationChannelKey(): String {
+        return when (notificationSoundType) {
+            "SILENT" -> "silent"
+            "BUNDLED" -> notificationSoundId.ifBlank { "default" }
+            "IMPORTED" -> notificationSoundId.ifBlank { "default" }
+            else -> "default"
+        }
     }
 
     val languageCodes = mapOf(
@@ -363,11 +396,13 @@ object AppSettings {
         useShortTextCurrency = snapshot.useShortTextCurrency
 
         notificationsEnabled = snapshot.notificationsEnabled
-        notificationSound = runCatching { NotificationSound.valueOf(snapshot.notificationSound) }
-            .getOrNull() ?: NotificationSound.DEFAULT
+        notificationSoundType = snapshot.notificationSoundType
+        notificationSoundId = snapshot.notificationSoundId
+        notificationSoundDisplayName = snapshot.notificationSoundDisplayName
 
         reminderDaysBefore = snapshot.reminderDaysBefore
         reminderHoursBefore = snapshot.reminderHoursBefore
+        reminderMinutesBefore = snapshot.reminderMinutesBefore
 
         servicePhone = snapshot.servicePhone
         ownerName = snapshot.ownerName
@@ -410,10 +445,13 @@ object AppSettings {
             ownerName = ownerName,
 
             notificationsEnabled = notificationsEnabled,
-            notificationSound = notificationSound.name,
+            notificationSoundType = notificationSoundType,
+            notificationSoundId = notificationSoundId,
+            notificationSoundDisplayName = notificationSoundDisplayName,
 
             reminderDaysBefore = reminderDaysBefore,
             reminderHoursBefore = reminderHoursBefore,
+            reminderMinutesBefore = reminderMinutesBefore,
 
             servicePhone = servicePhone,
 

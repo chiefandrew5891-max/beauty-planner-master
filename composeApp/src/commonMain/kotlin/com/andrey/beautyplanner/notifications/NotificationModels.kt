@@ -1,13 +1,24 @@
 package com.andrey.beautyplanner.notifications
 
-enum class NotificationSound {
+import kotlinx.serialization.Serializable
+
+enum class NotificationSoundType {
     DEFAULT,
-    SILENT
+    SILENT,
+    BUNDLED,
+    IMPORTED
 }
+
+@Serializable
+data class NotificationSoundConfig(
+    val type: String = NotificationSoundType.DEFAULT.name,
+    val soundId: String = "",
+    val displayName: String = ""
+)
 
 data class ReminderPreset(
     val minutesBefore: Int,
-    val key: String // для локализации в UI
+    val key: String
 )
 
 val DefaultReminderPresets = listOf(

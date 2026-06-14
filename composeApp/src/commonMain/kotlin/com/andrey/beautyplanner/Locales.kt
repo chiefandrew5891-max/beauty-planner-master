@@ -47,6 +47,8 @@ object Locales {
             "backup_import_success" to "Импорт успешно завершён.",
             "backup_import_invalid_file" to "Выбранный файл не является корректной резервной копией.",
             "backup_import_invalid_payload" to "Файл резервной копии повреждён или не содержит корректных данных.",
+            "notif_sound_soft" to "Мягкий сигнал",
+            "notif_sound_bell" to "Колокольчик",
 
             "stats_client_filter" to "Клиент",
             "stats_client_picker_title" to "Выбрать клиента",
@@ -230,8 +232,15 @@ object Locales {
             "reminders_when" to "Напоминать за:",
             "remind_days" to "Дни",
             "remind_hours" to "Часы",
+            "remind_minutes" to "Минуты",
             "remind_summary" to "Итог",
             "remind_off" to "Выключено",
+            "notif_sound_custom" to "Пользовательский звук",
+            "notif_sound_choose" to "Выбрать мелодию",
+            "notif_sound_source" to "Источник звука",
+            "notif_sound_bundled" to "Встроенный звук",
+            "notif_sound_imported" to "Импортированный звук",
+            "notif_sound_not_selected" to "Мелодия не выбрана",
 
             // Support / feedback
             "support_section" to "Служба поддержки",
@@ -340,6 +349,17 @@ object Locales {
 
             "unlock_title" to "Введите PIN",
             "unlock_text" to "Для доступа к приложению требуется PIN.",
+            "notif_sound_1" to "Sound 1",
+            "notif_sound_2" to "Sound 2",
+            "notif_sound_3" to "Sound 3",
+            "notif_sound_4" to "Sound 4",
+            "notif_sound_5" to "Sound 5",
+            "notif_sound_6" to "Sound 6",
+            "notif_sound_7" to "Sound 7",
+            "notif_sound_8" to "Sound 8",
+            "notif_sound_9" to "Sound 9",
+            "notif_sound_10" to "Sound 10",
+            "notif_sound_11" to "Sound 11",
 
             // months + weekdays
             "month_jan" to "Январь", "month_feb" to "Февраль", "month_mar" to "Март",
@@ -399,6 +419,8 @@ object Locales {
             "backup_import_success" to "Import completed successfully.",
             "backup_import_invalid_file" to "The selected file is not a valid backup.",
             "backup_import_invalid_payload" to "The backup file is corrupted or does not contain valid data.",
+            "notif_sound_soft" to "Soft tone",
+            "notif_sound_bell" to "Bell",
 
             "stats_client_filter" to "Client",
             "stats_client_picker_title" to "Select client",
@@ -579,8 +601,15 @@ object Locales {
             "reminders_when" to "Remind before:",
             "remind_days" to "Days",
             "remind_hours" to "Hours",
+            "remind_minutes" to "Minutes",
             "remind_summary" to "Summary",
             "remind_off" to "Off",
+            "notif_sound_custom" to "Custom sound",
+            "notif_sound_choose" to "Choose ringtone",
+            "notif_sound_source" to "Sound source",
+            "notif_sound_bundled" to "Bundled sound",
+            "notif_sound_imported" to "Imported sound",
+            "notif_sound_not_selected" to "No ringtone selected",
 
             "support_section" to "Support",
             "support_phone_label" to "Support phone",
@@ -685,6 +714,17 @@ object Locales {
 
             "unlock_title" to "Enter PIN",
             "unlock_text" to "PIN is required to access the app.",
+            "notif_sound_1" to "Sound 1",
+            "notif_sound_2" to "Sound 2",
+            "notif_sound_3" to "Sound 3",
+            "notif_sound_4" to "Sound 4",
+            "notif_sound_5" to "Sound 5",
+            "notif_sound_6" to "Sound 6",
+            "notif_sound_7" to "Sound 7",
+            "notif_sound_8" to "Sound 8",
+            "notif_sound_9" to "Sound 9",
+            "notif_sound_10" to "Sound 10",
+            "notif_sound_11" to "Sound 11",
 
             "month_jan" to "January", "month_feb" to "February", "month_mar" to "March",
             "month_apr" to "April", "month_may" to "May", "month_jun" to "June",
@@ -744,6 +784,8 @@ object Locales {
             "backup_import_success" to "Importazione completata con successo.",
             "backup_import_invalid_file" to "Il file selezionato non è un backup valido.",
             "backup_import_invalid_payload" to "Il file di backup è danneggiato o non contiene dati validi.",
+            "notif_sound_soft" to "Suono morbido",
+            "notif_sound_bell" to "Campanello",
 
             "stats_client_filter" to "Cliente",
             "stats_client_picker_title" to "Seleziona cliente",
@@ -924,8 +966,15 @@ object Locales {
             "reminders_when" to "Ricorda prima:",
             "remind_days" to "Giorni",
             "remind_hours" to "Ore",
+            "remind_minutes" to "Minuti",
             "remind_summary" to "Riepilogo",
             "remind_off" to "Disattivato",
+            "notif_sound_custom" to "Suono personalizzato",
+            "notif_sound_choose" to "Scegli suoneria",
+            "notif_sound_source" to "Origine del suono",
+            "notif_sound_bundled" to "Suono integrato",
+            "notif_sound_imported" to "Suono importato",
+            "notif_sound_not_selected" to "Nessuna suoneria selezionata",
 
             "support_section" to "Supporto",
             "support_phone_label" to "Telefono supporto",
@@ -997,7 +1046,7 @@ object Locales {
             "pin_confirm_label" to "Conferma PIN",
             "pin_mismatch" to "I codici PIN non corrispondono",
             "pin_disable_warning" to "Se disattivi il codice PIN, le operazioni sul database saranno limitate:\n• importazione\n• esportazione\n• cancellazione del database\n\nContinuare?",
-            "backup_pin_required_hint" to "Per usare importazione, esportazione e cancellazione del database, abilita il PIN e configurarlo.",
+            "backup_pin_required_hint" to "Per usare importazione, esportazione e cancellazione del database, abilita il PIN e configuralo.",
             "security_section" to "Sicurezza",
             "pin_enabled" to "Richiedi PIN",
             "pin_set" to "Imposta PIN",
@@ -1021,6 +1070,17 @@ object Locales {
 
             "unlock_title" to "Inserisci PIN",
             "unlock_text" to "È richiesto un PIN per accedere all'app.",
+            "notif_sound_1" to "Sound 1",
+            "notif_sound_2" to "Sound 2",
+            "notif_sound_3" to "Sound 3",
+            "notif_sound_4" to "Sound 4",
+            "notif_sound_5" to "Sound 5",
+            "notif_sound_6" to "Sound 6",
+            "notif_sound_7" to "Sound 7",
+            "notif_sound_8" to "Sound 8",
+            "notif_sound_9" to "Sound 9",
+            "notif_sound_10" to "Sound 10",
+            "notif_sound_11" to "Sound 11",
 
             "month_jan" to "Gennaio", "month_feb" to "Febbraio", "month_mar" to "Marzo",
             "month_apr" to "Aprile", "month_may" to "Maggio", "month_jun" to "Giugno",
@@ -1087,6 +1147,8 @@ object Locales {
             "backup_import_success" to "Імпорт успішно завершено.",
             "backup_import_invalid_file" to "Обраний файл не є коректною резервною копією.",
             "backup_import_invalid_payload" to "Файл резервної копії пошкоджений або не містить коректних даних.",
+            "notif_sound_soft" to "М'який сигнал",
+            "notif_sound_bell" to "Дзвіночок",
 
             "stats_client_filter" to "Клієнт",
             "stats_client_picker_title" to "Обрати клієнта",
@@ -1267,8 +1329,15 @@ object Locales {
             "reminders_when" to "Нагадувати за:",
             "remind_days" to "Дні",
             "remind_hours" to "Години",
+            "remind_minutes" to "Хвилини",
             "remind_summary" to "Підсумок",
             "remind_off" to "Вимкнено",
+            "notif_sound_custom" to "Користувацький звук",
+            "notif_sound_choose" to "Обрати мелодію",
+            "notif_sound_source" to "Джерело звуку",
+            "notif_sound_bundled" to "Вбудований звук",
+            "notif_sound_imported" to "Імпортований звук",
+            "notif_sound_not_selected" to "Мелодію не вибрано",
 
             "support_section" to "Підтримка",
             "support_phone_label" to "Телефон підтримки",
@@ -1372,6 +1441,17 @@ object Locales {
 
             "unlock_title" to "Введіть PIN",
             "unlock_text" to "Для доступу до застосунку потрібен PIN.",
+            "notif_sound_1" to "Sound 1",
+            "notif_sound_2" to "Sound 2",
+            "notif_sound_3" to "Sound 3",
+            "notif_sound_4" to "Sound 4",
+            "notif_sound_5" to "Sound 5",
+            "notif_sound_6" to "Sound 6",
+            "notif_sound_7" to "Sound 7",
+            "notif_sound_8" to "Sound 8",
+            "notif_sound_9" to "Sound 9",
+            "notif_sound_10" to "Sound 10",
+            "notif_sound_11" to "Sound 11",
 
             "month_jan" to "Січень", "month_feb" to "Лютий", "month_mar" to "Березень",
             "month_apr" to "Квітень", "month_may" to "Травень", "month_jun" to "Червень",
@@ -1417,6 +1497,16 @@ object Locales {
             "uk" -> "$n ${ukPlural(n, "година", "години", "годин")}"
             "it" -> if (n == 1) "$n ora" else "$n ore"
             else -> if (n == 1) "$n hour" else "$n hours"
+        }
+    }
+
+    fun minutesCount(n: Int): String {
+        val langCode = currentLanguage
+        return when (langCode) {
+            "ru" -> "$n ${ruPlural(n, "минута", "минуты", "минут")}"
+            "uk" -> "$n ${ukPlural(n, "хвилина", "хвилини", "хвилин")}"
+            "it" -> if (n == 1) "$n minuto" else "$n minuti"
+            else -> if (n == 1) "$n minute" else "$n minutes"
         }
     }
 
