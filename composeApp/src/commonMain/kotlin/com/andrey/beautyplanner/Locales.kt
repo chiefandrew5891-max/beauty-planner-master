@@ -3,6 +3,11 @@ package com.andrey.beautyplanner
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import com.andrey.beautyplanner.generated.resources.Res
 
 object Locales {
 
@@ -10,1743 +15,181 @@ object Locales {
         AppSettings.languageCodes[AppSettings.selectedLanguage] ?: "ru"
     )
 
-    private val strings = mapOf(
-        "ru" to mapOf(
-            // Вход и регистрация
-            "auth_password_reset" to "Забыли пароль?",
-            "auth_password_reset_sent" to "Письмо для сброса пароля отправлено.",
-            "auth_password_reset_failed" to "Не удалось отправить письмо для сброса пароля.",
-            "auth_email_sign_in" to "Войти по email",
-            "auth_email_register" to "Регистрация по email",
-            "auth_email_title" to "Вход или регистрация",
-            "auth_email_mode_sign_in" to "Вход",
-            "auth_email_mode_register" to "Регистрация",
-            "auth_email_field" to "Email",
-            "auth_password_field" to "Пароль",
-            "auth_password_confirm_field" to "Подтвердите пароль",
-            "auth_email_invalid" to "Введите корректный email.",
-            "auth_password_too_short" to "Пароль должен содержать минимум 6 символов.",
-            "auth_passwords_mismatch" to "Пароли не совпадают.",
-            "auth_email_sign_in_failed" to "Не удалось войти по email.",
-            "auth_email_register_failed" to "Не удалось зарегистрироваться по email.",
-            "auth_email_submit_sign_in" to "Войти",
-            "auth_email_submit_register" to "Зарегистрироваться",
-            "account_sign_in" to "Войти / зарегистрироваться",
-            "account_switch" to "Сменить аккаунт",
-            "account_sign_out" to "Выйти",
-            "account_current" to "Текущий аккаунт",
-            "account_anonymous" to "Гостевой режим",
-            "auth_title" to "Вход",
-            "auth_subtitle" to "Войдите, чтобы сохранить доступ к данным и покупкам на новом устройстве.",
-            "auth_google" to "Продолжить с Google",
-            "auth_anonymous" to "Продолжить без входа",
-            "auth_skip_hint" to "Вы сможете привязать аккаунт позже.",
-            "auth_error_generic" to "Не удалось выполнить вход.",
-            "auth_google_no_credentials" to "Не удалось найти доступный Google-аккаунт на устройстве. Проверьте, добавлен ли аккаунт Google и обновлены ли сервисы Google Play.",
-            "auth_google_cancelled" to "Вход через Google был отменён.",
-            "auth_google_failed" to "Не удалось выполнить вход через Google.",
-            //Backup and restore
-            "premium_required_backup" to "Резервное копирование доступно только во время пробного периода или с Premium-подпиской.",
-            "booking_new_title" to "Новая запись",
-            "backup_encrypt_toggle" to "Зашифровать резервную копию",
-            "backup_password" to "Пароль резервной копии",
-            "backup_password_confirm" to "Подтвердите пароль",
-            "backup_password_mismatch" to "Пароли не совпадают",
-            "backup_password_too_short" to "Пароль должен содержать минимум 6 символов",
-            "backup_import_password_title" to "Пароль резервной копии",
-            "backup_import_password_hint" to "Введите пароль для расшифровки файла",
-            "backup_import_password_invalid" to "Не удалось расшифровать файл. Проверьте пароль.",
-            "notifications_settings_hint" to "Управление уведомлениями, звуком и временем напоминаний.",
-            "notifications_settings_open" to "Открыть настройки уведомлений",
-            "multi_currency_mode_all" to "Мультивалютный режим (все процедуры)",
-            "booking_end_after_start" to "Конец должен быть позже начала",
-            "booking_fill_required_fields" to "Заполните обязательные поля",
-            "booking_other_mode_hint" to "Режим “Другое”: введите название процедуры вручную",
-            "currency_text_format_label" to "Текстовый формат валюты (USD/UAH)",
-            "auto_shift_conflict_title" to "Конфликт времени",
-            "auto_shift_conflict_intro" to "Есть пересечение по времени.",
-            "auto_shift_conflict_question" to "Сдвинуть следующие записи автоматически?",
-            "auto_shift_conflict_no_space_for" to "Не хватает места в конце дня для",
-            "shift" to "Сдвинуть",
-            "reschedule_for_client_prefix" to "Переназначить запись для",
-            "backup_created_at" to "Дата создания",
-            "backup_appointments_count" to "Количество записей",
-            "backup_format_plain" to "Обычная резервная копия",
-            "backup_format_encrypted" to "Зашифрованная резервная копия",
-            "backup_format_legacy" to "Старый формат резервной копии",
-            "backup_version" to "Версия",
-            "backup_import_preview_title" to "Информация о резервной копии",
-            "backup_import_make_safety_copy" to "Перед импортом рекомендуется сделать резервную копию текущей базы. Сделать сейчас?",
-            "backup_export_success" to "Резервная копия подготовлена к сохранению.",
-            "backup_import_success" to "Импорт успешно завершён.",
-            "backup_import_invalid_file" to "Выбранный файл не является корректной резервной копией.",
-            "backup_import_invalid_payload" to "Файл резервной копии повреждён или не содержит корректных данных.",
-            "notif_sound_soft" to "Мягкий сигнал",
-            "notif_sound_bell" to "Колокольчик",
-
-            "stats_client_filter" to "Клиент",
-            "stats_client_picker_title" to "Выбрать клиента",
-            "stats_open_client_picker" to "Выбрать из базы клиентов",
-            "stats_clear_client_filter" to "Сбросить фильтр клиента",
-            "stats_client_filter_button" to "Фильтр по клиенту",
-            "stats_selected_client" to "Выбранный клиент",
-
-            "app_name" to "Beauty Planner",
-            "nav_main" to "Главная",
-            "nav_settings" to "Настройки",
-            "nav_day" to "Детали дня",
-            "nav_menu" to "Меню",
-            "nav_stats" to "Статистика",
-            "nav_feedback" to "Обратная связь",
-            "save" to "Сохранить",
-            "cancel" to "Отмена",
-            "close" to "Закрыть",
-            "confirm" to "Подтвердить",
-            "yes" to "Да",
-            "currency_eur" to "€",
-            "currency_usd" to "$",
-            "currency_uah" to "₴",
-            "currency_rub" to "₽",
-            "currency_label" to "Валюта",
-
-            "client_name" to "Имя клиента",
-            "phone" to "Телефон",
-            "service" to "Процедура",
-            "price" to "Стоимость",
-            "free" to "Свободно",
-            "unavailable" to "Недоступно",
-            //Developer screen
-            "developer_mode_title" to "Режим разработчика",
-            "developer_mode_hint" to "Внутренние инструменты разработчика и тестовый доступ.",
-            "developer_mode_open" to "Открыть режим разработчика",
-            "developer_password_title" to "Пароль разработчика",
-            "developer_password_hint" to "Введите пароль",
-            "developer_password_invalid" to "Неверный пароль",
-            "developer_unlock" to "Разблокировать",
-            "developer_logout" to "Выйти из режима разработчика",
-            "developer_current_tier" to "Текущий уровень доступа",
-            "developer_trial_active" to "Пробный период активен",
-            "developer_trial_days_left" to "Осталось дней пробного периода",
-            "developer_trial_started_at" to "Пробный период начат",
-            "developer_premium_unlocked" to "Premium разблокирован",
-            "developer_enable_premium" to "Включить Premium",
-            "developer_disable_premium" to "Отключить Premium",
-            "developer_reset_trial" to "Сбросить Trial на сейчас",
-            "developer_expire_trial" to "Завершить Trial",
-
-            // Premium screen
-            "premium_subscription_status_compact" to "Статус подписки",
-            "premium_subscription_inactive" to "Неактивна",
-            "premium_subscription_status_title" to "Статус подписки",
-            "premium_subscription_expires" to "Действует до",
-            "premium_subscription_days_left" to "Осталось",
-            "premium_subscription_auto_renew" to "Автопродление",
-            "premium_subscription_auto_renew_on" to "Включено",
-            "premium_subscription_auto_renew_off" to "Выключено",
-            "premium_subscription_state_active" to "Активна",
-            "premium_subscription_state_canceled" to "Отменена",
-            "premium_subscription_state_expired" to "Истекла",
-            "premium_subscription_state_grace" to "Льготный период",
-            "premium_subscription_state_on_hold" to "Приостановлена",
-            "premium_subscription_state_verifying" to "Проверяется",
-            "premium_subscription_state_none" to "Нет подписки",
-            "billing_account_binding_title" to "Привязка покупки",
-            "billing_account_binding_message" to "Премиум будет привязан к текущему аккаунту приложения:",
-            "billing_account_binding_google_play_note" to "Покупка оформляется через аккаунт Google Play устройства. Аккаунт Google Play и аккаунт приложения могут не совпадать.",
-            "billing_account_binding_unknown" to "Аккаунт не определён",
-            "billing_refund_info_title" to "Возврат и поддержка",
-            "billing_refund_info_message" to "Для возврата средств может потребоваться номер заказа Google Play или письмо-подтверждение покупки.",
-            "premium_buy_btn" to "Купить Premium",
-            "premium_restore_btn" to "Восстановить покупки",
-            "premium_loading_price" to "Загрузка цены...",
-            "premium_purchase_cancelled" to "Покупка отменена.",
-            "premium_purchase_failed" to "Не удалось выполнить покупку.",
-            "premium_restore_failed" to "Не удалось восстановить покупки.",
-            "premium_restored" to "Покупка успешно восстановлена.",
-            "premium_nothing_to_restore" to "Покупки для восстановления не найдены.",
-            "premium_already_owned" to "Premium уже активирован",
-            "premium_store_unavailable" to "Google Play Billing сейчас недоступен.",
-            "premium_product_not_found" to "Продукт Premium не найден в Google Play.",
-            "premium_section_title" to "Подписка и доступ",
-            "premium_status_label" to "Текущий статус",
-            "premium_trial_days_left" to "Осталось дней пробного периода",
-            "premium_trial_active_hint" to "Сейчас вам доступны все функции приложения.",
-            "premium_free_limited_hint" to "Часть функций ограничена. Откройте Premium, чтобы получить полный доступ.",
-            "premium_active_hint" to "У вас полный доступ ко всем premium-функциям.",
-            "premium_open_screen_btn" to "Открыть экран Premium",
-            "premium_status_trial" to "Пробный период",
-            "premium_status_free" to "Бесплатная версия",
-            "premium_status_premium" to "Premium",
-            "premium_learn_more_btn" to "Подробнее",
-            "premium_access_title" to "Премиум доступ",
-            "premium_upgrade_title" to "Перейти на Premium",
-            "premium_active_title" to "Premium активен",
-            "premium_trial_active_subtitle" to "Ваш пробный период активен. Сейчас вам доступны все функции приложения.",
-            "premium_free_limited_subtitle" to "Ваш 14-дневный пробный период завершён. Сейчас вы используете ограниченную бесплатную версию.",
-            "premium_active_subtitle" to "Для вашего аккаунта активирован Premium-доступ.",
-            "premium_features_title" to "Возможности Premium",
-            "premium_feature_unlimited" to "Неограниченное количество записей",
-            "premium_feature_stats" to "Статистика и аналитика",
-            "premium_feature_backup" to "Экспорт и импорт резервных копий",
-            "premium_feature_future" to "Будущие premium-функции и улучшения",
-            "premium_unlock_btn" to "Открыть Premium",
-            "premium_continue_free_btn" to "Остаться на бесплатной версии",
-            "premium_billing_coming_soon" to "Интеграция оплаты будет подключена на следующем этапе.",
-            "premium_required_default" to "Эта функция доступна только во время пробного периода или с Premium-подпиской.",
-            "premium_required_stats" to "Статистика доступна только во время пробного периода или с Premium-подпиской.",
-            "premium_required_export" to "Экспорт доступен только во время пробного периода или с Premium-подпиской.",
-            "premium_required_import" to "Импорт доступен только во время пробного периода или с Premium-подпиской.",
-            "premium_required_limit" to "Бесплатная версия после окончания пробного периода позволяет хранить до 20 записей. Чтобы добавить больше, откройте Premium.",
-
-            // Services
-            "service_gel_polish" to "Гель-лак",
-            "service_gel_strengthening" to "Укрепление гелем",
-            "service_nail_extensions" to "Наращивание",
-            "service_lash_extensions" to "Наращивание ресниц",
-
-            // ✅ added
-            "service_correction" to "Коррекция",
-            "service_repair" to "Ремонт",
-            "service_other" to "Другое",
-
-            "all_appointments_list" to "Список всех записей:",
-            "no_appointments" to "Нет записей",
-
-            "upcoming_appointments_list" to "Предстоящие записи:",
-            "no_upcoming_appointments" to "Нет предстоящих записей",
-            "view_appointment_title" to "Просмотр записи",
-            "quick_actions_title" to "Быстрые действия",
-
-            "language_label" to "Язык",
-            "theme_label" to "Тема",
-            "font_size_label" to "Размер шрифта",
-            "theme_light" to "Светлая",
-            "theme_dark" to "Тёмная",
-            "font_small" to "Мелкий",
-            "font_medium" to "Средний",
-            "font_large" to "Крупный",
-
-            "backup_settings_title" to "Резервное копирование",
-            "backup_settings_hint" to "Экспорт и импорт базы данных.",
-            "backup_settings_open" to "Открыть резервное копирование",
-            "backup_section" to "Резервное копирование",
-            "export_db" to "Экспорт",
-            "import_db" to "Импорт",
-            "backup_file_name" to "Имя файла",
-            "backup_export_name_hint" to "Введите имя файла резервной копии. Расширение .json добавится автоматически.",
-            "backup_extension_note" to "Формат: .json (подходит для Android и iOS)",
-            "backup_import_confirm_text" to "Импортировать выбранный файл? Текущие записи будут заменены.",
-            "import_btn" to "Импорт",
-            "import_invalid_json" to "Не удалось импортировать: проверьте JSON (пустой или неверный формат).",
-            "backup_import_error_empty" to "Файл пустой или не удалось прочитать содержимое.",
-            "backup_import_error_read" to "Не удалось прочитать файл.",
-            "backup_import_error_no_activity" to "Не удалось открыть проводник (нет Activity).",
-            "backup_import_error_no_vc" to "Не удалось открыть проводник.",
-
-            // Support phone edit flow
-            "support_phone_edit" to "Изменить",
-            "support_phone_save" to "Сохранить",
-            "support_phone_edit_confirm_title" to "Изменение номера",
-            "support_phone_edit_confirm_text" to "Вы уверены, что хотите изменить номер службы поддержки?",
-            "support_phone_edit_confirm_yes" to "Да, изменить",
-
-            "privacy_policy" to "Политика конфиденциальности",
-
-            "delete_title" to "Удаление",
-            "delete_btn" to "Удалить",
-            "delete_confirm_prefix" to "Удалить запись",
-            "delete_confirm_at" to "на",
-            "continue_question" to "Продолжить?",
-
-            "transfer_appt" to "Перенести запись",
-            "transfer_title" to "Перенос записи",
-            "transfer_choose_time" to "Выберите время",
-            "transfer_confirm" to "Перенести",
-            "booking_new_title" to "Новая запись",
-            "user_name_placeholder" to "Например, Евгения",
-
-            "transfer_conflict_title" to "Время занято",
-            "transfer_conflict_text" to "Это время уже занято другой записью. Вы хотите перенести текущую запись сюда и затем переназначить вторую запись?",
-            "transfer_conflict_a" to "Переносим",
-            "transfer_conflict_b" to "Занято",
-            "transfer_agree" to "Согласовать",
-
-            "reschedule_title_for" to "Переназначить запись для",
-            "reschedule_choose_time" to "Выберите новое время",
-            "reschedule_confirm" to "Сохранить",
-
-            "start_time" to "Начало",
-            "end_time" to "Конец",
-            "duration_hours" to "Длительность (ч)",
-
-            "notifications_section" to "Уведомления",
-            "notifications_enabled" to "Включить уведомления",
-            "notif_sound_label" to "Звук уведомления",
-            "notif_sound_default" to "По умолчанию",
-            "notif_sound_silent" to "Без звука",
-            "reminders_when" to "Напоминать за:",
-            "remind_days" to "Дни",
-            "remind_hours" to "Часы",
-            "remind_minutes" to "Минуты",
-            "remind_summary" to "Итог",
-            "remind_off" to "Выключено",
-            "notif_sound_custom" to "Пользовательский звук",
-            "notif_sound_choose" to "Выбрать мелодию",
-            "notif_sound_source" to "Источник звука",
-            "notif_sound_bundled" to "Встроенный звук",
-            "notif_sound_imported" to "Импортированный звук",
-            "notif_sound_not_selected" to "Мелодия не выбрана",
-
-            // Support / feedback
-            "support_section" to "Служба поддержки",
-            "support_phone_label" to "Телефон поддержки",
-            "support_phone_hint" to "Введите номер (например: +39 123 456 789 или +7 999 000-00-00)",
-            "support_phone_empty" to "Не указан",
-            "support_feedback_text" to "Если у вас неполадки — позвоните в поддержку по номеру ниже.",
-            "support_call" to "Позвонить",
-            "my_services" to "Мои услуги",
-            "my_services_hint" to "Создавайте свои услуги и задавайте цену по умолчанию.",
-            "service_add" to "Добавить услугу",
-            "service_edit" to "Редактировать услугу",
-            "service_name" to "Название услуги",
-            "service_default_price" to "Цена по умолчанию",
-            "service_empty_list" to "Список услуг пуст",
-            "service_delete_confirm" to "Удалить эту услугу?",
-            "premium_required_services" to "Пользовательские услуги и прайс-лист доступны только во время пробного периода или с Premium-подпиской.",
-            "work_schedule" to "График нерабочих дней",
-            "work_schedule_hint" to "Выберите дни недели и интервал времени, когда вы недоступны для записи.",
-            "work_schedule_add_interval" to "Добавить интервал",
-            "work_schedule_from" to "С",
-                "work_schedule_to" to "До",
-            "work_schedule_empty" to "Интервалы не добавлены",
-            "work_schedule_delete_confirm" to "Удалить этот интервал?",
-            "premium_required_work_schedule" to "График нерабочих дней доступен только во время пробного периода или с Premium-подпиской.",
-            // User name satting
-            "user_name_label" to "Имя пользователя",
-            "user_name_hint" to "Введите имя",
-            "contacts_permission_hint" to "Для автопоиска по контактам нужно разрешение на доступ к контактам. Его можно выдать в настройках устройства.",
-            // Stats
-            "stats_period_day" to "День",
-            "stats_period_week" to "Неделя",
-            "stats_period_month" to "Месяц",
-            "stats_period_year" to "Год",
-            "stats_range" to "Период",
-            "stats_revenue" to "Выручка",
-            "stats_count" to "Количество записей",
-            "stats_hours" to "Отработано часов",
-            "stats_top_services" to "Процедуры",
-            "stats_procedures_done" to "Проведено",
-            "stats_empty" to "Нет данных за выбранный период",
-            "stats_unknown_service" to "Без названия",
-            "stats_filters" to "Фильтры",
-            "stats_period_custom" to "Период",
-            "stats_custom_range" to "Выбор диапазона",
-            "stats_date_from" to "От",
-            "stats_date_to" to "До",
-            "stats_pick_start_date" to "Выберите начальную дату",
-            "stats_pick_end_date" to "Выберите конечную дату",
-
-            // Completed Record Card
-            "view" to "Просмотр",
-            "edit" to "Изменить",
-            "edit_appointment_title" to "Изменение записи",
-            "edit_appointment_confirm" to "Вы уверены, что хотите изменить эту запись?",
-            "conflict_time_title" to "Конфликт времени",
-            "shift" to "Сдвинуть",
-
-            // Content descriptions
-            "cd_menu" to "Меню",
-            "cd_back" to "Назад",
-            "cd_settings" to "Настройки",
-
-            // ✅ Appointment status (NEW)
-            "appt_status_label" to "Статус",
-            "appt_status_waiting" to "Ожидается",
-            "appt_status_in_progress" to "Выполняется",
-            "appt_status_done" to "Выполнено",
-            "appt_status_canceled" to "Отменено",
-            "past_date_actions_disabled" to "Для прошедших дат изменение, перенос и удаление недоступны.",
-
-            // Currency
-            "currency_eur" to "€",
-            "splash_for" to "для",
-            //Settings
-            "appearance_settings" to "Настройка оформления и темы",
-            "appearance_settings_hint" to "Язык, тема, размер шрифта, валюта и имя пользователя.",
-
-            // --------- Security / PIN ---------
-            "pin_create_hint" to "Придумайте PIN-код и подтвердите его.",
-            "pin_create_label" to "Придумайте PIN",
-            "pin_confirm_label" to "Подтвердите PIN",
-            "pin_mismatch" to "PIN-коды не совпадают",
-            "pin_disable_warning" to "При отключении PIN-кода будут ограничены операции с базой данных:\n• импорт\n• экспорт\n• очистка базы\n\nПродолжить?",
-            "backup_pin_required_hint" to "Чтобы использовать импорт, экспорт и очистку базы, включите PIN и установите его.",
-            "security_section" to "Безопасность",
-            "pin_enabled" to "Запрашивать PIN",
-            "pin_set" to "Установить PIN",
-            "pin_change" to "Изменить PIN",
-            "pin_remove" to "Удалить PIN",
-            "pin_label" to "PIN (4–8 цифр)",
-            "pin_invalid_format" to "Введите PIN из 4–8 цифр",
-            "pin_required" to "Требуется PIN",
-            "pin_wrong" to "Неверный PIN",
-
-            "export_requires_pin" to "Для экспорта требуется PIN.",
-            "import_requires_pin" to "Для импорта требуется PIN.",
-
-            "clear_db" to "Очистить базу данных",
-            "clear_db_title" to "Очистка базы",
-            "clear_db_requires_pin" to "Чтобы очистить базу данных, введите PIN.",
-            "clear_db_warning_backup" to "Рекомендуем сначала сделать резервную копию базы данных. Сделать копию сейчас?",
-            "clear_db_make_backup" to "Сделать копию",
-            "clear_db_skip_backup" to "Очистить без копии",
-            "clear_db_confirm" to "Вы уверены? Все записи будут удалены без возможности восстановления.",
-
-            "unlock_title" to "Введите PIN",
-            "unlock_text" to "Для доступа к приложению требуется PIN.",
-            "notif_sound_1" to "Sound 1",
-            "notif_sound_2" to "Sound 2",
-            "notif_sound_3" to "Sound 3",
-            "notif_sound_4" to "Sound 4",
-            "notif_sound_5" to "Sound 5",
-            "notif_sound_6" to "Sound 6",
-            "notif_sound_7" to "Sound 7",
-            "notif_sound_8" to "Sound 8",
-            "notif_sound_9" to "Sound 9",
-            "notif_sound_10" to "Sound 10",
-            "notif_sound_11" to "Sound 11",
-
-            // months + weekdays
-            "month_jan" to "Январь", "month_feb" to "Февраль", "month_mar" to "Март",
-            "month_apr" to "Апрель", "month_may" to "Май", "month_jun" to "Июнь",
-            "month_jul" to "Июль", "month_aug" to "Август", "month_sep" to "Сентябрь",
-            "month_oct" to "Октябрь", "month_nov" to "Ноябрь", "month_dec" to "Декабрь",
-
-            "month_jan_gen" to "января",
-            "month_feb_gen" to "февраля",
-            "month_mar_gen" to "марта",
-            "month_apr_gen" to "апреля",
-            "month_may_gen" to "мая",
-            "month_jun_gen" to "июня",
-            "month_jul_gen" to "июля",
-            "month_aug_gen" to "августа",
-            "month_sep_gen" to "сентября",
-            "month_oct_gen" to "октября",
-            "month_nov_gen" to "ноября",
-            "month_dec_gen" to "декабря",
-
-            "mon" to "Пн", "tue" to "Вт", "wed" to "Ср", "thu" to "Чт", "fri" to "Пт", "sat" to "Сб", "sun" to "Вс"
-        ),
-
-        "en" to mapOf(
-            // Вход и регистрация
-            "auth_password_reset" to "Forgot password?",
-            "auth_password_reset_sent" to "Password reset email has been sent.",
-            "auth_password_reset_failed" to "Failed to send password reset email.",
-            "auth_email_sign_in" to "Sign in with email",
-            "auth_email_register" to "Register with email",
-            "auth_email_title" to "Sign in or register",
-            "auth_email_mode_sign_in" to "Sign in",
-            "auth_email_mode_register" to "Register",
-            "auth_email_field" to "Email",
-            "auth_password_field" to "Password",
-            "auth_password_confirm_field" to "Confirm password",
-            "auth_email_invalid" to "Enter a valid email.",
-            "auth_password_too_short" to "Password must be at least 6 characters.",
-            "auth_passwords_mismatch" to "Passwords do not match.",
-            "auth_email_sign_in_failed" to "Failed to sign in with email.",
-            "auth_email_register_failed" to "Failed to register with email.",
-            "auth_email_submit_sign_in" to "Sign in",
-            "auth_email_submit_register" to "Register",
-            "account_sign_in" to "Sign in / Register",
-            "account_switch" to "Switch account",
-            "account_sign_out" to "Sign out",
-            "account_current" to "Current account",
-            "account_anonymous" to "Guest mode",
-            "auth_title" to "Sign in",
-            "auth_subtitle" to "Sign in to keep access to your data and purchases on a new device.",
-            "auth_google" to "Continue with Google",
-            "auth_anonymous" to "Continue without signing in",
-            "auth_skip_hint" to "You can link an account later.",
-            "auth_error_generic" to "Sign-in failed.",
-            "auth_google_no_credentials" to "No available Google account was found on this device. Check that a Google account is added and Google Play services are up to date.",
-            "auth_google_cancelled" to "Google sign-in was cancelled.",
-            "auth_google_failed" to "Google sign-in failed.",
-            //Backup and restore
-            "premium_required_backup" to "Backup is available only during trial or with Premium subscription.",
-            "booking_new_title" to "New appointment",
-            "backup_encrypt_toggle" to "Encrypt backup",
-            "backup_password" to "Backup password",
-            "backup_password_confirm" to "Confirm password",
-            "backup_password_mismatch" to "Passwords do not match",
-            "backup_password_too_short" to "Password must be at least 6 characters",
-            "backup_import_password_title" to "Backup password",
-            "backup_import_password_hint" to "Enter password to decrypt the file",
-            "backup_import_password_invalid" to "Could not decrypt file. Check the password.",
-            "notifications_settings_hint" to "Manage notifications, sound, and reminder timing.",
-            "notifications_settings_open" to "Open notification settings",
-            "multi_currency_mode_all" to "Multi-currency mode (all services)",
-            "booking_end_after_start" to "End must be after start",
-            "booking_fill_required_fields" to "Fill required fields",
-            "booking_other_mode_hint" to "Other mode: type service name",
-            "currency_text_format_label" to "Text currency format (USD/UAH)",
-            "auto_shift_conflict_title" to "Time conflict",
-            "auto_shift_conflict_intro" to "There is a time overlap.",
-            "auto_shift_conflict_question" to "Shift the following appointments automatically?",
-            "auto_shift_conflict_no_space_for" to "Not enough space at the end of the day for",
-            "shift" to "Shift",
-            "reschedule_for_client_prefix" to "Reschedule appointment for",
-            "backup_created_at" to "Created at",
-            "backup_appointments_count" to "Appointments count",
-            "backup_format_plain" to "Plain backup",
-            "backup_format_encrypted" to "Encrypted backup",
-            "backup_format_legacy" to "Legacy backup format",
-            "backup_version" to "Version",
-            "backup_import_preview_title" to "Backup information",
-            "backup_import_make_safety_copy" to "Before import, we recommend creating a backup of the current database. Create one now?",
-            "backup_export_success" to "Backup is ready to be saved.",
-            "backup_import_success" to "Import completed successfully.",
-            "backup_import_invalid_file" to "The selected file is not a valid backup.",
-            "backup_import_invalid_payload" to "The backup file is corrupted or does not contain valid data.",
-            "notif_sound_soft" to "Soft tone",
-            "notif_sound_bell" to "Bell",
-
-            "stats_client_filter" to "Client",
-            "stats_client_picker_title" to "Select client",
-            "stats_open_client_picker" to "Choose from client database",
-            "stats_clear_client_filter" to "Clear client filter",
-            "stats_client_filter_button" to "Filter by client",
-            "stats_selected_client" to "Selected client",
-            "currency_eur" to "€",
-            "currency_usd" to "$",
-            "currency_uah" to "₴",
-            "currency_rub" to "₽",
-            "currency_label" to "currency",
-
-            "app_name" to "Beauty Planner",
-            "nav_main" to "Main",
-            "nav_settings" to "Settings",
-            "nav_day" to "Day Details",
-            "nav_menu" to "Menu",
-            "nav_stats" to "Statistics",
-            "nav_feedback" to "Support",
-            "save" to "Save",
-            "cancel" to "Cancel",
-            "close" to "Close",
-            "confirm" to "Confirm",
-            "yes" to "Yes",
-            //Developer screen
-            "developer_mode_title" to "Developer Mode",
-            "developer_mode_hint" to "Internal developer tools and test access.",
-            "developer_mode_open" to "Open developer mode",
-            "developer_password_title" to "Developer password",
-            "developer_password_hint" to "Enter password",
-            "developer_password_invalid" to "Invalid password",
-            "developer_unlock" to "Unlock",
-            "developer_logout" to "Exit developer mode",
-            "developer_current_tier" to "Current access tier",
-            "developer_trial_active" to "Trial active",
-            "developer_trial_days_left" to "Trial days left",
-            "developer_trial_started_at" to "Trial started at",
-            "developer_premium_unlocked" to "Premium unlocked",
-            "developer_enable_premium" to "Enable Premium",
-            "developer_disable_premium" to "Disable Premium",
-            "developer_reset_trial" to "Reset Trial to now",
-            "developer_expire_trial" to "Expire Trial",
-
-            // Premium screen
-            "premium_subscription_status_compact" to "Subscription status",
-            "premium_subscription_inactive" to "Inactive",
-            "premium_subscription_status_title" to "Subscription status",
-            "premium_subscription_expires" to "Active until",
-            "premium_subscription_days_left" to "Days left",
-            "premium_subscription_auto_renew" to "Auto-renew",
-            "premium_subscription_auto_renew_on" to "Enabled",
-            "premium_subscription_auto_renew_off" to "Disabled",
-            "premium_subscription_state_active" to "Active",
-            "premium_subscription_state_canceled" to "Canceled",
-            "premium_subscription_state_expired" to "Expired",
-            "premium_subscription_state_grace" to "Grace period",
-            "premium_subscription_state_on_hold" to "On hold",
-            "premium_subscription_state_verifying" to "Verifying",
-            "premium_subscription_state_none" to "No subscription",
-            "billing_account_binding_title" to "Purchase binding",
-            "billing_account_binding_message" to "Premium will be linked to the current app account:",
-            "billing_account_binding_google_play_note" to "The purchase is processed through the device's Google Play account. Your Google Play account and your app account may be different.",
-            "billing_account_binding_unknown" to "Account not identified",
-            "billing_refund_info_title" to "Refunds and support",
-            "billing_refund_info_message" to "For refunds, you may need your Google Play order number or purchase confirmation email.",
-            "premium_buy_btn" to "Buy Premium",
-            "premium_restore_btn" to "Restore purchases",
-            "premium_loading_price" to "Loading price...",
-            "premium_purchase_cancelled" to "Purchase was cancelled.",
-            "premium_purchase_failed" to "Purchase failed.",
-            "premium_restore_failed" to "Failed to restore purchases.",
-            "premium_restored" to "Purchase restored successfully.",
-            "premium_nothing_to_restore" to "No purchases found to restore.",
-            "premium_already_owned" to "Premium is already active",
-            "premium_store_unavailable" to "Google Play Billing is currently unavailable.",
-            "premium_product_not_found" to "Premium product was not found in Google Play.",
-            "premium_section_title" to "Subscription and Access",
-            "premium_status_label" to "Current status",
-            "premium_trial_days_left" to "Trial days left",
-            "premium_trial_active_hint" to "You currently have access to all app features.",
-            "premium_free_limited_hint" to "Some features are limited. Upgrade to Premium for full access.",
-            "premium_active_hint" to "You have full access to all premium features.",
-            "premium_open_screen_btn" to "Open Premium screen",
-            "premium_status_trial" to "Trial",
-            "premium_status_free" to "Free version",
-            "premium_status_premium" to "Premium",
-            "premium_learn_more_btn" to "Learn more",
-            "premium_access_title" to "Premium Access",
-            "premium_upgrade_title" to "Upgrade to Premium",
-            "premium_active_title" to "Premium Active",
-            "premium_trial_active_subtitle" to "Your trial is active. You currently have full access to all app features.",
-            "premium_free_limited_subtitle" to "Your 14-day trial has ended. You are now using the limited free version.",
-            "premium_active_subtitle" to "Premium access is active for your account.",
-            "premium_features_title" to "Premium features",
-            "premium_feature_unlimited" to "Unlimited appointments",
-            "premium_feature_stats" to "Statistics and business insights",
-            "premium_feature_backup" to "Backup export and import",
-            "premium_feature_future" to "Future premium features and improvements",
-            "premium_unlock_btn" to "Unlock Premium",
-            "premium_continue_free_btn" to "Stay on free version",
-            "premium_billing_coming_soon" to "Billing integration will be connected in the next stage.",
-            "premium_required_default" to "This feature is available only during trial or with Premium subscription.",
-            "premium_required_stats" to "Statistics are available only during trial or with Premium subscription.",
-            "premium_required_export" to "Export is available only during trial or with Premium subscription.",
-            "premium_required_import" to "Import is available only during trial or with Premium subscription.",
-            "premium_required_limit" to "The free version after trial allows up to 20 appointments. Upgrade to Premium to add more.",
-
-            "client_name" to "Client Name",
-            "phone" to "Phone",
-            "service" to "Service",
-            "price" to "Price",
-            "free" to "Free",
-            "unavailable" to "Unavailable",
-
-            "service_gel_polish" to "Gel polish",
-            "service_gel_strengthening" to "Gel strengthening",
-            "service_nail_extensions" to "Nail extensions",
-            "service_lash_extensions" to "Lash extensions",
-
-            "service_correction" to "Correction",
-            "service_repair" to "Repair",
-            "service_other" to "Other",
-
-            "all_appointments_list" to "All appointments list:",
-            "no_appointments" to "No appointments",
-
-            "upcoming_appointments_list" to "Upcoming appointments:",
-            "no_upcoming_appointments" to "No upcoming appointments",
-            "view_appointment_title" to "Appointment details",
-            "quick_actions_title" to "Quick actions",
-
-            "language_label" to "Language",
-            "theme_label" to "Theme",
-            "font_size_label" to "Font Size",
-            "theme_light" to "Light",
-            "theme_dark" to "Dark",
-            "font_small" to "Small",
-            "font_medium" to "Medium",
-            "font_large" to "Large",
-
-            "backup_settings_title" to "Backup",
-            "backup_settings_hint" to "Export and import database backups.",
-            "backup_settings_open" to "Open backup settings",
-            "backup_section" to "Backup",
-            "export_db" to "Export",
-            "import_db" to "Import",
-            "backup_file_name" to "File name",
-            "backup_export_name_hint" to "Enter backup file name. .json extension will be added automatically.",
-            "backup_extension_note" to "Format: .json (works on Android and iOS)",
-            "backup_import_confirm_text" to "Import selected file? Current appointments will be replaced.",
-            "import_btn" to "Import",
-            "import_invalid_json" to "Import failed: please check the JSON (empty or invalid format).",
-            "backup_import_error_empty" to "File is empty or cannot be read.",
-            "backup_import_error_read" to "Cannot read file.",
-            "backup_import_error_no_activity" to "Cannot open file picker (no Activity).",
-            "backup_import_error_no_vc" to "Cannot open file picker.",
-
-            "support_phone_edit" to "Edit",
-            "support_phone_save" to "Save",
-            "support_phone_edit_confirm_title" to "Edit phone",
-            "support_phone_edit_confirm_text" to "Are you sure you want to change support phone number?",
-            "support_phone_edit_confirm_yes" to "Yes",
-
-            "privacy_policy" to "Privacy Policy",
-
-            "delete_title" to "Delete",
-            "delete_btn" to "Delete",
-            "delete_confirm_prefix" to "Delete appointment for",
-            "delete_confirm_at" to "at",
-            "continue_question" to "Continue?",
-
-            "transfer_appt" to "Transfer appointment",
-            "transfer_title" to "Transfer appointment",
-            "transfer_choose_time" to "Choose time",
-            "transfer_confirm" to "Transfer",
-            "booking_new_title" to "New appointment",
-            "user_name_placeholder" to "For example, Eugeniia",
-
-            "transfer_conflict_title" to "Time is busy",
-            "transfer_conflict_text" to "This time is already booked. Do you want to move the current appointment here and then reschedule the other one?",
-            "transfer_conflict_a" to "Moving",
-            "transfer_conflict_b" to "Booked",
-            "transfer_agree" to "Agree",
-
-            "reschedule_title_for" to "Reschedule appointment for",
-            "reschedule_choose_time" to "Choose new time",
-            "reschedule_confirm" to "Save",
-
-            "start_time" to "Start time",
-            "end_time" to "End",
-            "duration_hours" to "Duration (h)",
-
-            "notifications_section" to "Notifications",
-            "notifications_enabled" to "Enable notifications",
-            "notif_sound_label" to "Notification sound",
-            "notif_sound_default" to "Default",
-            "notif_sound_silent" to "Silent",
-            "reminders_when" to "Remind before:",
-            "remind_days" to "Days",
-            "remind_hours" to "Hours",
-            "remind_minutes" to "Minutes",
-            "remind_summary" to "Summary",
-            "remind_off" to "Off",
-            "notif_sound_custom" to "Custom sound",
-            "notif_sound_choose" to "Choose ringtone",
-            "notif_sound_source" to "Sound source",
-            "notif_sound_bundled" to "Bundled sound",
-            "notif_sound_imported" to "Imported sound",
-            "notif_sound_not_selected" to "No ringtone selected",
-
-            "support_section" to "Support",
-            "support_phone_label" to "Support phone",
-            "support_phone_hint" to "Enter phone number (e.g. +39 123 456 789)",
-            "support_phone_empty" to "Not set",
-            "support_feedback_text" to "If something is not working, call support using the number below.",
-            "support_call" to "Call",
-            "my_services" to "My Services",
-            "my_services_hint" to "Create your own services and set default prices.",
-            "service_add" to "Add service",
-            "service_edit" to "Edit service",
-            "service_name" to "Service name",
-            "service_default_price" to "Default price",
-            "service_empty_list" to "Service list is empty",
-            "service_delete_confirm" to "Delete this service?",
-            "premium_required_services" to "Custom services and price list are available only during trial or with Premium subscription.",
-            "work_schedule" to "Unavailable Schedule",
-            "work_schedule_hint" to "Select weekdays and a time interval when you are unavailable for bookings.",
-            "work_schedule_add_interval" to "Add interval",
-            "work_schedule_from" to "From",
-            "work_schedule_to" to "To",
-            "work_schedule_empty" to "No intervals added",
-            "work_schedule_delete_confirm" to "Delete this interval?",
-            "premium_required_work_schedule" to "Unavailable schedule is available only during trial or with Premium subscription.",
-            // User name satting
-            "user_name_label" to "User name",
-            "user_name_hint" to "Enter your name",
-            "contacts_permission_hint" to "Contact access permission is required for autocomplete. You can enable it in device settings.",
-
-            "stats_period_day" to "Day",
-            "stats_period_week" to "Week",
-            "stats_period_month" to "Month",
-            "stats_period_year" to "Year",
-            "stats_range" to "Range",
-            "stats_revenue" to "Revenue",
-            "stats_count" to "Appointments",
-            "stats_hours" to "Hours worked",
-            "stats_top_services" to "Services",
-            "stats_procedures_done" to "Done",
-            "stats_empty" to "No data for selected period",
-            "stats_unknown_service" to "Unnamed",
-            "stats_filters" to "Filters",
-            "stats_period_custom" to "Custom",
-            "stats_custom_range" to "Select range",
-            "stats_date_from" to "From",
-            "stats_date_to" to "To",
-            "stats_pick_start_date" to "Select start date",
-            "stats_pick_end_date" to "Select end date",
-
-            "view" to "View",
-            "edit" to "Edit",
-            "edit_appointment_title" to "Edit appointment",
-            "edit_appointment_confirm" to "Are you sure you want to edit this appointment?",
-            "conflict_time_title" to "Time conflict",
-            "shift" to "Shift",
-
-            "cd_menu" to "Menu",
-            "cd_back" to "Back",
-            "cd_settings" to "Settings",
-
-            // ✅ Appointment status (NEW)
-            "appt_status_label" to "Status",
-            "appt_status_waiting" to "Waiting",
-            "appt_status_in_progress" to "In progress",
-            "appt_status_done" to "Done",
-            "appt_status_canceled" to "Canceled",
-            "past_date_actions_disabled" to "Editing, transfer, and deletion are unavailable for past dates.",
-
-            "currency_eur" to "€",
-            "splash_for" to "for",
-            //Settings
-            "appearance_settings" to "Appearance & Theme",
-            "appearance_settings_hint" to "Language, theme, font size, currency and username.",
-            //Settings
-            // --------- Security / PIN ---------
-            "pin_create_hint" to "Create a PIN code and confirm it.",
-            "pin_create_label" to "Create PIN",
-            "pin_confirm_label" to "Confirm PIN",
-            "pin_mismatch" to "PIN codes do not match",
-            "pin_disable_warning" to "If you disable the PIN code, database operations will be restricted:\n• import\n• export\n• clear database\n\nContinue?",
-            "backup_pin_required_hint" to "To use import, export, and database clearing, enable PIN and set it up.",
-            "security_section" to "Security",
-            "pin_enabled" to "Require PIN",
-            "pin_set" to "Set PIN",
-            "pin_change" to "Change PIN",
-            "pin_remove" to "Remove PIN",
-            "pin_label" to "PIN (4–8 digits)",
-            "pin_invalid_format" to "Enter a 4–8 digit PIN",
-            "pin_required" to "PIN required",
-            "pin_wrong" to "Wrong PIN",
-
-            "export_requires_pin" to "PIN is required to export.",
-            "import_requires_pin" to "PIN is required to import.",
-
-            "clear_db" to "Clear database",
-            "clear_db_title" to "Clear database",
-            "clear_db_requires_pin" to "To clear the database, enter PIN.",
-            "clear_db_warning_backup" to "We recommend creating a backup first. Create a backup now?",
-            "clear_db_make_backup" to "Create backup",
-            "clear_db_skip_backup" to "Clear without backup",
-            "clear_db_confirm" to "Are you sure? All appointments will be deleted and cannot be restored.",
-
-            "unlock_title" to "Enter PIN",
-            "unlock_text" to "PIN is required to access the app.",
-            "notif_sound_1" to "Sound 1",
-            "notif_sound_2" to "Sound 2",
-            "notif_sound_3" to "Sound 3",
-            "notif_sound_4" to "Sound 4",
-            "notif_sound_5" to "Sound 5",
-            "notif_sound_6" to "Sound 6",
-            "notif_sound_7" to "Sound 7",
-            "notif_sound_8" to "Sound 8",
-            "notif_sound_9" to "Sound 9",
-            "notif_sound_10" to "Sound 10",
-            "notif_sound_11" to "Sound 11",
-
-            "month_jan" to "January", "month_feb" to "February", "month_mar" to "March",
-            "month_apr" to "April", "month_may" to "May", "month_jun" to "June",
-            "month_jul" to "July", "month_aug" to "August", "month_sep" to "September",
-            "month_oct" to "October", "month_nov" to "November", "month_dec" to "December",
-
-            "month_jan_gen" to "January",
-            "month_feb_gen" to "February",
-            "month_mar_gen" to "March",
-            "month_apr_gen" to "April",
-            "month_may_gen" to "May",
-            "month_jun_gen" to "June",
-            "month_jul_gen" to "July",
-            "month_aug_gen" to "August",
-            "month_sep_gen" to "September",
-            "month_oct_gen" to "October",
-            "month_nov_gen" to "November",
-            "month_dec_gen" to "December",
-
-            "mon" to "Mon", "tue" to "Tue", "wed" to "Wed", "thu" to "Thu", "fri" to "Fri", "sat" to "Sat", "sun" to "Sun"
-        ),
-
-        // Итальянский и украинский блоки оставляю как у тебя, но добавляю статусы в конец каждого.
-        "it" to mapOf(
-            // Вход и регистрация
-            "auth_password_reset" to "Password dimenticata?",
-            "auth_password_reset_sent" to "L'email per il ripristino della password è stata inviata.",
-            "auth_password_reset_failed" to "Impossibile inviare l'email di ripristino password.",
-            "auth_email_sign_in" to "Accedi con email",
-            "auth_email_register" to "Registrati con email",
-            "auth_email_title" to "Accesso o registrazione",
-            "auth_email_mode_sign_in" to "Accesso",
-            "auth_email_mode_register" to "Registrazione",
-            "auth_email_field" to "Email",
-            "auth_password_field" to "Password",
-            "auth_password_confirm_field" to "Conferma password",
-            "auth_email_invalid" to "Inserisci un'email valida.",
-            "auth_password_too_short" to "La password deve contenere almeno 6 caratteri.",
-            "auth_passwords_mismatch" to "Le password non coincidono.",
-            "auth_email_sign_in_failed" to "Accesso con email non riuscito.",
-            "auth_email_register_failed" to "Registrazione con email non riuscita.",
-            "auth_email_submit_sign_in" to "Accedi",
-            "auth_email_submit_register" to "Registrati",
-            "account_sign_in" to "Accedi / Registrati",
-            "account_switch" to "Cambia account",
-            "account_sign_out" to "Esci",
-            "account_current" to "Account corrente",
-            "account_anonymous" to "Modalità ospite",
-            "auth_title" to "Accesso",
-            "auth_subtitle" to "Accedi per mantenere l’accesso ai tuoi dati e acquisti su un nuovo dispositivo.",
-            "auth_google" to "Continua con Google",
-            "auth_anonymous" to "Continua senza accesso",
-            "auth_skip_hint" to "Potrai collegare un account in seguito.",
-            "auth_error_generic" to "Accesso non riuscito.",
-            "auth_google_no_credentials" to "Nessun account Google disponibile trovato su questo dispositivo. Verifica che un account Google sia stato aggiunto e che Google Play Services sia aggiornato.",
-            "auth_google_cancelled" to "L'accesso con Google è stato annullato.",
-            "auth_google_failed" to "Accesso con Google non riuscito.",
-            //Backup and restore
-            "premium_required_backup" to "Il backup è disponibile solo durante il periodo di prova o con l'abbonamento Premium.",
-            "booking_new_title" to "Nuovo appuntamento",
-            "backup_encrypt_toggle" to "Crittografa backup",
-            "backup_password" to "Password del backup",
-            "backup_password_confirm" to "Conferma password",
-            "backup_password_mismatch" to "Le password non coincidono",
-            "backup_password_too_short" to "La password deve contenere almeno 6 caratteri",
-            "backup_import_password_title" to "Password del backup",
-            "backup_import_password_hint" to "Inserisci la password per decifrare il file",
-            "backup_import_password_invalid" to "Impossibile decifrare il file. Controlla la password.",
-            "notifications_settings_hint" to "Gestisci notifiche, suono e tempi dei promemoria.",
-            "notifications_settings_open" to "Apri impostazioni notifiche",
-            "multi_currency_mode_all" to "Modalità multivaluta (tutti i servizi)",
-            "booking_end_after_start" to "La fine deve essere dopo l'inizio",
-            "booking_fill_required_fields" to "Compila i campi obbligatori",
-            "booking_other_mode_hint" to "Modalità “Altro”: inserisci manualmente il nome",
-            "currency_text_format_label" to "Formato testo valuta (USD/UAH)",
-            "auto_shift_conflict_title" to "Conflitto di orario",
-            "auto_shift_conflict_intro" to "C'è una sovrapposizione di orario.",
-            "auto_shift_conflict_question" to "Spostare automaticamente i seguenti appuntamenti?",
-            "auto_shift_conflict_no_space_for" to "Non c'è abbastanza spazio alla fine della giornata per",
-            "shift" to "Sposta",
-            "reschedule_for_client_prefix" to "Riprogrammare appuntamento per",
-            "backup_created_at" to "Data di creazione",
-            "backup_appointments_count" to "Numero appuntamenti",
-            "backup_format_plain" to "Backup normale",
-            "backup_format_encrypted" to "Backup crittografato",
-            "backup_format_legacy" to "Formato backup legacy",
-            "backup_version" to "Versione",
-            "backup_import_preview_title" to "Informazioni sul backup",
-            "backup_import_make_safety_copy" to "Prima dell'importazione consigliamo di creare un backup del database attuale. Crearlo ora?",
-            "backup_export_success" to "Il backup è pronto per essere salvato.",
-            "backup_import_success" to "Importazione completata con successo.",
-            "backup_import_invalid_file" to "Il file selezionato non è un backup valido.",
-            "backup_import_invalid_payload" to "Il file di backup è danneggiato o non contiene dati validi.",
-            "notif_sound_soft" to "Suono morbido",
-            "notif_sound_bell" to "Campanello",
-
-            "stats_client_filter" to "Cliente",
-            "stats_client_picker_title" to "Seleziona cliente",
-            "stats_open_client_picker" to "Scegli dalla lista clienti",
-            "stats_clear_client_filter" to "Reimposta filtro cliente",
-            "stats_client_filter_button" to "Filtro per cliente",
-            "stats_selected_client" to "Cliente selezionato",
-            "currency_eur" to "€",
-            "currency_usd" to "$",
-            "currency_uah" to "₴",
-            "currency_rub" to "₽",
-            "currency_label" to "valuta",
-
-            "app_name" to "Beauty Planner",
-            "nav_main" to "Home",
-            "nav_settings" to "Impostazioni",
-            "nav_day" to "Dettagli",
-            "nav_menu" to "Menu",
-            "nav_stats" to "Statistiche",
-            "nav_feedback" to "Supporto",
-            "save" to "Salva",
-            "cancel" to "Annulla",
-            "close" to "Chiudi",
-            "confirm" to "Conferma",
-            "yes" to "Sì",
-            //Developer screen
-            "developer_mode_title" to "Modalità sviluppatore",
-            "developer_mode_hint" to "Strumenti interni per sviluppatore e accesso di test.",
-            "developer_mode_open" to "Apri modalità sviluppatore",
-            "developer_password_title" to "Password sviluppatore",
-            "developer_password_hint" to "Inserisci la password",
-            "developer_password_invalid" to "Password non valida",
-            "developer_unlock" to "Sblocca",
-            "developer_logout" to "Esci dalla modalità sviluppatore",
-            "developer_current_tier" to "Livello di accesso corrente",
-            "developer_trial_active" to "Periodo di prova attivo",
-            "developer_trial_days_left" to "Giorni di prova rimanenti",
-            "developer_trial_started_at" to "Periodo di prova iniziato",
-            "developer_premium_unlocked" to "Premium sbloccato",
-            "developer_enable_premium" to "Attiva Premium",
-            "developer_disable_premium" to "Disattiva Premium",
-            "developer_reset_trial" to "Reimposta Trial a ora",
-            "developer_expire_trial" to "Termina Trial",
-
-            // Premium screen
-            "premium_subscription_status_compact" to "Stato dell'abbonamento",
-            "premium_subscription_inactive" to "Non attivo",
-            "premium_subscription_status_title" to "Stato dell'abbonamento",
-            "premium_subscription_expires" to "Attivo fino al",
-            "premium_subscription_days_left" to "Giorni rimanenti",
-            "premium_subscription_auto_renew" to "Rinnovo automatico",
-            "premium_subscription_auto_renew_on" to "Attivo",
-            "premium_subscription_auto_renew_off" to "Disattivato",
-            "premium_subscription_state_active" to "Attivo",
-            "premium_subscription_state_canceled" to "Annullato",
-            "premium_subscription_state_expired" to "Scaduto",
-            "premium_subscription_state_grace" to "Periodo di tolleranza",
-            "premium_subscription_state_on_hold" to "Sospeso",
-            "premium_subscription_state_verifying" to "Verifica in corso",
-            "premium_subscription_state_none" to "Nessun abbonamento",
-            "billing_account_binding_title" to "Collegamento dell'acquisto",
-            "billing_account_binding_message" to "Premium sarà collegato all'account corrente dell'app:",
-            "billing_account_binding_google_play_note" to "L'acquisto viene elaborato tramite l'account Google Play del dispositivo. L'account Google Play e l'account dell'app possono essere diversi.",
-            "billing_account_binding_unknown" to "Account non identificato",
-            "billing_refund_info_title" to "Rimborsi e supporto",
-            "billing_refund_info_message" to "Per i rimborsi potrebbe essere necessario il numero d'ordine di Google Play o l'email di conferma dell'acquisto.",
-            "premium_buy_btn" to "Acquista Premium",
-            "premium_restore_btn" to "Ripristina acquisti",
-            "premium_loading_price" to "Caricamento prezzo...",
-            "premium_purchase_cancelled" to "Acquisto annullato.",
-            "premium_purchase_failed" to "Impossibile completare l'acquisto.",
-            "premium_restore_failed" to "Impossibile ripristinare gli acquisti.",
-            "premium_restored" to "Acquisto ripristinato con successo.",
-            "premium_nothing_to_restore" to "Nessun acquisto da ripristinare.",
-            "premium_already_owned" to "Premium è già attivo",
-            "premium_store_unavailable" to "Google Play Billing non è disponibile al momento.",
-            "premium_product_not_found" to "Prodotto Premium non trovato in Google Play.",
-            "premium_section_title" to "Abbonamento e Accesso",
-            "premium_status_label" to "Stato attuale",
-            "premium_trial_days_left" to "Giorni di prova rimanenti",
-            "premium_trial_active_hint" to "Attualmente hai accesso a tutte le funzioni dell'app.",
-            "premium_free_limited_hint" to "Alcune funzioni sono limitate. Passa a Premium per l'accesso completo.",
-            "premium_active_hint" to "Hai accesso completo a tutte le funzioni premium.",
-            "premium_open_screen_btn" to "Apri schermata Premium",
-            "premium_status_trial" to "Periodo di prova",
-            "premium_status_free" to "Versione gratuita",
-            "premium_status_premium" to "Premium",
-            "premium_learn_more_btn" to "Scopri di più",
-            "premium_access_title" to "Accesso Premium",
-            "premium_upgrade_title" to "Passa a Premium",
-            "premium_active_title" to "Premium attivo",
-            "premium_trial_active_subtitle" to "Il tuo periodo di prova è attivo. Attualmente hai accesso completo a tutte le funzioni dell'app.",
-            "premium_free_limited_subtitle" to "Il tuo periodo di prova di 14 giorni è terminato. Ora stai utilizzando la versione gratuita limitata.",
-            "premium_active_subtitle" to "L'accesso Premium è attivo per il tuo account.",
-            "premium_features_title" to "Funzioni Premium",
-            "premium_feature_unlimited" to "Appuntamenti illimitati",
-            "premium_feature_stats" to "Statistiche e analisi",
-            "premium_feature_backup" to "Esportazione e importazione del backup",
-            "premium_feature_future" to "Future funzioni Premium e miglioramenti",
-            "premium_unlock_btn" to "Attiva Premium",
-            "premium_continue_free_btn" to "Resta con la versione gratuita",
-            "premium_billing_coming_soon" to "L'integrazione dei pagamenti sarà collegata nella fase successiva.",
-            "premium_required_default" to "Questa funzione è disponibile solo durante il periodo di prova o con l'abbonamento Premium.",
-            "premium_required_stats" to "Le statistiche sono disponibili solo durante il periodo di prova o con l'abbonamento Premium.",
-            "premium_required_export" to "L'esportazione è disponibile solo durante il periodo di prova o con l'abbonamento Premium.",
-            "premium_required_import" to "L'importazione è disponibile solo durante il periodo di prova o con l'abbonamento Premium.",
-            "premium_required_limit" to "La versione gratuita dopo il periodo di prova consente fino a 20 appuntamenti. Passa a Premium per aggiungerne altri.",
-
-            "client_name" to "Nome cliente",
-            "phone" to "Telefono",
-            "service" to "Procedura",
-            "price" to "Prezzo",
-            "free" to "Libero",
-            "unavailable" to "Non disponibile",
-
-            "service_gel_polish" to "Smalto gel",
-            "service_gel_strengthening" to "Rinforzo con gel",
-            "service_nail_extensions" to "Ricostruzione unghie",
-            "service_lash_extensions" to "Extension ciglia",
-
-            "service_correction" to "Correzione",
-            "service_repair" to "Riparazione",
-            "service_other" to "Altro",
-
-            "all_appointments_list" to "Elenco appuntamenti:",
-            "no_appointments" to "Nessun appuntamento",
-
-            "upcoming_appointments_list" to "Prossimi appuntamenti:",
-            "no_upcoming_appointments" to "Nessun appuntamento futuro",
-            "view_appointment_title" to "Dettagli appuntamento",
-            "quick_actions_title" to "Azioni rapide",
-
-            "language_label" to "Lingua",
-            "theme_label" to "Tema",
-            "font_size_label" to "Dimensione carattere",
-            "theme_light" to "Chiaro",
-            "theme_dark" to "Scuro",
-            "font_small" to "Piccolo",
-            "font_medium" to "Medio",
-            "font_large" to "Grande",
-
-            "backup_settings_title" to "Backup",
-            "backup_settings_hint" to "Esporta e importa i backup del database.",
-            "backup_settings_open" to "Apri backup",
-            "backup_section" to "Backup",
-            "export_db" to "Esporta",
-            "import_db" to "Importa",
-            "backup_file_name" to "Nome file",
-            "backup_export_name_hint" to "Inserisci il nome del file di backup. L'estensione .json verrà aggiunta automaticamente.",
-            "backup_extension_note" to "Formato: .json (Android e iOS)",
-            "backup_import_confirm_text" to "Importare il file selezionato? Gli appuntamenti attuali verranno sostituiti.",
-            "import_btn" to "Importa",
-            "import_invalid_json" to "Importazione non riuscita: controlla il JSON (vuoto o formato non valido).",
-            "backup_import_error_empty" to "Il file è vuoto o non può essere letto.",
-            "backup_import_error_read" to "Impossibile leggere il file.",
-            "backup_import_error_no_activity" to "Impossibile aprire il selettore file.",
-            "backup_import_error_no_vc" to "Impossibile aprire il selettore file.",
-
-            "support_phone_edit" to "Modifica",
-            "support_phone_save" to "Salva",
-            "support_phone_edit_confirm_title" to "Modifica numero",
-            "support_phone_edit_confirm_text" to "Vuoi modificare il numero di supporto?",
-            "support_phone_edit_confirm_yes" to "Sì",
-
-            "privacy_policy" to "Privacy Policy",
-
-            "delete_title" to "Elimina",
-            "delete_btn" to "Elimina",
-            "delete_confirm_prefix" to "Eliminare appuntamento per",
-            "delete_confirm_at" to "alle",
-            "continue_question" to "Continuare?",
-
-            "transfer_appt" to "Sposta appuntamento",
-            "transfer_title" to "Sposta appuntamento",
-            "transfer_choose_time" to "Scegli l'orario",
-            "transfer_confirm" to "Sposta",
-            "booking_new_title" to "Nuovo appuntamento",
-            "user_name_placeholder" to "Per esempio, Yevheniia",
-
-            "transfer_conflict_title" to "Orario occupato",
-            "transfer_conflict_text" to "Questo orario è già prenotato. Vuoi spostare l'appuntamento qui e poi riprogrammare l'altro?",
-            "transfer_conflict_a" to "Spostiamo",
-            "transfer_conflict_b" to "Occupato",
-            "transfer_agree" to "Concorda",
-
-            "reschedule_title_for" to "Riprogrammare appuntamento per",
-            "reschedule_choose_time" to "Scegli nuovo orario",
-            "reschedule_confirm" to "Salva",
-
-            "start_time" to "Ora inizio",
-            "end_time" to "Fine",
-            "duration_hours" to "Durata (h)",
-
-            "notifications_section" to "Notifiche",
-            "notifications_enabled" to "Abilita notifiche",
-            "notif_sound_label" to "Suono notifica",
-            "notif_sound_default" to "Predefinito",
-            "notif_sound_silent" to "Silenzioso",
-            "reminders_when" to "Ricorda prima:",
-            "remind_days" to "Giorni",
-            "remind_hours" to "Ore",
-            "remind_minutes" to "Minuti",
-            "remind_summary" to "Riepilogo",
-            "remind_off" to "Disattivato",
-            "notif_sound_custom" to "Suono personalizzato",
-            "notif_sound_choose" to "Scegli suoneria",
-            "notif_sound_source" to "Origine del suono",
-            "notif_sound_bundled" to "Suono integrato",
-            "notif_sound_imported" to "Suono importato",
-            "notif_sound_not_selected" to "Nessuna suoneria selezionata",
-
-            "support_section" to "Supporto",
-            "support_phone_label" to "Telefono supporto",
-            "support_phone_hint" to "Inserisci numero (es. +39 123 456 789)",
-            "support_phone_empty" to "Non impostato",
-            "support_feedback_text" to "Se qualcosa non funziona, chiama il supporto usando il numero qui sotto.",
-            "support_call" to "Chiama",
-            "my_services" to "I miei servizi",
-            "my_services_hint" to "Crea i tuoi servizi e imposta i prezzi predefiniti.",
-            "service_add" to "Aggiungi servizio",
-            "service_edit" to "Modifica servizio",
-            "service_name" to "Nome del servizio",
-            "service_default_price" to "Prezzo predefinito",
-            "service_empty_list" to "L'elenco dei servizi è vuoto",
-            "service_delete_confirm" to "Eliminare questo servizio?",
-            "premium_required_services" to "I servizi personalizzati e il listino prezzi sono disponibili solo durante il periodo di prova o con l'abbonamento Premium.",
-            "work_schedule" to "Orario dei giorni non lavorativi",
-            "work_schedule_hint" to "Seleziona i giorni della settimana e l'intervallo orario in cui non sei disponibile per le prenotazioni.",
-            "work_schedule_add_interval" to "Aggiungi intervallo",
-            "work_schedule_from" to "Da",
-            "work_schedule_to" to "A",
-            "work_schedule_empty" to "Nessun intervallo aggiunto",
-            "work_schedule_delete_confirm" to "Eliminare questo intervallo?",
-            "premium_required_work_schedule" to "L'orario dei giorni non lavorativi è disponibile solo durante il periodo di prova o con l'abbonamento Premium.",
-            // User name satting
-            "user_name_label" to "Nome utente",
-            "user_name_hint" to "Inserisci il tuo nome",
-            "contacts_permission_hint" to "Per la ricerca automatica serve il permesso di accesso ai contatti. Puoi abilitarlo nelle impostazioni del dispositivo.",
-
-            "stats_period_day" to "Giorno",
-            "stats_period_week" to "Settimana",
-            "stats_period_month" to "Mese",
-            "stats_period_year" to "Anno",
-            "stats_range" to "Periodo",
-            "stats_revenue" to "Incasso",
-            "stats_count" to "Appuntamenti",
-            "stats_hours" to "Ore lavorate",
-            "stats_top_services" to "Servizi",
-            "stats_procedures_done" to "Eseguiti",
-            "stats_empty" to "Nessun dato per il periodo selezionato",
-            "stats_unknown_service" to "Senza nome",
-            "stats_filters" to "Filtri",
-            "stats_period_custom" to "Personalizzato",
-            "stats_custom_range" to "Seleziona intervallo",
-            "stats_date_from" to "Da",
-            "stats_date_to" to "A",
-            "stats_pick_start_date" to "Seleziona la data iniziale",
-            "stats_pick_end_date" to "Seleziona la data finale",
-
-            "view" to "Visualizza",
-            "edit" to "Modifica",
-            "edit_appointment_title" to "Modifica appuntamento",
-            "edit_appointment_confirm" to "Vuoi davvero modificare questo appuntamento?",
-            "conflict_time_title" to "Conflitto di orario",
-            "shift" to "Sposta",
-
-            "cd_menu" to "Menu",
-            "cd_back" to "Indietro",
-            "cd_settings" to "Impostazioni",
-
-            "currency_eur" to "€",
-            "splash_for" to "per",
-            //Settings
-            "appearance_settings" to "Aspetto e tema",
-            "appearance_settings_hint" to "Lingua, tema, dimensione del carattere, valuta e nome utente.",
-            // --------- Security / PIN ---------
-            "pin_create_hint" to "Crea un PIN e confermalo.",
-            "pin_create_label" to "Crea PIN",
-            "pin_confirm_label" to "Conferma PIN",
-            "pin_mismatch" to "I codici PIN non corrispondono",
-            "pin_disable_warning" to "Se disattivi il codice PIN, le operazioni sul database saranno limitate:\n• importazione\n• esportazione\n• cancellazione del database\n\nContinuare?",
-            "backup_pin_required_hint" to "Per usare importazione, esportazione e cancellazione del database, abilita il PIN e configuralo.",
-            "security_section" to "Sicurezza",
-            "pin_enabled" to "Richiedi PIN",
-            "pin_set" to "Imposta PIN",
-            "pin_change" to "Cambia PIN",
-            "pin_remove" to "Rimuovi PIN",
-            "pin_label" to "PIN (4–8 cifre)",
-            "pin_invalid_format" to "Inserisci un PIN di 4–8 cifre",
-            "pin_required" to "PIN richiesto",
-            "pin_wrong" to "PIN errato",
-
-            "export_requires_pin" to "È richiesto il PIN per esportare.",
-            "import_requires_pin" to "È richiesto il PIN per importare.",
-
-            "clear_db" to "Svuota database",
-            "clear_db_title" to "Svuota database",
-            "clear_db_requires_pin" to "Per svuotare il database inserisci il PIN.",
-            "clear_db_warning_backup" to "Consigliamo di creare prima un backup. Creare un backup ora?",
-            "clear_db_make_backup" to "Crea backup",
-            "clear_db_skip_backup" to "Svuota senza backup",
-            "clear_db_confirm" to "Sei sicuro? Tutti gli appuntamenti verranno eliminati e non potranno essere ripristinati.",
-
-            "unlock_title" to "Inserisci PIN",
-            "unlock_text" to "È richiesto un PIN per accedere all'app.",
-            "notif_sound_1" to "Sound 1",
-            "notif_sound_2" to "Sound 2",
-            "notif_sound_3" to "Sound 3",
-            "notif_sound_4" to "Sound 4",
-            "notif_sound_5" to "Sound 5",
-            "notif_sound_6" to "Sound 6",
-            "notif_sound_7" to "Sound 7",
-            "notif_sound_8" to "Sound 8",
-            "notif_sound_9" to "Sound 9",
-            "notif_sound_10" to "Sound 10",
-            "notif_sound_11" to "Sound 11",
-
-            "month_jan" to "Gennaio", "month_feb" to "Febbraio", "month_mar" to "Marzo",
-            "month_apr" to "Aprile", "month_may" to "Maggio", "month_jun" to "Giugno",
-            "month_jul" to "Luglio", "month_aug" to "Agosto", "month_sep" to "Settembre",
-            "month_oct" to "Ottobre", "month_nov" to "Novembre", "month_dec" to "Dicembre",
-
-            "month_jan_gen" to "Gennaio",
-            "month_feb_gen" to "Febbraio",
-            "month_mar_gen" to "Marzo",
-            "month_apr_gen" to "Aprile",
-            "month_may_gen" to "Maggio",
-            "month_jun_gen" to "Giugno",
-            "month_jul_gen" to "Luglio",
-            "month_aug_gen" to "Agosto",
-            "month_sep_gen" to "Settembre",
-            "month_oct_gen" to "Ottobre",
-            "month_nov_gen" to "Novembre",
-            "month_dec_gen" to "Dicembre",
-
-            "mon" to "Lun", "tue" to "Mar", "wed" to "Mer", "thu" to "Gio", "fri" to "Ven", "sat" to "Sab", "sun" to "Dom",
-
-            // ✅ Appointment status (NEW)
-            "appt_status_label" to "Stato",
-            "appt_status_waiting" to "In attesa",
-            "appt_status_in_progress" to "In corso",
-            "appt_status_done" to "Completato",
-            "appt_status_canceled" to "Annullato",
-            "past_date_actions_disabled" to "Per le date passate modifica, spostamento ed eliminazione non sono disponibili."
-        ),
-
-        "uk" to mapOf(
-            // Вход и регистрация
-            "auth_password_reset" to "Забули пароль?",
-            "auth_password_reset_sent" to "Лист для скидання пароля відправлено.",
-            "auth_password_reset_failed" to "Не вдалося надіслати лист для скидання пароля.",
-            "auth_email_sign_in" to "Увійти через email",
-            "auth_email_register" to "Реєстрація через email",
-            "auth_email_title" to "Вхід або реєстрація",
-            "auth_email_mode_sign_in" to "Вхід",
-            "auth_email_mode_register" to "Реєстрація",
-            "auth_email_field" to "Email",
-            "auth_password_field" to "Пароль",
-            "auth_password_confirm_field" to "Підтвердіть пароль",
-            "auth_email_invalid" to "Введіть коректний email.",
-            "auth_password_too_short" to "Пароль має містити щонайменше 6 символів.",
-            "auth_passwords_mismatch" to "Паролі не збігаються.",
-            "auth_email_sign_in_failed" to "Не вдалося увійти через email.",
-            "auth_email_register_failed" to "Не вдалося зареєструватися через email.",
-            "auth_email_submit_sign_in" to "Увійти",
-            "auth_email_submit_register" to "Зареєструватися",
-            "account_sign_in" to "Увійти / Зареєструватися",
-            "account_switch" to "Змінити акаунт",
-            "account_sign_out" to "Вийти",
-            "account_current" to "Поточний акаунт",
-            "account_anonymous" to "Гостьовий режим",
-            "auth_title" to "Вхід",
-            "auth_subtitle" to "Увійдіть, щоб зберегти доступ до даних і покупок на новому пристрої.",
-            "auth_google" to "Продовжити з Google",
-            "auth_anonymous" to "Продовжити без входу",
-            "auth_skip_hint" to "Ви зможете прив’язати акаунт пізніше.",
-            "auth_error_generic" to "Не вдалося виконати вхід.",
-            "auth_google_no_credentials" to "На цьому пристрої не знайдено доступного Google-акаунта. Переконайтеся, що Google-акаунт додано, а сервіси Google Play оновлено.",
-            "auth_google_cancelled" to "Вхід через Google було скасовано.",
-            "auth_google_failed" to "Не вдалося виконати вхід через Google.",
-            //Backup and restore
-            "premium_required_backup" to "Резервне копіювання доступне лише під час пробного періоду або з Premium-підпискою.",
-            "booking_new_title" to "Новий запис",
-            "backup_encrypt_toggle" to "Зашифрувати резервну копію",
-            "backup_password" to "Пароль резервної копії",
-            "backup_password_confirm" to "Підтвердіть пароль",
-            "backup_password_mismatch" to "Паролі не збігаються",
-            "backup_password_too_short" to "Пароль має містити щонайменше 6 символів",
-            "backup_import_password_title" to "Пароль резервної копії",
-            "backup_import_password_hint" to "Введіть пароль для розшифрування файлу",
-            "backup_import_password_invalid" to "Не вдалося розшифрувати файл. Перевірте пароль.",
-            "notifications_settings_hint" to "Керуйте сповіщеннями, звуком і часом нагадувань.",
-            "notifications_settings_open" to "Відкрити налаштування сповіщень",
-            "multi_currency_mode_all" to "Мультивалютний режим (всі процедури)",
-            "booking_end_after_start" to "Кінець має бути пізніше початку",
-            "booking_fill_required_fields" to "Заповніть обовʼязкові поля",
-            "booking_other_mode_hint" to "Режим “Інше”: введіть назву процедури вручну",
-            "currency_text_format_label" to "Текстовий формат валюти (USD/UAH)",
-            "auto_shift_conflict_title" to "Конфлікт часу",
-            "auto_shift_conflict_intro" to "Є перетин у часі.",
-            "auto_shift_conflict_question" to "Зсунути наступні записи автоматично?",
-            "auto_shift_conflict_no_space_for" to "Не вистачає місця в кінці дня для",
-            "shift" to "Зсунути",
-            "reschedule_for_client_prefix" to "Перепризначити запис для",
-            "backup_created_at" to "Дата створення",
-            "backup_appointments_count" to "Кількість записів",
-            "backup_format_plain" to "Звичайна резервна копія",
-            "backup_format_encrypted" to "Зашифрована резервна копія",
-            "backup_format_legacy" to "Старий формат резервної копії",
-            "backup_version" to "Версія",
-            "backup_import_preview_title" to "Інформація про резервну копію",
-            "backup_import_make_safety_copy" to "Перед імпортом рекомендуємо зробити резервну копію поточної бази. Зробити зараз?",
-            "backup_export_success" to "Резервну копію підготовлено до збереження.",
-            "backup_import_success" to "Імпорт успішно завершено.",
-            "backup_import_invalid_file" to "Обраний файл не є коректною резервною копією.",
-            "backup_import_invalid_payload" to "Файл резервної копії пошкоджений або не містить коректних даних.",
-            "notif_sound_soft" to "М'який сигнал",
-            "notif_sound_bell" to "Дзвіночок",
-
-            "stats_client_filter" to "Клієнт",
-            "stats_client_picker_title" to "Обрати клієнта",
-            "stats_open_client_picker" to "Обрати з бази клієнтів",
-            "stats_clear_client_filter" to "Скинути фільтр клієнта",
-            "stats_client_filter_button" to "Фільтр за клієнтом",
-            "stats_selected_client" to "Обраний клієнт",
-            "currency_eur" to "€",
-            "currency_usd" to "$",
-            "currency_uah" to "₴",
-            "currency_rub" to "₽",
-            "currency_label" to "Валюта",
-
-            "app_name" to "Beauty Planner",
-            "nav_main" to "Головна",
-            "nav_settings" to "Налаштування",
-            "nav_day" to "Деталі дня",
-            "nav_menu" to "Меню",
-            "nav_stats" to "Статистика",
-            "nav_feedback" to "Звʼязок",
-            "save" to "Зберегти",
-            "cancel" to "Скасувати",
-            "close" to "Закрити",
-            "confirm" to "Підтвердити",
-            "yes" to "Так",
-            //Developer screen
-            "developer_mode_title" to "Режим розробника",
-            "developer_mode_hint" to "Внутрішні інструменти розробника та тестовий доступ.",
-            "developer_mode_open" to "Відкрити режим розробника",
-            "developer_password_title" to "Пароль розробника",
-            "developer_password_hint" to "Введіть пароль",
-            "developer_password_invalid" to "Невірний пароль",
-            "developer_unlock" to "Розблокувати",
-            "developer_logout" to "Вийти з режиму розробника",
-            "developer_current_tier" to "Поточний рівень доступу",
-            "developer_trial_active" to "Пробний період активний",
-            "developer_trial_days_left" to "Залишилось днів пробного періоду",
-            "developer_trial_started_at" to "Пробний період розпочато",
-            "developer_premium_unlocked" to "Premium розблоковано",
-            "developer_enable_premium" to "Увімкнути Premium",
-            "developer_disable_premium" to "Вимкнути Premium",
-            "developer_reset_trial" to "Скинути Trial на зараз",
-            "developer_expire_trial" to "Завершити Trial",
-
-            // Premium screen
-            "premium_subscription_status_compact" to "Статус підписки",
-            "premium_subscription_inactive" to "Неактивна",
-            "premium_subscription_status_title" to "Статус підписки",
-            "premium_subscription_expires" to "Діє до",
-            "premium_subscription_days_left" to "Залишилось",
-            "premium_subscription_auto_renew" to "Автоподовження",
-            "premium_subscription_auto_renew_on" to "Увімкнено",
-            "premium_subscription_auto_renew_off" to "Вимкнено",
-            "premium_subscription_state_active" to "Активна",
-            "premium_subscription_state_canceled" to "Скасована",
-            "premium_subscription_state_expired" to "Закінчилась",
-            "premium_subscription_state_grace" to "Пільговий період",
-            "premium_subscription_state_on_hold" to "Призупинена",
-            "premium_subscription_state_verifying" to "Перевіряється",
-            "premium_subscription_state_none" to "Немає підписки",
-            "billing_account_binding_title" to "Прив’язка покупки",
-            "billing_account_binding_message" to "Преміум буде прив’язано до поточного акаунта застосунку:",
-            "billing_account_binding_google_play_note" to "Покупка оформлюється через акаунт Google Play на пристрої. Акаунт Google Play та акаунт застосунку можуть відрізнятися.",
-            "billing_account_binding_unknown" to "Акаунт не визначено",
-            "billing_refund_info_title" to "Повернення коштів і підтримка",
-            "billing_refund_info_message" to "Для повернення коштів може знадобитися номер замовлення Google Play або лист-підтвердження покупки.",
-            "premium_buy_btn" to "Купити Premium",
-            "premium_restore_btn" to "Відновити покупки",
-            "premium_loading_price" to "Завантаження ціни...",
-            "premium_purchase_cancelled" to "Покупку скасовано.",
-            "premium_purchase_failed" to "Не вдалося виконати покупку.",
-            "premium_restore_failed" to "Не вдалося відновити покупки.",
-            "premium_restored" to "Покупку успішно відновлено.",
-            "premium_nothing_to_restore" to "Покупок для відновлення не знайдено.",
-            "premium_already_owned" to "Premium вже активовано",
-            "premium_store_unavailable" to "Google Play Billing зараз недоступний.",
-            "premium_product_not_found" to "Продукт Premium не знайдено в Google Play.",
-            "premium_section_title" to "Підписка та доступ",
-            "premium_status_label" to "Поточний статус",
-            "premium_trial_days_left" to "Залишилось днів пробного періоду",
-            "premium_trial_active_hint" to "Зараз вам доступні всі функції застосунку.",
-            "premium_free_limited_hint" to "Частина функцій обмежена. Відкрийте Premium, щоб отримати повний доступ.",
-            "premium_active_hint" to "У вас повний доступ до всіх premium-функцій.",
-            "premium_open_screen_btn" to "Відкрити екран Premium",
-            "premium_status_trial" to "Пробний період",
-            "premium_status_free" to "Безкоштовна версія",
-            "premium_status_premium" to "Premium",
-            "premium_learn_more_btn" to "Детальніше",
-            "premium_access_title" to "Преміум доступ",
-            "premium_upgrade_title" to "Перейти на Premium",
-            "premium_active_title" to "Premium активний",
-            "premium_trial_active_subtitle" to "Ваш пробний період активний. Зараз вам доступні всі функції застосунку.",
-            "premium_free_limited_subtitle" to "Ваш 14-денний пробний період завершився. Зараз ви використовуєте обмежену безкоштовну версію.",
-            "premium_active_subtitle" to "Для вашого акаунта активовано Premium-доступ.",
-            "premium_features_title" to "Можливості Premium",
-            "premium_feature_unlimited" to "Необмежена кількість записів",
-            "premium_feature_stats" to "Статистика та аналітика",
-            "premium_feature_backup" to "Експорт та імпорт резервних копій",
-            "premium_feature_future" to "Майбутні premium-функції та покращення",
-            "premium_unlock_btn" to "Відкрити Premium",
-            "premium_continue_free_btn" to "Залишитися на безкоштовній версії",
-            "premium_billing_coming_soon" to "Інтеграцію оплати буде підключено на наступному етапі.",
-            "premium_required_default" to "Ця функція доступна лише під час пробного періоду або з Premium-підпискою.",
-            "premium_required_stats" to "Статистика доступна лише під час пробного періоду або з Premium-підпискою.",
-            "premium_required_export" to "Експорт доступний лише під час пробного періоду або з Premium-підпискою.",
-            "premium_required_import" to "Імпорт доступний лише під час пробного періоду або з Premium-підпискою.",
-            "premium_required_limit" to "Безкоштовна версія після завершення пробного періоду дозволяє зберігати до 20 записів. Щоб додати більше, відкрийте Premium.",
-
-            "client_name" to "Ім'я клієнта",
-            "phone" to "Телефон",
-            "service" to "Процедура",
-            "price" to "Вартість",
-            "free" to "Вільно",
-            "unavailable" to "Недоступно",
-
-            "service_gel_polish" to "Гель-лак",
-            "service_gel_strengthening" to "Зміцнення гелем",
-            "service_nail_extensions" to "Нарощування",
-            "service_lash_extensions" to "Нарощування вій",
-
-            "service_correction" to "Корекція",
-            "service_repair" to "Ремонт",
-            "service_other" to "Інше",
-
-            "all_appointments_list" to "Список всіх записів:",
-            "no_appointments" to "Немає записів",
-
-            "upcoming_appointments_list" to "Майбутні записи:",
-            "no_upcoming_appointments" to "Немає майбутніх записів",
-            "view_appointment_title" to "Перегляд запису",
-            "quick_actions_title" to "Швидкі дії",
-
-            "language_label" to "Мова",
-            "theme_label" to "Тема",
-            "font_size_label" to "Розмір шрифту",
-            "theme_light" to "Світла",
-            "theme_dark" to "Темна",
-            "font_small" to "Дрібний",
-            "font_medium" to "Середній",
-            "font_large" to "Великий",
-
-            "backup_settings_title" to "Резервне копіювання",
-            "backup_settings_hint" to "Експорт та імпорт бази даних.",
-            "backup_settings_open" to "Відкрити резервне копіювання",
-            "backup_section" to "Резервне копіювання",
-            "export_db" to "Експорт",
-            "import_db" to "Імпорт",
-            "backup_file_name" to "Назва файлу",
-            "backup_export_name_hint" to "Введіть назву файлу резервної копії. Розширення .json додасться автоматично.",
-            "backup_extension_note" to "Формат: .json (Android та iOS)",
-            "backup_import_confirm_text" to "Імпортувати вибраний файл? Поточні записи буде замінено.",
-            "import_btn" to "Імпорт",
-            "import_invalid_json" to "Не вдалося імпортувати: перевірте JSON (порожній або невірний формат).",
-            "backup_import_error_empty" to "Файл порожній або не вдалося прочитати.",
-            "backup_import_error_read" to "Не вдалося прочитати файл.",
-            "backup_import_error_no_activity" to "Не вдалося відкрити провідник.",
-            "backup_import_error_no_vc" to "Не вдалося відкрити провідник.",
-
-            "support_phone_edit" to "Змінити",
-            "support_phone_save" to "Зберегти",
-            "support_phone_edit_confirm_title" to "Зміна номера",
-            "support_phone_edit_confirm_text" to "Ви впевнені, що хочете змінити номер підтримки?",
-            "support_phone_edit_confirm_yes" to "Так",
-
-            "privacy_policy" to "Політика конфіденційності",
-
-            "delete_title" to "Видалення",
-            "delete_btn" to "Видалити",
-            "delete_confirm_prefix" to "Видалити запис",
-            "delete_confirm_at" to "о",
-            "continue_question" to "Продовжити?",
-
-            "transfer_appt" to "Перенести запис",
-            "transfer_title" to "Перенесення запису",
-            "transfer_choose_time" to "Оберіть час",
-            "transfer_confirm" to "Перенести",
-            "booking_new_title" to "Новий запис",
-            "user_name_placeholder" to "Наприклад, Євгенiя",
-
-            "transfer_conflict_title" to "Час зайнято",
-            "transfer_conflict_text" to "Цей час уже зайнятий. Перенести запис сюди і потім переназначити інший?",
-            "transfer_conflict_a" to "Переносимо",
-            "transfer_conflict_b" to "Зайнято",
-            "transfer_agree" to "Погодити",
-
-            "reschedule_title_for" to "Перепризначити запис для",
-            "reschedule_choose_time" to "Оберіть новий час",
-            "reschedule_confirm" to "Зберегти",
-
-            "start_time" to "Початок",
-            "end_time" to "Кінець",
-            "duration_hours" to "Тривалість (год)",
-
-            "notifications_section" to "Сповіщення",
-            "notifications_enabled" to "Увімкнути сповіщення",
-            "notif_sound_label" to "Звук сповіщення",
-            "notif_sound_default" to "За замовчуванням",
-            "notif_sound_silent" to "Без звуку",
-            "reminders_when" to "Нагадувати за:",
-            "remind_days" to "Дні",
-            "remind_hours" to "Години",
-            "remind_minutes" to "Хвилини",
-            "remind_summary" to "Підсумок",
-            "remind_off" to "Вимкнено",
-            "notif_sound_custom" to "Користувацький звук",
-            "notif_sound_choose" to "Обрати мелодію",
-            "notif_sound_source" to "Джерело звуку",
-            "notif_sound_bundled" to "Вбудований звук",
-            "notif_sound_imported" to "Імпортований звук",
-            "notif_sound_not_selected" to "Мелодію не вибрано",
-
-            "support_section" to "Підтримка",
-            "support_phone_label" to "Телефон підтримки",
-            "support_phone_hint" to "Введіть номер (наприклад: +39 123 456 789)",
-            "support_phone_empty" to "Не вказано",
-            "support_feedback_text" to "Якщо щось не працює — зателефонуйте в підтримку за номером нижче.",
-            "support_call" to "Подзвонити",
-            "my_services" to "Мої послуги",
-            "my_services_hint" to "Створюйте власні послуги та задавайте ціну за замовчуванням.",
-            "service_add" to "Додати послугу",
-            "service_edit" to "Редагувати послугу",
-            "service_name" to "Назва послуги",
-            "service_default_price" to "Ціна за замовчуванням",
-            "service_empty_list" to "Список послуг порожній",
-            "service_delete_confirm" to "Видалити цю послугу?",
-            "premium_required_services" to "Користувацькі послуги та прайс-лист доступні лише під час пробного періоду або з Premium-підпискою.",
-            "work_schedule" to "Графік неробочих днів",
-            "work_schedule_hint" to "Оберіть дні тижня та інтервал часу, коли ви недоступні для запису.",
-            "work_schedule_add_interval" to "Додати інтервал",
-            "work_schedule_from" to "Від",
-            "work_schedule_to" to "До",
-            "work_schedule_empty" to "Інтервали ще не додані",
-            "work_schedule_delete_confirm" to "Видалити цей інтервал?",
-            "premium_required_work_schedule" to "Графік неробочих днів доступний лише під час пробного періоду або з Premium-підпискою.",
-            // User name satting
-            "user_name_label" to "Ім’я користувача",
-            "user_name_hint" to "Введіть ім’я",
-            "contacts_permission_hint" to "Для автопошуку потрібен дозвіл на доступ до контактів. Його можна надати в налаштуваннях пристрою.",
-
-            "stats_period_day" to "День",
-            "stats_period_week" to "Тиждень",
-            "stats_period_month" to "Місяць",
-            "stats_period_year" to "Рік",
-            "stats_range" to "Період",
-            "stats_revenue" to "Виручка",
-            "stats_count" to "Кількість записів",
-            "stats_hours" to "Відпрацьовано годин",
-            "stats_top_services" to "Процедури",
-            "stats_procedures_done" to "Проведено",
-            "stats_empty" to "Немає даних за вибраний період",
-            "stats_unknown_service" to "Без назви",
-            "stats_filters" to "Фільтри",
-            "stats_period_custom" to "Власний",
-            "stats_custom_range" to "Вибір діапазону",
-            "stats_date_from" to "Від",
-            "stats_date_to" to "До",
-            "stats_pick_start_date" to "Оберіть початкову дату",
-            "stats_pick_end_date" to "Оберіть кінцеву дату",
-
-            "view" to "Перегляд",
-            "edit" to "Змінити",
-            "edit_appointment_title" to "Зміна запису",
-            "edit_appointment_confirm" to "Ви впевнені, що хочете змінити цей запис?",
-            "conflict_time_title" to "Конфлікт часу",
-            "shift" to "Зсунути",
-
-            "cd_menu" to "Меню",
-            "cd_back" to "Назад",
-            "cd_settings" to "Налаштування",
-
-            // ✅ Appointment status (NEW)
-            "appt_status_label" to "Статус",
-            "appt_status_done" to "Виконано",
-            "appt_status_waiting" to "Очікується",
-            "appt_status_in_progress" to "Виконується",
-            "appt_status_canceled" to "Скасовано",
-            "past_date_actions_disabled" to "Для минулих дат зміна, перенесення та видалення недоступні.",
-
-            "currency_eur" to "€",
-            "splash_for" to "для",
-            //Settings
-            "appearance_settings" to "Налаштування оформлення і теми",
-            "appearance_settings_hint" to "Мова, тема, розмір шрифту, валюта та ім'я користувача.",
-            // --------- Security / PIN ---------
-            "pin_create_hint" to "Придумайте PIN-код і підтвердьте його.",
-            "pin_create_label" to "Придумайте PIN",
-            "pin_confirm_label" to "Підтвердьте PIN",
-            "pin_mismatch" to "PIN-коди не збігаються",
-            "pin_disable_warning" to "Якщо вимкнути PIN-код, операції з базою даних будуть обмежені:\n• імпорт\n• експорт\n• очищення бази\n\nПродовжити?",
-            "backup_pin_required_hint" to "Щоб використовувати імпорт, експорт і очищення бази, увімкніть PIN і встановіть його.",
-            "security_section" to "Безпека",
-            "pin_enabled" to "Запитувати PIN",
-            "pin_set" to "Встановити PIN",
-            "pin_change" to "Змінити PIN",
-            "pin_remove" to "Видалити PIN",
-            "pin_label" to "PIN (4–8 цифр)",
-            "pin_invalid_format" to "Введіть PIN з 4–8 цифр",
-            "pin_required" to "Потрібен PIN",
-            "pin_wrong" to "Невірний PIN",
-
-            "export_requires_pin" to "Для експорту потрібен PIN.",
-            "import_requires_pin" to "Для імпорту потрібен PIN.",
-
-            "clear_db" to "Очистити базу даних",
-            "clear_db_title" to "Очищення бази",
-            "clear_db_requires_pin" to "Щоб очистити базу даних, введіть PIN.",
-            "clear_db_warning_backup" to "Рекомендуємо спочатку зробити резервну копію. Зробити копію зараз?",
-            "clear_db_make_backup" to "Зробити копію",
-            "clear_db_skip_backup" to "Очистити без копії",
-            "clear_db_confirm" to "Ви впевнені? Усі записи буде видалено без можливості відновлення.",
-
-            "unlock_title" to "Введіть PIN",
-            "unlock_text" to "Для доступу до застосунку потрібен PIN.",
-            "notif_sound_1" to "Sound 1",
-            "notif_sound_2" to "Sound 2",
-            "notif_sound_3" to "Sound 3",
-            "notif_sound_4" to "Sound 4",
-            "notif_sound_5" to "Sound 5",
-            "notif_sound_6" to "Sound 6",
-            "notif_sound_7" to "Sound 7",
-            "notif_sound_8" to "Sound 8",
-            "notif_sound_9" to "Sound 9",
-            "notif_sound_10" to "Sound 10",
-            "notif_sound_11" to "Sound 11",
-
-            "month_jan" to "Січень", "month_feb" to "Лютий", "month_mar" to "Березень",
-            "month_apr" to "Квітень", "month_may" to "Травень", "month_jun" to "Червень",
-            "month_jul" to "Липень", "month_aug" to "Серпень", "month_sep" to "Вересень",
-            "month_oct" to "Жовтень", "month_nov" to "Листопад", "month_dec" to "Грудень",
-
-            "month_jan_gen" to "січня",
-            "month_feb_gen" to "лютого",
-            "month_mar_gen" to "березня",
-            "month_apr_gen" to "квітня",
-            "month_may_gen" to "травня",
-            "month_jun_gen" to "червня",
-            "month_jul_gen" to "липня",
-            "month_aug_gen" to "серпня",
-            "month_sep_gen" to "вересня",
-            "month_oct_gen" to "жовтня",
-            "month_nov_gen" to "листопада",
-            "month_dec_gen" to "грудня",
-
-            "mon" to "Пн", "tue" to "Вт", "wed" to "Ср", "thu" to "Чт", "fri" to "Пт", "sat" to "Сб", "sun" to "Нд"
-        )
-    )
-
+    private val json = Json { ignoreUnknownKeys = true }
+
+    // Кэш загруженных языков: "ru" -> mapOf("key" to "value")
+    private val strings = mutableMapOf<String, Map<String, String>>()
+
+    // вызывать один раз на старте
+    @OptIn(ExperimentalResourceApi::class)
+    suspend fun init() {
+        ensureLoaded("en")
+        ensureLoaded(currentLanguage)
+    }
+
+    // если язык меняется из UI
+    @OptIn(ExperimentalResourceApi::class)
+    suspend fun onLanguageChanged(langCode: String) {
+        currentLanguage = langCode
+        ensureLoaded(langCode)
+        ensureLoaded("en")
+    }
+
+    // старый API
     fun t(key: String): String {
-        val langCode = currentLanguage
-        return strings[langCode]?.get(key) ?: strings["en"]?.get(key) ?: key
+        val cur = strings[currentLanguage]
+        val en = strings["en"]
+        return cur?.get(key) ?: en?.get(key) ?: key
     }
 
-    fun daysCount(n: Int): String {
-        val langCode = currentLanguage
-        return when (langCode) {
-            "ru" -> "$n ${ruPlural(n, "день", "дня", "дней")}"
-            "uk" -> "$n ${ukPlural(n, "день", "дні", "днів")}"
-            "it" -> if (n == 1) "$n giorno" else "$n giorni"
-            else -> if (n == 1) "$n day" else "$n days"
+    // старый API сохранен
+    fun daysCount(n: Int): String = tPlural("duration_days", n)
+    fun hoursCount(n: Int): String = tPlural("duration_hours", n)
+    fun minutesCount(n: Int): String = tPlural("duration_minutes", n)
+
+    // новый plural API (внутренний)
+    fun tPlural(key: String, count: Int): String {
+        val template = t(key)
+        return formatPluralTemplate(template, count)
+    }
+
+    // ---------------- loading ----------------
+
+    @OptIn(ExperimentalResourceApi::class)
+    private suspend fun ensureLoaded(lang: String) {
+        if (strings.containsKey(lang)) return
+        strings[lang] = loadLang(lang)
+    }
+
+    @OptIn(ExperimentalResourceApi::class)
+    private suspend fun loadLang(lang: String): Map<String, String> {
+        val path = "files/locales/$lang.json"
+        return try {
+            val bytes = Res.readBytes(path)
+            val text = bytes.decodeToString()
+            val root = json.parseToJsonElement(text).jsonObject
+            buildMap(root.size) {
+                for ((k, v) in root) put(k, v.jsonPrimitive.content)
+            }
+        } catch (_: Throwable) {
+            emptyMap()
         }
     }
 
-    fun hoursCount(n: Int): String {
-        val langCode = currentLanguage
-        return when (langCode) {
-            "ru" -> "$n ${ruPlural(n, "час", "часа", "часов")}"
-            "uk" -> "$n ${ukPlural(n, "година", "години", "годин")}"
-            "it" -> if (n == 1) "$n ora" else "$n ore"
-            else -> if (n == 1) "$n hour" else "$n hours"
-        }
+    // ---------------- plural parser ----------------
+
+    private fun formatPluralTemplate(template: String, count: Int): String {
+        // ожидаем ICU-подобный шаблон:
+        // {count, plural, one {# day} other {# days}}
+        val marker = "plural,"
+        val p = template.indexOf(marker)
+        if (p == -1) return template.replace("{count}", count.toString())
+
+        val bodyRaw = template.substring(p + marker.length).trim()
+        val body = if (bodyRaw.endsWith("}")) bodyRaw.dropLast(1).trim() else bodyRaw
+
+        val forms = parsePluralForms(body)
+        val category = pluralCategoryFor(currentLanguage, count)
+        val chosen = forms[category] ?: forms["other"] ?: template
+        return chosen.replace("#", count.toString())
     }
 
-    fun minutesCount(n: Int): String {
-        val langCode = currentLanguage
-        return when (langCode) {
-            "ru" -> "$n ${ruPlural(n, "минута", "минуты", "минут")}"
-            "uk" -> "$n ${ukPlural(n, "хвилина", "хвилини", "хвилин")}"
-            "it" -> if (n == 1) "$n minuto" else "$n minuti"
-            else -> if (n == 1) "$n minute" else "$n minutes"
+    private fun parsePluralForms(body: String): Map<String, String> {
+        val keys = listOf("zero", "one", "two", "few", "many", "other")
+        val out = mutableMapOf<String, String>()
+        var i = 0
+
+        while (i < body.length) {
+            while (i < body.length && body[i].isWhitespace()) i++
+
+            var found: String? = null
+            for (k in keys) {
+                if (body.startsWith(k, i)) {
+                    found = k
+                    break
+                }
+            }
+            if (found == null) {
+                i++
+                continue
+            }
+
+            i += found.length
+            while (i < body.length && body[i].isWhitespace()) i++
+            if (i >= body.length || body[i] != '{') continue
+
+            val (txt, next) = readBracedText(body, i)
+            out[found] = txt
+            i = next
         }
+        return out
     }
 
-    private fun ruPlural(n: Int, one: String, few: String, many: String): String {
-        val nn = kotlin.math.abs(n) % 100
-        val n1 = nn % 10
-        return if (nn in 11..14) many else when (n1) {
-            1 -> one
-            2, 3, 4 -> few
-            else -> many
+    private fun readBracedText(s: String, openIdx: Int): Pair<String, Int> {
+        var depth = 0
+        var i = openIdx
+        val sb = StringBuilder()
+
+        while (i < s.length) {
+            val c = s[i]
+            if (c == '{') {
+                depth++
+                if (depth > 1) sb.append(c)
+            } else if (c == '}') {
+                depth--
+                if (depth == 0) return Pair(sb.toString(), i + 1)
+                sb.append(c)
+            } else {
+                sb.append(c)
+            }
+            i++
         }
+        return Pair(sb.toString(), s.length)
     }
 
-    private fun ukPlural(n: Int, one: String, few: String, many: String): String {
-        val nn = kotlin.math.abs(n) % 100
-        val n1 = nn % 10
-        return if (nn in 11..14) many else when (n1) {
-            1 -> one
-            2, 3, 4 -> few
-            else -> many
+    private fun pluralCategoryFor(lang: String, n: Int): String {
+        val x = kotlin.math.abs(n)
+        return when (lang) {
+            "ru", "uk" -> {
+                val m10 = x % 10
+                val m100 = x % 100
+                when {
+                    m10 == 1 && m100 != 11 -> "one"
+                    m10 in 2..4 && m100 !in 12..14 -> "few"
+                    m10 == 0 || m10 in 5..9 || m100 in 11..14 -> "many"
+                    else -> "other"
+                }
+            }
+            "pl" -> {
+                val m10 = x % 10
+                val m100 = x % 100
+                when {
+                    x == 1 -> "one"
+                    m10 in 2..4 && m100 !in 12..14 -> "few"
+                    else -> "many"
+                }
+            }
+            "cs", "sk" -> when {
+                x == 1 -> "one"
+                x in 2..4 -> "few"
+                else -> "other"
+            }
+            "sl" -> when (x % 100) {
+                1 -> "one"
+                2 -> "two"
+                3, 4 -> "few"
+                else -> "other"
+            }
+            "ar" -> when {
+                x == 0 -> "zero"
+                x == 1 -> "one"
+                x == 2 -> "two"
+                x % 100 in 3..10 -> "few"
+                x % 100 in 11..99 -> "many"
+                else -> "other"
+            }
+            "ja", "zh", "ko", "tr", "id" -> "other"
+            else -> if (x == 1) "one" else "other"
         }
     }
 }

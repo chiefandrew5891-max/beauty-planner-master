@@ -234,6 +234,33 @@ fun PremiumAccessScreen(
                     lineHeight = (18 * fontScale).sp
                 )
 
+                Spacer(modifier = Modifier.padding(top = 6.dp))
+
+                Text(
+                    text = Locales.t("billing_privacy_notice"),
+                    fontSize = (12 * fontScale).sp,
+                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.65f),
+                    lineHeight = (18 * fontScale).sp
+                )
+
+                Spacer(modifier = Modifier.padding(top = 4.dp))
+
+                Text(
+                    text = Locales.t("billing_token_notice"),
+                    fontSize = (12 * fontScale).sp,
+                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.65f),
+                    lineHeight = (18 * fontScale).sp
+                )
+
+                Spacer(modifier = Modifier.padding(top = 4.dp))
+
+                Text(
+                    text = Locales.t("billing_account_link_notice"),
+                    fontSize = (12 * fontScale).sp,
+                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.65f),
+                    lineHeight = (18 * fontScale).sp
+                )
+
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 Text(

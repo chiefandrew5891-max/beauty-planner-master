@@ -226,10 +226,12 @@ fun AppRootChrome(
         val nowMillis = Clock.System.now().toEpochMilliseconds()
         val isPremiumActive = AppSettings.cachedHasPremium
         val expiryMillis = AppSettings.premiumSubscriptionExpiryMillis
-        val stateLabel = if (isPremiumActive) {
-            subscriptionStateLabel(AppSettings.premiumSubscriptionState)
-        } else {
-            Locales.t("premium_subscription_inactive")
+        val rawState = AppSettings.premiumSubscriptionState.trim().uppercase()
+
+        val stateLabel = when {
+            isPremiumActive -> subscriptionStateLabel(rawState)
+            rawState.isNotBlank() && rawState != "NONE" -> subscriptionStateLabel(rawState)
+            else -> Locales.t("premium_subscription_inactive")
         }
 
         Column(

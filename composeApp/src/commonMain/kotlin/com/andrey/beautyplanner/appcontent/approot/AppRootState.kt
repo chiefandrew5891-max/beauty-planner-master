@@ -594,15 +594,30 @@ class AppRootState(
         val info = billingManager.getSubscriptionInfo()
         val now = Clock.System.now().toEpochMilliseconds()
 
-        AppSettings.premiumSubscriptionState = info.state.name
-        AppSettings.premiumSubscribedProductId = info.productId
-        AppSettings.premiumSubscriptionToken = info.purchaseToken
-        AppSettings.premiumSubscriptionStartMillis = info.startTimeMillis ?: 0L
-        AppSettings.premiumSubscriptionExpiryMillis = info.expiryTimeMillis ?: 0L
+        if (info.state != SubscriptionState.NONE) {
+            AppSettings.premiumSubscriptionState = info.state.name
+        }
+
+        if (info.productId.isNotBlank()) {
+            AppSettings.premiumSubscribedProductId = info.productId
+        }
+
+        if (info.purchaseToken.isNotBlank()) {
+            AppSettings.premiumSubscriptionToken = info.purchaseToken
+        }
+
+        if ((info.startTimeMillis ?: 0L) > 0L) {
+            AppSettings.premiumSubscriptionStartMillis = info.startTimeMillis ?: 0L
+        }
+
+        if ((info.expiryTimeMillis ?: 0L) > 0L) {
+            AppSettings.premiumSubscriptionExpiryMillis = info.expiryTimeMillis ?: 0L
+        }
+
         AppSettings.premiumSubscriptionAutoRenewing = info.isAutoRenewing
         AppSettings.premiumLastVerifiedAtMillis = info.lastVerifiedAtMillis ?: now
-        AppSettings.persist()
 
+        AppSettings.persist()
         refreshAccessState(now)
     }
 

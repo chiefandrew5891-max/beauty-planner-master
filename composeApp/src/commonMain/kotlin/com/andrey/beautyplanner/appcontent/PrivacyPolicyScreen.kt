@@ -184,7 +184,6 @@ private fun BulletItem(
             lineHeight = bodyLineHeight,
             modifier = Modifier.padding(end = 8.dp)
         )
-
         RichParagraphText(
             text = text,
             bodyFontSize = bodyFontSize,
@@ -244,57 +243,80 @@ private fun privacyPolicyContent(languageCode: String): PrivacyPolicyContent {
     return when (languageCode) {
         "ru" -> PrivacyPolicyContent(
             documentTitle = "Политика конфиденциальности приложения Beauty Planner",
-            lastUpdated = "Последнее обновление: Май 2026 г.",
+            lastUpdated = "Последнее обновление: Июнь 2026 г.",
             intro = "Настоящая Политика конфиденциальности описывает, как $AUTHOR_NAME (далее «мы», «наш» или «Разработчик») обрабатывает данные при использовании мобильного приложения Beauty Planner.",
             sections = listOf(
                 PrivacyPolicySection(
-                    title = "1. Какие данные обрабатывает приложение",
+                    title = "1. Какие данные обрабатываются",
                     paragraphs = listOf(
-                        "Приложение Beauty Planner предназначено для локального ведения записей, расписания и напоминаний. Основные данные, которые вы вводите в приложение, сохраняются на вашем устройстве.",
-                        "К таким данным могут относиться имя клиента, номер телефона, дата и время записи, название услуги, стоимость и другие заметки, которые вы добавляете вручную."
+                        "Приложение Beauty Planner хранит и обрабатывает данные, которые вы вводите: имя клиента, телефон, дату и время записи, название услуги, цену, заметки, настройки приложения, а также связанные технические параметры.",
+                        "Для входа и привязки аккаунта могут обрабатываться идентификатор пользователя (Firebase UID), email, отображаемое имя и провайдер входа (например, Google, email или анонимный режим)."
                     )
                 ),
                 PrivacyPolicySection(
                     title = "2. Где хранятся данные",
                     paragraphs = listOf(
-                        "На текущем этапе основная информация, которую вы вводите в приложение, хранится локально на вашем устройстве.",
-                        "Приложение также поддерживает экспорт и импорт резервных копий по вашей инициативе. Такие файлы создаются только по вашему действию и сохраняются в выбранное вами место."
+                        "Данные записей и часть настроек хранятся локально на вашем устройстве.",
+                        "Для функций аккаунта, подписки и управления доступом часть данных обрабатывается и хранится в облачной инфраструктуре (включая Firebase Authentication, Cloud Firestore и Cloud Functions).",
+                        "Резервные копии создаются только по вашему действию (экспорт). Вы сами выбираете место их хранения. При включении шифрования резервная копия защищается паролем, который задаёте вы."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "3. Разрешения устройства",
+                    title = "3. Покупки, подписка и платежи",
                     paragraphs = listOf(
-                        "Для работы отдельных функций приложение может запрашивать доступ к возможностям устройства."
+                        "Для покупок Premium на Android приложение использует Google Play Billing.",
+                        "Платёжные данные банковской карты обрабатываются Google Play. Приложение напрямую не получает данные вашей карты.",
+                        "Для проверки и статуса подписки приложение может обрабатывать данные покупки, такие как productId, purchaseToken, состояние подписки, срок действия, автопродление и номер заказа (если доступен)."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "4. Серверная проверка подписки и RTDN",
+                    paragraphs = listOf(
+                        "Для актуализации статуса подписки может использоваться серверная проверка через Google Play Developer API.",
+                        "Также может использоваться обработка Real-time Developer Notifications (RTDN) для обновления статуса подписки."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "5. Разрешения устройства",
+                    paragraphs = listOf(
+                        "Для отдельных функций приложение может запрашивать разрешения устройства."
                     ),
                     bullets = listOf(
-                        "Уведомления — для напоминаний о предстоящих записях.",
-                        "Контакты — только если вы сами используете автоподстановку или поиск клиента по контактам устройства.",
-                        "Доступ к файлам — только в рамках системного выбора файла при импорте или экспорте резервной копии."
+                        "Уведомления — для напоминаний о записях.",
+                        "Контакты — только если вы включаете автопоиск/подсказки по контактам.",
+                        "Доступ к файлам — только через системный выбор файла для импорта/экспорта резервной копии.",
+                        "Запуск после перезагрузки (на Android) — для восстановления запланированных напоминаний."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "4. Покупки и подписка",
+                    title = "6. Передача данных третьим лицам",
                     paragraphs = listOf(
-                        "Для оформления подписки Premium приложение использует Google Play Billing на Android.",
-                        "Информация об оплате обрабатывается соответствующей платформой магазина приложений. Само приложение не получает данные вашей банковской карты."
+                        "Мы не продаём ваши персональные данные.",
+                        "Данные могут передаваться только технологическим провайдерам, необходимым для работы функций приложения (например, Firebase и Google Play), в пределах функциональности, описанной в этой Политике."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "5. Передача данных третьим лицам",
+                    title = "7. Срок хранения и удаление данных",
                     paragraphs = listOf(
-                        "Приложение не предназначено для передачи вашей клиентской базы или записей третьим лицам.",
-                        "Данные не отправляются на отдельный внешний сервер приложения, если иное не указано явно в будущих обновлениях политики конфиденциальности."
+                        "Локальные данные можно удалить, очистив данные приложения на устройстве и/или удалив созданные вами файлы резервных копий.",
+                        "Если у вас есть аккаунт, связанные серверные данные (например, профиль доступа/подписки) могут храниться в инфраструктуре приложения до удаления или в рамках технически обоснованного срока."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "6. Удаление данных",
+                    title = "8. Безопасность",
                     paragraphs = listOf(
-                        "Вы можете удалить данные приложения самостоятельно, очистив данные приложения в системе или удалив созданные резервные копии.",
-                        "Также внутри приложения могут быть доступны функции удаления записей и очистки локальной базы данных."
+                        "Мы принимаем разумные технические меры для защиты данных в рамках используемых платформ и инфраструктуры.",
+                        "Вы несёте ответственность за безопасность устройства, аккаунта, а также пароля резервной копии (если включено шифрование)."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "7. Контакты",
+                    title = "9. Изменения Политики",
+                    paragraphs = listOf(
+                        "Мы можем обновлять настоящую Политику конфиденциальности. Актуальная редакция публикуется в приложении с датой последнего обновления."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "10. Контакты",
                     paragraphs = listOf(
                         "Если у вас есть вопросы по данной Политике конфиденциальности, вы можете связаться с нами по адресу:"
                     ),
@@ -305,57 +327,80 @@ private fun privacyPolicyContent(languageCode: String): PrivacyPolicyContent {
 
         "uk" -> PrivacyPolicyContent(
             documentTitle = "Політика конфіденційності додатка Beauty Planner",
-            lastUpdated = "Останнє оновлення: Травень 2026 р.",
+            lastUpdated = "Останнє оновлення: Червень 2026 р.",
             intro = "Ця Політика конфіденційності описує, як $AUTHOR_NAME (далі «ми», «наш» або «Розробник») обробляє дані під час використання мобільного додатка Beauty Planner.",
             sections = listOf(
                 PrivacyPolicySection(
-                    title = "1. Які дані обробляє додаток",
+                    title = "1. Які дані обробляються",
                     paragraphs = listOf(
-                        "Додаток Beauty Planner призначений для локального ведення записів, розкладу та нагадувань. Основні дані, які ви вводите, зберігаються на вашому пристрої.",
-                        "До таких даних можуть належати ім’я клієнта, номер телефону, дата і час запису, назва послуги, вартість та інші нотатки, які ви додаєте вручну."
+                        "Додаток Beauty Planner зберігає та обробляє дані, які ви вводите: ім’я клієнта, телефон, дату й час запису, назву послуги, ціну, нотатки, налаштування додатка та пов’язані технічні параметри.",
+                        "Для входу та прив’язки акаунта можуть оброблятися ідентифікатор користувача (Firebase UID), email, ім’я профілю та провайдер входу (наприклад, Google, email або анонімний режим)."
                     )
                 ),
                 PrivacyPolicySection(
                     title = "2. Де зберігаються дані",
                     paragraphs = listOf(
-                        "На поточному етапі основна інформація, яку ви вводите в додаток, зберігається локально на вашому пристрої.",
-                        "Додаток також підтримує експорт та імпорт резервних копій за вашою ініціативою. Такі файли створюються лише за вашою дією та зберігаються у вибране вами місце."
+                        "Дані записів і частина налаштувань зберігаються локально на вашому пристрої.",
+                        "Для функцій акаунта, підписки та керування доступом частина даних обробляється і зберігається у хмарній інфраструктурі (зокрема Firebase Authentication, Cloud Firestore і Cloud Functions).",
+                        "Резервні копії створюються лише за вашою дією (експорт). Ви самостійно обираєте місце їх зберігання. Якщо увімкнено шифрування, резервна копія захищається паролем, який задаєте ви."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "3. Дозволи пристрою",
+                    title = "3. Покупки, підписка та платежі",
                     paragraphs = listOf(
-                        "Для роботи окремих функцій додаток може запитувати доступ до можливостей пристрою."
+                        "Для покупок Premium на Android додаток використовує Google Play Billing.",
+                        "Платіжні дані банківської картки обробляються Google Play. Додаток напряму не отримує дані вашої картки.",
+                        "Для перевірки та статусу підписки додаток може обробляти дані покупки, такі як productId, purchaseToken, стан підписки, строк дії, автоподовження та номер замовлення (якщо доступний)."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "4. Серверна перевірка підписки та RTDN",
+                    paragraphs = listOf(
+                        "Для актуалізації статусу підписки може використовуватися серверна перевірка через Google Play Developer API.",
+                        "Також може використовуватися обробка Real-time Developer Notifications (RTDN) для оновлення статусу підписки."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "5. Дозволи пристрою",
+                    paragraphs = listOf(
+                        "Для окремих функцій додаток може запитувати дозволи пристрою."
                     ),
                     bullets = listOf(
-                        "Сповіщення — для нагадувань про майбутні записи.",
-                        "Контакти — лише якщо ви самі використовуєте автопідстановку або пошук клієнта в контактах пристрою.",
-                        "Доступ до файлів — лише в межах системного вибору файлу під час імпорту або експорту резервної копії."
+                        "Сповіщення — для нагадувань про записи.",
+                        "Контакти — лише якщо ви вмикаєте автопошук/підказки за контактами.",
+                        "Доступ до файлів — лише через системний вибір файлу для імпорту/експорту резервної копії.",
+                        "Запуск після перезавантаження (на Android) — для відновлення запланованих нагадувань."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "4. Покупки та підписка",
+                    title = "6. Передача даних третім особам",
                     paragraphs = listOf(
-                        "Для оформлення підписки Premium додаток використовує Google Play Billing на Android.",
-                        "Інформація про оплату обробляється відповідною платформою магазину додатків. Сам додаток не отримує дані вашої банківської картки."
+                        "Ми не продаємо ваші персональні дані.",
+                        "Дані можуть передаватися лише технологічним провайдерам, необхідним для роботи функцій додатка (наприклад, Firebase і Google Play), у межах функціональності, описаної в цій Політиці."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "5. Передача даних третім особам",
+                    title = "7. Строк зберігання та видалення даних",
                     paragraphs = listOf(
-                        "Додаток не призначений для передачі вашої клієнтської бази або записів третім особам.",
-                        "Дані не надсилаються на окремий зовнішній сервер додатка, якщо інше не буде прямо вказано в майбутніх оновленнях політики конфіденційності."
+                        "Локальні дані можна видалити, очистивши дані додатка на пристрої та/або видаливши створені вами файли резервних копій.",
+                        "Якщо у вас є акаунт, пов’язані серверні дані (наприклад, профіль доступу/підписки) можуть зберігатися в інфраструктурі додатка до видалення або в межах технічно обґрунтованого строку."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "6. Видалення даних",
+                    title = "8. Безпека",
                     paragraphs = listOf(
-                        "Ви можете видалити дані додатка самостійно, очистивши дані додатка в системі або видаливши створені резервні копії.",
-                        "Також усередині додатка можуть бути доступні функції видалення записів і очищення локальної бази даних."
+                        "Ми застосовуємо розумні технічні заходи для захисту даних у межах використовуваних платформ та інфраструктури.",
+                        "Ви несете відповідальність за безпеку пристрою, акаунта, а також пароля резервної копії (якщо увімкнено шифрування)."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "7. Контакти",
+                    title = "9. Зміни Політики",
+                    paragraphs = listOf(
+                        "Ми можемо оновлювати цю Політику конфіденційності. Актуальна редакція публікується у додатку з датою останнього оновлення."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "10. Контакти",
                     paragraphs = listOf(
                         "Якщо у вас є запитання щодо цієї Політики конфіденційності, ви можете зв’язатися з нами за адресою:"
                     ),
@@ -366,59 +411,82 @@ private fun privacyPolicyContent(languageCode: String): PrivacyPolicyContent {
 
         "it" -> PrivacyPolicyContent(
             documentTitle = "Informativa sulla Privacy di Beauty Planner",
-            lastUpdated = "Ultimo aggiornamento: Maggio 2026",
+            lastUpdated = "Ultimo aggiornamento: Giugno 2026",
             intro = "La presente Informativa sulla Privacy descrive come $AUTHOR_NAME (\"noi\", \"nostro\" o \"Sviluppatore\") tratta i dati durante l’utilizzo dell’app mobile Beauty Planner.",
             sections = listOf(
                 PrivacyPolicySection(
-                    title = "1. Quali dati tratta l'app",
+                    title = "1. Quali dati vengono trattati",
                     paragraphs = listOf(
-                        "Beauty Planner è progettata per gestire localmente appuntamenti, pianificazione e promemoria. I principali dati inseriti nell’app vengono salvati sul tuo dispositivo.",
-                        "Questi dati possono includere nome del cliente, numero di telefono, data e ora dell’appuntamento, nome del servizio, prezzo e altre note inserite manualmente."
+                        "Beauty Planner memorizza e tratta i dati che inserisci: nome cliente, telefono, data e ora dell’appuntamento, nome del servizio, prezzo, note, impostazioni dell’app e parametri tecnici correlati.",
+                        "Per accesso e collegamento account possono essere trattati identificativo utente (Firebase UID), email, nome visualizzato e provider di accesso (ad esempio Google, email o modalità anonima)."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "2. Dove vengono conservati i dati",
+                    title = "2. Dove sono conservati i dati",
                     paragraphs = listOf(
-                        "Nello stato attuale del progetto, le principali informazioni inserite nell’app vengono conservate localmente sul tuo dispositivo.",
-                        "L’app supporta anche l’esportazione e l’importazione di backup su tua iniziativa. Tali file vengono creati solo su tua azione e salvati nella posizione da te scelta."
+                        "I dati degli appuntamenti e una parte delle impostazioni sono conservati localmente sul tuo dispositivo.",
+                        "Per funzioni di account, abbonamento e gestione accessi, una parte dei dati viene trattata e conservata in infrastruttura cloud (inclusi Firebase Authentication, Cloud Firestore e Cloud Functions).",
+                        "I backup vengono creati solo su tua azione (esportazione). Scegli tu dove salvarli. Se abiliti la cifratura, il backup è protetto da una password scelta da te."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "3. Permessi del dispositivo",
+                    title = "3. Acquisti, abbonamento e pagamenti",
                     paragraphs = listOf(
-                        "Per il funzionamento di alcune funzioni, l’app può richiedere accesso a determinate capacità del dispositivo."
+                        "Per gli acquisti Premium su Android, l’app utilizza Google Play Billing.",
+                        "I dati di pagamento della carta sono trattati da Google Play. L’app non riceve direttamente i dati della tua carta.",
+                        "Per verifica e stato dell’abbonamento, l’app può trattare dati d’acquisto come productId, purchaseToken, stato dell’abbonamento, scadenza, rinnovo automatico e numero ordine (se disponibile)."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "4. Verifica server dell’abbonamento e RTDN",
+                    paragraphs = listOf(
+                        "Per aggiornare lo stato dell’abbonamento può essere usata la verifica server tramite Google Play Developer API.",
+                        "Può essere usata anche l’elaborazione delle Real-time Developer Notifications (RTDN) per aggiornare lo stato dell’abbonamento."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "5. Permessi del dispositivo",
+                    paragraphs = listOf(
+                        "Per alcune funzionalità l’app può richiedere permessi del dispositivo."
                     ),
                     bullets = listOf(
-                        "Notifiche — per ricordare i prossimi appuntamenti.",
-                        "Contatti — solo se utilizzi volontariamente il completamento automatico o la ricerca cliente nei contatti del dispositivo.",
-                        "Accesso ai file — solo nell’ambito della selezione di file di sistema durante importazione o esportazione del backup."
+                        "Notifiche — per promemoria appuntamenti.",
+                        "Contatti — solo se abiliti ricerca/suggerimenti dai contatti.",
+                        "Accesso ai file — solo tramite selettore file di sistema per import/export backup.",
+                        "Avvio dopo riavvio (su Android) — per ripristinare i promemoria pianificati."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "4. Acquisti e abbonamento",
+                    title = "6. Condivisione dei dati con terze parti",
                     paragraphs = listOf(
-                        "Per l’attivazione dell’abbonamento Premium su Android, l’app utilizza Google Play Billing.",
-                        "Le informazioni di pagamento vengono gestite dalla piattaforma del negozio di applicazioni. L’app non riceve i dati della tua carta bancaria."
+                        "Non vendiamo i tuoi dati personali.",
+                        "I dati possono essere condivisi solo con provider tecnologici necessari al funzionamento dell’app (ad esempio Firebase e Google Play), nei limiti delle funzionalità descritte in questa Informativa."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "5. Condivisione dei dati con terze parti",
+                    title = "7. Conservazione e cancellazione dei dati",
                     paragraphs = listOf(
-                        "L’app non è progettata per trasferire a terzi il tuo archivio clienti o i tuoi appuntamenti.",
-                        "I dati non vengono inviati a un server esterno dedicato dell’app, salvo diversa indicazione esplicita in futuri aggiornamenti dell’informativa."
+                        "Puoi eliminare i dati locali cancellando i dati dell’app dal dispositivo e/o eliminando i file di backup creati da te.",
+                        "Se utilizzi un account, i dati server correlati (ad esempio profilo di accesso/abbonamento) possono essere conservati nell’infrastruttura dell’app fino a cancellazione o per un periodo tecnicamente giustificato."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "6. Eliminazione dei dati",
+                    title = "8. Sicurezza",
                     paragraphs = listOf(
-                        "Puoi eliminare i dati dell’app in autonomia cancellando i dati dell’app dal sistema o eliminando i backup creati.",
-                        "All’interno dell’app possono inoltre essere disponibili funzioni per eliminare gli appuntamenti o cancellare il database locale."
+                        "Adottiamo misure tecniche ragionevoli per proteggere i dati nell’ambito delle piattaforme e infrastrutture utilizzate.",
+                        "Sei responsabile della sicurezza del dispositivo, dell’account e della password del backup (se la cifratura è attiva)."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "7. Contatti",
+                    title = "9. Modifiche all’Informativa",
                     paragraphs = listOf(
-                        "Per qualsiasi domanda relativa alla presente Informativa sulla Privacy, puoi contattarci all’indirizzo:"
+                        "Possiamo aggiornare la presente Informativa sulla Privacy. La versione aggiornata è pubblicata nell’app con la data di ultimo aggiornamento."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "10. Contatti",
+                    paragraphs = listOf(
+                        "Per domande su questa Informativa sulla Privacy, puoi contattarci a:"
                     ),
                     emailLines = listOf("")
                 )
@@ -427,59 +495,82 @@ private fun privacyPolicyContent(languageCode: String): PrivacyPolicyContent {
 
         else -> PrivacyPolicyContent(
             documentTitle = "Privacy Policy for Beauty Planner",
-            lastUpdated = "Last Updated: May 2026",
+            lastUpdated = "Last Updated: June 2026",
             intro = "This Privacy Policy explains how $AUTHOR_NAME (\"we\", \"our\", or \"Developer\") processes data when you use the Beauty Planner mobile application.",
             sections = listOf(
                 PrivacyPolicySection(
-                    title = "1. What data the app processes",
+                    title = "1. What data is processed",
                     paragraphs = listOf(
-                        "Beauty Planner is designed for local appointment management, planning, and reminders. The main data you enter into the app is stored on your device.",
-                        "This may include client name, phone number, appointment date and time, service name, price, and other notes that you enter manually."
+                        "Beauty Planner stores and processes data you enter: client name, phone number, appointment date and time, service name, price, notes, app settings, and related technical parameters.",
+                        "For sign-in and account linking, the app may process user identifiers (Firebase UID), email, display name, and sign-in provider (for example Google, email, or anonymous mode)."
                     )
                 ),
                 PrivacyPolicySection(
                     title = "2. Where data is stored",
                     paragraphs = listOf(
-                        "At the current stage of the project, the main information entered into the app is stored locally on your device.",
-                        "The app also supports backup export and import initiated by you. Such files are created only by your action and stored in the location you choose."
+                        "Appointment data and part of app settings are stored locally on your device.",
+                        "For account, subscription, and access-control features, part of data is processed and stored in cloud infrastructure (including Firebase Authentication, Cloud Firestore, and Cloud Functions).",
+                        "Backups are created only by your action (export). You choose where to store them. If encryption is enabled, the backup is protected by a password that you set."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "3. Device permissions",
+                    title = "3. Purchases, subscription, and payments",
                     paragraphs = listOf(
-                        "For some features, the app may request access to certain device capabilities."
+                        "For Premium purchases on Android, the app uses Google Play Billing.",
+                        "Bank card payment data is processed by Google Play. The app does not directly receive your card details.",
+                        "To verify and maintain subscription status, the app may process purchase-related data such as productId, purchaseToken, subscription state, expiry time, auto-renew status, and order ID (if available)."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "4. Server-side subscription verification and RTDN",
+                    paragraphs = listOf(
+                        "To keep subscription status up to date, server-side verification may be performed via Google Play Developer API.",
+                        "Real-time Developer Notifications (RTDN) may also be processed to update subscription status."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "5. Device permissions",
+                    paragraphs = listOf(
+                        "For certain features, the app may request device permissions."
                     ),
                     bullets = listOf(
-                        "Notifications — to remind you about upcoming appointments.",
-                        "Contacts — only if you voluntarily use autocomplete or client lookup from your device contacts.",
-                        "File access — only within the system file picker used for backup import or export."
+                        "Notifications — for appointment reminders.",
+                        "Contacts — only if you enable contact-based autocomplete/suggestions.",
+                        "File access — only through the system file picker for backup import/export.",
+                        "Run after reboot (on Android) — to restore scheduled reminders."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "4. Purchases and subscription",
+                    title = "6. Sharing data with third parties",
                     paragraphs = listOf(
-                        "For Premium subscription purchases on Android, the app uses Google Play Billing.",
-                        "Payment information is processed by the relevant app store platform. The app itself does not receive your bank card details."
+                        "We do not sell your personal data.",
+                        "Data may be shared only with technology providers required to deliver app functionality (for example Firebase and Google Play), within the scope described in this Policy."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "5. Sharing data with third parties",
+                    title = "7. Data retention and deletion",
                     paragraphs = listOf(
-                        "The app is not designed to transfer your client database or appointment data to third parties.",
-                        "Data is not sent to a dedicated external server of the app unless explicitly stated in future updates to this Privacy Policy."
+                        "You can delete local data by clearing app storage on your device and/or deleting backup files you created.",
+                        "If you use an account, related server-side data (for example access/subscription profile) may be stored in app infrastructure until deletion or for a technically justified retention period."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "6. Data deletion",
+                    title = "8. Security",
                     paragraphs = listOf(
-                        "You can delete app data yourself by clearing app storage in the system or removing any backup files you created.",
-                        "The app may also provide features for deleting appointments and clearing the local database."
+                        "We apply reasonable technical safeguards to protect data within the platforms and infrastructure used.",
+                        "You are responsible for the security of your device, account, and backup password (if backup encryption is enabled)."
                     )
                 ),
                 PrivacyPolicySection(
-                    title = "7. Contact",
+                    title = "9. Policy updates",
                     paragraphs = listOf(
-                        "If you have any questions about this Privacy Policy, you can contact us at:"
+                        "We may update this Privacy Policy. The current version is published in the app with the latest update date."
+                    )
+                ),
+                PrivacyPolicySection(
+                    title = "10. Contact",
+                    paragraphs = listOf(
+                        "If you have questions about this Privacy Policy, you can contact us at:"
                     ),
                     emailLines = listOf("")
                 )
