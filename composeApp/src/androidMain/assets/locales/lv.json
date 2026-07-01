@@ -1,5 +1,5 @@
 {
-  "Loading": "Ielādē...",
+  "loading": "Ielādē...",
   "auth_password_reset": "Aizmirsi paroli?",
   "auth_password_reset_sent": "Paroles atiestatīšanas e-pasts ir nosūtīts.",
   "auth_password_reset_failed": "Neizdevās nosūtīt paroles atiestatīšanas e-pastu.",

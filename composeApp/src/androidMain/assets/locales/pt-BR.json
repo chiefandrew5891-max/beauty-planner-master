@@ -1,5 +1,5 @@
 {
-  "Loading": "Carregando...",
+  "loading": "Carregando...",
   "auth_password_reset": "Esqueceu a senha?",
   "auth_password_reset_sent": "O e-mail de redefinição de senha foi enviado.",
   "auth_password_reset_failed": "Falha ao enviar e-mail de redefinição de senha.",

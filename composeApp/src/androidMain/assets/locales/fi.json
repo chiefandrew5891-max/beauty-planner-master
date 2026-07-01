@@ -1,5 +1,5 @@
 {
-  "Loading": "Ladataan...",
+  "loading": "Ladataan...",
   "auth_password_reset": "Unohditko salasanan?",
   "auth_password_reset_sent": "Salasanan palautussähköposti on lähetetty.",
   "auth_password_reset_failed": "Salasanan palautussähköpostin lähettäminen epäonnistui.",

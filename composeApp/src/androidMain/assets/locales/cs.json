@@ -1,5 +1,5 @@
 {
-  "Loading": "Načítání...",
+  "loading": "Načítání...",
   "auth_password_reset": "Zapomněli jste heslo?",
   "auth_password_reset_sent": "E-mail pro obnovení hesla byl odeslán.",
   "auth_password_reset_failed": "Nepodařilo se odeslat e-mail pro obnovení hesla.",

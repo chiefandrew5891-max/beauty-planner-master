@@ -1,5 +1,5 @@
 {
-  "Loading": "Ładowanie...",
+  "loading": "Ładowanie...",
   "auth_password_reset": "Zapomniałeś hasła?",
   "auth_password_reset_sent": "E-mail do resetowania hasła został wysłany.",
   "auth_password_reset_failed": "Nie udało się wysłać e-maila do resetowania hasła.",

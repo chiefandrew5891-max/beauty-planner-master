@@ -1,5 +1,5 @@
 {
-  "Loading": "Завантаження...",
+  "loading": "Завантаження...",
   "auth_password_reset": "Забули пароль?",
   "auth_password_reset_sent": "Лист для скидання пароля відправлено.",
   "auth_password_reset_failed": "Не вдалося надіслати лист для скидання пароля.",

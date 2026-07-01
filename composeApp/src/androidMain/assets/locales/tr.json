@@ -1,5 +1,5 @@
 {
-  "Loading": "Yükleniyor...",
+  "loading": "Yükleniyor...",
   "auth_password_reset": "Şifrenizi mi unuttunuz?",
   "auth_password_reset_sent": "Şifre sıfırlama e-postası gönderildi.",
   "auth_password_reset_failed": "Şifre sıfırlama e-postası gönderilemedi.",

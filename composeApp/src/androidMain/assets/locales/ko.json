@@ -1,5 +1,5 @@
 {
-  "Loading": "로딩 중...",
+  "loading": "로딩 중...",
   "auth_password_reset": "비밀번호를 잊으셨나요?",
   "auth_password_reset_sent": "비밀번호 재설정 이메일이 전송되었습니다.",
   "auth_password_reset_failed": "비밀번호 재설정 이메일 전송에 실패했습니다.",

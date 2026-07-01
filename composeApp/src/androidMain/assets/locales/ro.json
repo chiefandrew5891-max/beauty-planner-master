@@ -1,5 +1,5 @@
 {
-  "Loading": "Încărcare...",
+  "loading": "Încărcare...",
   "auth_password_reset": "Ați uitat parola?",
   "auth_password_reset_sent": "E-mailul pentru resetarea parolei a fost trimis.",
   "auth_password_reset_failed": "E-mailul pentru resetarea parolei nu a putut fi trimis.",

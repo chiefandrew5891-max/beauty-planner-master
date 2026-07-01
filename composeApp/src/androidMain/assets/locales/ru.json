@@ -1,5 +1,5 @@
 {
-  "Loading": "Загрузка...",
+  "loading": "Загрузка...",
   "auth_password_reset": "Забыли пароль?",
   "auth_password_reset_sent": "Письмо для сброса пароля отправлено.",
   "auth_password_reset_failed": "Не удалось отправить письмо для сброса пароля.",

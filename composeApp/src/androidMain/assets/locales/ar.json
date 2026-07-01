@@ -1,5 +1,5 @@
 {
-  "Loading": "جاري التحميل...",
+  "loading": "جاري التحميل...",
   "auth_password_reset": "هل نسيت كلمة المرور؟",
   "auth_password_reset_sent": "تم إرسال بريد إعادة تعيين كلمة المرور.",
   "auth_password_reset_failed": "تعذّر إرسال بريد إعادة تعيين كلمة المرور.",

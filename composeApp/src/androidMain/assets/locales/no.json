@@ -1,5 +1,5 @@
 {
-  "Loading": "Laster...",
+  "loading": "Laster...",
   "auth_password_reset": "Glømt passord?",
   "auth_password_reset_sent": "E-post for tilbakestilling av passord er sendt.",
   "auth_password_reset_failed": "Kunne ikke sende e-post for tilbakestilling av passord.",

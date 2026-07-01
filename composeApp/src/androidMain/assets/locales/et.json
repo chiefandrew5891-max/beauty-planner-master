@@ -1,5 +1,5 @@
 {
-  "Loading": "Laadimine...",
+  "loading": "Laadimine...",
   "auth_password_reset": "Unustasid parooli?",
   "auth_password_reset_sent": "Parooli lähtestamise e-kiri on saadetud.",
   "auth_password_reset_failed": "Parooli lähtestamise e-kirja saatmine ebaõnnestus.",

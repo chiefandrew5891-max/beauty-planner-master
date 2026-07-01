@@ -232,14 +232,14 @@ fun SetPinDialog(
                     Spacer(Modifier.height(12.dp))
                     val validFormat = pin.length in 4..8
                     OutlinedTextField(
-                        value = pin,
-                        onValueChange = { v -> pin = v.filter { it.isDigit() }.take(8) },
-                        label = { Text(Locales.t("pin_label")) },
+                        value = confirmPin,
+                        onValueChange = { confirmPin = it.filter { ch -> ch.isDigit() }.take(8) },
+                        label = { Text(Locales.t("pin_confirm_label")) },
                         singleLine = true,
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                         modifier = Modifier.fillMaxWidth(),
-                        isError = tried && !validFormat,
+                        isError = tried && (!confirmValid || !pinsMatch),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
                             color = MaterialTheme.colors.onSurface

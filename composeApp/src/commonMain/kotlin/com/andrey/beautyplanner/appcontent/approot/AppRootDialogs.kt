@@ -448,7 +448,6 @@ fun AppRootDialogs(state: AppRootState) {
                                     Locales.t("backup_password_too_short")
                                 return@Button
                             }
-
                             if (state.backupPassword != state.backupPasswordConfirm) {
                                 state.backupPasswordError =
                                     Locales.t("backup_password_mismatch")
@@ -456,38 +455,43 @@ fun AppRootDialogs(state: AppRootState) {
                             }
                         }
 
-                        val payload = DataManager.exportBackupPayload(state.appointments)
-                        val safeName = state.exportFileName.trim()
-                            .ifBlank { "beautyplanner-backup" }
+                        state.showGlobalLoading(Locales.t("loading"))
+                        try {
+                            val payload = DataManager.exportBackupPayload(state.appointments)
+                            val safeName = state.exportFileName.trim()
+                                .ifBlank { "beautyplanner-backup" }
 
-                        val fileText = if (state.backupEncryptEnabled) {
-                            BackupCodec.createEncryptedBackupFile(
-                                payloadJson = payload,
-                                password = state.backupPassword,
-                                appointmentsCount = state.appointments.size
+                            val fileText = if (state.backupEncryptEnabled) {
+                                BackupCodec.createEncryptedBackupFile(
+                                    payloadJson = payload,
+                                    password = state.backupPassword,
+                                    appointmentsCount = state.appointments.size
+                                )
+                            } else {
+                                BackupCodec.createPlainBackupFile(
+                                    payloadJson = payload,
+                                    appointmentsCount = state.appointments.size
+                                )
+                            }
+
+                            state.showExportNameDialog = false
+                            state.backupPassword = ""
+                            state.backupPasswordConfirm = ""
+                            state.backupPasswordError = null
+
+                            BackupFilePicker.exportJson(
+                                suggestedFileName = safeName,
+                                json = fileText
                             )
-                        } else {
-                            BackupCodec.createPlainBackupFile(
-                                payloadJson = payload,
-                                appointmentsCount = state.appointments.size
-                            )
-                        }
 
-                        state.showExportNameDialog = false
-                        state.backupPassword = ""
-                        state.backupPasswordConfirm = ""
-                        state.backupPasswordError = null
+                            state.backupSuccessMessage = Locales.t("backup_export_success")
 
-                        BackupFilePicker.exportJson(
-                            suggestedFileName = safeName,
-                            json = fileText
-                        )
-
-                        state.backupSuccessMessage = Locales.t("backup_export_success")
-
-                        if (state.pendingImportAfterBackup) {
-                            state.pendingImportAfterBackup = false
-                            state.showImportConfirm = true
+                            if (state.pendingImportAfterBackup) {
+                                state.pendingImportAfterBackup = false
+                                state.showImportConfirm = true
+                            }
+                        } finally {
+                            state.hideGlobalLoading()
                         }
                     }
                 ) {
@@ -589,58 +593,59 @@ fun AppRootDialogs(state: AppRootState) {
             confirmButton = {
                 Button(
                     onClick = {
-                        val text = state.pendingImportText.orEmpty()
-                        val parsed = BackupCodec.parseBackupFile(text)
-
-                        when (parsed) {
-                            is ParsedBackupFile.LegacyPlainPayload -> {
-                                val imported = DataManager.importBackupPayload(parsed.payloadJson)
-                                if (imported.isEmpty()) {
-                                    state.showImportError = Locales.t("backup_import_invalid_payload")
-                                } else {
-                                    state.appointments.clear()
-                                    state.appointments.addAll(imported)
-                                    state.saveAll()
-                                    state.showImportError = null
-                                    state.backupSuccessMessage = Locales.t("backup_import_success")
+                        state.showGlobalLoading(Locales.t("loading"))
+                        try {
+                            val text = state.pendingImportText.orEmpty()
+                            val parsed = BackupCodec.parseBackupFile(text)
+                            when (parsed) {
+                                is ParsedBackupFile.LegacyPlainPayload -> {
+                                    val imported = DataManager.importBackupPayload(parsed.payloadJson)
+                                    if (imported.isEmpty()) {
+                                        state.showImportError = Locales.t("backup_import_invalid_payload")
+                                    } else {
+                                        state.appointments.clear()
+                                        state.appointments.addAll(imported)
+                                        state.saveAll()
+                                        state.showImportError = null
+                                        state.backupSuccessMessage = Locales.t("backup_import_success")
+                                        state.pendingImportPreview = null
+                                    }
+                                    state.showImportConfirm = false
+                                    state.pendingImportText = null
+                                }
+                                is ParsedBackupFile.PlainContainer -> {
+                                    val payload = parsed.container.payload.orEmpty()
+                                    val imported = DataManager.importBackupPayload(payload)
+                                    if (imported.isEmpty()) {
+                                        state.showImportError = Locales.t("backup_import_invalid_payload")
+                                    } else {
+                                        state.appointments.clear()
+                                        state.appointments.addAll(imported)
+                                        state.saveAll()
+                                        state.showImportError = null
+                                        state.backupSuccessMessage = Locales.t("backup_import_success")
+                                        state.pendingImportPreview = null
+                                    }
+                                    state.showImportConfirm = false
+                                    state.pendingImportText = null
+                                }
+                                is ParsedBackupFile.EncryptedContainer -> {
+                                    state.pendingEncryptedImportText = text
+                                    state.importPassword = ""
+                                    state.importPasswordError = null
+                                    state.showImportPasswordDialog = true
+                                    state.showImportConfirm = false
+                                    state.pendingImportText = null
+                                }
+                                null -> {
+                                    state.showImportError = Locales.t("backup_import_invalid_file")
+                                    state.showImportConfirm = false
+                                    state.pendingImportText = null
                                     state.pendingImportPreview = null
                                 }
-                                state.showImportConfirm = false
-                                state.pendingImportText = null
                             }
-
-                            is ParsedBackupFile.PlainContainer -> {
-                                val payload = parsed.container.payload.orEmpty()
-                                val imported = DataManager.importBackupPayload(payload)
-                                if (imported.isEmpty()) {
-                                    state.showImportError = Locales.t("backup_import_invalid_payload")
-                                } else {
-                                    state.appointments.clear()
-                                    state.appointments.addAll(imported)
-                                    state.saveAll()
-                                    state.showImportError = null
-                                    state.backupSuccessMessage = Locales.t("backup_import_success")
-                                    state.pendingImportPreview = null
-                                }
-                                state.showImportConfirm = false
-                                state.pendingImportText = null
-                            }
-
-                            is ParsedBackupFile.EncryptedContainer -> {
-                                state.pendingEncryptedImportText = text
-                                state.importPassword = ""
-                                state.importPasswordError = null
-                                state.showImportPasswordDialog = true
-                                state.showImportConfirm = false
-                                state.pendingImportText = null
-                            }
-
-                            null -> {
-                                state.showImportError = Locales.t("backup_import_invalid_file")
-                                state.showImportConfirm = false
-                                state.pendingImportText = null
-                                state.pendingImportPreview = null
-                            }
+                        } finally {
+                            state.hideGlobalLoading()
                         }
                     }
                 ) {
@@ -732,42 +737,43 @@ fun AppRootDialogs(state: AppRootState) {
             confirmButton = {
                 Button(
                     onClick = {
-                        val text = state.pendingEncryptedImportText.orEmpty()
-                        val parsed = BackupCodec.parseBackupFile(text)
-                        val encrypted =
-                            (parsed as? ParsedBackupFile.EncryptedContainer)?.container
-
-                        if (encrypted == null) {
-                            state.importPasswordError = Locales.t("backup_import_invalid_payload")
-                            return@Button
+                        state.showGlobalLoading(Locales.t("loading"))
+                        try {
+                            val text = state.pendingEncryptedImportText.orEmpty()
+                            val parsed = BackupCodec.parseBackupFile(text)
+                            val encrypted =
+                                (parsed as? ParsedBackupFile.EncryptedContainer)?.container
+                            if (encrypted == null) {
+                                state.importPasswordError = Locales.t("backup_import_invalid_payload")
+                                return@Button
+                            }
+                            val payload = BackupCodec.decryptPayload(
+                                container = encrypted,
+                                password = state.importPassword
+                            )
+                            if (payload.isNullOrBlank()) {
+                                state.importPasswordError =
+                                    Locales.t("backup_import_password_invalid")
+                                return@Button
+                            }
+                            val imported = DataManager.importBackupPayload(payload)
+                            if (imported.isEmpty()) {
+                                state.importPasswordError = Locales.t("backup_import_invalid_payload")
+                                return@Button
+                            }
+                            state.appointments.clear()
+                            state.appointments.addAll(imported)
+                            state.saveAll()
+                            state.showImportPasswordDialog = false
+                            state.pendingEncryptedImportText = null
+                            state.importPassword = ""
+                            state.importPasswordError = null
+                            state.showImportError = null
+                            state.backupSuccessMessage = Locales.t("backup_import_success")
+                            state.pendingImportPreview = null
+                        } finally {
+                            state.hideGlobalLoading()
                         }
-
-                        val payload = BackupCodec.decryptPayload(
-                            container = encrypted,
-                            password = state.importPassword
-                        )
-
-                        if (payload.isNullOrBlank()) {
-                            state.importPasswordError =
-                                Locales.t("backup_import_password_invalid")
-                            return@Button
-                        }
-
-                        val imported = DataManager.importBackupPayload(payload)
-                        if (imported.isEmpty()) {
-                            state.importPasswordError = Locales.t("backup_import_invalid_payload")
-                            return@Button
-                        }
-
-                        state.appointments.clear()
-                        state.appointments.addAll(imported)
-                        state.saveAll()
-
-                        state.showImportPasswordDialog = false
-                        state.pendingEncryptedImportText = null
-                        state.importPassword = ""
-                        state.importPasswordError = null
-                        state.showImportError = null
                     }
                 ) {
                     Text(Locales.t("import_btn"))

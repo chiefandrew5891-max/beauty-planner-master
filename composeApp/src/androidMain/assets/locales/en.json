@@ -1,5 +1,5 @@
 {
-  "Loading": "Loading...",
+  "loading": "Loading...",
   "auth_password_reset": "Forgot password?",
   "auth_password_reset_sent": "Password reset email has been sent.",
   "auth_password_reset_failed": "Failed to send password reset email.",

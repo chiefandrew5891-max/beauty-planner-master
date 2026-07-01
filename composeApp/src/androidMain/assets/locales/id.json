@@ -1,5 +1,5 @@
 {
-  "Loading": "Memuat...",
+  "loading": "Memuat...",
   "auth_password_reset": "Lupa kata sandi?",
   "auth_password_reset_sent": "Email pemulihan kata sandi telah dikirim.",
   "auth_password_reset_failed": "Gagal mengirim email pemulihan kata sandi.",

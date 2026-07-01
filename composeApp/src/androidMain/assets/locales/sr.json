@@ -1,5 +1,5 @@
 {
-  "Loading": "Учитавање...",
+  "loading": "Учитавање...",
   "auth_password_reset": "Zaboravili ste lozinku?",
   "auth_password_reset_sent": "E-mail za resetovanje lozinke je poslat.",
   "auth_password_reset_failed": "Neuspešno slanje e-maila za resetovanje lozinke.",

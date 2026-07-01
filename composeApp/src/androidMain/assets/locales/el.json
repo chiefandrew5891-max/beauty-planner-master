@@ -1,5 +1,5 @@
 {
-  "Loading": "Φόρτωση...",
+  "loading": "Φόρτωση...",
   "auth_password_reset": "Ξέχασατε τον κωδικό πρόσβασης;",
   "auth_password_reset_sent": "Το e-mail για την επαναφορά του κωδικού πρόσβασης έχει σταλεί.",
   "auth_password_reset_failed": "Αποτυχία αποστολής e-mail επαναφοράς κωδικού πρόσβασης.",

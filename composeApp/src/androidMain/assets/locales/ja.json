@@ -1,5 +1,5 @@
 {
-  "Loading": "読み込み中...",
+  "loading": "読み込み中...",
   "auth_password_reset": "パスワードをお忘れですか？",
   "auth_password_reset_sent": "パスワード再設定用のメールを送信しました。",
   "auth_password_reset_failed": "パスワード再設定メールの送信に失敗しました。",

@@ -1,6 +1,5 @@
 {
-  "Loading": "Betöltés...",
-  "Loading": "Laden...",
+  "loading": "Laden...",
   "auth_password_reset": "Passwort vergessen?",
   "auth_password_reset_sent": "E-Mail zum Zurücksetzen des Passworts wurde gesendet.",
   "auth_password_reset_failed": "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden.",

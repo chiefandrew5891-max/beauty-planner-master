@@ -1,5 +1,5 @@
 {
-  "Loading": "Įkeliama...",
+  "loading": "Įkeliama...",
   "auth_password_reset": "Pamiršote slaptažodį?",
   "auth_password_reset_sent": "Slaptažodžio atkūrimo el. laiškas išsiųstas.",
   "auth_password_reset_failed": "Nepavyko išsiųsti slaptažodžio atkūrimo el. laiško.",

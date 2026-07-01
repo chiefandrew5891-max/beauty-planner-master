@@ -1,5 +1,5 @@
 {
-  "Loading": "Laddar...",
+  "loading": "Laddar...",
   "auth_password_reset": "Glömt lösenord?",
   "auth_password_reset_sent": "E-post för återställning av lösenord har skickats.",
   "auth_password_reset_failed": "Misslyckades med att skicka e-post för återställning av lösenord.",

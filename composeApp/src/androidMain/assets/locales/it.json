@@ -1,5 +1,5 @@
 {
-  "Loading": "Caricamento...",
+  "loading": "Caricamento...",
   "auth_password_reset": "Password dimenticata?",
   "auth_password_reset_sent": "L'email per il ripristino della password è stata inviata.",
   "auth_password_reset_failed": "Impossibile inviare l'email di ripristino password.",

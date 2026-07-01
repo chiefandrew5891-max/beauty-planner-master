@@ -1,5 +1,5 @@
 {
-  "Loading": "Cargando...",
+  "loading": "Cargando...",
   "auth_password_reset": "¿Olvidaste tu contraseña?",
   "auth_password_reset_sent": "Se ha enviado el correo para restablecer la contraseña.",
   "auth_password_reset_failed": "No se pudo enviar el correo para restablecer la contraseña.",

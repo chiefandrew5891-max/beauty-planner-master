@@ -1,5 +1,5 @@
 {
-  "Loading": "Laden...",
+  "loading": "Laden...",
   "auth_password_reset": "Wachtwoord vergeten?",
   "auth_password_reset_sent": "E-mail voor het herstellen van het wachtwoord is verzonden.",
   "auth_password_reset_failed": "E-mail voor het herstellen van het wachtwoord kon niet worden verzonden.",

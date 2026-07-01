@@ -1,5 +1,5 @@
 {
-  "Loading": "Chargement...",
+  "loading": "Chargement...",
   "auth_password_reset": "Mot de passe oublié ?",
   "auth_password_reset_sent": "L'e-mail de réinitialisation du mot de passe a été envoyé.",
   "auth_password_reset_failed": "Échec de l'envoi de l'e-mail de réinitialisation du mot de passe.",

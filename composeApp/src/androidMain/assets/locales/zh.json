@@ -1,5 +1,5 @@
 {
-  "Loading": "加载中...",
+  "loading": "加载中...",
   "auth_password_reset": "忘记密码？",
   "auth_password_reset_sent": "重置密码邮件已发送。",
   "auth_password_reset_failed": "发送重置密码邮件失败。",

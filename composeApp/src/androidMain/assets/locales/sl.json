@@ -1,5 +1,5 @@
 {
-  "Loading": "Nalaganje...",
+  "loading": "Nalaganje...",
   "auth_password_reset": "Ste pozabili geslo?",
   "auth_password_reset_sent": "E-poštno sporočilo za ponastavitev gesla je bilo poslano.",
   "auth_password_reset_failed": "Pošiljanje e-poštnega sporočila za ponastavitev gesla ni uspelo.",

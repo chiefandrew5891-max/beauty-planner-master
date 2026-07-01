@@ -665,73 +665,72 @@ class AppRootState(
 
     fun buyPremium() {
         scope.launch {
-            val product = billingUiState.products.firstOrNull {
-                it.productId == PREMIUM_SUBS_PRODUCT_ID
-            }
-
-            if (product == null) {
+            showGlobalLoading(Locales.t("loading"))
+            try {
+                val product = billingUiState.products.firstOrNull {
+                    it.productId == PREMIUM_SUBS_PRODUCT_ID
+                }
+                if (product == null) {
+                    billingUiState = billingUiState.copy(
+                        status = BillingStatus.ERROR,
+                        errorMessage = Locales.t("premium_product_not_found")
+                    )
+                    return@launch
+                }
                 billingUiState = billingUiState.copy(
-                    status = BillingStatus.ERROR,
-                    errorMessage = Locales.t("premium_product_not_found")
+                    status = BillingStatus.PURCHASING,
+                    errorMessage = null
                 )
-                return@launch
-            }
-
-            billingUiState = billingUiState.copy(
-                status = BillingStatus.PURCHASING,
-                errorMessage = null
-            )
-
-            val accountId = currentAuthUser?.uid?.ifBlank { null }
-                ?: AppSettings.backendUserId.ifBlank { null }
-                ?: IdentityManager.getOrCreateInstallId()
-
-            when (
-                val result = billingManager.purchasePremium(
-                    productId = product.productId,
-                    obfuscatedAccountId = accountId
-                )
-            ) {
-                is PurchaseResult.Success -> {
-                    runCatching {
-                        val remote = com.andrey.beautyplanner.remote.BackendBridge.verifySubscription(
-                            userId = AppSettings.backendUserId,
-                            productId = result.productId,
-                            purchaseToken = result.purchaseToken
-                        )
-                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
-                        refreshAccessState()
+                val accountId = currentAuthUser?.uid?.ifBlank { null }
+                    ?: AppSettings.backendUserId.ifBlank { null }
+                    ?: IdentityManager.getOrCreateInstallId()
+                when (
+                    val result = billingManager.purchasePremium(
+                        productId = product.productId,
+                        obfuscatedAccountId = accountId
+                    )
+                ) {
+                    is PurchaseResult.Success -> {
+                        runCatching {
+                            val remote = com.andrey.beautyplanner.remote.BackendBridge.verifySubscription(
+                                userId = AppSettings.backendUserId,
+                                productId = result.productId,
+                                purchaseToken = result.purchaseToken
+                            )
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            refreshAccessState()
+                            billingUiState = billingUiState.copy(
+                                status = BillingStatus.PURCHASED,
+                                errorMessage = null,
+                                ownedPremium = accessState.hasPremium
+                            )
+                        }.onFailure { e ->
+                            billingUiState = billingUiState.copy(
+                                status = BillingStatus.ERROR,
+                                errorMessage = e.message ?: "Backend verification failed",
+                                ownedPremium = accessState.hasPremium
+                            )
+                        }
+                    }
+                    is PurchaseResult.Cancelled -> {
                         billingUiState = billingUiState.copy(
-                            status = BillingStatus.PURCHASED,
-                            errorMessage = null,
+                            status = BillingStatus.READY,
+                            errorMessage = Locales.t("premium_purchase_cancelled"),
                             ownedPremium = accessState.hasPremium
                         )
-                    }.onFailure { e ->
+                    }
+                    is PurchaseResult.Error -> {
                         billingUiState = billingUiState.copy(
                             status = BillingStatus.ERROR,
-                            errorMessage = e.message ?: "Backend verification failed",
+                            errorMessage = result.message.ifBlank {
+                                Locales.t("premium_purchase_failed")
+                            },
                             ownedPremium = accessState.hasPremium
                         )
                     }
                 }
-
-                is PurchaseResult.Cancelled -> {
-                    billingUiState = billingUiState.copy(
-                        status = BillingStatus.READY,
-                        errorMessage = Locales.t("premium_purchase_cancelled"),
-                        ownedPremium = accessState.hasPremium
-                    )
-                }
-
-                is PurchaseResult.Error -> {
-                    billingUiState = billingUiState.copy(
-                        status = BillingStatus.ERROR,
-                        errorMessage = result.message.ifBlank {
-                            Locales.t("premium_purchase_failed")
-                        },
-                        ownedPremium = accessState.hasPremium
-                    )
-                }
+            } finally {
+                hideGlobalLoading()
             }
         }
     }
@@ -739,50 +738,56 @@ class AppRootState(
     fun restorePremium(silent: Boolean = false) {
         scope.launch {
             if (!silent) {
-                billingUiState = billingUiState.copy(
-                    status = BillingStatus.RESTORING,
-                    errorMessage = null
-                )
+                showGlobalLoading(Locales.t("loading"))
             }
-
-            when (val result = billingManager.restorePurchases()) {
-                is RestoreResult.Restored -> {
-                    runCatching {
-                        val remote = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
-                            AppSettings.backendUserId
-                        )
-                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
-                        refreshAccessState()
+            try {
+                if (!silent) {
+                    billingUiState = billingUiState.copy(
+                        status = BillingStatus.RESTORING,
+                        errorMessage = null
+                    )
+                }
+                when (val result = billingManager.restorePurchases()) {
+                    is RestoreResult.Restored -> {
+                        runCatching {
+                            val remote = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
+                                AppSettings.backendUserId
+                            )
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            refreshAccessState()
+                            billingUiState = billingUiState.copy(
+                                status = BillingStatus.READY,
+                                errorMessage = if (silent) null else Locales.t("premium_restored"),
+                                ownedPremium = accessState.hasPremium
+                            )
+                        }.onFailure { e ->
+                            billingUiState = billingUiState.copy(
+                                status = BillingStatus.ERROR,
+                                errorMessage = e.message ?: Locales.t("premium_restore_failed"),
+                                ownedPremium = accessState.hasPremium
+                            )
+                        }
+                    }
+                    is RestoreResult.NothingToRestore -> {
                         billingUiState = billingUiState.copy(
                             status = BillingStatus.READY,
-                            errorMessage = if (silent) null else Locales.t("premium_restored"),
+                            errorMessage = if (silent) null else Locales.t("premium_nothing_to_restore"),
                             ownedPremium = accessState.hasPremium
                         )
-                    }.onFailure { e ->
+                    }
+                    is RestoreResult.Error -> {
                         billingUiState = billingUiState.copy(
-                            status = BillingStatus.ERROR,
-                            errorMessage = e.message ?: Locales.t("premium_restore_failed"),
+                            status = if (silent) BillingStatus.READY else BillingStatus.ERROR,
+                            errorMessage = if (silent) null else result.message.ifBlank {
+                                Locales.t("premium_restore_failed")
+                            },
                             ownedPremium = accessState.hasPremium
                         )
                     }
                 }
-
-                is RestoreResult.NothingToRestore -> {
-                    billingUiState = billingUiState.copy(
-                        status = BillingStatus.READY,
-                        errorMessage = if (silent) null else Locales.t("premium_nothing_to_restore"),
-                        ownedPremium = accessState.hasPremium
-                    )
-                }
-
-                is RestoreResult.Error -> {
-                    billingUiState = billingUiState.copy(
-                        status = if (silent) BillingStatus.READY else BillingStatus.ERROR,
-                        errorMessage = if (silent) null else result.message.ifBlank {
-                            Locales.t("premium_restore_failed")
-                        },
-                        ownedPremium = accessState.hasPremium
-                    )
+            } finally {
+                if (!silent) {
+                    hideGlobalLoading()
                 }
             }
         }
