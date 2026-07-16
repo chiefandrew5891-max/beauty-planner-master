@@ -1,8 +1,12 @@
 {
   "$schema": "https://repomix.com/schemas/latest/schema.json",
   "output": {
-    "style": "xml",
-    "filePath": "/Users/chief_andrew/Desktop/repomix-temp.xml"
+    "style": "markdown",
+    "filePath": "/Users/chief_andrew/Desktop/repomix-temp.xml",
+    "headerText": "This file is generated using Repomix. Format: Plain Markdown. Encoding: UTF-8.",
+    "showLineNumbers": false,
+    "removeComments": false,
+    "removeEmptyLines": false
   },
   "ignore": {
     "customPatterns": [

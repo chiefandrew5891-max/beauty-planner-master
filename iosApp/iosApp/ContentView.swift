@@ -139,6 +139,57 @@ struct ComposeView: UIViewControllerRepresentable {
                 deferred.complete(value: mapped)
             }
         }
+                CloudSyncBridgeConnector().pullAll = { userId, deferred in
+                    FirestoreBridge.pullAll(userId: userId) { result, error in
+                        if let error = error {
+                            deferred.completeExceptionally(
+                                exception: KotlinIllegalStateException(message: error)
+                            )
+                            return
+                        }
+
+                        deferred.complete(value: result ?? [:])
+                    }
+                }
+
+                CloudSyncBridgeConnector().pushAppointments = { userId, appointments, deferred in
+                    let mappedAppointments: [[String: String]] = appointments.map { item in
+                        var mapped: [String: String] = [:]
+                        for (key, value) in item {
+                            mapped[key] = value
+                        }
+                        return mapped
+                    }
+
+                    FirestoreBridge.pushAppointments(userId: userId, appointments: mappedAppointments) { result, error in
+                        if let error = error {
+                            deferred.completeExceptionally(
+                                exception: KotlinIllegalStateException(message: error)
+                            )
+                            return
+                        }
+
+                        deferred.complete(value: result ?? [:])
+                    }
+                }
+
+                CloudSyncBridgeConnector().pushSettings = { userId, settings, deferred in
+                    var mappedSettings: [String: String] = [:]
+                    for (key, value) in settings {
+                        mappedSettings[key] = value
+                    }
+
+                    FirestoreBridge.pushSettings(userId: userId, settings: mappedSettings) { result, error in
+                        if let error = error {
+                            deferred.completeExceptionally(
+                                exception: KotlinIllegalStateException(message: error)
+                            )
+                            return
+                        }
+
+                        deferred.complete(value: result ?? [:])
+                    }
+                }
 
         StoreKitBridgeConnector().loadProducts = { productIds, deferred in
             StoreKitBridge.loadProducts(productIds) { result, error in

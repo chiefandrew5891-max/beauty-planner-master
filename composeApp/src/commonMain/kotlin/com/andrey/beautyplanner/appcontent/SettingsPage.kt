@@ -26,8 +26,6 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -404,7 +402,7 @@ fun SettingsPage(
                         color = onSurface
                     )
 
-                    Switch(
+                    AppSwitch(
                         checked = pendingPinEnabledValue,
                         onCheckedChange = { newValue ->
                             if (newValue) {
@@ -420,11 +418,7 @@ fun SettingsPage(
                                 pendingPinEnabledValue = false
                                 showDisablePinConfirm = true
                             }
-                        },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = MaterialTheme.colors.primary,
-                            checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
-                        )
+                        }
                     )
                 }
 

@@ -2,18 +2,24 @@ package com.andrey.beautyplanner
 
 import platform.Foundation.NSUserDefaults
 
-private const val DB_KEY = "appointments_db_json"
-
 actual fun createAppointmentStorage(): AppointmentStorage = IosUserDefaultsStorage()
 
 private class IosUserDefaultsStorage : AppointmentStorage {
     private val defaults = NSUserDefaults.standardUserDefaults
 
-    override fun write(text: String) {
-        defaults.setObject(text, forKey = DB_KEY)
+    override fun write(profileKey: String, text: String) {
+        defaults.setObject(text, forKey = keyFor(profileKey))
     }
 
-    override fun read(): String? {
-        return defaults.stringForKey(DB_KEY)
+    override fun read(profileKey: String): String? {
+        return defaults.stringForKey(keyFor(profileKey))
+    }
+
+    private fun keyFor(profileKey: String): String {
+        val safeKey = profileKey
+            .trim()
+            .ifBlank { "guest" }
+            .replace(Regex("[^a-zA-Z0-9_-]"), "_")
+        return "appointments_db_json_$safeKey"
     }
 }

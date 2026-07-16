@@ -373,6 +373,15 @@ fun AppRootChrome(
                     }
 
                     DrawerItem(
+                        title = Locales.t("nav_unpaid_appointments"),
+                        selected = state.currentScreen == Screen.UNPAID_APPOINTMENTS
+                    ) {
+                        state.screenHistory = emptyList()
+                        state.currentScreen = Screen.UNPAID_APPOINTMENTS
+                        state.closeDrawer()
+                    }
+
+                    DrawerItem(
                         title = Locales.t("nav_settings"),
                         selected = state.currentScreen == Screen.SETTINGS
                     ) {

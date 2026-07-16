@@ -24,6 +24,8 @@ import com.andrey.beautyplanner.auth.AuthUser
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 @Stable
 class AppRootState(
@@ -35,6 +37,11 @@ class AppRootState(
     private val billingManager = BillingManager()
     private val authenticatedSessionTimeoutMillis =
         7L * 24L * 60L * 60L * 1000L
+
+    var cloudSyncInProgress by mutableStateOf(false)
+        private set
+
+    private val cloudSyncMutex = Mutex()
 
     var currentAuthUser by mutableStateOf<AuthUser?>(null)
 
@@ -117,6 +124,7 @@ class AppRootState(
 
     var isGlobalLoading by mutableStateOf(false)
     var globalLoadingMessage by mutableStateOf<String?>(null)
+    var isRefreshing by mutableStateOf(false)
 
     data class ShiftItem(val apptId: String, val newStartMin: Int)
     data class ImportPreviewInfo(
@@ -201,6 +209,29 @@ class AppRootState(
                 )
             )
         }
+    fun reloadAppointmentsForProfile(profileKey: String) {
+        CloudSyncLogger.log("reloadAppointmentsForProfile: profileKey=$profileKey")
+
+        val loaded = runCatching {
+            DataManager.loadFromDatabase(profileKey)
+        }.getOrElse {
+            CloudSyncLogger.log("reloadAppointmentsForProfile: failed: ${it.message}")
+            emptyList()
+        }
+
+        appointments.clear()
+        appointments.addAll(loaded)
+
+        CloudSyncLogger.log("reloadAppointmentsForProfile: loaded=${loaded.size}")
+    }
+
+    fun reloadAppointmentsForCurrentProfile() {
+        reloadAppointmentsForProfile(LocalProfileManager.currentProfileKey())
+    }
+
+    fun reloadAppointmentsForGuestProfile() {
+        reloadAppointmentsForProfile(LocalProfileManager.guestProfileKey())
+    }
     fun showGlobalLoading(message: String? = null) {
         globalLoadingMessage = message
         isGlobalLoading = true
@@ -292,9 +323,50 @@ class AppRootState(
         currentScreen = Screen.MONTH
     }
 
+    fun manualRefresh() {
+        if (isRefreshing) return
+
+        scope.launch {
+            isRefreshing = true
+            try {
+                CloudSyncLogger.log("manualRefresh: started")
+
+                reloadAppointmentsForCurrentProfile()
+                refreshAccessState()
+
+                val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
+                if (premiumEligible) {
+                    runCatching {
+                        performCloudSyncIfEligible()
+                    }.onFailure {
+                        CloudSyncLogger.log("manualRefresh: sync failed: ${it.message}")
+                    }
+                } else {
+                    CloudSyncLogger.log("manualRefresh: local reload only, no premium access")
+                }
+
+                CloudSyncLogger.log("manualRefresh: finished")
+            } finally {
+                isRefreshing = false
+            }
+        }
+    }
+
     fun resetLivePreviews() {
         currentLiveDarkMode = AppSettings.isDarkMode
         fontScale = AppSettings.getFontScale()
+    }
+
+    fun confirmDeferredPayment(appointment: Appointment) {
+        val idx = appointments.indexOfFirst { it.id == appointment.id }
+        if (idx < 0) return
+
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+        appointments[idx] = AppointmentSyncUtils.touchForCreateOrUpdate(
+            source = appointment.markPaidAfterDelay(),
+            nowMillis = nowMillis
+        )
+        saveAll()
     }
 
     fun openDrawer() = scope.launch { drawerState.open() }
@@ -341,6 +413,7 @@ class AppRootState(
             AuthGateway.clearCredentialState()
             currentAuthUser = null
             AppSettings.backendUserId = ""
+            AppSettings.localProfileUserId = ""
             AppSettings.cachedAccessTier = "FREE_LIMITED"
             AppSettings.cachedTrialEndsAtMillis = 0L
             AppSettings.cachedHasPremium = false
@@ -384,8 +457,12 @@ class AppRootState(
         )
 
         currentAuthUser = currentUser
+        AppSettings.localProfileUserId = currentUser.uid
+        AppSettings.persist()
         com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+        reloadAppointmentsForCurrentProfile()
         refreshAccessState(Clock.System.now().toEpochMilliseconds())
+        performCloudSyncIfEligible()
         authResolved = true
         authErrorMessage = null
         currentScreen = Screen.MONTH
@@ -413,19 +490,76 @@ class AppRootState(
                                 authProvider = result.user.provider.name.lowercase()
                             )
                             currentAuthUser = result.user
+                            AppSettings.localProfileUserId = result.user.uid
                             AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
                             AppSettings.persist()
-                            refreshAccessState()
+
+                            clearSessionLocalState()
+                            reloadAppointmentsForCurrentProfile()
+                            performCloudSyncIfEligible()
                             authResolved = true
                             authErrorMessage = null
                             currentScreen = Screen.MONTH
-                        }.onFailure {
-                            authErrorMessage = mapAuthErrorMessage(it.message)
+                        }.onFailure { throwable ->
+                            authErrorMessage = mapAuthErrorMessage(throwable.message)
                         }
                     }
                     is SignInResult.Cancelled -> {
                         authErrorMessage = Locales.t("auth_google_cancelled")
                     }
+                    is SignInResult.Error -> {
+                        authErrorMessage = mapAuthErrorMessage(result.message)
+                    }
+                }
+            } finally {
+                hideGlobalLoading()
+            }
+        }
+    }
+
+    fun continueWithApple() {
+        scope.launch {
+            showGlobalLoading(Locales.t("loading"))
+            try {
+                when (val result = AuthGateway.signInWithApple()) {
+                    is SignInResult.Success -> {
+                        runCatching {
+                            val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
+                                installId = IdentityManager.getOrCreateInstallId(),
+                                firebaseUid = result.user.uid,
+                                platform = getPlatform().backendPlatform,
+                                authProvider = result.user.provider.name.lowercase(),
+                                email = result.user.email,
+                                displayName = result.user.displayName
+                            )
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
+                                firebaseUid = result.user.uid,
+                                email = result.user.email,
+                                displayName = result.user.displayName,
+                                authProvider = result.user.provider.name.lowercase()
+                            )
+                            currentAuthUser = result.user
+                            AppSettings.localProfileUserId = result.user.uid
+                            AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
+                            AppSettings.persist()
+
+                            clearSessionLocalState()
+                            reloadAppointmentsForCurrentProfile()
+                            refreshAccessState()
+                            performCloudSyncIfEligible()
+                            authResolved = true
+                            authErrorMessage = null
+                            currentScreen = Screen.MONTH
+                        }.onFailure { error ->
+                            authErrorMessage = mapAuthErrorMessage(error.message)
+                        }
+                    }
+
+                    is SignInResult.Cancelled -> {
+                        authErrorMessage = Locales.t("auth_error_generic")
+                    }
+
                     is SignInResult.Error -> {
                         authErrorMessage = mapAuthErrorMessage(result.message)
                     }
@@ -460,12 +594,20 @@ class AppRootState(
                     )
                     currentAuthUser = user
                     com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+
+                    AppSettings.backendUserId = ""
+                    AppSettings.localProfileUserId = ""
+                    AppSettings.persist()
+
+                    clearSessionLocalState()
+                    reloadAppointmentsForGuestProfile()
+
                     refreshAccessState()
                     authResolved = true
                     authErrorMessage = null
                     currentScreen = Screen.MONTH
-                }.onFailure {
-                    authErrorMessage = mapAuthErrorMessage(it.message)
+                }.onFailure { error ->
+                    authErrorMessage = mapAuthErrorMessage(error.message)
                 }
             } finally {
                 hideGlobalLoading()
@@ -474,9 +616,34 @@ class AppRootState(
     }
     fun openSignInScreen() {
         authErrorMessage = null
+        clearSessionLocalState()
+        reloadAppointmentsForGuestProfile()
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
     }
+    fun clearSessionLocalState() {
+        appointments.clear()
+
+        editingAppointment = null
+        transferA = null
+        conflictB = null
+        pendingTargetDate = null
+        pendingTargetTime = ""
+
+        pendingImportText = null
+        pendingImportPreview = null
+        pendingEncryptedImportText = null
+
+        showBookingDialog = false
+        showTransferPickDialog = false
+        showTransferConflictConfirm = false
+        showRescheduleBDialog = false
+        showDeleteConfirm = null
+
+        bookingReadOnly = false
+        selectedTimeSlot = ""
+    }
+
     fun switchAccount() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
@@ -484,8 +651,10 @@ class AppRootState(
                 runCatching {
                     AuthGateway.signOut()
                     AuthGateway.clearCredentialState()
+
                     currentAuthUser = null
                     AppSettings.backendUserId = ""
+                    AppSettings.localProfileUserId = ""
                     AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
                     AppSettings.cachedAccessTier = "FREE_LIMITED"
                     AppSettings.cachedTrialEndsAtMillis = 0L
@@ -493,12 +662,16 @@ class AppRootState(
                     AppSettings.cachedSubscriptionState = "NONE"
                     AppSettings.developerPremiumOverrideEnabled = false
                     AppSettings.persist()
+
+                    clearSessionLocalState()
+                    reloadAppointmentsForGuestProfile()
                     refreshAccessState()
+
                     screenHistory = emptyList()
                     currentScreen = Screen.AUTH_WELCOME
                     authErrorMessage = null
-                }.onFailure {
-                    authErrorMessage = mapAuthErrorMessage(it.message)
+                }.onFailure { error ->
+                    authErrorMessage = mapAuthErrorMessage(error.message)
                 }
             } finally {
                 hideGlobalLoading()
@@ -512,8 +685,10 @@ class AppRootState(
                 runCatching {
                     AuthGateway.signOut()
                     AuthGateway.clearCredentialState()
+
                     currentAuthUser = null
                     AppSettings.backendUserId = ""
+                    AppSettings.localProfileUserId = ""
                     AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
                     AppSettings.cachedAccessTier = "FREE_LIMITED"
                     AppSettings.cachedTrialEndsAtMillis = 0L
@@ -521,12 +696,16 @@ class AppRootState(
                     AppSettings.cachedSubscriptionState = "NONE"
                     AppSettings.developerPremiumOverrideEnabled = false
                     AppSettings.persist()
+
+                    clearSessionLocalState()
+                    reloadAppointmentsForGuestProfile()
                     refreshAccessState()
+
                     screenHistory = emptyList()
                     currentScreen = Screen.AUTH_WELCOME
                     authErrorMessage = null
-                }.onFailure {
-                    authErrorMessage = mapAuthErrorMessage(it.message)
+                }.onFailure { error ->
+                    authErrorMessage = mapAuthErrorMessage(error.message)
                 }
             } finally {
                 hideGlobalLoading()
@@ -592,14 +771,19 @@ class AppRootState(
                                 authProvider = "password"
                             )
                             currentAuthUser = result.user
+                            AppSettings.localProfileUserId = result.user.uid
                             AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
                             AppSettings.persist()
+
+                            clearSessionLocalState()
+                            reloadAppointmentsForCurrentProfile()
                             refreshAccessState()
+                            performCloudSyncIfEligible()
                             authResolved = true
                             authErrorMessage = null
                             currentScreen = Screen.MONTH
-                        }.onFailure {
-                            authErrorMessage = mapAuthErrorMessage(it.message)
+                        }.onFailure { error ->
+                            authErrorMessage = mapAuthErrorMessage(error.message)
                         }
                     }
                     is SignInResult.Cancelled -> {
@@ -613,6 +797,130 @@ class AppRootState(
                 hideGlobalLoading()
             }
         }
+    }
+
+    suspend fun performCloudSyncIfEligible() {
+        val userId = currentAuthUser?.uid?.trim().orEmpty()
+        if (userId.isBlank()) {
+            CloudSyncLogger.log("performCloudSyncIfEligible: skipped, blank auth uid")
+            return
+        }
+
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+        val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
+        if (!premiumEligible) {
+            CloudSyncLogger.log("performCloudSyncIfEligible: skipped, no premium access")
+            return
+        }
+
+        CloudSyncLogger.log(
+            "performCloudSyncIfEligible: start userId=$userId localAppointments=${appointments.size}"
+        )
+
+        val repository = CloudSyncRepositoryProvider.repository
+        val remote = repository.pullAll(userId)
+
+        val mergedAppointments = CloudSyncCoordinator.mergeLocalAndRemoteAppointments(
+            local = appointments.toList(),
+            remote = remote.appointments
+        )
+
+        appointments.clear()
+        appointments.addAll(mergedAppointments)
+
+        if (
+            CloudSyncCoordinator.shouldApplyRemoteSettings(
+                localSettingsUpdatedAtMillis = AppSettings.cloudSettingsUpdatedAtMillis,
+                remoteSettings = remote.settings
+            )
+        ) {
+            remote.settings?.let {
+                CloudSyncLogger.log("performCloudSyncIfEligible: applying remote settings")
+                AppSettings.applyCloudSettingsSnapshot(it)
+            }
+            currentLiveDarkMode = AppSettings.isDarkMode
+            fontScale = AppSettings.getFontScale()
+        } else {
+            CloudSyncLogger.log("performCloudSyncIfEligible: keeping local settings")
+        }
+
+        DataManager.saveToDatabase(
+            data = appointments.toList(),
+            profileKey = LocalProfileManager.currentProfileKey()
+        )
+
+        repository.pushAll(
+            userId = userId,
+            appointments = appointments.toList(),
+            settings = AppSettings.exportCloudSettingsSnapshot(nowMillis)
+        )
+
+        val visibleAppointments = AppointmentSyncUtils.visibleAppointments(appointments.toList())
+        val mins = AppSettings.reminderMinutesComputed()
+
+        if (AppSettings.notificationsEnabled && mins.isNotEmpty()) {
+            Notifications.rescheduleAll(
+                appointments = visibleAppointments,
+                reminderMinutes = mins,
+                soundType = AppSettings.notificationSoundType,
+                soundId = AppSettings.notificationSoundId,
+                nowEpochMillis = nowMillis
+            )
+        } else {
+            Notifications.cancelAll()
+        }
+
+        refreshAccessState(nowMillis)
+
+        CloudSyncLogger.log(
+            "performCloudSyncIfEligible: done userId=$userId merged=${appointments.size} visible=${visibleAppointments.size}"
+        )
+    }
+
+    fun scheduleCloudSyncIfEligible() {
+        scope.launch {
+            cloudSyncMutex.withLock {
+                cloudSyncInProgress = true
+                CloudSyncLogger.log("scheduleCloudSyncIfEligible: launched")
+                try {
+                    runCatching { performCloudSyncIfEligible() }
+                        .onFailure { CloudSyncLogger.log("scheduleCloudSyncIfEligible: failed: ${it.message}") }
+                } finally {
+                    cloudSyncInProgress = false
+                    CloudSyncLogger.log("scheduleCloudSyncIfEligible: finished")
+                }
+            }
+        }
+    }
+    fun forceCloudSyncFromDebug() {
+        if (cloudSyncInProgress) {
+            CloudSyncLogger.log("forceCloudSyncFromDebug: skipped, sync already running")
+            return
+        }
+
+        scope.launch {
+            cloudSyncInProgress = true
+            CloudSyncLogger.log("forceCloudSyncFromDebug: launched manually")
+            try {
+                runCatching {
+                    performCloudSyncIfEligible()
+                }.onFailure {
+                    CloudSyncLogger.log("forceCloudSyncFromDebug: failed: ${it.message}")
+                }
+            } finally {
+                cloudSyncInProgress = false
+                CloudSyncLogger.log("forceCloudSyncFromDebug: finished")
+            }
+        }
+    }
+
+    fun logCloudSyncSnapshot() {
+        val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
+        val visibleCount = appointments.count { !it.isDeleted }
+
+        CloudSyncLogger.log(
+            "snapshot: authUid=${currentAuthUser?.uid ?: "—"}, provider=${currentAuthUser?.provider ?: "NONE"}, backendUserId=${AppSettings.backendUserId.ifBlank { "—" }}, premiumEligible=$premiumEligible, inProgress=$cloudSyncInProgress, appointments=${appointments.size}, visible=$visibleCount"
+        )
     }
     private suspend fun syncSubscriptionState() {
         val info = billingManager.getSubscriptionInfo()
@@ -859,15 +1167,21 @@ class AppRootState(
     }
 
     fun saveAll() {
-        DataManager.saveToDatabase(appointments.toList())
+        CloudSyncLogger.log("saveAll: appointments=${appointments.size}")
+        DataManager.saveToDatabase(
+            data = appointments.toList(),
+            profileKey = LocalProfileManager.currentProfileKey()
+        )
 
         val nowMillis = Clock.System.now().toEpochMilliseconds()
         refreshAccessState(nowMillis)
 
+        val visibleAppointments = AppointmentSyncUtils.visibleAppointments(appointments.toList())
         val mins = AppSettings.reminderMinutesComputed()
+
         if (AppSettings.notificationsEnabled && mins.isNotEmpty()) {
             Notifications.rescheduleAll(
-                appointments = appointments.toList(),
+                appointments = visibleAppointments,
                 reminderMinutes = mins,
                 soundType = AppSettings.notificationSoundType,
                 soundId = AppSettings.notificationSoundId,
@@ -876,27 +1190,55 @@ class AppRootState(
         } else {
             Notifications.cancelAll()
         }
+
+        scheduleCloudSyncIfEligible()
     }
 
     fun findAppointment(date: LocalDate, time: String): Appointment? =
-        appointments.find { it.dateString == date.toString() && it.time == time }
+        appointments.find {
+            !it.isDeleted &&
+                    it.dateString == date.toString() &&
+                    it.time == time
+        }
 
     fun moveAppointment(appt: Appointment, toDate: LocalDate, toTime: String) {
         val idx = appointments.indexOfFirst { it.id == appt.id }
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+
         if (idx >= 0) {
-            appointments[idx] = appt.copy(dateString = toDate.toString(), time = toTime)
+            appointments[idx] = AppointmentSyncUtils.touchForCreateOrUpdate(
+                appt.copy(
+                    dateString = toDate.toString(),
+                    time = toTime
+                ),
+                nowMillis = nowMillis
+            )
         } else {
-            appointments.remove(appt)
-            appointments.add(appt.copy(dateString = toDate.toString(), time = toTime))
+            appointments.add(
+                AppointmentSyncUtils.touchForCreateOrUpdate(
+                    appt.copy(
+                        dateString = toDate.toString(),
+                        time = toTime
+                    ),
+                    nowMillis = nowMillis
+                )
+            )
         }
     }
 
     fun replaceById(updated: Appointment) {
         val idx = appointments.indexOfFirst { it.id == updated.id }
-        if (idx >= 0) appointments[idx] = updated
-        else {
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+        val touched = AppointmentSyncUtils.touchForCreateOrUpdate(
+            source = updated,
+            nowMillis = nowMillis
+        )
+
+        if (idx >= 0) {
+            appointments[idx] = touched
+        } else {
             appointments.removeAll { it.id == updated.id }
-            appointments.add(updated)
+            appointments.add(touched)
         }
     }
 
@@ -980,14 +1322,6 @@ fun rememberAppRootState(): AppRootState {
 
         val nowMillis = Clock.System.now().toEpochMilliseconds()
 
-        runCatching { DataManager.loadFromDatabase() }
-            .onSuccess { loaded ->
-                if (loaded.isNotEmpty()) {
-                    appointments.clear()
-                    appointments.addAll(loaded)
-                }
-            }
-
         runCatching {
             state.enforceAuthenticatedSessionTimeoutIfNeeded()
             state.bootstrapAuthenticatedUser()
@@ -995,6 +1329,9 @@ fun rememberAppRootState(): AppRootState {
             state.currentScreen = Screen.MONTH
         }.onFailure {
             state.authResolved = false
+            appointments.clear()
+            state.reloadAppointmentsForGuestProfile()
+
             val raw = it.message.orEmpty()
             state.authErrorMessage =
                 if (
@@ -1005,6 +1342,7 @@ fun rememberAppRootState(): AppRootState {
                 } else {
                     state.mapAuthErrorMessage(raw)
                 }
+
             state.currentScreen = Screen.AUTH_WELCOME
         }
 

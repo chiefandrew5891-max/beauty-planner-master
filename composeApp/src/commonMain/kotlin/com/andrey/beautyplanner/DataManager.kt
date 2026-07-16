@@ -13,18 +13,23 @@ private val jsonConfig = Json {
 object DataManager {
     private val storage: AppointmentStorage by lazy { createAppointmentStorage() }
 
-    fun saveToDatabase(data: List<Appointment>) {
+    fun saveToDatabase(
+        data: List<Appointment>,
+        profileKey: String = LocalProfileManager.currentProfileKey()
+    ) {
         try {
             val jsonString = jsonConfig.encodeToString(data)
-            storage.write(jsonString)
+            storage.write(profileKey, jsonString)
         } catch (e: Exception) {
             println("Save error: ${e.message}")
         }
     }
 
-    fun loadFromDatabase(): List<Appointment> {
+    fun loadFromDatabase(
+        profileKey: String = LocalProfileManager.currentProfileKey()
+    ): List<Appointment> {
         return try {
-            val jsonString = storage.read() ?: return emptyList()
+            val jsonString = storage.read(profileKey) ?: return emptyList()
             if (jsonString.isBlank()) emptyList()
             else jsonConfig.decodeFromString<List<Appointment>>(jsonString)
         } catch (e: Exception) {
@@ -51,8 +56,8 @@ object DataManager {
 }
 
 interface AppointmentStorage {
-    fun write(text: String)
-    fun read(): String?
+    fun write(profileKey: String, text: String)
+    fun read(profileKey: String): String?
 }
 
 expect fun createAppointmentStorage(): AppointmentStorage

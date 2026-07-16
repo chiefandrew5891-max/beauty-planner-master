@@ -1,5 +1,10 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.combinedClickable
@@ -24,19 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
+import com.andrey.beautyplanner.AppointmentPaymentStatus
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.effectivePaymentStatus
 import com.andrey.beautyplanner.utils.LiveStatusKey
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
-import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlin.math.PI
 import kotlin.math.sin
 
@@ -96,7 +97,6 @@ fun AppointmentCard(
     endHm: String,
     nowDate: LocalDate? = null,
     nowMinutes: Int? = null,
-    // Для DayDetails: цвета/фон уже были "канонические" — даём передать снаружи
     dayDetailsBackgroundColor: Color? = null,
     dayDetailsIsPastOrFinished: Boolean = false,
     onClick: () -> Unit,
@@ -110,6 +110,7 @@ fun AppointmentCard(
         amount = appt.price,
         currencyCode = appt.currency
     )
+    val paymentStatus = appt.effectivePaymentStatus()
 
     if (showDateInCard) {
         val formattedDate = ddMMyyyy(appt.dateString)
@@ -200,11 +201,9 @@ fun AppointmentCard(
                             color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
                         )
                     }
+
                     Text(
-                        text = AppSettings.formatMoneyAmount(
-                            amount = appt.price,
-                            currencyCode = appt.currency
-                        ),
+                        text = priceText,
                         fontSize = (13 * fontScale).sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
@@ -236,6 +235,29 @@ fun AppointmentCard(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
+
+                        if (paymentStatus == AppointmentPaymentStatus.PAYMENT_LATER) {
+                            Spacer(Modifier.height(6.dp))
+
+                            Text(
+                                text = Locales.t("payment_later"),
+                                fontSize = (11 * fontScale).sp,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colors.primary
+                            )
+                        } else if (
+                            paymentStatus == AppointmentPaymentStatus.PAID_AFTER_DELAY &&
+                            status == LiveStatusKey.DONE
+                        ) {
+                            Spacer(Modifier.height(6.dp))
+
+                            Text(
+                                text = Locales.t("paid_later"),
+                                fontSize = (11 * fontScale).sp,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f)
+                            )
+                        }
                     }
 
                     if (status == LiveStatusKey.DONE) {
@@ -251,7 +273,6 @@ fun AppointmentCard(
             }
         }
     } else {
-        // ====== EXACT DayDetails "filled slot" DESIGN (текущий) ======
         val bg = dayDetailsBackgroundColor ?: MaterialTheme.colors.surface
 
         Card(
@@ -273,7 +294,6 @@ fun AppointmentCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
             ) {
-                // time col (как было)
                 val timeColWidth = 60.dp
                 val timeFont = (16 * fontScale).sp
                 val timeFontWeight = FontWeight.Bold
@@ -309,7 +329,9 @@ fun AppointmentCard(
                 }
 
                 Column(
-                    modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp)
                 ) {
                     Text(
                         text = appt.clientName,
@@ -329,6 +351,29 @@ fun AppointmentCard(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+
+                    if (paymentStatus == AppointmentPaymentStatus.PAYMENT_LATER) {
+                        Spacer(modifier = Modifier.height(6.dp))
+
+                        Text(
+                            text = Locales.t("payment_later"),
+                            fontSize = (11 * fontScale).sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colors.primary
+                        )
+                    } else if (
+                        paymentStatus == AppointmentPaymentStatus.PAID_AFTER_DELAY &&
+                        status == LiveStatusKey.DONE
+                    ) {
+                        Spacer(modifier = Modifier.height(6.dp))
+
+                        Text(
+                            text = Locales.t("paid_later"),
+                            fontSize = (11 * fontScale).sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f)
+                        )
+                    }
                 }
 
                 if (priceText.isNotBlank()) {
@@ -380,6 +425,7 @@ fun AppointmentDetailsDialog(
         amount = appt.price,
         currencyCode = appt.currency
     )
+    val paymentStatus = appt.effectivePaymentStatus()
 
     val dateTextColor = MaterialTheme.colors.primary.copy(alpha = 0.95f)
     val timeTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.72f)
@@ -450,6 +496,33 @@ fun AppointmentDetailsDialog(
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = "${Locales.t("price")}: $priceText",
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+                        )
+                    }
+
+                    if (paymentStatus == AppointmentPaymentStatus.PAYMENT_LATER) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = Locales.t("payment_later"),
+                            color = MaterialTheme.colors.primary.copy(alpha = 0.95f),
+                            fontWeight = FontWeight.Medium
+                        )
+                    } else if (
+                        paymentStatus == AppointmentPaymentStatus.PAID_AFTER_DELAY &&
+                        status == LiveStatusKey.DONE
+                    ) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = Locales.t("paid_later"),
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.75f),
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
+                    if (appt.notes.isNotBlank()) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = "${Locales.t("view_comment")}: ${appt.notes}",
                             color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
                         )
                     }

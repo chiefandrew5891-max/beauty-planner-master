@@ -888,8 +888,18 @@ fun AppRootDialogs(state: AppRootState) {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        state.appointments.remove(state.showDeleteConfirm)
-                        state.saveAll()
+                        val target = state.showDeleteConfirm
+                        if (target != null) {
+                            val idx = state.appointments.indexOfFirst { it.id == target.id }
+                            if (idx >= 0) {
+                                val nowMillis = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+                                state.appointments[idx] = com.andrey.beautyplanner.AppointmentSyncUtils.markDeleted(
+                                    source = state.appointments[idx],
+                                    nowMillis = nowMillis
+                                )
+                                state.saveAll()
+                            }
+                        }
                         state.showDeleteConfirm = null
                     }
                 ) {

@@ -15,8 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -212,13 +210,9 @@ fun AppearanceSettingsScreen(state: AppRootState) {
                     fontSize = (16 * fontScale).sp,
                     color = onSurface
                 )
-                Switch(
+                AppSwitch(
                     checked = useShortTextCurrencyDraft,
-                    onCheckedChange = { useShortTextCurrencyDraft = it },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colors.primary,
-                        checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
-                    )
+                    onCheckedChange = { useShortTextCurrencyDraft = it }
                 )
             }
 

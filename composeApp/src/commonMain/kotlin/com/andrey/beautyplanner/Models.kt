@@ -2,6 +2,12 @@ package com.andrey.beautyplanner
 
 import kotlinx.serialization.Serializable
 
+enum class AppointmentPaymentStatus {
+    PAID,
+    PAYMENT_LATER,
+    PAID_AFTER_DELAY
+}
+
 @Serializable
 data class Appointment(
     val id: String,
@@ -14,6 +20,10 @@ data class Appointment(
     val durationMinutes: Int = 0,
     val durationHours: Int = 1,
     val notes: String = "",
+    val paymentDeferred: Boolean = false,
+    val paymentStatus: String = "",
+    val updatedAtMillis: Long = 0L,
+    val isDeleted: Boolean = false,
     val currency: String = "EUR"
 )
 @Serializable
@@ -44,6 +54,7 @@ enum class Screen {
     DAY_DETAILS,
     SETTINGS,
     STATS,
+    UNPAID_APPOINTMENTS,
     FEEDBACK,
     PRIVACY_POLICY,
     PREMIUM_ACCESS,

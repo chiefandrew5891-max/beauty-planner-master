@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.auth.isAppleSignInSupported
 
 @Composable
 fun AuthWelcomeScreen(
     errorMessage: String?,
     onContinueWithGoogle: () -> Unit,
+    onContinueWithApple: () -> Unit,
     onContinueWithEmail: () -> Unit,
     onRegisterWithEmail: () -> Unit,
     onContinueAnonymously: () -> Unit
@@ -59,6 +61,13 @@ fun AuthWelcomeScreen(
                 text = Locales.t("auth_google"),
                 onClick = onContinueWithGoogle
             )
+
+            if (isAppleSignInSupported()) {
+                SecondaryActionButton(
+                    text = Locales.t("auth_apple"),
+                    onClick = onContinueWithApple
+                )
+            }
 
             SecondaryActionButton(
                 text = Locales.t("auth_email_sign_in"),

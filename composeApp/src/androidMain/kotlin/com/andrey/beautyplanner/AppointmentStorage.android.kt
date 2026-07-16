@@ -3,8 +3,6 @@ package com.andrey.beautyplanner
 import android.content.Context
 import java.io.File
 
-private const val DB_FILE_NAME = "appointments_db.json"
-
 object AndroidAppContext {
     var context: Context? = null
     var activity: android.app.Activity? = null
@@ -13,18 +11,28 @@ object AndroidAppContext {
 actual fun createAppointmentStorage(): AppointmentStorage {
     val ctx = AndroidAppContext.context
         ?: error("AndroidAppContext.context is not set. Set it before calling DataManager.")
-    val file = File(ctx.filesDir, DB_FILE_NAME)
-    return FileAppointmentStorage(file)
+    return FileAppointmentStorage(ctx)
 }
 
 private class FileAppointmentStorage(
-    private val file: File
+    private val context: Context
 ) : AppointmentStorage {
-    override fun write(text: String) {
-        file.writeText(text)
+
+    override fun write(profileKey: String, text: String) {
+        fileFor(profileKey).writeText(text)
     }
 
-    override fun read(): String? {
+    override fun read(profileKey: String): String? {
+        val file = fileFor(profileKey)
         return if (file.exists()) file.readText() else null
+    }
+
+    private fun fileFor(profileKey: String): File {
+        val safeKey = profileKey
+            .trim()
+            .ifBlank { "guest" }
+            .replace(Regex("[^a-zA-Z0-9_-]"), "_")
+
+        return File(context.filesDir, "appointments_db_$safeKey.json")
     }
 }

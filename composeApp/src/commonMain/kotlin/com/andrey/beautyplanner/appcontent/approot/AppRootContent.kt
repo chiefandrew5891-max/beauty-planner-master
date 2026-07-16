@@ -38,8 +38,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
 import com.andrey.beautyplanner.appcontent.AuthEmailScreen
 import kotlinx.coroutines.launch
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 
 
+@OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun AppRootContent(
     state: AppRootState,
@@ -153,6 +157,9 @@ fun AppRootContent(
                 onContinueWithGoogle = {
                     state.continueWithGoogle()
                 },
+                onContinueWithApple = {
+                    state.continueWithApple()
+                },
                 onContinueWithEmail = {
                     state.openEmailSignInScreen()
                 },
@@ -181,7 +188,7 @@ fun AppRootContent(
 
                 if (AccessManager.hasFeature(PremiumFeature.STATS, nowMillis)) {
                     StatsPage(
-                        appointments = state.appointments,
+                        appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
                         today = state.today
                     )
                 } else {
@@ -222,6 +229,13 @@ fun AppRootContent(
                 }
             )
 
+            Screen.UNPAID_APPOINTMENTS -> UnpaidAppointmentsScreen(
+                appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                onConfirmPayment = { appt ->
+                    state.confirmDeferredPayment(appt)
+                }
+            )
+
             Screen.MONTH -> {
                 var nowTimeHm by remember { mutableStateOf(getCurrentTimeHm()) }
                 LaunchedEffect(Unit) {
@@ -240,7 +254,7 @@ fun AppRootContent(
                 val upcoming by remember(nowTimeHm, state.today, state.appointments.size) {
                     derivedStateOf {
                         getUpcomingAppointments(
-                            appointments = state.appointments,
+                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
                             today = state.today,
                             nowTime = nowTimeHm
                         )
@@ -293,146 +307,160 @@ fun AppRootContent(
                         }
                     }
                 }
-
-                CenteredContentContainer(maxWidth = 980.dp) {
-                    Column(Modifier.fillMaxSize()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp, vertical = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = headerText,
-                                fontSize = (24 * state.fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.onBackground
-                            )
-                            Row {
-                                val arrowsEnabled = !isCollapsed
-                                val arrowTint = if (arrowsEnabled) {
-                                    MaterialTheme.colors.primary
-                                } else {
-                                    MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
-                                }
-                                IconButton(
-                                    enabled = arrowsEnabled,
-                                    onClick = { state.calendarViewDate = state.calendarViewDate.minus(1, DateTimeUnit.MONTH) }
+                val pullRefreshState = rememberPullRefreshState(
+                    refreshing = state.isRefreshing,
+                    onRefresh = { state.manualRefresh() }
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pullRefresh(pullRefreshState)
+                    ) {
+                        CenteredContentContainer(maxWidth = 980.dp) {
+                            Column(Modifier.fillMaxSize()) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.KeyboardArrowLeft,
-                                        contentDescription = null,
-                                        tint = arrowTint
+                                    Text(
+                                        text = headerText,
+                                        fontSize = (24 * state.fontScale).sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colors.onBackground
                                     )
-                                }
-                                IconButton(
-                                    enabled = arrowsEnabled,
-                                    onClick = { state.calendarViewDate = state.calendarViewDate.plus(1, DateTimeUnit.MONTH) }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.KeyboardArrowRight,
-                                        contentDescription = null,
-                                        tint = arrowTint
-                                    )
-                                }
-                            }
-                        }
-
-                        LazyColumn(
-                            state = listState,
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(bottom = 24.dp)
-                        ) {
-                            item {
-                                MonthCalendarGrid(
-                                    monthDate = state.calendarViewDate,
-                                    today = state.today,
-                                    selectedDate = state.selectedDate
-                                ) { date ->
-                                    state.selectedDate = date
-                                    state.navigateTo(Screen.DAY_DETAILS)
-                                }
-                            }
-
-                            item {
-                                Divider(
-                                    modifier = Modifier.padding(horizontal = 40.dp, vertical = 16.dp),
-                                    color = Color.LightGray.copy(alpha = 0.5f),
-                                    thickness = 1.dp
-                                )
-                                Text(
-                                    text = Locales.t("upcoming_appointments_list"),
-                                    modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
-                                    fontSize = (16 * state.fontScale).sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray
-                                )
-                            }
-
-                            if (upcoming.isEmpty()) {
-                                item {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 12.dp, bottom = 40.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            text = Locales.t("no_upcoming_appointments"),
-                                            color = Color.Gray,
-                                            fontSize = (14 * state.fontScale).sp
-                                        )
+                                    Row {
+                                        val arrowsEnabled = !isCollapsed
+                                        val arrowTint = if (arrowsEnabled) {
+                                            MaterialTheme.colors.primary
+                                        } else {
+                                            MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
+                                        }
+                                        IconButton(
+                                            enabled = arrowsEnabled,
+                                            onClick = { state.calendarViewDate = state.calendarViewDate.minus(1, DateTimeUnit.MONTH) }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.KeyboardArrowLeft,
+                                                contentDescription = null,
+                                                tint = arrowTint
+                                            )
+                                        }
+                                        IconButton(
+                                            enabled = arrowsEnabled,
+                                            onClick = { state.calendarViewDate = state.calendarViewDate.plus(1, DateTimeUnit.MONTH) }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.KeyboardArrowRight,
+                                                contentDescription = null,
+                                                tint = arrowTint
+                                            )
+                                        }
                                     }
                                 }
-                            } else {
-                                items(upcoming.size) { idx ->
-                                    val appt = upcoming[idx]
-                                    val durationMin =
-                                        if (appt.durationMinutes > 0) appt.durationMinutes
-                                        else appt.durationHours.coerceAtLeast(1) * 60
-                                    val startMin =
-                                        com.andrey.beautyplanner.utils.parseHmToMinutes(appt.time) ?: 0
-                                    val endMin = startMin + durationMin
-                                    val endHour = ((endMin / 60) % 24).toString().padStart(2, '0')
-                                    val endMinute = (endMin % 60).toString().padStart(2, '0')
-                                    val endHm = "$endHour:$endMinute"
-                                    val status = getLiveStatus(
-                                        appt = appt,
-                                        nowDate = state.today,
-                                        nowMinutes = nowMin
-                                    )
-                                    AppointmentCard(
-                                        appt = appt,
-                                        status = status,
-                                        showDateInCard = true,
-                                        startHm = appt.time,
-                                        endHm = endHm,
-                                        nowDate = state.today,
-                                        nowMinutes = nowMin,
-                                        onClick = {
-                                            viewingAppt = appt
-                                            viewingStartHm = appt.time
-                                            viewingEndHm = endHm
-                                            viewingStatus = status
-                                        },
-                                        onLongClick = {
-                                            viewingAppt = appt
-                                            viewingStartHm = appt.time
-                                            viewingEndHm = endHm
-                                            viewingStatus = status
+
+                                LazyColumn(
+                                    state = listState,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentPadding = PaddingValues(bottom = 24.dp)
+                                ) {
+                                    item {
+                                        MonthCalendarGrid(
+                                            monthDate = state.calendarViewDate,
+                                            today = state.today,
+                                            selectedDate = state.selectedDate
+                                        ) { date ->
+                                            state.selectedDate = date
+                                            state.navigateTo(Screen.DAY_DETAILS)
                                         }
-                                    )
+                                    }
+
+                                    item {
+                                        Divider(
+                                            modifier = Modifier.padding(horizontal = 40.dp, vertical = 16.dp),
+                                            color = Color.LightGray.copy(alpha = 0.5f),
+                                            thickness = 1.dp
+                                        )
+                                        Text(
+                                            text = Locales.t("upcoming_appointments_list"),
+                                            modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
+                                            fontSize = (16 * state.fontScale).sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = Color.Gray
+                                        )
+                                    }
+
+                                    if (upcoming.isEmpty()) {
+                                        item {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = 12.dp, bottom = 40.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text(
+                                                    text = Locales.t("no_upcoming_appointments"),
+                                                    color = Color.Gray,
+                                                    fontSize = (14 * state.fontScale).sp
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        items(upcoming.size) { idx ->
+                                            val appt = upcoming[idx]
+                                            val durationMin =
+                                                if (appt.durationMinutes > 0) appt.durationMinutes
+                                                else appt.durationHours.coerceAtLeast(1) * 60
+                                            val startMin =
+                                                com.andrey.beautyplanner.utils.parseHmToMinutes(appt.time) ?: 0
+                                            val endMin = startMin + durationMin
+                                            val endHour = ((endMin / 60) % 24).toString().padStart(2, '0')
+                                            val endMinute = (endMin % 60).toString().padStart(2, '0')
+                                            val endHm = "$endHour:$endMinute"
+                                            val status = getLiveStatus(
+                                                appt = appt,
+                                                nowDate = state.today,
+                                                nowMinutes = nowMin
+                                            )
+                                            AppointmentCard(
+                                                appt = appt,
+                                                status = status,
+                                                showDateInCard = true,
+                                                startHm = appt.time,
+                                                endHm = endHm,
+                                                nowDate = state.today,
+                                                nowMinutes = nowMin,
+                                                onClick = {
+                                                    viewingAppt = appt
+                                                    viewingStartHm = appt.time
+                                                    viewingEndHm = endHm
+                                                    viewingStatus = status
+                                                },
+                                                onLongClick = {
+                                                    viewingAppt = appt
+                                                    viewingStartHm = appt.time
+                                                    viewingEndHm = endHm
+                                                    viewingStatus = status
+                                                }
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
+                    PullRefreshIndicator(
+                        refreshing = state.isRefreshing,
+                        state = pullRefreshState,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
                 }
             }
 
             Screen.DAY_DETAILS -> DayDetailsView(
                 date = state.selectedDate,
-                appointments = state.appointments,
+                appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
                 onDateChange = { state.selectedDate = it },
                 onTimeClick = { time ->
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
@@ -589,6 +617,7 @@ fun AppRootContent(
                 dbOpsAllowed = AppSettings.pinEnabled && AppSettings.isPinSet()
             )
             Screen.DEVELOPER_ACCESS -> DeveloperAccessScreen(
+                state = state,
                 accessState = state.accessState,
                 onEnablePremium = {
                     AppSettings.developerPremiumOverrideEnabled = true
@@ -616,18 +645,21 @@ fun AppRootContent(
                 time = state.editingAppointment?.time ?: state.selectedTimeSlot,
                 initialData = state.editingAppointment ?: state.transferA,
                 readOnly = state.bookingReadOnly && state.editingAppointment != null,
-                localClientSuggestions = ClientSuggestions.fromAppointments(state.appointments),
+                localClientSuggestions = ClientSuggestions.fromAppointments(
+                    AppointmentSyncUtils.visibleAppointments(state.appointments)
+                ),
                 onDismiss = {
                     state.showBookingDialog = false
                     state.editingAppointment = null
                     state.transferA = null
                     state.bookingReadOnly = false
                 },
-                onSave = { startTime, durationMinutes, name, phone, service, price, currencyCode -> // <-- Добавили currencyCode
-                    val id = state.editingAppointment?.id
-                        ?: state.transferA?.id
-                        ?: Clock.System.now().toEpochMilliseconds().toString()
+                onSave = { startTime, durationMinutes, name, phone, service, price, currencyCode, notes, paymentDeferred ->
+                    val existing = state.editingAppointment ?: state.transferA
+                    val id = existing?.id ?: Clock.System.now().toEpochMilliseconds().toString()
                     val targetDate = state.selectedDate.toString()
+                    val nowMillis = Clock.System.now().toEpochMilliseconds()
+
                     val newAppt = Appointment(
                         id = id,
                         dateString = targetDate,
@@ -638,16 +670,24 @@ fun AppRootContent(
                         price = price,
                         durationMinutes = durationMinutes,
                         durationHours = ((durationMinutes + 59) / 60).coerceAtLeast(1),
-                        currency = currencyCode // <-- Намертво привязываем переданную валюту к объекту!
+                        notes = notes,
+                        paymentDeferred = paymentDeferred,
+                        paymentStatus = if (paymentDeferred) {
+                            AppointmentPaymentStatus.PAYMENT_LATER.name
+                        } else {
+                            AppointmentPaymentStatus.PAID.name
+                        },
+                        updatedAtMillis = nowMillis,
+                        isDeleted = existing?.isDeleted ?: false,
+                        currency = currencyCode
                     )
-                    state.transferA?.let {
-                        state.appointments.remove(it)
-                        state.transferA = null
-                    }
+
                     state.replaceById(newAppt)
                     state.saveAll()
+
                     state.showBookingDialog = false
                     state.editingAppointment = null
+                    state.transferA = null
                     state.bookingReadOnly = false
                 },
                 onTransferRequest = { appt ->

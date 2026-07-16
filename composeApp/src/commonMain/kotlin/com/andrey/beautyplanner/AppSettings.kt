@@ -96,6 +96,7 @@ private data class SettingsSnapshot(
 
     val installId: String = "",
     val backendUserId: String = "",
+    val localProfileUserId: String = "",
     val lastAuthenticatedAppOpenAtMillis: Long = 0L,
     val cachedAccessTier: String = "FREE_LIMITED",
     val cachedTrialEndsAtMillis: Long = 0L,
@@ -109,12 +110,16 @@ private data class SettingsSnapshot(
     val pinEnabled: Boolean = false,
     val adminPinHash: String = "",
     val developerModeUnlocked: Boolean = false,
-    val developerPremiumOverrideEnabled: Boolean = false
+    val developerPremiumOverrideEnabled: Boolean = false,
+
+    val cloudSettingsUpdatedAtMillis: Long = 0L,
 )
 
 object AppSettings {
     const val SHOW_DEVELOPER_PREMIUM_TOOLS = true
     private val storage: SettingsStorage by lazy { createSettingsStorage() }
+
+    var cloudSettingsUpdatedAtMillis by mutableStateOf(0L)
 
     var selectedCurrency by mutableStateOf("EUR")
     var useShortTextCurrency by mutableStateOf(false)
@@ -234,6 +239,7 @@ object AppSettings {
 
     var installId by mutableStateOf("")
     var backendUserId by mutableStateOf("")
+    var localProfileUserId by mutableStateOf("")
     var lastAuthenticatedAppOpenAtMillis by mutableStateOf(0L)
     var cachedAccessTier by mutableStateOf("FREE_LIMITED")
     var cachedTrialEndsAtMillis by mutableStateOf(0L)
@@ -384,6 +390,57 @@ object AppSettings {
         }
     }
 
+    fun exportCloudSettingsSnapshot(nowMillis: Long): CloudSettingsSnapshot {
+        cloudSettingsUpdatedAtMillis = nowMillis
+
+        return CloudSettingsSnapshot(
+            ownerName = ownerName,
+            selectedCurrency = selectedCurrency,
+            useShortTextCurrency = useShortTextCurrency,
+
+            notificationsEnabled = notificationsEnabled,
+            notificationSoundType = notificationSoundType,
+            notificationSoundId = notificationSoundId,
+            notificationSoundDisplayName = notificationSoundDisplayName,
+
+            reminderDaysBefore = reminderDaysBefore,
+            reminderHoursBefore = reminderHoursBefore,
+            reminderMinutesBefore = reminderMinutesBefore,
+
+            serviceTemplates = serviceTemplates,
+            weeklyBlockedIntervals = weeklyBlockedIntervals,
+            scheduleDateOverrides = scheduleDateOverrides,
+
+            updatedAtMillis = nowMillis
+        )
+    }
+
+    fun applyCloudSettingsSnapshot(snapshot: CloudSettingsSnapshot) {
+        ownerName = snapshot.ownerName
+        selectedCurrency = snapshot.selectedCurrency
+        useShortTextCurrency = snapshot.useShortTextCurrency
+
+        notificationsEnabled = snapshot.notificationsEnabled
+        notificationSoundType = snapshot.notificationSoundType
+        notificationSoundId = snapshot.notificationSoundId
+        notificationSoundDisplayName = snapshot.notificationSoundDisplayName
+
+        reminderDaysBefore = snapshot.reminderDaysBefore
+        reminderHoursBefore = snapshot.reminderHoursBefore
+        reminderMinutesBefore = snapshot.reminderMinutesBefore
+
+        serviceTemplates = if (snapshot.serviceTemplates.isNotEmpty()) {
+            snapshot.serviceTemplates
+        } else {
+            defaultServiceTemplates()
+        }
+
+        weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals
+        scheduleDateOverrides = snapshot.scheduleDateOverrides
+        cloudSettingsUpdatedAtMillis = snapshot.updatedAtMillis
+        persist()
+    }
+
     fun isPinSet(): Boolean = adminPinHash.isNotBlank()
 
     fun isPinValidFormat(pin: String): Boolean =
@@ -503,6 +560,7 @@ object AppSettings {
 
         installId = snapshot.installId
         backendUserId = snapshot.backendUserId
+        localProfileUserId = snapshot.localProfileUserId
         lastAuthenticatedAppOpenAtMillis = snapshot.lastAuthenticatedAppOpenAtMillis
         cachedAccessTier = snapshot.cachedAccessTier
         cachedTrialEndsAtMillis = snapshot.cachedTrialEndsAtMillis
@@ -522,6 +580,7 @@ object AppSettings {
         adminPinHash = snapshot.adminPinHash
         developerModeUnlocked = snapshot.developerModeUnlocked
         developerPremiumOverrideEnabled = snapshot.developerPremiumOverrideEnabled
+        cloudSettingsUpdatedAtMillis = snapshot.cloudSettingsUpdatedAtMillis
 
         val code = languageCodes[selectedLanguage] ?: "en"
         Locales.currentLanguage = code
@@ -564,6 +623,7 @@ object AppSettings {
 
             installId = installId,
             backendUserId = backendUserId,
+            localProfileUserId = localProfileUserId,
             lastAuthenticatedAppOpenAtMillis = lastAuthenticatedAppOpenAtMillis,
             cachedAccessTier = cachedAccessTier,
             cachedTrialEndsAtMillis = cachedTrialEndsAtMillis,
@@ -577,7 +637,8 @@ object AppSettings {
             pinEnabled = pinEnabled,
             adminPinHash = adminPinHash,
             developerModeUnlocked = developerModeUnlocked,
-            developerPremiumOverrideEnabled = developerPremiumOverrideEnabled
+            developerPremiumOverrideEnabled = developerPremiumOverrideEnabled,
+            cloudSettingsUpdatedAtMillis = cloudSettingsUpdatedAtMillis,
         )
 
         runCatching {

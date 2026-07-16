@@ -28,6 +28,8 @@ import com.andrey.beautyplanner.ServiceTemplate
 import kotlinx.coroutines.delay
 import androidx.compose.ui.text.TextStyle
 import com.andrey.beautyplanner.appcontent.appFontFamily
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 
 private fun displayServiceTitle(title: String): String {
     return if (title.startsWith("service_")) {
@@ -35,6 +37,10 @@ private fun displayServiceTitle(title: String): String {
     } else {
         title
     }
+}
+private fun isValidPriceInput(value: String): Boolean {
+    if (value.isBlank()) return false
+    return value.matches(Regex("""^\d+([.,]\d{0,2})?$"""))
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -45,7 +51,7 @@ fun BookingDialog(
     readOnly: Boolean,
     localClientSuggestions: List<ClientSuggestion>,
     onDismiss: () -> Unit,
-    onSave: (String, Int, String, String, String, String, String) -> Unit,
+    onSave: (String, Int, String, String, String, String, String, String, Boolean) -> Unit,
     onTransferRequest: (Appointment) -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
@@ -76,6 +82,8 @@ fun BookingDialog(
     var phone by remember(initKey) { mutableStateOf(initialData?.phone ?: "") }
     var serviceKey by remember(initKey) { mutableStateOf(initialData?.serviceName ?: "") }
     var price by remember(initKey) { mutableStateOf(initialData?.price ?: "") }
+    var notes by remember(initKey) { mutableStateOf(initialData?.notes ?: "") }
+    var paymentDeferred by remember(initKey) { mutableStateOf(initialData?.paymentDeferred == true) }
 
     val otherKey = "service_other"
     var serviceIsOther by remember(initKey) { mutableStateOf(false) }
@@ -134,7 +142,7 @@ fun BookingDialog(
     } else {
         serviceKey.trim().isNotBlank()
     }
-    val priceOk = price.trim().isNotBlank()
+    val priceOk = isValidPriceInput(price.trim())
 
     val endAbs = parseHmToMinutes(endTime)
     val endOk = endAbs != null && endAbs > startAbsMinutes
@@ -683,7 +691,17 @@ fun BookingDialog(
 
                 OutlinedTextField(
                     value = price,
-                    onValueChange = { newValue -> price = newValue },
+                    onValueChange = { newValue ->
+                        val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' }
+                        val separatorsCount = filtered.count { it == '.' || it == ',' }
+
+                        price = when {
+                            filtered.isEmpty() -> ""
+                            separatorsCount <= 1 -> filtered
+                            else -> price
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     enabled = editEnabled,
                     label = { Text(Locales.t("price") + " (${AppSettings.currencySymbol()})") },
                     modifier = Modifier.fillMaxWidth(),
@@ -708,6 +726,68 @@ fun BookingDialog(
                         errorCursorColor = MaterialTheme.colors.error
                     )
                 )
+                if (triedSave && editEnabled && !priceOk) {
+                    Text(
+                        text = "Enter numbers only",
+                        color = MaterialTheme.colors.error,
+                        fontSize = (12 * fontScale).sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 6.dp)
+                    )
+                }
+                Spacer(Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = notes,
+                    onValueChange = { newValue -> notes = newValue },
+                    enabled = editEnabled,
+                    label = { Text(Locales.t("booking_comment")) },
+                    placeholder = {
+                        Text(Locales.t("booking_comment_hint"))
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    singleLine = false,
+                    minLines = 3,
+                    maxLines = 5,
+                    textStyle = TextStyle(
+                        fontFamily = appFontFamily(),
+                        color = MaterialTheme.colors.onSurface
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        focusedBorderColor = MaterialTheme.colors.primary,
+                        unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.28f),
+                        focusedLabelColor = MaterialTheme.colors.primary,
+                        unfocusedLabelColor = MaterialTheme.colors.onSurface.copy(alpha = 0.68f),
+                        cursorColor = MaterialTheme.colors.primary,
+                        backgroundColor = MaterialTheme.colors.surface,
+                        placeholderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.50f),
+                        errorBorderColor = MaterialTheme.colors.error,
+                        errorCursorColor = MaterialTheme.colors.error
+                    )
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = Locales.t("booking_payment_deferred"),
+                        fontSize = (15 * fontScale).sp,
+                        color = MaterialTheme.colors.onSurface
+                    )
+
+                    AppSwitch(
+                        checked = paymentDeferred,
+                        onCheckedChange = { paymentDeferred = it },
+                        enabled = editEnabled
+                    )
+                }
 
                 Spacer(Modifier.height(16.dp))
 
@@ -743,7 +823,9 @@ fun BookingDialog(
                                 phone.trim(),
                                 serviceToStore,
                                 price.trim(),
-                                initialData?.currency ?: AppSettings.selectedCurrency
+                                initialData?.currency ?: AppSettings.selectedCurrency,
+                                notes.trim(),
+                                paymentDeferred
                             )
                         },
                         modifier = Modifier

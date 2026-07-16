@@ -12,8 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -123,18 +121,12 @@ fun NotificationsSettingsScreen() {
                     fontSize = (16 * fontScale).sp,
                     color = onSurface
                 )
-                Switch(
+                AppSwitch(
                     checked = AppSettings.notificationsEnabled,
                     onCheckedChange = {
                         AppSettings.notificationsEnabled = it
                         AppSettings.persist()
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colors.primary,
-                        checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.35f),
-                        uncheckedThumbColor = onSurface.copy(alpha = 0.45f),
-                        uncheckedTrackColor = onSurface.copy(alpha = 0.20f)
-                    )
+                    }
                 )
             }
             SettingsDropdown(
