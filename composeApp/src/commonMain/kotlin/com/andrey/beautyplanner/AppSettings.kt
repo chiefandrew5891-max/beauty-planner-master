@@ -97,6 +97,9 @@ private data class SettingsSnapshot(
     val installId: String = "",
     val backendUserId: String = "",
     val localProfileUserId: String = "",
+    val lastAuthProvider: String = "",
+    val lastAuthEmail: String = "",
+    val lastAuthDisplayName: String = "",
     val lastAuthenticatedAppOpenAtMillis: Long = 0L,
     val cachedAccessTier: String = "FREE_LIMITED",
     val cachedTrialEndsAtMillis: Long = 0L,
@@ -113,6 +116,12 @@ private data class SettingsSnapshot(
     val developerPremiumOverrideEnabled: Boolean = false,
 
     val cloudSettingsUpdatedAtMillis: Long = 0L,
+
+    val lastUpdateCheckAtMillis: Long = 0L,
+    val lastKnownUpdateAvailable: Boolean = false,
+    val lastKnownLatestVersion: String = "",
+    val lastKnownLatestBuild: String = "",
+    val lastKnownStoreUrl: String = "",
 )
 
 object AppSettings {
@@ -240,11 +249,19 @@ object AppSettings {
     var installId by mutableStateOf("")
     var backendUserId by mutableStateOf("")
     var localProfileUserId by mutableStateOf("")
+    var lastAuthProvider by mutableStateOf("")
+    var lastAuthEmail by mutableStateOf("")
+    var lastAuthDisplayName by mutableStateOf("")
     var lastAuthenticatedAppOpenAtMillis by mutableStateOf(0L)
     var cachedAccessTier by mutableStateOf("FREE_LIMITED")
     var cachedTrialEndsAtMillis by mutableStateOf(0L)
     var cachedHasPremium by mutableStateOf(false)
     var cachedSubscriptionState by mutableStateOf("NONE")
+    var lastUpdateCheckAtMillis by mutableStateOf(0L)
+    var lastKnownUpdateAvailable by mutableStateOf(false)
+    var lastKnownLatestVersion by mutableStateOf("")
+    var lastKnownLatestBuild by mutableStateOf("")
+    var lastKnownStoreUrl by mutableStateOf("")
 
     fun currencySymbol(): String {
         return currencySymbolFor(selectedCurrency, useShortTextCurrency)
@@ -561,6 +578,9 @@ object AppSettings {
         installId = snapshot.installId
         backendUserId = snapshot.backendUserId
         localProfileUserId = snapshot.localProfileUserId
+        lastAuthProvider = snapshot.lastAuthProvider
+        lastAuthEmail = snapshot.lastAuthEmail
+        lastAuthDisplayName = snapshot.lastAuthDisplayName
         lastAuthenticatedAppOpenAtMillis = snapshot.lastAuthenticatedAppOpenAtMillis
         cachedAccessTier = snapshot.cachedAccessTier
         cachedTrialEndsAtMillis = snapshot.cachedTrialEndsAtMillis
@@ -581,6 +601,12 @@ object AppSettings {
         developerModeUnlocked = snapshot.developerModeUnlocked
         developerPremiumOverrideEnabled = snapshot.developerPremiumOverrideEnabled
         cloudSettingsUpdatedAtMillis = snapshot.cloudSettingsUpdatedAtMillis
+
+        lastUpdateCheckAtMillis = snapshot.lastUpdateCheckAtMillis
+        lastKnownUpdateAvailable = snapshot.lastKnownUpdateAvailable
+        lastKnownLatestVersion = snapshot.lastKnownLatestVersion
+        lastKnownLatestBuild = snapshot.lastKnownLatestBuild
+        lastKnownStoreUrl = snapshot.lastKnownStoreUrl
 
         val code = languageCodes[selectedLanguage] ?: "en"
         Locales.currentLanguage = code
@@ -624,6 +650,9 @@ object AppSettings {
             installId = installId,
             backendUserId = backendUserId,
             localProfileUserId = localProfileUserId,
+            lastAuthProvider = lastAuthProvider,
+            lastAuthEmail = lastAuthEmail,
+            lastAuthDisplayName = lastAuthDisplayName,
             lastAuthenticatedAppOpenAtMillis = lastAuthenticatedAppOpenAtMillis,
             cachedAccessTier = cachedAccessTier,
             cachedTrialEndsAtMillis = cachedTrialEndsAtMillis,
@@ -639,6 +668,11 @@ object AppSettings {
             developerModeUnlocked = developerModeUnlocked,
             developerPremiumOverrideEnabled = developerPremiumOverrideEnabled,
             cloudSettingsUpdatedAtMillis = cloudSettingsUpdatedAtMillis,
+            lastUpdateCheckAtMillis = lastUpdateCheckAtMillis,
+            lastKnownUpdateAvailable = lastKnownUpdateAvailable,
+            lastKnownLatestVersion = lastKnownLatestVersion,
+            lastKnownLatestBuild = lastKnownLatestBuild,
+            lastKnownStoreUrl = lastKnownStoreUrl,
         )
 
         runCatching {

@@ -206,8 +206,13 @@ fun AppRootContent(
 
             Screen.FEEDBACK -> FeedbackPage(
                 phone = AppSettings.servicePhone,
+                updateStatus = state.appUpdateStatus,
+                isCheckingUpdates = state.isCheckingAppUpdates,
                 onCallClick = { phone ->
                     if (phone.isNotBlank()) PhoneCaller.call(phone)
+                },
+                onCheckUpdatesClick = {
+                    state.checkForAppUpdates()
                 }
             )
 

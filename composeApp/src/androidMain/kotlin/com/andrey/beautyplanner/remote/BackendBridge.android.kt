@@ -30,6 +30,42 @@ actual object BackendBridge {
                 }
         }
     }
+    actual suspend fun checkAppUpdate(
+        platform: String,
+        versionName: String,
+        buildNumber: String
+    ): Map<String, String> {
+        val functions = Firebase.functions
+
+        return suspendCancellableCoroutine { cont ->
+            functions
+                .getHttpsCallable("checkAppUpdate")
+                .call(
+                    mapOf(
+                        "platform" to platform,
+                        "versionName" to versionName,
+                        "buildNumber" to buildNumber
+                    )
+                )
+                .addOnSuccessListener { result ->
+                    try {
+                        val map = result.data as? Map<*, *>
+                            ?: throw IllegalStateException("checkAppUpdate returned non-map result")
+
+                        val parsed = map.entries.associate { (key, value) ->
+                            key.toString() to (value?.toString() ?: "")
+                        }
+
+                        cont.resume(parsed)
+                    } catch (e: Exception) {
+                        cont.resumeWithException(e)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    cont.resumeWithException(e)
+                }
+        }
+    }
 
     actual suspend fun bootstrapUser(
         installId: String,

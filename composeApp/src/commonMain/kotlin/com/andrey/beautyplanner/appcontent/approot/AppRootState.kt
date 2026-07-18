@@ -125,6 +125,7 @@ class AppRootState(
     var isGlobalLoading by mutableStateOf(false)
     var globalLoadingMessage by mutableStateOf<String?>(null)
     var isRefreshing by mutableStateOf(false)
+    var isCheckingAppUpdates by mutableStateOf(false)
 
     data class ShiftItem(val apptId: String, val newStartMin: Int)
     data class ImportPreviewInfo(
@@ -140,6 +141,17 @@ class AppRootState(
     var shiftBlockedApptId by mutableStateOf<String?>(null)
 
     var currentLiveDarkMode by mutableStateOf(AppSettings.isDarkMode)
+
+    var appUpdateStatus by mutableStateOf(
+        AppUpdateStatus(
+            checked = AppSettings.lastUpdateCheckAtMillis > 0L,
+            updateAvailable = AppSettings.lastKnownUpdateAvailable,
+            latestVersion = AppSettings.lastKnownLatestVersion,
+            latestBuild = AppSettings.lastKnownLatestBuild,
+            storeUrl = AppSettings.lastKnownStoreUrl,
+            errorMessage = ""
+        )
+    )
 
     val colors: Colors
         get() = if (currentLiveDarkMode) {
@@ -283,6 +295,15 @@ class AppRootState(
             lower == "internal" || lower.contains("internal") ->
                 Locales.t("auth_error_generic")
 
+            lower.contains("underlying tasks failed") ||
+                    lower.contains("network") ||
+                    lower.contains("unable to resolve host") ||
+                    lower.contains("failed to connect") ||
+                    lower.contains("timeout") ||
+                    lower.contains("timed out") ||
+                    lower.contains("unreachable") ->
+                Locales.t("auth_error_no_internet")
+
             lower.contains("developer console is not set up correctly") ->
                 Locales.t("auth_google_failed")
 
@@ -325,8 +346,63 @@ class AppRootState(
             lower.contains("supplied auth credential is malformed or has expired") ->
                 Locales.t("auth_error_generic")
 
-            else -> text
+            else -> Locales.t("auth_error_sign_in_failed")
         }
+    }
+    fun checkForAppUpdates() {
+        if (isCheckingAppUpdates) return
+
+        scope.launch {
+            isCheckingAppUpdates = true
+            try {
+                val status = runCatching {
+                    AppUpdateChecker.check()
+                }.getOrElse {
+                    AppUpdateStatus(
+                        checked = true,
+                        updateAvailable = false,
+                        errorMessage = Locales.t("about_app_update_failed")
+                    )
+                }
+
+                appUpdateStatus = status
+                persistUpdateStatus(status)
+            } finally {
+                isCheckingAppUpdates = false
+            }
+        }
+    }
+    fun restoreOfflineAuthenticatedSessionIfPossible(): Boolean {
+        val savedUserId = AppSettings.localProfileUserId.trim()
+        val savedProviderRaw = AppSettings.lastAuthProvider.trim().uppercase()
+        val savedEmail = AppSettings.lastAuthEmail.trim()
+        val savedDisplayName = AppSettings.lastAuthDisplayName.trim()
+
+        if (savedUserId.isBlank() || savedProviderRaw.isBlank()) return false
+
+        val provider = when (savedProviderRaw) {
+            "GOOGLE" -> SignInProvider.GOOGLE
+            "APPLE" -> SignInProvider.APPLE
+            "EMAIL" -> SignInProvider.EMAIL
+            else -> return false
+        }
+
+        currentAuthUser = AuthUser(
+            uid = savedUserId,
+            provider = provider,
+            email = savedEmail,
+            displayName = savedDisplayName
+        )
+
+        AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
+        AppSettings.persist()
+
+        reloadAppointmentsForCurrentProfile()
+        refreshAccessState()
+        authResolved = true
+        authErrorMessage = null
+        currentScreen = Screen.MONTH
+        return true
     }
     var screenHistory by mutableStateOf(listOf<Screen>())
     fun navigateTo(screen: Screen) {
@@ -358,6 +434,18 @@ class AppRootState(
             isRefreshing = true
             try {
                 CloudSyncLogger.log("manualRefresh: started")
+
+                val hasSavedAuthenticatedSession =
+                    AppSettings.localProfileUserId.isNotBlank() &&
+                            AppSettings.lastAuthProvider.isNotBlank()
+
+                if (hasSavedAuthenticatedSession) {
+                    runCatching {
+                        bootstrapAuthenticatedUser()
+                    }.onFailure {
+                        CloudSyncLogger.log("manualRefresh: bootstrap failed: ${it.message}")
+                    }
+                }
 
                 reloadAppointmentsForCurrentProfile()
                 refreshAccessState()
@@ -440,15 +528,7 @@ class AppRootState(
             AuthGateway.signOut()
             AuthGateway.clearCredentialState()
             currentAuthUser = null
-            AppSettings.backendUserId = ""
-            AppSettings.localProfileUserId = ""
-            AppSettings.cachedAccessTier = "FREE_LIMITED"
-            AppSettings.cachedTrialEndsAtMillis = 0L
-            AppSettings.cachedHasPremium = false
-            AppSettings.cachedSubscriptionState = "NONE"
-            AppSettings.developerPremiumOverrideEnabled = false
-            AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
-            AppSettings.persist()
+            clearPersistedAuthenticatedSession()
             refreshAccessState(now)
             throw IllegalStateException("Authenticated session expired due to inactivity")
         }
@@ -485,8 +565,7 @@ class AppRootState(
         )
 
         currentAuthUser = currentUser
-        AppSettings.localProfileUserId = currentUser.uid
-        AppSettings.persist()
+        persistAuthenticatedSession(currentUser)
         com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
         reloadAppointmentsForCurrentProfile()
         refreshAccessState(Clock.System.now().toEpochMilliseconds())
@@ -518,9 +597,7 @@ class AppRootState(
                                 authProvider = result.user.provider.name.lowercase()
                             )
                             currentAuthUser = result.user
-                            AppSettings.localProfileUserId = result.user.uid
-                            AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
-                            AppSettings.persist()
+                            persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
                             reloadAppointmentsForCurrentProfile()
@@ -568,9 +645,7 @@ class AppRootState(
                                 authProvider = result.user.provider.name.lowercase()
                             )
                             currentAuthUser = result.user
-                            AppSettings.localProfileUserId = result.user.uid
-                            AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
-                            AppSettings.persist()
+                            persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
                             reloadAppointmentsForCurrentProfile()
@@ -623,9 +698,7 @@ class AppRootState(
                     currentAuthUser = user
                     com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
 
-                    AppSettings.backendUserId = ""
-                    AppSettings.localProfileUserId = ""
-                    AppSettings.persist()
+                    clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
                     reloadAppointmentsForGuestProfile()
@@ -681,15 +754,7 @@ class AppRootState(
                     AuthGateway.clearCredentialState()
 
                     currentAuthUser = null
-                    AppSettings.backendUserId = ""
-                    AppSettings.localProfileUserId = ""
-                    AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
-                    AppSettings.cachedAccessTier = "FREE_LIMITED"
-                    AppSettings.cachedTrialEndsAtMillis = 0L
-                    AppSettings.cachedHasPremium = false
-                    AppSettings.cachedSubscriptionState = "NONE"
-                    AppSettings.developerPremiumOverrideEnabled = false
-                    AppSettings.persist()
+                    clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
                     reloadAppointmentsForGuestProfile()
@@ -715,15 +780,7 @@ class AppRootState(
                     AuthGateway.clearCredentialState()
 
                     currentAuthUser = null
-                    AppSettings.backendUserId = ""
-                    AppSettings.localProfileUserId = ""
-                    AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
-                    AppSettings.cachedAccessTier = "FREE_LIMITED"
-                    AppSettings.cachedTrialEndsAtMillis = 0L
-                    AppSettings.cachedHasPremium = false
-                    AppSettings.cachedSubscriptionState = "NONE"
-                    AppSettings.developerPremiumOverrideEnabled = false
-                    AppSettings.persist()
+                    clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
                     reloadAppointmentsForGuestProfile()
@@ -828,10 +885,7 @@ class AppRootState(
                                 }
 
                                 currentAuthUser = result.user
-                                AppSettings.localProfileUserId = result.user.uid
-                                AppSettings.lastAuthenticatedAppOpenAtMillis =
-                                    Clock.System.now().toEpochMilliseconds()
-                                AppSettings.persist()
+                                persistAuthenticatedSession(result.user)
 
                                 clearSessionLocalState()
                                 reloadAppointmentsForCurrentProfile()
@@ -1371,6 +1425,67 @@ class AppRootState(
     fun dispose() {
         billingManager.dispose()
     }
+    fun checkForAppUpdatesIfNeeded() {
+        val now = Clock.System.now().toEpochMilliseconds()
+        val lastCheck = AppSettings.lastUpdateCheckAtMillis
+        val shouldCheck = now - lastCheck >= 24L * 60L * 60L * 1000L
+
+        if (!shouldCheck || isCheckingAppUpdates) return
+
+        scope.launch {
+            isCheckingAppUpdates = true
+            try {
+                val status = runCatching {
+                    AppUpdateChecker.check()
+                }.getOrElse {
+                    AppUpdateStatus(
+                        checked = true,
+                        updateAvailable = false,
+                        errorMessage = Locales.t("about_app_update_failed")
+                    )
+                }
+
+                appUpdateStatus = status
+                persistUpdateStatus(status)
+            } finally {
+                isCheckingAppUpdates = false
+            }
+        }
+    }
+    private fun persistAuthenticatedSession(user: AuthUser) {
+        AppSettings.localProfileUserId = user.uid
+        AppSettings.lastAuthProvider = user.provider.name
+        AppSettings.lastAuthEmail = user.email
+        AppSettings.lastAuthDisplayName = user.displayName
+        AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
+        AppSettings.persist()
+    }
+    private fun clearPersistedAuthenticatedSession() {
+        AppSettings.backendUserId = ""
+        AppSettings.localProfileUserId = ""
+        AppSettings.lastAuthProvider = ""
+        AppSettings.lastAuthEmail = ""
+        AppSettings.lastAuthDisplayName = ""
+        AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
+        AppSettings.cachedAccessTier = "FREE_LIMITED"
+        AppSettings.cachedTrialEndsAtMillis = 0L
+        AppSettings.cachedHasPremium = false
+        AppSettings.cachedSubscriptionState = "NONE"
+        AppSettings.developerPremiumOverrideEnabled = false
+        AppSettings.persist()
+    }
+    private fun persistUpdateStatus(status: AppUpdateStatus) {
+        AppSettings.lastUpdateCheckAtMillis = Clock.System.now().toEpochMilliseconds()
+
+        if (status.errorMessage.isBlank()) {
+            AppSettings.lastKnownUpdateAvailable = status.updateAvailable
+            AppSettings.lastKnownLatestVersion = status.latestVersion
+            AppSettings.lastKnownLatestBuild = status.latestBuild
+            AppSettings.lastKnownStoreUrl = status.storeUrl
+        }
+
+        AppSettings.persist()
+    }
 }
 
 @Composable
@@ -1395,27 +1510,38 @@ fun rememberAppRootState(): AppRootState {
             state.bootstrapAuthenticatedUser()
         }.onSuccess {
             state.currentScreen = Screen.MONTH
-        }.onFailure {
-            state.authResolved = false
-            appointments.clear()
-            state.reloadAppointmentsForGuestProfile()
+        }.onFailure { error ->
+            val raw = error.message.orEmpty()
 
-            val raw = it.message.orEmpty()
-            state.authErrorMessage =
-                if (
-                    raw.contains("No authenticated user session found", ignoreCase = true) ||
-                    raw.contains("Anonymous session is not restored automatically", ignoreCase = true)
-                ) {
-                    null
-                } else {
-                    state.mapAuthErrorMessage(raw)
-                }
+            val isNoSavedAuthenticatedSession =
+                raw.contains("No authenticated user session found", ignoreCase = true) ||
+                        raw.contains("Anonymous session is not restored automatically", ignoreCase = true)
 
-            state.currentScreen = Screen.AUTH_WELCOME
+            val restoredOffline = if (!isNoSavedAuthenticatedSession) {
+                state.restoreOfflineAuthenticatedSessionIfPossible()
+            } else {
+                false
+            }
+
+            if (!restoredOffline) {
+                state.authResolved = false
+                appointments.clear()
+                state.reloadAppointmentsForGuestProfile()
+
+                state.authErrorMessage =
+                    if (isNoSavedAuthenticatedSession) {
+                        null
+                    } else {
+                        state.mapAuthErrorMessage(raw)
+                    }
+
+                state.currentScreen = Screen.AUTH_WELCOME
+            }
         }
 
         state.refreshAccessState(nowMillis)
         state.initBilling()
+        state.checkForAppUpdatesIfNeeded()
     }
 
     DisposableEffect(Unit) {

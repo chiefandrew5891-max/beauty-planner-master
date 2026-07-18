@@ -400,7 +400,7 @@ fun AppRootChrome(
                     }
 
                     DrawerItem(
-                        title = Locales.t("nav_feedback"),
+                        title = Locales.t("nav_about_app"),
                         selected = state.currentScreen == Screen.FEEDBACK
                     ) {
                         state.screenHistory = emptyList()

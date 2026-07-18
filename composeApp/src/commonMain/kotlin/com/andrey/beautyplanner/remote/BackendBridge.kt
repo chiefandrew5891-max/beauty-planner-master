@@ -3,6 +3,12 @@ package com.andrey.beautyplanner.remote
 expect object BackendBridge {
     suspend fun ensureAuthenticated(): String
 
+    suspend fun checkAppUpdate(
+        platform: String,
+        versionName: String,
+        buildNumber: String
+    ): Map<String, String>
+
     suspend fun bootstrapUser(
         installId: String,
         firebaseUid: String,

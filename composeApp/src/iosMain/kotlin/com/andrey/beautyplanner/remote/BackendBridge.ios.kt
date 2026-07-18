@@ -18,6 +18,21 @@ actual object BackendBridge {
         return uid
     }
 
+    actual suspend fun checkAppUpdate(
+        platform: String,
+        versionName: String,
+        buildNumber: String
+    ): Map<String, String> {
+        return callBackendFunction(
+            name = "checkAppUpdate",
+            payload = mapOf(
+                "platform" to platform,
+                "versionName" to versionName,
+                "buildNumber" to buildNumber
+            )
+        )
+    }
+
     actual suspend fun bootstrapUser(
         installId: String,
         firebaseUid: String,
