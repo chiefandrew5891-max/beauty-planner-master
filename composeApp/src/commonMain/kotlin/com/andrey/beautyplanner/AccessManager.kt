@@ -28,6 +28,7 @@ object AccessManager {
 
         return when (feature) {
             PremiumFeature.STATS -> false
+            PremiumFeature.ARCHIVE -> false
             PremiumFeature.BACKUP_EXPORT -> false
             PremiumFeature.BACKUP_IMPORT -> false
             PremiumFeature.UNLIMITED_APPOINTMENTS -> false

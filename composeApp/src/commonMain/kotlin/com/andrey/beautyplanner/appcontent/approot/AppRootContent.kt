@@ -187,43 +187,21 @@ fun AppRootContent(
             )
 
             Screen.STATS -> {
-                val nowMillis = Clock.System.now().toEpochMilliseconds()
-                val statsMessage = Locales.t("premium_required_stats")
+                val premiumEnabled =
+                    state.accessState.tier == AccessTier.PREMIUM ||
+                            state.accessState.tier == AccessTier.TRIAL
 
-                if (AccessManager.hasFeature(PremiumFeature.STATS, nowMillis)) {
-                    StatsPage(
-                        appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
-                        today = state.today
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = statsMessage,
-                                color = MaterialTheme.colors.onBackground,
-                                fontSize = (16 * state.fontScale).sp
-                            )
-
-                            Button(
-                                onClick = {
-                                    state.showPremiumRequired(
-                                        message = statsMessage,
-                                        returnTo = Screen.STATS
-                                    )
-                                }
-                            ) {
-                                Text(Locales.t("premium_learn_more_btn"))
-                            }
-                        }
+                StatsPage(
+                    appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                    today = state.today,
+                    premiumEnabled = premiumEnabled,
+                    onOpenPremium = {
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_stats"),
+                            returnTo = Screen.STATS
+                        )
                     }
-                }
+                )
             }
 
             Screen.FEEDBACK -> FeedbackPage(
@@ -233,12 +211,25 @@ fun AppRootContent(
                 }
             )
 
-            Screen.UNPAID_APPOINTMENTS -> UnpaidAppointmentsScreen(
-                appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
-                onConfirmPayment = { appt ->
-                    state.confirmDeferredPayment(appt)
-                }
-            )
+            Screen.UNPAID_APPOINTMENTS -> {
+                val premiumEnabled =
+                    state.accessState.tier == AccessTier.PREMIUM ||
+                            state.accessState.tier == AccessTier.TRIAL
+
+                UnpaidAppointmentsScreen(
+                    appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                    onConfirmPayment = { appt ->
+                        state.confirmDeferredPayment(appt)
+                    },
+                    premiumEnabled = premiumEnabled,
+                    onOpenPremium = {
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_default"),
+                            returnTo = Screen.UNPAID_APPOINTMENTS
+                        )
+                    }
+                )
+            }
 
             Screen.MONTH -> {
                 var nowTimeHm by remember { mutableStateOf(getCurrentTimeHm()) }
@@ -633,11 +624,50 @@ fun AppRootContent(
                     AppSettings.persist()
                     state.refreshAccessState()
                 },
+                onResetTrialToNow = {
+                    val now = Clock.System.now().toEpochMilliseconds()
+                    val trialEnds = now + 14L * 24L * 60L * 60L * 1000L
+
+                    AppSettings.trialStartedAtMillis = now
+                    AppSettings.cachedAccessTier = "TRIAL"
+                    AppSettings.cachedTrialEndsAtMillis = trialEnds
+                    AppSettings.cachedHasPremium = false
+                    AppSettings.cachedSubscriptionState = "NONE"
+                    AppSettings.persist()
+                    state.refreshAccessState(now)
+                },
+                onExpireTrial = {
+                    val now = Clock.System.now().toEpochMilliseconds()
+
+                    AppSettings.trialStartedAtMillis = 0L
+                    AppSettings.cachedAccessTier = "FREE_LIMITED"
+                    AppSettings.cachedTrialEndsAtMillis = 0L
+                    AppSettings.cachedHasPremium = false
+                    AppSettings.cachedSubscriptionState = "NONE"
+                    AppSettings.persist()
+                    state.refreshAccessState(now)
+                },
                 onLogoutDeveloperMode = {
                     AppSettings.lockDeveloperMode()
                     state.navigateBack()
                 }
             )
+            Screen.ARCHIVE -> {
+                val premiumEnabled =
+                    state.accessState.tier == AccessTier.PREMIUM ||
+                            state.accessState.tier == AccessTier.TRIAL
+
+                ArchivePage(
+                    appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                    premiumEnabled = premiumEnabled,
+                    onOpenPremium = {
+                        state.showPremiumRequired(
+                            message = Locales.t("premium_required_archive"),
+                            returnTo = Screen.ARCHIVE
+                        )
+                    }
+                )
+            }
             Screen.NOTIFICATION_SETTINGS -> NotificationsSettingsScreen()
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()

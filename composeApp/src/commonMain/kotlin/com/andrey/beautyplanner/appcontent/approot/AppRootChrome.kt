@@ -382,6 +382,15 @@ fun AppRootChrome(
                     }
 
                     DrawerItem(
+                        title = Locales.t("nav_archive"),
+                        selected = state.currentScreen == Screen.ARCHIVE
+                    ) {
+                        state.screenHistory = emptyList()
+                        state.currentScreen = Screen.ARCHIVE
+                        state.closeDrawer()
+                    }
+
+                    DrawerItem(
                         title = Locales.t("nav_settings"),
                         selected = state.currentScreen == Screen.SETTINGS
                     ) {

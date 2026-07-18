@@ -2,3 +2,4 @@
 #import "GoogleAuthBridge.h"
 #import "FirestoreBridge.h"
 #import "BackupCryptoBridge.h"
+#import "ContactsBridge.h"

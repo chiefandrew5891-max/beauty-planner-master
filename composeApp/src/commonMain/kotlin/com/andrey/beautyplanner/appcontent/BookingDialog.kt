@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import com.andrey.beautyplanner.appcontent.appFontFamily
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
+import com.andrey.beautyplanner.getPlatform
 
 private fun displayServiceTitle(title: String): String {
     return if (title.startsWith("service_")) {
@@ -177,42 +178,91 @@ fun BookingDialog(
         derivedStateOf { ContactsAutocomplete.isPermissionGranted() }
     }
 
-    LaunchedEffect(name, editEnabled, contactsPermissionGranted, localClientSuggestions) {
+    var localSuggestions by remember {
+        mutableStateOf<List<ClientSuggestion>>(emptyList())
+    }
+    var phoneBookSuggestions by remember {
+        mutableStateOf<List<ContactSuggestion>>(emptyList())
+    }
+
+    LaunchedEffect(name, editEnabled, localClientSuggestions) {
         if (!editEnabled) {
+            localSuggestions = emptyList()
             mergedSuggestions = emptyList()
             showSuggestions = false
             return@LaunchedEffect
         }
 
         val query = name.trim()
-        if (query.length < 1) {
+        if (query.isBlank()) {
+            localSuggestions = emptyList()
             mergedSuggestions = emptyList()
             showSuggestions = false
             return@LaunchedEffect
         }
 
-        delay(180)
+        delay(120)
 
-        val localFound = ClientSuggestions.filter(
+        localSuggestions = ClientSuggestions.filter(
             clients = localClientSuggestions,
             query = query,
             limit = 8
         )
 
-        val contactsFound = if (contactsPermissionGranted) {
-            ContactsAutocomplete.findSuggestions(query, limit = 8)
-        } else {
-            emptyList()
-        }
-
-        val merged = ClientSuggestions.merge(
-            local = localFound,
-            contacts = contactsFound,
+        mergedSuggestions = ClientSuggestions.merge(
+            local = localSuggestions,
+            contacts = phoneBookSuggestions,
             limit = 8
         )
+        showSuggestions = mergedSuggestions.isNotEmpty()
+    }
 
-        mergedSuggestions = merged
-        showSuggestions = merged.isNotEmpty()
+    LaunchedEffect(name, editEnabled, contactsPermissionGranted) {
+        if (!editEnabled || !contactsPermissionGranted) {
+            phoneBookSuggestions = emptyList()
+
+            mergedSuggestions = ClientSuggestions.merge(
+                local = localSuggestions,
+                contacts = emptyList(),
+                limit = 8
+            )
+            showSuggestions = mergedSuggestions.isNotEmpty()
+            return@LaunchedEffect
+        }
+
+        val query = name.trim()
+        if (query.length < 2) {
+            phoneBookSuggestions = emptyList()
+
+            mergedSuggestions = ClientSuggestions.merge(
+                local = localSuggestions,
+                contacts = emptyList(),
+                limit = 8
+            )
+            showSuggestions = mergedSuggestions.isNotEmpty()
+            return@LaunchedEffect
+        }
+
+        delay(250)
+
+        val found: List<ContactSuggestion> = if (getPlatform().backendPlatform == "ios") {
+            emptyList()
+        } else {
+            runCatching {
+                ContactsAutocomplete.findSuggestions(query, limit = 8)
+            }.getOrElse {
+                emptyList()
+            }
+        }
+
+        phoneBookSuggestions = found
+
+        mergedSuggestions = ClientSuggestions.merge(
+            local = localSuggestions,
+            contacts = phoneBookSuggestions,
+            limit = 8
+        )
+        showSuggestions = mergedSuggestions.isNotEmpty()
     }
 
     if (showEnableEditConfirm) {
@@ -433,8 +483,14 @@ fun BookingDialog(
                     isError = triedSave && editEnabled && !nameOk,
                     trailingIcon = {
                         if (editEnabled && !contactsPermissionGranted) {
-                            IconButton(onClick = { ContactsAutocomplete.requestPermission() }) {
-                                Icon(Icons.Default.Contacts, contentDescription = null)
+                            IconButton(
+                                onClick = { ContactsAutocomplete.requestPermission() }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Contacts,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
+                                )
                             }
                         }
                     },

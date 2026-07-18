@@ -7,6 +7,10 @@ struct ComposeView: UIViewControllerRepresentable {
         let signInBridge = GoogleSignInBridge()
         let appleBridge = AppleSignInBridge()
 
+        ContactsPermissionHelper.requestPermission { granted in
+            print("Contacts permission granted: \(granted)")
+        }
+
         signInBridge.startGoogleSignIn = { deferred in
             GoogleAuthBridge.signInWithGoogle { result, error in
                 if let error = error {
@@ -287,111 +291,133 @@ struct ComposeView: UIViewControllerRepresentable {
                 deferred.complete(value: mapped)
             }
         }
-                CloudSyncBridgeConnector().pullAll = { userId, deferred in
-                    FirestoreBridge.pullAll(userId: userId) { result, error in
-                        if let error = error {
-                            deferred.completeExceptionally(
-                                exception: KotlinIllegalStateException(message: error)
-                            )
-                            return
-                        }
-
-                        deferred.complete(value: result ?? [:])
-                    }
-                }
-                        BackupCryptoBridgeConnector().encrypt = { plaintext, password, saltBase64, iterations, deferred in
-                            var error: NSError?
-                            let result = BackupCryptoBridge.encrypt(
-                                plaintext: plaintext,
-                                password: password,
-                                saltBase64: saltBase64,
-                                iterations: Int32(iterations),
-                                error: &error
-                            )
-
-                            if let error = error {
-                                deferred.completeExceptionally(
-                                    exception: KotlinIllegalStateException(message: error.localizedDescription)
-                                )
-                                return
-                            }
-
-                            guard let result = result as? [String: String] else {
-                                deferred.completeExceptionally(
-                                    exception: KotlinIllegalStateException(message: "Backup encryption returned invalid result")
-                                )
-                                return
-                            }
-
-                            deferred.complete(value: result)
-                        }
-
-                        BackupCryptoBridgeConnector().decrypt = { ciphertextBase64, password, saltBase64, ivBase64, iterations, deferred in
-                            var error: NSError?
-                            let result = BackupCryptoBridge.decrypt(
-                                ciphertextBase64: ciphertextBase64,
-                                password: password,
-                                saltBase64: saltBase64,
-                                ivBase64: ivBase64,
-                                iterations: Int32(iterations),
-                                error: &error
-                            )
-
-                            if let error = error {
-                                deferred.completeExceptionally(
-                                    exception: KotlinIllegalStateException(message: error.localizedDescription)
-                                )
-                                return
-                            }
-
-                            guard let result = result as String? else {
-                                deferred.completeExceptionally(
-                                    exception: KotlinIllegalStateException(message: "Backup decryption returned empty result")
-                                )
-                                return
-                            }
-
-                            deferred.complete(value: result)
-                        }
-
-                CloudSyncBridgeConnector().pushAppointments = { userId, appointments, deferred in
-                    let mappedAppointments: [[String: String]] = appointments.map { item in
-                        var mapped: [String: String] = [:]
-                        for (key, value) in item {
-                            mapped[key] = value
-                        }
-                        return mapped
-                    }
-
-                    FirestoreBridge.pushAppointments(userId: userId, appointments: mappedAppointments) { result, error in
-                        if let error = error {
-                            deferred.completeExceptionally(
-                                exception: KotlinIllegalStateException(message: error)
-                            )
-                            return
-                        }
-
-                        deferred.complete(value: result ?? [:])
-                    }
+        CloudSyncBridgeConnector().pullAll = { userId, deferred in
+            FirestoreBridge.pullAll(userId: userId) { result, error in
+                if let error = error {
+                    deferred.completeExceptionally(
+                        exception: KotlinIllegalStateException(message: error)
+                    )
+                    return
                 }
 
-                CloudSyncBridgeConnector().pushSettings = { userId, settings, deferred in
-                    var mappedSettings: [String: String] = [:]
-                    for (key, value) in settings {
-                        mappedSettings[key] = value
-                    }
+                deferred.complete(value: result ?? [:])
+            }
+        }
+        ContactsAutocompleteBridgeConnector().isPermissionGranted = { deferred in
+            let granted = ContactsPermissionHelper.isPermissionGranted()
+            deferred.complete(value: granted)
+        }
 
-                    FirestoreBridge.pushSettings(userId: userId, settings: mappedSettings) { result, error in
-                        if let error = error {
-                            deferred.completeExceptionally(
-                                exception: KotlinIllegalStateException(message: error)
-                            )
-                            return
-                        }
+        ContactsAutocompleteBridgeConnector().requestPermission = { deferred in
+            ContactsPermissionHelper.requestPermission { granted in
+                deferred.complete(value: granted)
+            }
+        }
 
-                        deferred.complete(value: result ?? [:])
-                    }
+        ContactsAutocompleteBridgeConnector().findSuggestions = { query, limit, deferred in
+            ContactsPermissionHelper.findSuggestions(query: query, limit: Int(limit)) { results in
+                let mapped: [[String: String]] = results.map { item in
+                    [
+                        "displayName": item["displayName"] ?? "",
+                        "phone": item["phone"] ?? ""
+                    ]
                 }
+                deferred.complete(value: mapped)
+            }
+        }
+        BackupCryptoBridgeConnector().encrypt = { plaintext, password, saltBase64, iterations, deferred in
+            var error: NSError?
+            let result = BackupCryptoBridge.encrypt(
+                plaintext: plaintext,
+                password: password,
+                saltBase64: saltBase64,
+                iterations: Int32(iterations),
+                error: &error
+            )
+
+            if let error = error {
+                deferred.completeExceptionally(
+                    exception: KotlinIllegalStateException(message: error.localizedDescription)
+                )
+                return
+            }
+
+            guard let result = result as? [String: String] else {
+                deferred.completeExceptionally(
+                    exception: KotlinIllegalStateException(message: "Backup encryption returned invalid result")
+                )
+                return
+            }
+
+            deferred.complete(value: result)
+        }
+
+        BackupCryptoBridgeConnector().decrypt = { ciphertextBase64, password, saltBase64, ivBase64, iterations, deferred in
+            var error: NSError?
+            let result = BackupCryptoBridge.decrypt(
+                ciphertextBase64: ciphertextBase64,
+                password: password,
+                saltBase64: saltBase64,
+                ivBase64: ivBase64,
+                iterations: Int32(iterations),
+                error: &error
+            )
+
+            if let error = error {
+                deferred.completeExceptionally(
+                    exception: KotlinIllegalStateException(message: error.localizedDescription)
+                )
+                return
+            }
+
+            guard let result = result as String? else {
+                deferred.completeExceptionally(
+                    exception: KotlinIllegalStateException(message: "Backup decryption returned empty result")
+                )
+                return
+            }
+
+            deferred.complete(value: result)
+        }
+
+        CloudSyncBridgeConnector().pushAppointments = { userId, appointments, deferred in
+            let mappedAppointments: [[String: String]] = appointments.map { item in
+                var mapped: [String: String] = [:]
+                for (key, value) in item {
+                    mapped[key] = value
+                }
+                return mapped
+            }
+
+            FirestoreBridge.pushAppointments(userId: userId, appointments: mappedAppointments) { result, error in
+                if let error = error {
+                    deferred.completeExceptionally(
+                        exception: KotlinIllegalStateException(message: error)
+                    )
+                    return
+                }
+
+                deferred.complete(value: result ?? [:])
+            }
+        }
+
+        CloudSyncBridgeConnector().pushSettings = { userId, settings, deferred in
+            var mappedSettings: [String: String] = [:]
+            for (key, value) in settings {
+                mappedSettings[key] = value
+            }
+
+            FirestoreBridge.pushSettings(userId: userId, settings: mappedSettings) { result, error in
+                if let error = error {
+                    deferred.completeExceptionally(
+                        exception: KotlinIllegalStateException(message: error)
+                    )
+                    return
+                }
+
+                deferred.complete(value: result ?? [:])
+            }
+        }
 
         StoreKitBridgeConnector().loadProducts = { productIds, deferred in
             StoreKitBridge.loadProducts(productIds) { result, error in

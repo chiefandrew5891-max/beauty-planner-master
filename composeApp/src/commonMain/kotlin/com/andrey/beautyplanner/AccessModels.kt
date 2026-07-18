@@ -8,6 +8,7 @@ enum class AccessTier {
 
 enum class PremiumFeature {
     STATS,
+    ARCHIVE,
     BACKUP_EXPORT,
     BACKUP_IMPORT,
     UNLIMITED_APPOINTMENTS,

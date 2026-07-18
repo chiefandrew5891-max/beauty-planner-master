@@ -12,8 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,14 +35,15 @@ import com.andrey.beautyplanner.utils.getLiveStatus
 import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 
 @Composable
 fun UnpaidAppointmentsScreen(
     appointments: List<Appointment>,
-    onConfirmPayment: (Appointment) -> Unit
+    onConfirmPayment: (Appointment) -> Unit,
+    premiumEnabled: Boolean,
+    onOpenPremium: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
 
@@ -69,7 +76,21 @@ fun UnpaidAppointmentsScreen(
                 color = MaterialTheme.colors.onBackground
             )
 
-            if (unpaidAppointments.isEmpty()) {
+            if (!premiumEnabled) {
+                Text(
+                    text = Locales.t("premium_required_default"),
+                    fontSize = (14 * fontScale).sp,
+                    color = MaterialTheme.colors.error,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                OutlinedButton(
+                    onClick = onOpenPremium,
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                ) {
+                    Text(Locales.t("premium_open_screen_btn"))
+                }
+            } else if (unpaidAppointments.isEmpty()) {
                 Text(
                     text = Locales.t("unpaid_empty"),
                     fontSize = (14 * fontScale).sp,
@@ -80,19 +101,19 @@ fun UnpaidAppointmentsScreen(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(unpaidAppointments, key = { it.id }) { appt ->
+                    items(unpaidAppointments, key = { it.id }) { appointment ->
                         val liveStatus = runCatching {
                             getLiveStatus(
-                                appt = appt,
+                                appt = appointment,
                                 nowDate = today,
                                 nowMinutes = nowMinutes
                             )
                         }.getOrDefault(com.andrey.beautyplanner.utils.LiveStatusKey.WAITING)
 
-                        val serviceText = if (appt.serviceName.startsWith("service_")) {
-                            Locales.t(appt.serviceName)
+                        val serviceText = if (appointment.serviceName.startsWith("service_")) {
+                            Locales.t(appointment.serviceName)
                         } else {
-                            appt.serviceName
+                            appointment.serviceName
                         }
 
                         Card(
@@ -108,14 +129,14 @@ fun UnpaidAppointmentsScreen(
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 Text(
-                                    text = appt.clientName,
+                                    text = appointment.clientName,
                                     fontSize = (16 * fontScale).sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colors.onSurface
                                 )
 
                                 Text(
-                                    text = "${appt.dateString} • ${appt.time}",
+                                    text = "${appointment.dateString} • ${appointment.time}",
                                     fontSize = (13 * fontScale).sp,
                                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.65f)
                                 )
@@ -135,19 +156,19 @@ fun UnpaidAppointmentsScreen(
                                 Text(
                                     text = "${Locales.t("unpaid_price")}: ${
                                         AppSettings.formatMoneyAmount(
-                                            amount = appt.price,
-                                            currencyCode = appt.currency
+                                            amount = appointment.price,
+                                            currencyCode = appointment.currency
                                         )
                                     }",
                                     fontSize = (14 * fontScale).sp,
                                     color = MaterialTheme.colors.onSurface
                                 )
 
-                                if (appt.notes.isNotBlank()) {
-                                    var commentExpanded by remember(appt.id) { mutableStateOf(false) }
+                                if (appointment.notes.isNotBlank()) {
+                                    var commentExpanded by remember(appointment.id) { mutableStateOf(false) }
 
                                     Text(
-                                        text = "${Locales.t("view_comment")}: ${appt.notes}",
+                                        text = "${Locales.t("view_comment")}: ${appointment.notes}",
                                         fontSize = (13 * fontScale).sp,
                                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.75f),
                                         maxLines = if (commentExpanded) Int.MAX_VALUE else 1,
@@ -164,7 +185,7 @@ fun UnpaidAppointmentsScreen(
 
                                 PrimaryActionButton(
                                     text = Locales.t("unpaid_mark_paid"),
-                                    onClick = { onConfirmPayment(appt) }
+                                    onClick = { onConfirmPayment(appointment) }
                                 )
                             }
                         }

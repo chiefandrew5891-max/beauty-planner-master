@@ -55,7 +55,9 @@ private data class ServiceStat(
 @Composable
 fun StatsPage(
     appointments: List<Appointment>,
-    today: LocalDate
+    today: LocalDate,
+    premiumEnabled: Boolean,
+    onOpenPremium: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
 
@@ -108,24 +110,25 @@ fun StatsPage(
 
         appointments
             .asSequence()
-            .mapNotNull { a ->
-                val d = runCatching { LocalDate.parse(a.dateString) }.getOrNull() ?: return@mapNotNull null
-                d to a
+            .mapNotNull { appointment ->
+                val date = runCatching { LocalDate.parse(appointment.dateString) }.getOrNull()
+                    ?: return@mapNotNull null
+                date to appointment
             }
-            .filter { (d, _) -> d >= fromDate && d <= toDateInclusive }
+            .filter { (date, _) -> date >= fromDate && date <= toDateInclusive }
             .map { it.second }
-            .filter { appt ->
+            .filter { appointment ->
                 if (!isMultiCurrencyMode) {
-                    appt.currency == AppSettings.selectedCurrency
+                    appointment.currency == AppSettings.selectedCurrency
                 } else {
                     true
                 }
             }
-            .filter { appt ->
+            .filter { appointment ->
                 if (clientFilter.isNullOrBlank()) {
                     true
                 } else {
-                    appt.clientName.trim().lowercase().contains(clientFilter)
+                    appointment.clientName.trim().lowercase().contains(clientFilter)
                 }
             }
             .toList()
@@ -133,30 +136,30 @@ fun StatsPage(
 
     val totalCount = filtered.size
 
-    val totalHours = filtered.sumOf { a ->
-        if (a.durationMinutes > 0) a.durationMinutes / 60.0
-        else a.durationHours.toDouble()
+    val totalHours = filtered.sumOf { appointment ->
+        if (appointment.durationMinutes > 0) appointment.durationMinutes / 60.0
+        else appointment.durationHours.toDouble()
     }.roundToInt()
 
-    val revenue = filtered.sumOf { a ->
-        a.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
+    val revenue = filtered.sumOf { appointment ->
+        appointment.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
     }
 
     val revenueByCurrency = remember(filtered, AppSettings.selectedCurrency) {
         filtered
             .groupBy { it.currency.ifBlank { AppSettings.selectedCurrency } }
             .mapValues { (_, items) ->
-                items.sumOf { appt ->
-                    appt.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
+                items.sumOf { appointment ->
+                    appointment.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
                 }
             }
     }
 
     val byService = remember(filtered, AppSettings.selectedCurrency) {
         filtered
-            .groupBy { a ->
-                val s = a.serviceName
-                if (s.startsWith("service_")) Locales.t(s) else s
+            .groupBy { appointment ->
+                val service = appointment.serviceName
+                if (service.startsWith("service_")) Locales.t(service) else service
             }
             .map { (service, list) ->
                 val count = list.size
@@ -194,11 +197,27 @@ fun StatsPage(
             color = primaryText
         )
 
+        if (!premiumEnabled) {
+            Text(
+                text = Locales.t("premium_required_stats"),
+                color = MaterialTheme.colors.error,
+                fontSize = (14 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            OutlinedButton(
+                onClick = onOpenPremium,
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+            ) {
+                Text(Locales.t("premium_open_screen_btn"))
+            }
+        }
+
         Text(
             text = Locales.t("stats_filters"),
             fontSize = (16 * fontScale).sp,
             fontWeight = FontWeight.SemiBold,
-            color = primaryText
+            color = primaryText.copy(alpha = if (premiumEnabled) 1f else 0.55f)
         )
 
         Row(
@@ -210,13 +229,14 @@ fun StatsPage(
             Text(
                 text = Locales.t("multi_currency_mode_all"),
                 fontSize = (15 * fontScale).sp,
-                color = primaryText,
+                color = if (premiumEnabled) primaryText else primaryText.copy(alpha = 0.45f),
                 modifier = Modifier.weight(1f)
             )
 
             Switch(
                 checked = isMultiCurrencyMode,
-                onCheckedChange = { isMultiCurrencyMode = it },
+                onCheckedChange = { if (premiumEnabled) isMultiCurrencyMode = it },
+                enabled = premiumEnabled,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colors.primary,
                     checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
@@ -230,22 +250,39 @@ fun StatsPage(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            PeriodChip(Locales.t("stats_period_day"), period == StatsPeriod.DAY) {
+            PeriodChip(
+                text = Locales.t("stats_period_day"),
+                selected = period == StatsPeriod.DAY,
+                enabled = premiumEnabled
+            ) {
                 period = StatsPeriod.DAY
             }
-            PeriodChip(Locales.t("stats_period_week"), period == StatsPeriod.WEEK) {
+            PeriodChip(
+                text = Locales.t("stats_period_week"),
+                selected = period == StatsPeriod.WEEK,
+                enabled = premiumEnabled
+            ) {
                 period = StatsPeriod.WEEK
             }
-            PeriodChip(Locales.t("stats_period_month"), period == StatsPeriod.MONTH) {
+            PeriodChip(
+                text = Locales.t("stats_period_month"),
+                selected = period == StatsPeriod.MONTH,
+                enabled = premiumEnabled
+            ) {
                 period = StatsPeriod.MONTH
             }
-            PeriodChip(Locales.t("stats_period_year"), period == StatsPeriod.YEAR) {
+            PeriodChip(
+                text = Locales.t("stats_period_year"),
+                selected = period == StatsPeriod.YEAR,
+                enabled = premiumEnabled
+            ) {
                 period = StatsPeriod.YEAR
             }
         }
 
         OutlinedButton(
-            onClick = { period = StatsPeriod.CUSTOM },
+            onClick = { if (premiumEnabled) period = StatsPeriod.CUSTOM },
+            enabled = premiumEnabled,
             modifier = Modifier.fillMaxWidth(),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
             colors = ButtonDefaults.outlinedButtonColors(
@@ -266,7 +303,11 @@ fun StatsPage(
         ) {
             Text(
                 text = Locales.t("stats_period_custom"),
-                color = MaterialTheme.colors.primary
+                color = if (premiumEnabled) {
+                    MaterialTheme.colors.primary
+                } else {
+                    MaterialTheme.colors.onSurface.copy(alpha = 0.45f)
+                }
             )
         }
 
@@ -275,7 +316,7 @@ fun StatsPage(
                 text = Locales.t("stats_custom_range"),
                 fontSize = (14 * fontScale).sp,
                 fontWeight = FontWeight.SemiBold,
-                color = primaryText
+                color = if (premiumEnabled) primaryText else primaryText.copy(alpha = 0.45f)
             )
 
             Row(
@@ -283,7 +324,8 @@ fun StatsPage(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 OutlinedButton(
-                    onClick = { showFromDatePicker = true },
+                    onClick = { if (premiumEnabled) showFromDatePicker = true },
+                    enabled = premiumEnabled,
                     modifier = Modifier.weight(1f),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
@@ -294,7 +336,8 @@ fun StatsPage(
                 }
 
                 OutlinedButton(
-                    onClick = { showToDatePicker = true },
+                    onClick = { if (premiumEnabled) showToDatePicker = true },
+                    enabled = premiumEnabled,
                     modifier = Modifier.weight(1f),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
@@ -307,7 +350,8 @@ fun StatsPage(
         }
 
         OutlinedButton(
-            onClick = { showClientPickerDialog = true },
+            onClick = { if (premiumEnabled) showClientPickerDialog = true },
+            enabled = premiumEnabled,
             modifier = Modifier.fillMaxWidth(),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
         ) {
@@ -337,16 +381,19 @@ fun StatsPage(
                         text = clientQuery,
                         fontSize = (15 * fontScale).sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = primaryText
+                        color = if (premiumEnabled) primaryText else primaryText.copy(alpha = 0.45f)
                     )
                 }
             }
 
             TextButton(
                 onClick = {
-                    clientQuery = ""
-                    selectedClient = null
+                    if (premiumEnabled) {
+                        clientQuery = ""
+                        selectedClient = null
+                    }
                 },
+                enabled = premiumEnabled,
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Text(Locales.t("stats_clear_client_filter"))
@@ -356,71 +403,73 @@ fun StatsPage(
         Text(
             text = "${Locales.t("stats_range")}: $fromDate — $toDateInclusive",
             fontSize = (13 * fontScale).sp,
-            color = hintText
+            color = hintText.copy(alpha = if (premiumEnabled) 1f else 0.55f)
         )
 
         Divider()
 
-        if (!isMultiCurrencyMode) {
-            StatRow(
-                label = Locales.t("stats_revenue"),
-                value = formatMoney(revenue, AppSettings.selectedCurrency),
-                primaryText = primaryText
-            )
-        } else {
-            RevenueByCurrencyBlock(
-                label = Locales.t("stats_revenue"),
-                revenueByCurrency = revenueByCurrency,
-                primaryText = primaryText
-            )
-        }
-
-        StatRow(
-            label = Locales.t("stats_count"),
-            value = totalCount.toString(),
-            primaryText = primaryText
-        )
-
-        StatRow(
-            label = Locales.t("stats_hours"),
-            value = Locales.hoursCount(totalHours),
-            primaryText = primaryText
-        )
-
-        Divider()
-
-        Text(
-            text = Locales.t("stats_top_services"),
-            fontSize = (16 * fontScale).sp,
-            fontWeight = FontWeight.SemiBold,
-            color = primaryText
-        )
-
-        if (byService.isEmpty()) {
-            Text(
-                text = Locales.t("stats_empty"),
-                color = secondaryText,
-                fontSize = (14 * fontScale).sp
-            )
-        } else {
-            byService.forEach { s ->
-                ServiceRow(
-                    service = s.service,
-                    count = s.count,
-                    revenueByCurrency = s.revenueByCurrency,
-                    isMultiCurrencyMode = isMultiCurrencyMode,
-                    selectedCurrency = AppSettings.selectedCurrency,
-                    fontScale = fontScale,
-                    primaryText = primaryText,
-                    secondaryText = secondaryText
+        if (premiumEnabled) {
+            if (!isMultiCurrencyMode) {
+                StatRow(
+                    label = Locales.t("stats_revenue"),
+                    value = formatMoney(revenue, AppSettings.selectedCurrency),
+                    primaryText = primaryText
                 )
+            } else {
+                RevenueByCurrencyBlock(
+                    label = Locales.t("stats_revenue"),
+                    revenueByCurrency = revenueByCurrency,
+                    primaryText = primaryText
+                )
+            }
+
+            StatRow(
+                label = Locales.t("stats_count"),
+                value = totalCount.toString(),
+                primaryText = primaryText
+            )
+
+            StatRow(
+                label = Locales.t("stats_hours"),
+                value = Locales.hoursCount(totalHours),
+                primaryText = primaryText
+            )
+
+            Divider()
+
+            Text(
+                text = Locales.t("stats_top_services"),
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = primaryText
+            )
+
+            if (byService.isEmpty()) {
+                Text(
+                    text = Locales.t("stats_empty"),
+                    color = secondaryText,
+                    fontSize = (14 * fontScale).sp
+                )
+            } else {
+                byService.forEach { serviceStat ->
+                    ServiceRow(
+                        service = serviceStat.service,
+                        count = serviceStat.count,
+                        revenueByCurrency = serviceStat.revenueByCurrency,
+                        isMultiCurrencyMode = isMultiCurrencyMode,
+                        selectedCurrency = AppSettings.selectedCurrency,
+                        fontScale = fontScale,
+                        primaryText = primaryText,
+                        secondaryText = secondaryText
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
     }
 
-    if (showClientPickerDialog) {
+    if (premiumEnabled && showClientPickerDialog) {
         ClientPickerDialog(
             clients = allClients,
             selectedClientName = selectedClient?.displayName ?: clientQuery.takeIf { it.isNotBlank() },
@@ -438,7 +487,7 @@ fun StatsPage(
         )
     }
 
-    if (showFromDatePicker) {
+    if (premiumEnabled && showFromDatePicker) {
         StatsDatePickerDialog(
             title = Locales.t("stats_pick_start_date"),
             initialSelectedDate = customFromDate,
@@ -451,7 +500,7 @@ fun StatsPage(
         )
     }
 
-    if (showToDatePicker) {
+    if (premiumEnabled && showToDatePicker) {
         StatsDatePickerDialog(
             title = Locales.t("stats_pick_end_date"),
             initialSelectedDate = customToDate,
@@ -469,6 +518,7 @@ fun StatsPage(
 private fun PeriodChip(
     text: String,
     selected: Boolean,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     val modifier = Modifier.height(38.dp)
@@ -476,6 +526,7 @@ private fun PeriodChip(
     if (selected) {
         Button(
             onClick = onClick,
+            enabled = enabled,
             modifier = modifier,
             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
@@ -486,6 +537,7 @@ private fun PeriodChip(
     } else {
         OutlinedButton(
             onClick = onClick,
+            enabled = enabled,
             modifier = modifier,
             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
@@ -621,17 +673,17 @@ private fun ServiceRow(
 }
 
 private fun formatMoney(
-    v: Double,
+    value: Double,
     currencyCode: String
 ): String {
-    val rounded = (v * 100).roundToInt() / 100.0
-    val s = if (rounded % 1.0 == 0.0) {
+    val rounded = (value * 100).roundToInt() / 100.0
+    val text = if (rounded % 1.0 == 0.0) {
         rounded.toInt().toString()
     } else {
         rounded.toString()
     }
     return AppSettings.formatMoneyAmount(
-        amount = s,
+        amount = text,
         currencyCode = currencyCode
     )
 }

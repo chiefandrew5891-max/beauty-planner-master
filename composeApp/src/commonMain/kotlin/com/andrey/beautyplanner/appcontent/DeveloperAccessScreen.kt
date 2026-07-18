@@ -53,6 +53,8 @@ fun DeveloperAccessScreen(
     accessState: AccessState,
     onEnablePremium: () -> Unit,
     onDisablePremium: () -> Unit,
+    onResetTrialToNow: () -> Unit,
+    onExpireTrial: () -> Unit,
     onLogoutDeveloperMode: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
@@ -136,7 +138,64 @@ fun DeveloperAccessScreen(
                 color = onSurface.copy(alpha = 0.7f),
                 fontSize = (13 * fontScale).sp
             )
+            Text(
+                text = "Developer premium override: ${AppSettings.developerPremiumOverrideEnabled}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
 
+            Text(
+                text = "Cached access tier: ${AppSettings.cachedAccessTier}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Cached has premium: ${AppSettings.cachedHasPremium}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Cached subscription state: ${AppSettings.cachedSubscriptionState}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Premium subscription state: ${AppSettings.premiumSubscriptionState}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Premium subscription expiry: ${AppSettings.premiumSubscriptionExpiryMillis}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Access state tier (runtime): ${accessState.tier}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Access state hasPremium (runtime): ${accessState.hasPremium}",
+                color = onSurface.copy(alpha = 0.7f),
+                fontSize = (13 * fontScale).sp
+            )
+
+            Text(
+                text = "Premium gate result (stats/archive/unpaid): ${accessState.tier == AccessTier.PREMIUM || accessState.tier == AccessTier.TRIAL}",
+                color = if (accessState.tier == AccessTier.PREMIUM || accessState.tier == AccessTier.TRIAL) {
+                    MaterialTheme.colors.primary
+                } else {
+                    MaterialTheme.colors.error
+                },
+                fontSize = (13 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold
+            )
             Spacer(Modifier.height(8.dp))
 
             PrimaryActionButton(
@@ -147,6 +206,16 @@ fun DeveloperAccessScreen(
             SecondaryActionButton(
                 text = Locales.t("developer_disable_premium"),
                 onClick = onDisablePremium
+            )
+
+            SecondaryActionButton(
+                text = Locales.t("developer_reset_trial"),
+                onClick = onResetTrialToNow
+            )
+
+            DangerActionButton(
+                text = Locales.t("developer_expire_trial"),
+                onClick = onExpireTrial
             )
 
             Spacer(Modifier.height(16.dp))

@@ -55,6 +55,7 @@ enum class Screen {
     SETTINGS,
     STATS,
     UNPAID_APPOINTMENTS,
+    ARCHIVE,
     FEEDBACK,
     PRIVACY_POLICY,
     PREMIUM_ACCESS,
