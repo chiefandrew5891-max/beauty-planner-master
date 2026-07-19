@@ -30,6 +30,7 @@ import kotlinx.datetime.Clock
 import com.andrey.beautyplanner.getPlatform
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.remember
 
 private const val TERMS_OF_USE_URL = "https://sites.google.com/view/beautyplanner/terms-of-use"
 
@@ -85,18 +86,26 @@ fun PremiumAccessScreen(
                 premiumProduct != null &&
                 premiumProduct.offerToken.isNotBlank()
 
-    val subscriptionStateText = subscriptionStateLabel(AppSettings.premiumSubscriptionState)
+    val currentLang = Locales.currentLanguage
+
+    val subscriptionStateText = remember(currentLang, AppSettings.premiumSubscriptionState) {
+        subscriptionStateLabel(AppSettings.premiumSubscriptionState)
+    }
+
     val expiryMillis = AppSettings.premiumSubscriptionExpiryMillis
     val daysLeft = calculateSubscriptionDaysLeft(
         expiryMillis = expiryMillis,
         nowMillis = Clock.System.now().toEpochMilliseconds()
     )
     val expiryText = formatSubscriptionExpiry(expiryMillis)
+
     val autoRenewEnabled = AppSettings.premiumSubscriptionAutoRenewing
-    val autoRenewText = if (autoRenewEnabled) {
-        Locales.t("premium_subscription_auto_renew_on")
-    } else {
-        Locales.t("premium_subscription_auto_renew_off")
+    val autoRenewText = remember(currentLang, autoRenewEnabled) {
+        if (autoRenewEnabled) {
+            Locales.t("premium_subscription_auto_renew_on")
+        } else {
+            Locales.t("premium_subscription_auto_renew_off")
+        }
     }
 
     val showCancelledButActiveNotice =
