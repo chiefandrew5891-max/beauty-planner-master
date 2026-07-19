@@ -21,7 +21,6 @@ object DataManager {
             val jsonString = jsonConfig.encodeToString(data)
             storage.write(profileKey, jsonString)
         } catch (e: Exception) {
-            println("Save error: ${e.message}")
         }
     }
 
@@ -33,7 +32,6 @@ object DataManager {
             if (jsonString.isBlank()) emptyList()
             else jsonConfig.decodeFromString<List<Appointment>>(jsonString)
         } catch (e: Exception) {
-            println("Load error: ${e.message}")
             emptyList()
         }
     }

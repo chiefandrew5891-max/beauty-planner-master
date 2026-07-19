@@ -21,7 +21,6 @@ actual fun loadLocaleResourceText(path: String): String? {
 
     for (candidate in candidates) {
         val exists = NSFileManager.defaultManager.fileExistsAtPath(candidate)
-        println("LocaleResourceLoader: checking $candidate exists=$exists")
         if (!exists) continue
 
         val text = NSString.stringWithContentsOfFile(
@@ -31,11 +30,9 @@ actual fun loadLocaleResourceText(path: String): String? {
         ) as String?
 
         if (!text.isNullOrBlank()) {
-            println("LocaleResourceLoader: loaded locale file from $candidate")
             return text
         }
     }
 
-    println("LocaleResourceLoader: failed to load locale file for path=$path")
     return null
 }

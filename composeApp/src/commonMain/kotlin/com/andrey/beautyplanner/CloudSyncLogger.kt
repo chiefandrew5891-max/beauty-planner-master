@@ -17,8 +17,6 @@ object CloudSyncLogger {
         val ss = now.second.toString().padStart(2, '0')
         val line = "$hh:$mm:$ss  $message"
 
-        println("[CloudSync] $line")
-
         if (entries.size >= MAX_ENTRIES) {
             entries.removeAt(0)
         }

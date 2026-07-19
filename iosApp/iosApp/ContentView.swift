@@ -8,7 +8,6 @@ struct ComposeView: UIViewControllerRepresentable {
         let appleBridge = AppleSignInBridge()
 
         ContactsPermissionHelper.requestPermission { granted in
-            print("Contacts permission granted: \(granted)")
         }
 
         signInBridge.startGoogleSignIn = { deferred in
