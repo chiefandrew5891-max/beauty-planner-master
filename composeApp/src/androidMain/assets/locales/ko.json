@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "환불 시 Apple 구매 내역 또는 App Store의 구독 확인서가 필요할 수 있습니다.",
     "premium_guest_buy_requires_account": "Premium을 구매하려면 로그인하거나 계정을 만드세요",
     "premium_guest_restore_requires_account": "구매를 복원하려면 로그인하거나 계정을 만드세요",
-    "premium_guest_account_required_message": "Premium은 앱 계정과 연결되어 있습니다. 구독을 구매하거나 복원하려면 로그인하거나 계정을 만드세요."
+    "premium_guest_account_required_message": "Premium은 앱 계정과 연결되어 있습니다. 구독을 구매하거나 복원하려면 로그인하거나 계정을 만드세요.",
+    "backup_guest_requires_account": "백업 내보내기 및 가져오기는 로그인한 앱 계정에서만 사용할 수 있습니다. 백업을 사용하려면 로그인하거나 계정을 만드십시오.",
+    "premium_guest_account_label": "게스트 모드",
+    "premium_guest_binding_impossible_message": "Premium은 게스트 모드와 연결할 수 없습니다. 구독하려면 로그인하거나 앱 계정을 만드세요."
 }

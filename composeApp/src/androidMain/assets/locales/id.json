@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Untuk pengembalian dana, Anda mungkin memerlukan riwayat pembelian Apple atau konfirmasi langganan dari App Store.",
     "premium_guest_buy_requires_account": "Masuk atau buat akun untuk membeli Premium",
     "premium_guest_restore_requires_account": "Masuk atau buat akun untuk memulihkan pembelian",
-    "premium_guest_account_required_message": "Premium ditautkan ke akun aplikasi Anda. Masuk atau buat akun untuk membeli atau memulihkan langganan Anda."
+    "premium_guest_account_required_message": "Premium ditautkan ke akun aplikasi Anda. Masuk atau buat akun untuk membeli atau memulihkan langganan Anda.",
+    "backup_guest_requires_account": "Ekspor dan impor cadangan hanya tersedia untuk akun aplikasi yang telah masuk. Silakan masuk atau buat akun untuk menggunakan cadangan.",
+    "premium_guest_account_label": "Mode Tamu",
+    "premium_guest_binding_impossible_message": "Premium tidak dapat ditautkan ke mode tamu. Masuk atau buat akun aplikasi untuk berlangganan."
 }

@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Pour les remboursements, vous pourriez avoir besoin de votre historique d'achats Apple ou de la confirmation d'abonnement de l'App Store.",
     "premium_guest_buy_requires_account": "Connectez-vous ou créez un compte pour acheter Premium",
     "premium_guest_restore_requires_account": "Connectez-vous ou créez un compte pour restaurer les achats",
-    "premium_guest_account_required_message": "Premium est lié à votre compte d'application. Connectez-vous ou créez un compte pour acheter ou restaurer votre abonnement."
+    "premium_guest_account_required_message": "Premium est lié à votre compte d'application. Connectez-vous ou créez un compte pour acheter ou restaurer votre abonnement.",
+    "backup_guest_requires_account": "L'exportation et l'importation de sauvegardes sont disponibles uniquement für les comptes d'application connectés. Veuillez vous connecter ou créer un compte pour utiliser la sauvegarde.",
+    "premium_guest_account_label": "Mode invité",
+    "premium_guest_binding_impossible_message": "Premium ne peut pas être lié au mode invité. Connectez-vous ou créez un compte d'application pour vous abonner."
 }

@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Tagasimmaksete saamiseks võite vajada oma Apple'i ostuajalugu või tellimuse kinnitust App Store'ist.",
     "premium_guest_buy_requires_account": "Premiumi ostmiseks logige sisse või looge konto",
     "premium_guest_restore_requires_account": "Ostude taastamiseks logige sisse või looge konto",
-    "premium_guest_account_required_message": "Premium on seotud teie rakenduse kontoga. Tellimuse ostmiseks või taastamiseks logige sisse või looge konto."
+    "premium_guest_account_required_message": "Premium on seotud teie rakenduse kontoga. Tellimuse ostmiseks või taastamiseks logige sisse või looge konto.",
+    "backup_guest_requires_account": "Varukoopiate eksport ja import on saadaval ainult sisselogitud rakenduse kontodele. Varundamise kasutamiseks logige sisse või looge konto.",
+    "premium_guest_account_label": "Külalisrežiim",
+    "premium_guest_binding_impossible_message": "Premiumi ei saa siduda külalisrežiimiga. Tellimiseks logige sisse või looge rakenduse konto."
 }

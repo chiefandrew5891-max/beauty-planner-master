@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "如需退款，您可能需要您的 Apple 购买历史记录或来自 App Store 的订阅确认。",
     "premium_guest_buy_requires_account": "登录或 Gold 创建帐户以购买 Premium",
     "premium_guest_restore_requires_account": "登录或创建帐户以恢复购买",
-    "premium_guest_account_required_message": "Premium 已与您的应用帐户关联。登录或创建帐户以购买或恢复您的订阅。"
+    "premium_guest_account_required_message": "Premium 已与您的应用帐户关联。登录或创建帐户以购买或恢复您的订阅。",
+    "backup_guest_requires_account": "备份导出和导入仅适用于已登录的应用帐户。请登录或创建帐户以使用备份功能。",
+    "premium_guest_account_label": "访客模式",
+    "premium_guest_binding_impossible_message": "Premium 无法与访客模式关联。请登录或创建应用帐户以订阅。"
 }

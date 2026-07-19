@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Visszatérítéshez szükséged lehet az Apple vásárlási előzményeidre vagy az App Store-ból származó előfizetési visszaigazolásra.",
     "premium_guest_buy_requires_account": "Jelentkezz be vagy hozz létre egy fiókot a Premium megvásárlásához",
     "premium_guest_restore_requires_account": "Jelentkezz be vagy hozz létre egy fiókot a vásárlások visszaállításához",
-    "premium_guest_account_required_message": "A Premium össze van kapcsolva az alkalmazásfiókoddal. Jelentkezz be vagy hozz létre egy fiókot az előfizetésed megvásárlásához vagy visszaállításához."
+    "premium_guest_account_required_message": "A Premium össze van kapcsolva az alkalmazásfiókoddal. Jelentkezz be vagy hozz létre egy fiókot az előfizetésed megvásárlásához vagy visszaállításához.",
+    "backup_guest_requires_account": "A biztonsági mentések exportálása és importálása csak bejelentkezett alkalmazásfiókok számára érhető el. A biztonsági mentés használatához kérjük, jelentkezzen be vagy hozzon létre egy fiókot.",
+    "premium_guest_account_label": "Vendég mód",
+    "premium_guest_binding_impossible_message": "A Premium nem kapcsolható össze a vendég móddal. Az előfizetéshez jelentkezzen be vagy hozzon létre egy alkalmazásfiókot."
 }

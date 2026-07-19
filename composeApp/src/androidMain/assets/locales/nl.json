@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Voor terugbetalingen heeft u mogelijk uw Apple-aankoopgeschiedenis of de abonnementsbevestiging uit de App Store nodig.",
     "premium_guest_buy_requires_account": "Log in of maak een account aan om Premium te kopen",
     "premium_guest_restore_requires_account": "Log in of maak een account aan om aankopen te herstellen",
-    "premium_guest_account_required_message": "Premium is gekoppeld aan uw app-account. Log in of maak een account aan om uw abonnement te kopen of te herstellen."
+    "premium_guest_account_required_message": "Premium is gekoppeld aan uw app-account. Log in of maak een account aan om uw abonnement te kopen of te herstellen.",
+    "backup_guest_requires_account": "Export en import van back-ups zijn alleen beschikbaar voor ingelogde app-accounts. Log in of maak een account aan om back-up zu gebruiken.",
+    "premium_guest_account_label": "Gastmodus",
+    "premium_guest_binding_impossible_message": "Premium kan niet worden gekoppeld aan de gastmodus. Log in of maak een app-account aan om u te abonneren."
 }

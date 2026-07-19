@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "İadeler için Apple satın alma geçmişinize veya App Store'dan gelen abonelik onayına ihtiyacınız olabilir.",
     "premium_guest_buy_requires_account": "Premium satın almak için giriş yapın veya bir hesap oluşturun",
     "premium_guest_restore_requires_account": "Satın almaları geri yüklemek için giriş yapın veya bir hesap oluşturun",
-    "premium_guest_account_required_message": "Premium, uygulama hesabınıza bağlıdır. Aboneliğinizi satın almak veya geri yüklemek için giriş yapın veya bir hesap oluşturun."
+    "premium_guest_account_required_message": "Premium, uygulama hesabınıza bağlıdır. Aboneliğinizi satın almak veya geri yüklemek için giriş yapın veya bir hesap oluşturun.",
+    "backup_guest_requires_account": "Yedekleme dışa ve içe aktarma işlemleri yalnızca oturum açmış uygulama hesapları için kullanılabilir. Yedeklemeyi kullanmak için lütfen oturum açın veya bir hesap oluşturun.",
+    "premium_guest_account_label": "Misafir modu",
+    "premium_guest_binding_impossible_message": "Premium, misafir moduna bağlanamaz. Abone olmak için giriş yapın veya bir uygulama hesabı oluşturun."
 }

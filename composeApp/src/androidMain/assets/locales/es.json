@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Para reembolsos, es posible que necesite su historial de compras de Apple o la confirmación de la suscripción de la App Store.",
     "premium_guest_buy_requires_account": "Inicie sesión o cree una cuenta para comprar Premium",
     "premium_guest_restore_requires_account": "Inicie sesión o cree una cuenta para restaurar las compras",
-    "premium_guest_account_required_message": "Premium está vinculado a su cuenta de la aplicación. Inicie sesión o cree una cuenta para comprar o restaurar su suscripción."
+    "premium_guest_account_required_message": "Premium está vinculado a su cuenta de la aplicación. Inicie sesión o cree una cuenta para comprar o restaurar su suscripción.",
+    "backup_guest_requires_account": "La exportación e importación de copias de seguridad solo están disponibles para cuentas de aplicaciones que hayan iniciado sesión. Inicie sesión o cree una cuenta para usar la copia de seguridad.",
+    "premium_guest_account_label": "Modo invitado",
+    "premium_guest_binding_impossible_message": "Premium no se puede vincular al modo invitado. Inicie sesión o cree una cuenta de la aplicación para suscribirse."
 }

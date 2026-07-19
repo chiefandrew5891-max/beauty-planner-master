@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Ved refusion skal du muligvis bruge din Apple-købshistorik eller abonnementsbekræftelse fra App Store.",
     "premium_guest_buy_requires_account": "Log ind eller opret en konto for at købe Premium",
     "premium_guest_restore_requires_account": "Log ind eller opret en konto for at gendanne køb",
-    "premium_guest_account_required_message": "Premium er knyttet til din app-konto. Log ind eller opret en konto for at købe eller gendanne dit abonnement."
+    "premium_guest_account_required_message": "Premium er knyttet til din app-konto. Log ind eller opret en konto for at købe eller gendanne dit abonnement.",
+    "backup_guest_requires_account": "Eksport og import af sikkerhedskopier er kun tilgængelige for indloggede app-konti. Log venligst ind eller opret en konto for at bruge sikkerhedskopiering.",
+    "premium_guest_account_label": "Gæstetilstand",
+    "premium_guest_binding_impossible_message": "Premium kan ikke knyttes til gæstetilstand. Log ind eller opret en app-konto for at abonnere."
 }

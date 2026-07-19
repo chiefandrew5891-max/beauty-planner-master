@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "لاسترداد الأموال، قد تحتاج إلى سجل مشتريات Apple أو تأكيد الاشتراك من App Store.",
     "premium_guest_buy_requires_account": "سجل الدخول أو أنشئ حسابًا لشراء Premium",
     "premium_guest_restore_requires_account": "سجل الدخول أو أنشئ حسابًا لاستعادة المشتريات",
-    "premium_guest_account_required_message": "تم ربط Premium بحساب التطبيق الخاص بك. سجل الدخول أو أنشئ حسابًا لشراء اشتراكك أو استعادته."
+    "premium_guest_account_required_message": "تم ربط Premium بحساب التطبيق الخاص بك. سجل الدخول أو أنشئ حسابًا لشراء اشتراكك أو استعادته.",
+    "backup_guest_requires_account": "تصدير واستيراد النسخ الاحتياطي متاحان فقط لحسابات التطبيق المسجلة الدخول. يرجى تسجيل الدخول أو إنشاء حساب لاستخدام النسخ الاحتياطي.",
+    "premium_guest_account_label": "وضع الضيف",
+    "premium_guest_binding_impossible_message": "لا يمكن ربط Premium بوضع الضيف. سجل الدخول أو أنشئ حسابًا للتطبيق للاشتراك."
 }

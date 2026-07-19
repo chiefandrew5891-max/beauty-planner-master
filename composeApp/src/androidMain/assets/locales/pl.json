@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "W przypadku zwrotów kosztów może być wymagana historia zakupów Apple lub potwierdzenie subskrypcji z App Store.",
     "premium_guest_buy_requires_account": "Zaloguj się lub utwórz konto, aby kupić Premium",
     "premium_guest_restore_requires_account": "Zaloguj się lub utwórz konto, aby przywrócić zakupy",
-    "premium_guest_account_required_message": "Premium jest powiązane z Twoim kontem w aplikacji. Zaloguj się lub utwórz konto, aby kupić lub przywrócić subskrypcję."
+    "premium_guest_account_required_message": "Premium jest powiązane z Twoim kontem w aplikacji. Zaloguj się lub utwórz konto, aby kupić lub przywrócić subskrypcję.",
+    "backup_guest_requires_account": "Eksport i import kopii zapasowych są dostępne tylko dla zalogowanych kont aplikacji. Zaloguj się lub utwórz konto, aby korzystać z kopii zapasowej.",
+    "premium_guest_account_label": "Tryb gościa",
+    "premium_guest_binding_impossible_message": "Premium nie można powiązać z trybem gościa. Zaloguj się lub utwórz konto w aplikacji, aby subskrybować."
 }

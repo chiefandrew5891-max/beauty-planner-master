@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Pentru rambursări, este posibil să aveți nevoie de istoricul achizițiilor Apple sau de confirmarea abonamentului de la App Store.",
     "premium_guest_buy_requires_account": "Conectați-vă sau creați un cont pentru a cumpăra Premium",
     "premium_guest_restore_requires_account": "Conectați-vă sau creați un cont pentru a restaura achizițiile",
-    "premium_guest_account_required_message": "Premium este conectat la contul aplicației tale. Conectați-vă sau creați un cont pentru a cumpăra sau restaura abonamentul."
+    "premium_guest_account_required_message": "Premium este conectat la contul aplicației tale. Conectați-vă sau creați un cont pentru a cumpăra sau restaura abonamentul.",
+    "backup_guest_requires_account": "Exportul și importul de rezervă sunt disponibile numai pentru conturile de aplicații autentificate. Vă rugăm să vă autentificați sau să creați un cont pentru a utiliza backup-ul.",
+    "premium_guest_account_label": "Mod oaspete",
+    "premium_guest_binding_impossible_message": "Premium nu poate fi conectat la modul oaspete. Autentificați-vă sau creați un cont de aplicație pentru a vă abona."
 }

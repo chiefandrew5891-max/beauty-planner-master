@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "För återbetalning kan du behöva din Apple-köphistorik eller prenumerationsbekräftelse från App Store.",
     "premium_guest_buy_requires_account": "Logga in eller skapa ett konto för att köpa Premium",
     "premium_guest_restore_requires_account": "Logga in eller skapa ett konto för att återställa köp",
-    "premium_guest_account_required_message": "Premium är kopplat till ditt appkonto. Logga in eller skapa ett konto för att köpa eller återställa din prenumeration."
+    "premium_guest_account_required_message": "Premium är kopplat till ditt appkonto. Logga in eller skapa ett konto för att köpa eller återställa din prenumeration.",
+    "backup_guest_requires_account": "Export och import av säkerhetskopior är endast tillgängliga för inloggade appkonton. Logga in eller skapa ett konto för att använda säkerhetskopiering.",
+    "premium_guest_account_label": "Gästläge",
+    "premium_guest_binding_impossible_message": "Premium kan inte kopplas till gästläget. Logga in eller skapa ett appkonto för att prenumerera."
 }

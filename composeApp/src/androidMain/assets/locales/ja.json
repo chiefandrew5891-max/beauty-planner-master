@@ -530,5 +530,8 @@
     "billing_refund_info_message_ios": "返金には、Apple의購入履歴またはApp Storeからのサブスクリプション確認が必要になる場合があります。",
     "premium_guest_buy_requires_account": "Premiumを購入するには、サインインするかアカウントを作成してください",
     "premium_guest_restore_requires_account": "購入を復元するには、サインインするかアカウントを作成してください",
-    "premium_guest_account_required_message": "Premiumはアプリのアカウントにリンクされています。サブスクリプションの購入または復元を行うには、サインインするかアカウントを作成してください。"
+    "premium_guest_account_required_message": "Premiumはアプリのアカウントにリンクされています。サブスクリプションの購入または復元を行うには、サインインするかアカウントを作成してください。",
+    "backup_guest_requires_account": "バックアップの エクスポートとインポートは、サインインしているアプリ アカウントでのみ利用できます。バックアップを使用するには、サインインするかアカウントを作成してください。",
+    "premium_guest_account_label": "ゲストモード",
+    "premium_guest_binding_impossible_message": "Premiumをゲストモードにリンクすることはできません。定期購入するには、サインインするかアプリのアカウントを作成してください。"
 }

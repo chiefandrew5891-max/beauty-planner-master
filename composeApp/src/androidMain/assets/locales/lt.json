@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Dėl pinigų grąžinimo jums gali prireikti „Apple“ pirkimo istorijos arba prenumeratos patvirtinimo iš „App Store“.",
     "premium_guest_buy_requires_account": "Prisijunkite arba susikurkite paskyrą, kad įsigytumėte „Premium“",
     "premium_guest_restore_requires_account": "Prisijunkite arba susikurkite paskyrą, kad atkurtumėte pirkinius",
-    "premium_guest_account_required_message": "„Premium“ yra susieta su jūsų programėlės paskyra. Prisijunkite arba susikurkite paskyrą, kad įsigytumėte arba atkurtumėte prenumeratą."
+    "premium_guest_account_required_message": "„Premium“ yra susieta su jūsų programėlės paskyra. Prisijunkite arba susikurkite paskyrą, kad įsigytumėte arba atkurtumėte prenumeratą.",
+    "backup_guest_requires_account": "Atsarginių kopijų eksportavimas ir importavimas galimas tik prisijungusioms programėlės paskyroms. Prisijunkite arba susikurkite paskyrą, kad galėtumėte naudoti atsargines kopijas.",
+    "premium_guest_account_label": "Svečio režimas",
+    "premium_guest_binding_impossible_message": "„Premium“ negalima susieti su svečio režimu. Prisijunkite arba susikurkite programėlės paskyrą, kad užsiprenumeruotumėte."
 }

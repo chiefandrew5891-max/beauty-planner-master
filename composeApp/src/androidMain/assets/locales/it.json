@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Per i rimborsi, potresti aver bisogno della cronologia degli acquisti Apple o della conferma dell'abbonamento dall'App Store.",
     "premium_guest_buy_requires_account": "Accedi o crea un account para acquistare Premium",
     "premium_guest_restore_requires_account": "Accedi o crea un account per ripristinare gli acquisti",
-    "premium_guest_account_required_message": "Premium è collegato al tuo account dell'app. Accedi o crea un account per acquistare o ripristinare il tuo abbonamento."
+    "premium_guest_account_required_message": "Premium è collegato al tuo account dell'app. Accedi o crea un account per acquistare o ripristinare il tuo abbonamento.",
+    "backup_guest_requires_account": "L'esportazione e l'importazione del backup sono disponibili solo per gli account dell'app che hanno effettuato l'accesso. Accedi o crea un account per utilizzare il backup.",
+    "premium_guest_account_label": "Modalità ospite",
+    "premium_guest_binding_impossible_message": "Premium non può essere collegato alla modalità ospite. Accedi o crea un account dell'app per abbonarti."
 }

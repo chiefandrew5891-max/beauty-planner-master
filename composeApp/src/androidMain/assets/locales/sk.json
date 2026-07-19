@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Pri vrátení peňazí môžete potrebovať históriu nákupov Apple alebo potvrdenie o predplatnom z App Store.",
     "premium_guest_buy_requires_account": "Prihláste sa alebo si vytvorte účet na zakúpenie Premium",
     "premium_guest_restore_requires_account": "Prihláste sa alebo si vytvorte účet na obnovenie nákupov",
-    "premium_guest_account_required_message": "Premium je prepojené s vaším účtom v aplikácii. Prihláste sa alebo si vytvorte účet na zakúpenie alebo obnovenie predplatného."
+    "premium_guest_account_required_message": "Premium je prepojené s vaším účtom v aplikácii. Prihláste sa alebo si vytvorte účet na zakúpenie alebo obnovenie predplatného.",
+    "backup_guest_requires_account": "Export a import záloh sú k dispozícii iba pre prihlásené účty aplikácie. Na použitie zálohovania sa prosím prihláste alebo si vytvorte účet.",
+    "premium_guest_account_label": "Režim hosťa",
+    "premium_guest_binding_impossible_message": "Premium nie je možné prepojiť s režimom hosťa. Na predplatné sa prihláste alebo si vytvorte účet v aplikácii."
 }

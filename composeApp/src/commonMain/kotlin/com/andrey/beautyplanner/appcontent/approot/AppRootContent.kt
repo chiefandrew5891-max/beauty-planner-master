@@ -134,13 +134,21 @@ fun AppRootContent(
                     state.navigateTo(Screen.APPEARANCE_SETTINGS)
                 },
                 onOpenBackupSettings = {
+                    if (state.currentAuthUser?.provider == SignInProvider.ANONYMOUS) {
+                        state.showPremiumRequired(
+                            message = Locales.t("backup_guest_requires_account"),
+                            returnTo = Screen.SETTINGS
+                        )
+                        return@SettingsPage
+                    }
+
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
                     if (
                         !AccessManager.hasFeature(PremiumFeature.BACKUP_EXPORT, nowMillis) ||
                         !AccessManager.hasFeature(PremiumFeature.BACKUP_IMPORT, nowMillis)
                     ) {
                         state.showPremiumRequired(
-                            message = Locales.t("premium_required_backup"),
+                            message = Locales.t("premium_required_import"),
                             returnTo = Screen.SETTINGS
                         )
                         return@SettingsPage
@@ -508,9 +516,17 @@ fun AppRootContent(
                 message = state.premiumRequiredMessage,
                 billingUiState = state.billingUiState,
                 accountLabel = when {
-                    state.currentAuthUser?.email?.isNotBlank() == true -> state.currentAuthUser?.email ?: ""
-                    state.currentAuthUser?.displayName?.isNotBlank() == true -> state.currentAuthUser?.displayName ?: ""
-                    else -> Locales.t("billing_account_binding_unknown")
+                    state.currentAuthUser?.provider == SignInProvider.ANONYMOUS ->
+                        Locales.t("premium_guest_account_label")
+
+                    state.currentAuthUser?.email?.isNotBlank() == true ->
+                        state.currentAuthUser?.email ?: ""
+
+                    state.currentAuthUser?.displayName?.isNotBlank() == true ->
+                        state.currentAuthUser?.displayName ?: ""
+
+                    else ->
+                        Locales.t("billing_account_binding_unknown")
                 },
                 isGuestUser = state.currentAuthUser?.provider == SignInProvider.ANONYMOUS,
                 onContinueFree = {
@@ -528,6 +544,13 @@ fun AppRootContent(
             )
             Screen.BACKUP_SETTINGS -> BackupSettingsScreen(
                 onExport = {
+                    if (state.currentAuthUser?.provider == SignInProvider.ANONYMOUS) {
+                        state.showPremiumRequired(
+                            message = Locales.t("backup_guest_requires_account"),
+                            returnTo = Screen.BACKUP_SETTINGS
+                        )
+                        return@BackupSettingsScreen
+                    }
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
                     if (!AccessManager.hasFeature(PremiumFeature.BACKUP_EXPORT, nowMillis)) {
                         state.showPremiumRequired(
@@ -547,6 +570,13 @@ fun AppRootContent(
                     }
                 },
                 onImport = {
+                    if (state.currentAuthUser?.provider == SignInProvider.ANONYMOUS) {
+                        state.showPremiumRequired(
+                            message = Locales.t("backup_guest_requires_account"),
+                            returnTo = Screen.BACKUP_SETTINGS
+                        )
+                        return@BackupSettingsScreen
+                    }
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
                     if (!AccessManager.hasFeature(PremiumFeature.BACKUP_IMPORT, nowMillis)) {
                         state.showPremiumRequired(

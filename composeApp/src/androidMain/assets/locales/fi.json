@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Hyvityksiä varten saatat tarvita Apple-ostohistoriasi tai tilausvahvistuksen App Storesta.",
     "premium_guest_buy_requires_account": "Kirjaudu sisään tai luo tili ostaaksesi Premium-version",
     "premium_guest_restore_requires_account": "Kirjaudu sisään tai luo tili palauttaaksesi ostot",
-    "premium_guest_account_required_message": "Premium on linkitetty sovellustiliisi. Kirjaudu sisään tai luo tili ostaaksesi tai palauttaaksesi tilauksesi."
+    "premium_guest_account_required_message": "Premium on linkitetty sovellustiliisi. Kirjaudu sisään tai luo tili ostaaksesi tai palauttaaksesi tilauksesi.",
+    "backup_guest_requires_account": "Varmuuskopion vienti ja tuonti ovat käytettävissä vain kirjautuneille sovellustileille. Kirjaudu sisään tai luo tili käyttääksesi varmuuskopiointia.",
+    "premium_guest_account_label": "Vierastila",
+    "premium_guest_binding_impossible_message": "Premium-versiota ei voi linkittää vierastilaan. Kirjaudu sisään tai luo sovellustili tilataksesi."
 }

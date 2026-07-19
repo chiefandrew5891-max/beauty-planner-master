@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Für Rückerstattungen benötigen Sie möglicherweise Ihre Apple-Kaufhistorie oder die Abonnementbestätigung aus dem App Store.",
     "premium_guest_buy_requires_account": "Melden Sie sich an oder erstellen Sie ein Konto, um Premium zu erwerben",
     "premium_guest_restore_requires_account": "Melden Sie sich an oder erstellen Sie ein Konto, um Käufe wiederherzustellen",
-    "premium_guest_account_required_message": "Premium ist mit Ihrem App-Konto verknüpft. Melden Sie sich an oder erstellen Sie ein Konto, um Ihr Abonnement zu kaufen oder wiederherzustellen."
+    "premium_guest_account_required_message": "Premium ist mit Ihrem App-Konto verknüpft. Melden Sie sich an oder erstellen Sie ein Konto, um Ihr Abonnement zu kaufen oder wiederherzustellen.",
+    "backup_guest_requires_account": "Export und Import von Backups sind nur für angemeldete App-Konten verfügbar. Bitte melden Sie sich an oder erstellen Sie ein Konto, um das Backup zu nutzen.",
+    "premium_guest_account_label": "Gastmodus",
+    "premium_guest_binding_impossible_message": "Premium kann nicht mit dem Gastmodus verknüpft werden. Melden Sie sich an oder erstellen Sie ein App-Konto, um ein Abonnement abzuschließen."
 }

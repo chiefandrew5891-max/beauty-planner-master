@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Za vračila boste morda potrebovali zgodovino nakupov Apple ali potrditev naročnine iz trgovine App Store.",
     "premium_guest_buy_requires_account": "Prijavite se ali ustvarite račun za nakup Premium",
     "premium_guest_restore_requires_account": "Prijavite se ali ustvarite račun za obnovitev nakupov",
-    "premium_guest_account_required_message": "Premium je povezan z vašim računom aplikacije. Prijavite se ali ustvarite račun za nakup ali obnovitev naročnine."
+    "premium_guest_account_required_message": "Premium je povezan z vašim računom aplikacije. Prijavite se ali ustvarite račun za nakup ali obnovitev naročnine.",
+    "backup_guest_requires_account": "Izvoz in uvoz varnostnih kopij sta na voljo samo za prijavljene račune aplikacij. Prosimo, prijavite se ali ustvarite račun za uporabo varnostnega kopiranja.",
+    "premium_guest_account_label": "Gostujoči način",
+    "premium_guest_binding_impossible_message": "Premium ni mogoče povezati z gostujočim načinom. Prijavite se ali ustvarite račun aplikacije za naročnino."
 }

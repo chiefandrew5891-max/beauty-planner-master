@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Para reembolsos, você pode precisar do seu histórico de compras da Apple ou da confirmação de assinatura da App Store.",
     "premium_guest_buy_requires_account": "Faça login ou crie uma conta para comprar o Premium",
     "premium_guest_restore_requires_account": "Faça login ou crie uma conta para restaurar as compras",
-    "premium_guest_account_required_message": "O Premium está vinculado à sua conta do aplicativo. Faça login ou crie uma conta para comprar ou restaurar sua assinatura."
+    "premium_guest_account_required_message": "O Premium está vinculado à sua conta do aplicativo. Faça login ou crie uma conta para comprar ou restaurar sua assinatura.",
+    "backup_guest_requires_account": "A exportação e importação de backup estão disponíveis apenas para contas de aplicativos conectadas. Faça login ou crie uma conta para usar o backup.",
+    "premium_guest_account_label": "Modo convidado",
+    "premium_guest_binding_impossible_message": "O Premium não pode ser vinculado al modo convidado. Faça login ou crie uma conta do aplicativo para assinar."
 }

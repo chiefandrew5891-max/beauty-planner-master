@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "रिफंड के लिए, आपको अपने Apple खरीद इतिहास या App Store से सदस्यता पुष्टिकरण की आवश्यकता हो सकती है।",
     "premium_guest_buy_requires_account": "Premium खरीदने के लिए साइन इन करें या एक खाता बनाएं",
     "premium_guest_restore_requires_account": "खरीद बहाल करने के लिए साइन इन करें या एक खाता बनाएं",
-    "premium_guest_account_required_message": "Premium आपके ऐप खाते से लिंक है। अपनी सदस्यता खरीदने या बहाल करने के लिए साइन इन करें या एक खाता बनाएं।"
+    "premium_guest_account_required_message": "Premium आपके ऐप खाते से लिंक है। अपनी सदस्यता खरीदने या बहाल करने के लिए साइन इन करें या एक खाता बनाएं।",
+    "backup_guest_requires_account": "बैकअप निर्यात और आयात केवल साइन-इन किए गए ऐप खातों के लिए उपलब्ध हैं। बैकअप का उपयोग करने के लिए कृपया साइन इन करें या एक खाता बनाएं।",
+    "premium_guest_account_label": "अतिथि मोड",
+    "premium_guest_binding_impossible_message": "Premium को अतिथि मोड से लिंक नहीं किया जा सकता है। सदस्यता लेने के लिए कृपया साइन इन करें या एक ऐप खाता बनाएं।"
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -223,7 +222,11 @@ fun PremiumAccessScreen(
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 Text(
-                    text = Locales.t("billing_account_binding_message"),
+                    text = if (isGuestUser) {
+                        Locales.t("premium_guest_binding_impossible_message")
+                    } else {
+                        Locales.t("billing_account_binding_message")
+                    },
                     fontSize = (14 * fontScale).sp,
                     color = MaterialTheme.colors.onBackground.copy(alpha = 0.85f),
                     lineHeight = (20 * fontScale).sp
@@ -335,7 +338,7 @@ fun PremiumAccessScreen(
                     enabled = !isGuestUser && billingUiState.status != BillingStatus.PURCHASING
                 )
 
-                if (!isPremiumActive) {
+                if (!isPremiumActive && !isGuestUser) {
                     Spacer(modifier = Modifier.padding(top = 10.dp))
 
                     SecondaryActionButton(

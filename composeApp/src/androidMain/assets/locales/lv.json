@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "Lai saņemtu atmaksu, jums var būt nepieciešama Apple pirkumu vēsture vai abonementa apstiprinājums no App Store.",
     "premium_guest_buy_requires_account": "Pierakstieties vai izveidojiet kontu, lai iegādātos Premium",
     "premium_guest_restore_requires_account": "Pierakstieties vai izveidojiet kontu, lai atjaunotu pirkumus",
-    "premium_guest_account_required_message": "Premium ir piesaistīts jūsu lietotnes kontam. Pierakstieties vai izveidojiet kontu, lai iegādātos vai atjaunotu abonementu."
+    "premium_guest_account_required_message": "Premium ir piesaistīts jūsu lietotnes kontam. Pierakstieties vai izveidojiet kontu, lai iegādātos vai atjaunotu abonementu.",
+    "backup_guest_requires_account": "Dublikātu eksportēšana un importēšana ir pieejama tikai pieteiktiem lietotnes kontiem. Lūdzu, pierakstieties vai izveidojiet kontu, lai izmantotu dublēšanu.",
+    "premium_guest_account_label": "Viesa režīms",
+    "premium_guest_binding_impossible_message": "Premium nevar piesaistīt viesa režīmam. Pierakstieties vai izveidojiet lietotnes kontu, lai abonētu."
 }

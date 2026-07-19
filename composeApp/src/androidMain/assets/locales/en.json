@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "For refunds, you may need your Apple purchase history or subscription confirmation from the App Store.",
     "premium_guest_buy_requires_account": "Sign in or create an account to purchase Premium",
     "premium_guest_restore_requires_account": "Sign in or create an account to restore purchases",
-    "premium_guest_account_required_message": "Premium is linked to your app account. Sign in or create an account to purchase or restore your subscription."
+    "premium_guest_account_required_message": "Premium is linked to your app account. Sign in or create an account to purchase or restore your subscription.",
+    "backup_guest_requires_account": "Backup export and import are available only for signed-in app accounts. Please sign in or create an account to use backup.",
+    "premium_guest_account_label": "Guest Mode",
+    "premium_guest_binding_impossible_message": "Premium cannot be linked to a guest account. Sign in or create an app account to purchase a subscription."
 }

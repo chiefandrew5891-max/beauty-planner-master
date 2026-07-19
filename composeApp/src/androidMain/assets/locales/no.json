@@ -538,5 +538,8 @@
     "billing_refund_info_message_ios": "For refusjon kan du trenge Apple-kjøpshistorikken din eller abonnementsbekreftelsen fra App Store.",
     "premium_guest_buy_requires_account": "Logg inn eller opprett en konto for å kjøpe Premium",
     "premium_guest_restore_requires_account": "Logg inn eller opprett en konto for å gjenopprette kjøp",
-    "premium_guest_account_required_message": "Premium er knyttet til din app-konto. Logg inn eller opprett en konto for å kjøpe eller gjenopprette abonnementet ditt."
+    "premium_guest_account_required_message": "Premium er knyttet til din app-konto. Logg inn eller opprett en konto for å kjøpe eller gjenopprette abonnementet ditt.",
+    "backup_guest_requires_account": "Eksport og import av sikkerhetskopi er bare tilgjengelig for innloggede app-konti. Logg inn eller opprett en konto for å bruke sikkerhetskopiering.",
+    "premium_guest_account_label": "Gjestemodus",
+    "premium_guest_binding_impossible_message": "Premium kan ikke knyttes til gjestemodus. Logg inn eller opprett en app-konto for å abonnere."
 }
