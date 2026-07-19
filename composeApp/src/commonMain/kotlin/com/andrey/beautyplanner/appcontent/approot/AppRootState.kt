@@ -237,6 +237,10 @@ class AppRootState(
         CloudSyncLogger.log("reloadAppointmentsForProfile: loaded=${loaded.size}")
     }
 
+    fun refreshBillingLocalization() {
+        billingUiState = billingUiState.copy(errorMessage = null)
+        initBilling()
+    }
     fun reloadAppointmentsForCurrentProfile() {
         reloadAppointmentsForProfile(LocalProfileManager.currentProfileKey())
     }

@@ -281,6 +281,7 @@ fun AppearanceSettingsScreen(state: AppRootState) {
                             AppSettings.persist()
 
                             Locales.onLanguageChanged(code)
+                            state.refreshBillingLocalization()
 
                             state.currentLiveDarkMode = AppSettings.isDarkMode
                             state.fontScale = AppSettings.getFontScale()
