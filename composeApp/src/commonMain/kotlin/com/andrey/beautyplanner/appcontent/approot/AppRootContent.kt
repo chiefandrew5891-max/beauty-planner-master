@@ -42,8 +42,32 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import com.andrey.beautyplanner.auth.SignInProvider
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
+private const val APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS = 24L * 60L * 60L * 1000L
 
+private fun canManageAppointment(
+    appointment: Appointment,
+    nowMillis: Long = Clock.System.now().toEpochMilliseconds()
+): Boolean {
+    val appointmentDate = runCatching { kotlinx.datetime.LocalDate.parse(appointment.dateString) }.getOrNull() ?: return true
+    val timeParts = appointment.time.split(":")
+    val hour = timeParts.getOrNull(0)?.toIntOrNull() ?: 0
+    val minute = timeParts.getOrNull(1)?.toIntOrNull() ?: 0
+
+    val appointmentStart = runCatching {
+        kotlinx.datetime.LocalDateTime(
+            year = appointmentDate.year,
+            monthNumber = appointmentDate.monthNumber,
+            dayOfMonth = appointmentDate.dayOfMonth,
+            hour = hour,
+            minute = minute
+        ).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+    }.getOrNull() ?: return true
+
+    return nowMillis <= appointmentStart + APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS
+}
 @OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun AppRootContent(
@@ -800,8 +824,12 @@ fun AppRootContent(
         val apptToView = viewingAppt
         val statusToView = viewingStatus
         if (apptToView != null && statusToView != null) {
-            val apptDate = runCatching { kotlinx.datetime.LocalDate.parse(apptToView.dateString) }.getOrNull()
-            val actionsEnabled = apptDate == null || apptDate >= state.today
+            val actionsEnabled =
+                if (AppSettings.developerModeUnlocked) {
+                    true
+                } else {
+                    canManageAppointment(apptToView)
+                }
 
             AppointmentDetailsDialog(
                 appt = apptToView,
@@ -809,7 +837,6 @@ fun AppRootContent(
                 endHm = viewingEndHm,
                 status = statusToView,
                 actionsEnabled = actionsEnabled,
-                allowDeletePast = AppSettings.developerModeUnlocked,
                 onDismiss = {
                     viewingAppt = null
                     viewingStatus = null
@@ -831,7 +858,7 @@ fun AppRootContent(
                     state.bookingReadOnly = false
                 },
                 onDeleteClick = {
-                    if (!(actionsEnabled || AppSettings.developerModeUnlocked)) {
+                    if (!actionsEnabled) {
                         return@AppointmentDetailsDialog
                     }
                     viewingAppt = null

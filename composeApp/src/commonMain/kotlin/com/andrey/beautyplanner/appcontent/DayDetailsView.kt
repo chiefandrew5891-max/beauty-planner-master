@@ -26,7 +26,35 @@ import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.coroutines.delay
 import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
+
+private const val APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS = 24L * 60L * 60L * 1000L
+
+private fun canManageAppointment(
+    appointment: Appointment,
+    nowMillis: Long = Clock.System.now().toEpochMilliseconds()
+): Boolean {
+    val appointmentDate = runCatching { LocalDate.parse(appointment.dateString) }.getOrNull() ?: return true
+    val timeParts = appointment.time.split(":")
+    val hour = timeParts.getOrNull(0)?.toIntOrNull() ?: 0
+    val minute = timeParts.getOrNull(1)?.toIntOrNull() ?: 0
+
+    val appointmentStart = runCatching {
+        kotlinx.datetime.LocalDateTime(
+            year = appointmentDate.year,
+            monthNumber = appointmentDate.monthNumber,
+            dayOfMonth = appointmentDate.dayOfMonth,
+            hour = hour,
+            minute = minute
+        ).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+    }.getOrNull() ?: return true
+
+    return nowMillis <= appointmentStart + APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS
+}
 private fun minutesToHm(mins: Int): String {
     val safe = mins.coerceIn(0, 24 * 60 - 1)
     val h = safe / 60
@@ -330,7 +358,12 @@ fun DayDetailsView(
     val apptToView = viewingAppt
     val liveStatusToView = viewingStatus
     if (apptToView != null && liveStatusToView != null) {
-        val actionsEnabled = date >= today
+        val actionsEnabled =
+            if (AppSettings.developerModeUnlocked) {
+                true
+            } else {
+                canManageAppointment(apptToView)
+            }
 
         AppointmentDetailsDialog(
             appt = apptToView,
@@ -338,7 +371,6 @@ fun DayDetailsView(
             endHm = viewingEndHm,
             status = liveStatusToView,
             actionsEnabled = actionsEnabled,
-            allowDeletePast = AppSettings.developerModeUnlocked,
             onDismiss = {
                 viewingAppt = null
                 viewingStatus = null
@@ -356,7 +388,7 @@ fun DayDetailsView(
                 onTransferClick(apptToView)
             },
             onDeleteClick = {
-                if (!(actionsEnabled || AppSettings.developerModeUnlocked)) {
+                if (!actionsEnabled) {
                     return@AppointmentDetailsDialog
                 }
                 viewingAppt = null
