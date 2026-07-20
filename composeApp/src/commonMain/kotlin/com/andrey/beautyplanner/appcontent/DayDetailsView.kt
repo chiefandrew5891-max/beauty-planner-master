@@ -22,6 +22,7 @@ import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.getCurrentTimeHm
 import com.andrey.beautyplanner.utils.getLiveStatus
+import com.andrey.beautyplanner.utils.isWithinEditGracePeriod
 import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.coroutines.delay
@@ -331,16 +332,7 @@ fun DayDetailsView(
     val liveStatusToView = viewingStatus
     if (apptToView != null && liveStatusToView != null) {
         val actionsEnabled = date >= today
-        val canEditInGracePeriod = if (!actionsEnabled) {
-            val apptTimeMin = parseHmToMinutes(apptToView.time) ?: 0
-            val apptLocalDt = LocalDateTime(
-                date.year, date.month, date.dayOfMonth,
-                apptTimeMin / 60, apptTimeMin % 60, 0
-            )
-            val apptInstant = apptLocalDt.toInstant(TimeZone.currentSystemDefault())
-            val diffMs = Clock.System.now().toEpochMilliseconds() - apptInstant.toEpochMilliseconds()
-            diffMs in 0L..(24L * 60L * 60L * 1000L)
-        } else false
+        val canEditInGracePeriod = !actionsEnabled && isWithinEditGracePeriod(date, apptToView.time)
 
         AppointmentDetailsDialog(
             appt = apptToView,
