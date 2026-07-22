@@ -10,12 +10,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import android.content.Intent
 import com.andrey.beautyplanner.auth.GoogleSignInFallbackBridge
 import com.andrey.beautyplanner.auth.GoogleSignInFallbackResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -28,6 +32,7 @@ import java.net.URL
 
 private const val AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS = 10_000
 private const val AVATAR_DOWNLOAD_READ_TIMEOUT_MS = 15_000
+private const val AVATAR_DOWNLOAD_USER_AGENT = "BeautyPlanner/1.0"
 
 class MainActivity : ComponentActivity() {
 
@@ -253,12 +258,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun processAvatarUrl(url: String, onResult: (String?) -> Unit) {
-        Thread {
+        lifecycleScope.launch(Dispatchers.IO) {
             val result = runCatching { downloadAndProcessAvatar(url) }.getOrNull()
-            runOnUiThread {
+            withContext(Dispatchers.Main) {
                 onResult(result)
             }
-        }.start()
+        }
     }
 
     private fun downloadAndProcessAvatar(url: String): String? {
@@ -271,6 +276,7 @@ class MainActivity : ComponentActivity() {
             connection.connectTimeout = AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS
             connection.readTimeout = AVATAR_DOWNLOAD_READ_TIMEOUT_MS
             connection.setRequestProperty("Accept", "image/*")
+            connection.setRequestProperty("User-Agent", AVATAR_DOWNLOAD_USER_AGENT)
             connection.connect()
 
             if (connection.responseCode !in 200..299) return null

@@ -74,6 +74,8 @@ private fun FractionalStarRatingRow(rating: Float) {
 
 @Composable
 private fun FractionalStar(fillFraction: Float) {
+    // Draw the muted star first, then clip a second full star to the desired width
+    // so fractional ratings keep a clean silhouette and visible unfilled remainder.
     Box(
         modifier = Modifier.size(24.dp),
         contentAlignment = Alignment.CenterStart

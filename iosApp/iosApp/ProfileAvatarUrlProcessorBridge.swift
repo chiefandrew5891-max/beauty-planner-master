@@ -24,8 +24,8 @@ final class ProfileAvatarUrlProcessorBridge {
             return nil
         }
 
-        let normalised = normalise(image)
-        guard let cgImage = normalised.cgImage else { return nil }
+        let normalized = normalize(image)
+        guard let cgImage = normalized.cgImage else { return nil }
 
         let width = CGFloat(cgImage.width)
         let height = CGFloat(cgImage.height)
@@ -49,7 +49,7 @@ final class ProfileAvatarUrlProcessorBridge {
         return jpegData.base64EncodedString()
     }
 
-    private static func normalise(_ image: UIImage) -> UIImage {
+    private static func normalize(_ image: UIImage) -> UIImage {
         if image.imageOrientation == .up { return image }
         let renderer = UIGraphicsImageRenderer(size: image.size)
         return renderer.image { _ in
