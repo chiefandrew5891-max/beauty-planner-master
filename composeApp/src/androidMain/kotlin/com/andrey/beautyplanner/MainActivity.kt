@@ -32,7 +32,7 @@ import java.net.URL
 
 private const val AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS = 10_000
 private const val AVATAR_DOWNLOAD_READ_TIMEOUT_MS = 15_000
-private const val AVATAR_DOWNLOAD_USER_AGENT = "BeautyPlanner/1.0"
+private const val AVATAR_DOWNLOAD_USER_AGENT = "BeautyPlanner"
 
 class MainActivity : ComponentActivity() {
 
@@ -267,10 +267,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun downloadAndProcessAvatar(url: String): String? {
-        val lowercaseUrl = url.lowercase()
-        if (!lowercaseUrl.startsWith("http://") && !lowercaseUrl.startsWith("https://")) return null
+        val parsedUrl = URL(url)
+        val scheme = parsedUrl.protocol.lowercase()
+        if (scheme != "http" && scheme != "https") return null
 
-        val connection = (URL(url).openConnection() as? HttpURLConnection) ?: return null
+        val connection = (parsedUrl.openConnection() as? HttpURLConnection) ?: return null
         return try {
             connection.instanceFollowRedirects = true
             connection.connectTimeout = AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS

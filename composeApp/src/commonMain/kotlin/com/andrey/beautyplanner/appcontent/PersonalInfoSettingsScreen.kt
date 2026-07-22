@@ -69,12 +69,6 @@ fun PersonalInfoSettingsScreen() {
                 displayCustomNameDraft != AppSettings.profileDisplayCustomName ||
                 specializationDraft.trim() != AppSettings.profileSpecialization.trim()
 
-    val hasPreviewData = userNameDraft.trim().isNotBlank() ||
-            phoneDraft.trim().isNotBlank() ||
-            avatarUrlDraft.trim().isNotBlank() ||
-            avatarBase64Draft.isNotBlank() ||
-            AppSettings.profileRating > 0f
-
     val avatarBitmap = rememberProfileAvatarBitmap(avatarBase64Draft)
 
     // Show avatar crop editor when a raw (uncropped) image has been picked
@@ -114,78 +108,76 @@ fun PersonalInfoSettingsScreen() {
 
             Divider()
 
-            if (hasPreviewData) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .aspectRatio(1f),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(0.6f)
-                            .aspectRatio(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (avatarBitmap != null) {
-                            Image(
-                                bitmap = avatarBitmap,
-                                contentDescription = Locales.t("profile_avatar_cd"),
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape),
-                                contentScale = ContentScale.Crop
+                    if (avatarBitmap != null) {
+                        Image(
+                            bitmap = avatarBitmap,
+                            contentDescription = Locales.t("profile_avatar_cd"),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colors.onSurface.copy(alpha = 0.10f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = userNameDraft.trim().take(1).ifBlank { "?" }.uppercase(),
+                                fontSize = (72 * fontScale).sp,
+                                fontWeight = FontWeight.Bold,
+                                color = onSurface.copy(alpha = 0.65f)
                             )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colors.onSurface.copy(alpha = 0.10f)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = userNameDraft.trim().take(1).ifBlank { "?" }.uppercase(),
-                                    fontSize = (72 * fontScale).sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = onSurface.copy(alpha = 0.65f)
-                                )
-                            }
                         }
                     }
-
-                    if (userNameDraft.trim().isNotBlank()) {
-                        Text(
-                            text = userNameDraft.trim(),
-                            fontSize = (24 * fontScale).sp,
-                            fontWeight = FontWeight.Bold,
-                            color = onBg,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    if (specializationDraft.trim().isNotBlank()) {
-                        Text(
-                            text = specializationDraft.trim(),
-                            fontSize = (14 * fontScale).sp,
-                            color = onSurface.copy(alpha = 0.72f),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    if (phoneDraft.trim().isNotBlank() && phoneVisibleDraft) {
-                        Text(
-                            text = phoneDraft.trim(),
-                            fontSize = (14 * fontScale).sp,
-                            color = onSurface.copy(alpha = 0.72f),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    ProfileRatingBlock(rating = AppSettings.profileRating)
                 }
 
-                Divider()
+                if (userNameDraft.trim().isNotBlank()) {
+                    Text(
+                        text = userNameDraft.trim(),
+                        fontSize = (24 * fontScale).sp,
+                        fontWeight = FontWeight.Bold,
+                        color = onBg,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                if (specializationDraft.trim().isNotBlank()) {
+                    Text(
+                        text = specializationDraft.trim(),
+                        fontSize = (14 * fontScale).sp,
+                        color = onSurface.copy(alpha = 0.72f),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                if (phoneDraft.trim().isNotBlank() && phoneVisibleDraft) {
+                    Text(
+                        text = phoneDraft.trim(),
+                        fontSize = (14 * fontScale).sp,
+                        color = onSurface.copy(alpha = 0.72f),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                ProfileRatingBlock(rating = AppSettings.profileRating)
             }
+
+            Divider()
 
             ProfileTextField(
                 title = Locales.t("user_name_label"),
