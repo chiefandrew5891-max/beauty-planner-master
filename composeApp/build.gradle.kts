@@ -59,7 +59,11 @@ kotlin {
                 implementation("androidx.core:core-ktx:1.13.1")
                 implementation("org.jetbrains.compose.ui:ui-tooling-preview:1.6.11")
                 implementation("androidx.browser:browser:1.8.0")
-                implementation(libs.googlePlayBilling)
+
+                // ВАЖНО: фикс совместимости Kotlin metadata.
+                // Google требует Billing >= 8.0.0, ставим 8.0.0 (совместимо с текущим стеком).
+                // Не используем libs.googlePlayBilling, т.к. он может тянуть 9.0.0.
+                implementation("com.android.billingclient:billing-ktx:8.0.0")
 
                 implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
                 implementation("com.google.firebase:firebase-auth-ktx:23.2.0")

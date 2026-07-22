@@ -16,6 +16,7 @@ import com.andrey.beautyplanner.AndroidAppContext
 import com.andrey.beautyplanner.AppSettings
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import com.android.billingclient.api.QueryProductDetailsResult
 
 actual class BillingManager actual constructor() {
 
@@ -128,7 +129,9 @@ actual class BillingManager actual constructor() {
             .build()
 
         return suspendCancellableCoroutine { cont ->
-            billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
+            billingClient.queryProductDetailsAsync(
+                params
+            ) { billingResult: BillingResult, result: com.android.billingclient.api.QueryProductDetailsResult ->
                 if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
                     cachedProductDetails = emptyMap()
                     cachedBillingProducts = emptyMap()
@@ -136,12 +139,15 @@ actual class BillingManager actual constructor() {
                     return@queryProductDetailsAsync
                 }
 
-                cachedProductDetails = productDetailsList.associateBy { it.productId }
+                val detailsList: List<ProductDetails> = result.productDetailsList.orEmpty()
 
-                val mappedProducts = productDetailsList.mapNotNull { details ->
+                cachedProductDetails = detailsList.associateBy { details: ProductDetails ->
+                    details.productId
+                }
+
+                val mappedProducts = detailsList.mapNotNull { details: ProductDetails ->
                     val subscriptionOffers = details.subscriptionOfferDetails.orEmpty()
                     val selectedOffer = subscriptionOffers.firstOrNull() ?: return@mapNotNull null
-
                     val pricingPhase = selectedOffer.pricingPhases.pricingPhaseList.firstOrNull()
                         ?: return@mapNotNull null
 
@@ -159,7 +165,6 @@ actual class BillingManager actual constructor() {
                 }
 
                 cachedBillingProducts = mappedProducts.associateBy { it.productId }
-
                 cont.resume(mappedProducts)
             }
         }
