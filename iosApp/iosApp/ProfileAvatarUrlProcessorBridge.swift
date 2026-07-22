@@ -2,6 +2,7 @@ import UIKit
 import ComposeApp
 
 final class ProfileAvatarUrlProcessorBridge {
+    private static let avatarCompressionQuality: CGFloat = 0.85
 
     static func register() {
         ProfileAvatarUrlProcessor.shared.processImpl = { url, onResult in
@@ -42,7 +43,7 @@ final class ProfileAvatarUrlProcessorBridge {
             UIImage(cgImage: croppedCg).draw(in: CGRect(origin: .zero, size: targetSize))
         }
 
-        guard let jpegData = resized.jpegData(compressionQuality: 0.85) else { return nil }
+        guard let jpegData = resized.jpegData(compressionQuality: avatarCompressionQuality) else { return nil }
         return jpegData.base64EncodedString()
     }
 

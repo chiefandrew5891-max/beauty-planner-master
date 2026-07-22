@@ -2,6 +2,7 @@ package com.andrey.beautyplanner
 
 import kotlin.math.roundToInt
 
+const val DEFAULT_PROFILE_RATING = 4.7f
 private const val PROFILE_RATING_SCALE = 5f
 
 fun normalizedProfileRating(value: Float): Float =

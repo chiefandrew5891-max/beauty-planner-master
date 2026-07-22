@@ -254,9 +254,9 @@ fun PersonalInfoSettingsScreen() {
                 placeholder = Locales.t("profile_avatar_url_hint")
             )
 
-            if (!avatarUrlErrorMessage.isNullOrBlank()) {
+            avatarUrlErrorMessage?.takeIf { it.isNotBlank() }?.let { errorMessage ->
                 Text(
-                    text = avatarUrlErrorMessage.orEmpty(),
+                    text = errorMessage,
                     fontSize = (13 * fontScale).sp,
                     color = MaterialTheme.colors.error
                 )

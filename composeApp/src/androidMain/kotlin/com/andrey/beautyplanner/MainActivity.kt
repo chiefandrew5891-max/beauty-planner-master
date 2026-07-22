@@ -26,6 +26,9 @@ import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
+private const val AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS = 10_000
+private const val AVATAR_DOWNLOAD_READ_TIMEOUT_MS = 15_000
+
 class MainActivity : ComponentActivity() {
 
     private val requestNotificationsPermissionLauncher =
@@ -262,8 +265,8 @@ class MainActivity : ComponentActivity() {
         val connection = (URL(url).openConnection() as? HttpURLConnection) ?: return null
         return try {
             connection.instanceFollowRedirects = true
-            connection.connectTimeout = 10_000
-            connection.readTimeout = 15_000
+            connection.connectTimeout = AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS
+            connection.readTimeout = AVATAR_DOWNLOAD_READ_TIMEOUT_MS
             connection.setRequestProperty("Accept", "image/*")
             connection.connect()
 

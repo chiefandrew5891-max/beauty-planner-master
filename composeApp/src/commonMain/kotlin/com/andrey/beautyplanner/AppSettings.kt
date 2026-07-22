@@ -67,7 +67,7 @@ private data class SettingsSnapshot(
     val ownerName: String = "",
     val profilePhone: String = "",
     val profilePhoneVisible: Boolean = true,
-    val profileRating: Float = 4.7f,
+    val profileRating: Float = DEFAULT_PROFILE_RATING,
     val profileAvatarUrl: String = "",
     val profileAvatarBase64: String = "",
     val profileDisplayCustomName: Boolean = false,
@@ -186,7 +186,7 @@ object AppSettings {
     var ownerName by mutableStateOf("")
     var profilePhone by mutableStateOf("")
     var profilePhoneVisible by mutableStateOf(true)
-    var profileRating by mutableStateOf(4.7f)
+    var profileRating by mutableStateOf(DEFAULT_PROFILE_RATING)
     var profileAvatarUrl by mutableStateOf("")
     var profileAvatarBase64 by mutableStateOf("")
     var profileDisplayCustomName by mutableStateOf(false)
