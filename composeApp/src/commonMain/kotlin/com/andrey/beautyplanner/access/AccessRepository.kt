@@ -38,11 +38,12 @@ object AccessRepository {
             0
         }
 
+        val trialEndsAtMillis = AppSettings.cachedTrialEndsAtMillis
         return AccessState(
             tier = tier,
             trialStartedAtMillis = AppSettings.trialStartedAtMillis,
-            trialEndsAtMillis = AppSettings.cachedTrialEndsAtMillis,
-            isTrialActive = tier == AccessTier.TRIAL,
+            trialEndsAtMillis = trialEndsAtMillis,
+            isTrialActive = tier == AccessTier.TRIAL && trialEndsAtMillis > nowMillis,
             hasPremium = AppSettings.cachedHasPremium,
             trialDaysLeft = daysLeft
         )

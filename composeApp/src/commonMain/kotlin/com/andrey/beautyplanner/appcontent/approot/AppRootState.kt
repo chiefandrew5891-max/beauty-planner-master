@@ -104,6 +104,8 @@ class AppRootState(
     var premiumRequiredMessage by mutableStateOf("")
     var premiumReturnScreen by mutableStateOf(Screen.SETTINGS)
 
+    var freeLimitPopupMessage by mutableStateOf<String?>(null)
+
     var mustCreatePin by mutableStateOf(false)
     var locked by mutableStateOf(AppSettings.pinEnabled && AppSettings.isPinSet())
 
