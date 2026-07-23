@@ -871,7 +871,7 @@ fun AppRootContent(
 
                                 else -> {
                                     val remaining =
-                                        AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - threshold
+                                        AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newVisibleCount
                                     if (isTrialActive)
                                         Locales.t("free_limit_popup_slots_remaining_trial")
                                             .replace("{count}", remaining.toString())

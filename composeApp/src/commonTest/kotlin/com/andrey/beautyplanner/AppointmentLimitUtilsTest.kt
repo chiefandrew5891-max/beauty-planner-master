@@ -85,7 +85,7 @@ class AppointmentLimitUtilsTest {
     }
 
     @Test
-    fun isTrialActive_falseWhenEndsAtMillisIsZero() {
+    fun isTrialActive_falseWhenTrialExpired() {
         // isTrialActive should be false when trialEndsAtMillis <= nowMillis
         val expiredState = AccessState(
             tier = AccessTier.TRIAL,
