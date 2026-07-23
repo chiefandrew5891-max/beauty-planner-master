@@ -290,7 +290,7 @@ fun SettingsPage(
                         color = onSurface
                     )
 
-                    if (accessState.tier == AccessTier.TRIAL) {
+                    if (accessState.isTrialActive) {
                         Text(
                             text = "${Locales.t("premium_trial_days_left")}: ${accessState.trialDaysLeft}",
                             fontSize = (14 * fontScale).sp,

@@ -49,10 +49,10 @@ fun PremiumAccessScreen(
     val fontScale = AppSettings.getFontScale()
     val linkColor = MaterialTheme.colors.primary
 
-    val subtitle = when (accessState.tier) {
-        AccessTier.TRIAL -> Locales.t("premium_trial_active_subtitle")
-        AccessTier.FREE_LIMITED -> Locales.t("premium_free_limited_subtitle")
-        AccessTier.PREMIUM -> Locales.t("premium_active_subtitle")
+    val subtitle = when {
+        accessState.tier == AccessTier.PREMIUM -> Locales.t("premium_active_subtitle")
+        accessState.isTrialActive -> Locales.t("premium_trial_active_subtitle")
+        else -> Locales.t("premium_trial_expired_subtitle")
     }
 
     val premiumProduct = billingUiState.products.firstOrNull {

@@ -226,7 +226,7 @@ fun AppRootContent(
             Screen.STATS -> {
                 val premiumEnabled =
                     state.accessState.tier == AccessTier.PREMIUM ||
-                            state.accessState.tier == AccessTier.TRIAL
+                            state.accessState.isTrialActive
 
                 StatsPage(
                     appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
@@ -256,7 +256,7 @@ fun AppRootContent(
             Screen.UNPAID_APPOINTMENTS -> {
                 val premiumEnabled =
                     state.accessState.tier == AccessTier.PREMIUM ||
-                            state.accessState.tier == AccessTier.TRIAL
+                            state.accessState.isTrialActive
 
                 UnpaidAppointmentsScreen(
                     appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
@@ -289,11 +289,15 @@ fun AppRootContent(
                 }
                 val visibleAppointmentsCount =
                     AppointmentSyncUtils.visibleAppointmentsCount(state.appointments)
-                val appointmentLimitNotice = when (state.accessState.tier) {
-                    AccessTier.FREE_LIMITED -> {
+                val appointmentLimitNotice = run {
+                    val nowMs = Clock.System.now().toEpochMilliseconds()
+                    val isEffectivelyFreeLimited = !AccessManager.hasPremiumScreenAccess(nowMs)
+                    if (!isEffectivelyFreeLimited) {
+                        null
+                    } else {
                         val remainingSlots = AccessManager.getRemainingFreeSlots(
                             currentAppointmentsCount = visibleAppointmentsCount,
-                            nowMillis = Clock.System.now().toEpochMilliseconds()
+                            nowMillis = nowMs
                         )
                         if (AccessManager.shouldShowFreeLimitWarning(remainingSlots)) {
                             Locales.t("premium_free_limit_slots_warning")
@@ -302,8 +306,6 @@ fun AppRootContent(
                             null
                         }
                     }
-
-                    else -> null
                 }
 
                 val listState = rememberLazyListState()
@@ -761,7 +763,7 @@ fun AppRootContent(
             Screen.ARCHIVE -> {
                 val premiumEnabled =
                     state.accessState.tier == AccessTier.PREMIUM ||
-                            state.accessState.tier == AccessTier.TRIAL
+                            state.accessState.isTrialActive
 
                 ArchivePage(
                     appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
@@ -848,6 +850,39 @@ fun AppRootContent(
                     state.replaceById(newAppt)
                     state.saveAll()
 
+                    if (isNewAppointment) {
+                        val newVisibleCount = AppointmentSyncUtils.visibleAppointmentsCount(
+                            state.appointments
+                        )
+                        val threshold = AccessManager.getFreeLimitPopupThreshold(newVisibleCount)
+                        if (threshold != null) {
+                            val isTrialActive = state.accessState.isTrialActive
+                            state.freeLimitPopupMessage = when (threshold) {
+                                1 -> if (isTrialActive)
+                                    Locales.t("free_limit_popup_after_first_trial")
+                                else
+                                    Locales.t("free_limit_popup_after_first_free")
+
+                                AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT ->
+                                    if (isTrialActive)
+                                        Locales.t("free_limit_popup_limit_reached_trial")
+                                    else
+                                        Locales.t("free_limit_popup_limit_reached_free")
+
+                                else -> {
+                                    val remaining =
+                                        AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newVisibleCount
+                                    if (isTrialActive)
+                                        Locales.t("free_limit_popup_slots_remaining_trial")
+                                            .replace("{count}", remaining.toString())
+                                    else
+                                        Locales.t("free_limit_popup_slots_remaining_free")
+                                            .replace("{count}", remaining.toString())
+                                }
+                            }
+                        }
+                    }
+
                     state.showBookingDialog = false
                     state.editingAppointment = null
                     state.transferA = null
@@ -933,6 +968,35 @@ fun AppRootContent(
                     viewingStatus = null
                     state.showDeleteConfirm = apptToView
                 }
+            )
+        }
+
+        val popupMessage = state.freeLimitPopupMessage
+        if (popupMessage != null) {
+            androidx.compose.material.AlertDialog(
+                onDismissRequest = { state.freeLimitPopupMessage = null },
+                title = {
+                    Text(
+                        text = Locales.t("free_limit_popup_title"),
+                        fontSize = (17 * state.fontScale).sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                },
+                text = {
+                    Text(
+                        text = popupMessage,
+                        fontSize = (14 * state.fontScale).sp,
+                        lineHeight = (20 * state.fontScale).sp
+                    )
+                },
+                confirmButton = {
+                    androidx.compose.material.TextButton(
+                        onClick = { state.freeLimitPopupMessage = null }
+                    ) {
+                        Text(Locales.t("close"))
+                    }
+                },
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
             )
         }
     }
