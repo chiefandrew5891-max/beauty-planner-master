@@ -1,46 +1,56 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
+import com.andrey.beautyplanner.CloudSyncLogger
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.ProfileAvatarUrlProcessor
 import com.andrey.beautyplanner.ProfileImagePicker
+import com.andrey.beautyplanner.remote.MasterProfileSync
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.layout.ContentScale
+import kotlinx.coroutines.launch
 
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PersonalInfoSettingsScreen() {
     val fontScale = AppSettings.getFontScale()
@@ -56,9 +66,10 @@ fun PersonalInfoSettingsScreen() {
     var specializationDraft by remember { mutableStateOf(AppSettings.profileSpecialization) }
     var avatarUrlErrorMessage by remember { mutableStateOf<String?>(null) }
     var isSaving by remember { mutableStateOf(false) }
-
-    // Raw (uncropped) base64 returned by the picker; triggers the crop editor dialog
     var pendingRawBase64 by remember { mutableStateOf<String?>(null) }
+    var isRefreshingProfile by remember { mutableStateOf(false) }
+
+    val scope = rememberCoroutineScope()
 
     val hasChanges =
         userNameDraft.trim() != AppSettings.ownerName.trim() ||
@@ -71,7 +82,26 @@ fun PersonalInfoSettingsScreen() {
 
     val avatarBitmap = rememberProfileAvatarBitmap(avatarBase64Draft)
 
-    // Show avatar crop editor when a raw (uncropped) image has been picked
+    fun refreshMasterProfile(force: Boolean) {
+        scope.launch {
+            isRefreshingProfile = true
+            MasterProfileSync.pullIfAuthenticated(force = force)
+                .onFailure {
+                    CloudSyncLogger.log("pullMasterProfile: failed: ${it.message}")
+                }
+            isRefreshingProfile = false
+        }
+    }
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshingProfile,
+        onRefresh = { refreshMasterProfile(force = true) }
+    )
+
+    LaunchedEffect(Unit) {
+        refreshMasterProfile(force = false)
+    }
+
     pendingRawBase64?.let { rawBase64 ->
         AvatarCropEditorDialog(
             rawBase64 = rawBase64,
@@ -85,249 +115,272 @@ fun PersonalInfoSettingsScreen() {
         )
     }
 
-    CenteredNarrowContentContainer {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            Text(
-                text = Locales.t("profile_master_title"),
-                fontSize = (22 * fontScale).sp,
-                fontWeight = FontWeight.Bold,
-                color = onBg
-            )
-
-            Text(
-                text = Locales.t("profile_master_description"),
-                fontSize = (14 * fontScale).sp,
-                color = onBg.copy(alpha = 0.7f)
-            )
-
-            Divider()
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
+    ) {
+        CenteredNarrowContentContainer {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.6f)
-                        .aspectRatio(1f),
-                    contentAlignment = Alignment.Center
+                Text(
+                    text = Locales.t("profile_master_title"),
+                    fontSize = (22 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = onBg
+                )
+
+                Text(
+                    text = Locales.t("profile_master_description"),
+                    fontSize = (14 * fontScale).sp,
+                    color = onBg.copy(alpha = 0.7f)
+                )
+
+                Divider()
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    if (avatarBitmap != null) {
-                        Image(
-                            bitmap = avatarBitmap,
-                            contentDescription = Locales.t("profile_avatar_cd"),
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colors.onSurface.copy(alpha = 0.10f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = userNameDraft.trim().take(1).ifBlank { "?" }.uppercase(),
-                                fontSize = (72 * fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                color = onSurface.copy(alpha = 0.65f)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.6f)
+                            .aspectRatio(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (avatarBitmap != null) {
+                            Image(
+                                bitmap = avatarBitmap,
+                                contentDescription = Locales.t("profile_avatar_cd"),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
                             )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colors.onSurface.copy(alpha = 0.10f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = userNameDraft.trim().take(1).ifBlank { "?" }.uppercase(),
+                                    fontSize = (72 * fontScale).sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = onSurface.copy(alpha = 0.65f)
+                                )
+                            }
                         }
+                    }
+
+                    if (userNameDraft.trim().isNotBlank()) {
+                        Text(
+                            text = userNameDraft.trim(),
+                            fontSize = (24 * fontScale).sp,
+                            fontWeight = FontWeight.Bold,
+                            color = onBg,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    if (specializationDraft.trim().isNotBlank()) {
+                        Text(
+                            text = specializationDraft.trim(),
+                            fontSize = (14 * fontScale).sp,
+                            color = onSurface.copy(alpha = 0.72f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    if (phoneDraft.trim().isNotBlank() && phoneVisibleDraft) {
+                        Text(
+                            text = phoneDraft.trim(),
+                            fontSize = (14 * fontScale).sp,
+                            color = onSurface.copy(alpha = 0.72f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    ProfileRatingBlock(rating = AppSettings.profileRating)
+                }
+
+                Divider()
+
+                ProfileTextField(
+                    title = Locales.t("user_name_label"),
+                    value = userNameDraft,
+                    onValueChange = { userNameDraft = it },
+                    placeholder = Locales.t("user_name_hint")
+                )
+
+                if (userNameDraft.trim().isNotBlank()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = Locales.t("profile_display_name_switch"),
+                            fontSize = (14 * fontScale).sp,
+                            color = onSurface.copy(alpha = 0.85f),
+                            modifier = Modifier.weight(1f)
+                        )
+                        AppSwitch(
+                            checked = displayCustomNameDraft,
+                            onCheckedChange = { displayCustomNameDraft = it }
+                        )
                     }
                 }
 
-                if (userNameDraft.trim().isNotBlank()) {
-                    Text(
-                        text = userNameDraft.trim(),
-                        fontSize = (24 * fontScale).sp,
-                        fontWeight = FontWeight.Bold,
-                        color = onBg,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                ProfileTextField(
+                    title = Locales.t("profile_specialization_label"),
+                    value = specializationDraft,
+                    onValueChange = { specializationDraft = it },
+                    placeholder = Locales.t("profile_specialization_hint")
+                )
 
-                if (specializationDraft.trim().isNotBlank()) {
-                    Text(
-                        text = specializationDraft.trim(),
-                        fontSize = (14 * fontScale).sp,
-                        color = onSurface.copy(alpha = 0.72f),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                ProfileTextField(
+                    title = Locales.t("profile_phone_label"),
+                    value = phoneDraft,
+                    onValueChange = { phoneDraft = it },
+                    placeholder = Locales.t("profile_phone_hint")
+                )
 
-                if (phoneDraft.trim().isNotBlank() && phoneVisibleDraft) {
-                    Text(
-                        text = phoneDraft.trim(),
-                        fontSize = (14 * fontScale).sp,
-                        color = onSurface.copy(alpha = 0.72f),
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-                ProfileRatingBlock(rating = AppSettings.profileRating)
-            }
-
-            Divider()
-
-            ProfileTextField(
-                title = Locales.t("user_name_label"),
-                value = userNameDraft,
-                onValueChange = { userNameDraft = it },
-                placeholder = Locales.t("user_name_hint")
-            )
-
-            // Display name preference switch (show only when a name is set)
-            if (userNameDraft.trim().isNotBlank()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = Locales.t("profile_display_name_switch"),
-                        fontSize = (14 * fontScale).sp,
-                        color = onSurface.copy(alpha = 0.85f),
-                        modifier = Modifier.weight(1f)
+                        text = Locales.t("profile_show_phone"),
+                        fontSize = (16 * fontScale).sp,
+                        color = onSurface
                     )
                     AppSwitch(
-                        checked = displayCustomNameDraft,
-                        onCheckedChange = { displayCustomNameDraft = it }
+                        checked = phoneVisibleDraft,
+                        onCheckedChange = { phoneVisibleDraft = it }
                     )
                 }
-            }
 
-            ProfileTextField(
-                title = Locales.t("profile_specialization_label"),
-                value = specializationDraft,
-                onValueChange = { specializationDraft = it },
-                placeholder = Locales.t("profile_specialization_hint")
-            )
-
-            ProfileTextField(
-                title = Locales.t("profile_phone_label"),
-                value = phoneDraft,
-                onValueChange = { phoneDraft = it },
-                placeholder = Locales.t("profile_phone_hint")
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = Locales.t("profile_show_phone"),
-                    fontSize = (16 * fontScale).sp,
-                    color = onSurface
+                ProfileTextField(
+                    title = Locales.t("profile_avatar_url_label"),
+                    value = avatarUrlDraft,
+                    onValueChange = {
+                        avatarUrlDraft = it
+                        avatarUrlErrorMessage = null
+                    },
+                    placeholder = Locales.t("profile_avatar_url_hint")
                 )
-                AppSwitch(
-                    checked = phoneVisibleDraft,
-                    onCheckedChange = { phoneVisibleDraft = it }
-                )
-            }
 
-            ProfileTextField(
-                title = Locales.t("profile_avatar_url_label"),
-                value = avatarUrlDraft,
-                onValueChange = {
-                    avatarUrlDraft = it
-                    avatarUrlErrorMessage = null
-                },
-                placeholder = Locales.t("profile_avatar_url_hint")
-            )
-
-            avatarUrlErrorMessage?.takeIf { it.isNotBlank() }?.let { errorMessage ->
-                Text(
-                    text = errorMessage,
-                    fontSize = (13 * fontScale).sp,
-                    color = MaterialTheme.colors.error
-                )
-            }
-
-            SecondaryActionButton(
-                text = Locales.t("profile_pick_photo"),
-                onClick = {
-                    avatarUrlErrorMessage = null
-                    ProfileImagePicker.pickImage { rawBase64 ->
-                        if (!rawBase64.isNullOrBlank()) {
-                            pendingRawBase64 = rawBase64
-                        }
-                    }
+                avatarUrlErrorMessage?.takeIf { it.isNotBlank() }?.let { errorMessage ->
+                    Text(
+                        text = errorMessage,
+                        fontSize = (13 * fontScale).sp,
+                        color = MaterialTheme.colors.error
+                    )
                 }
-            )
 
-            SecondaryActionButton(
-                text = Locales.t("profile_remove_photo"),
-                onClick = {
-                    avatarUrlErrorMessage = null
-                    avatarBase64Draft = ""
-                },
-                enabled = avatarBase64Draft.isNotBlank()
-            )
-
-            Spacer(Modifier.height(6.dp))
-
-            PrimaryActionButton(
-                text = if (isSaving) Locales.t("loading") else Locales.t("save"),
-                onClick = {
-                    if (isSaving) return@PrimaryActionButton
-
-                    val nextOwnerName = userNameDraft.trim()
-                    val nextPhone = phoneDraft.trim()
-                    val nextAvatarUrl = avatarUrlDraft.trim()
-                    val nextSpecialization = specializationDraft.trim()
-                    val shouldProcessAvatarUrl =
-                        nextAvatarUrl.isNotBlank() &&
-                            nextAvatarUrl != AppSettings.profileAvatarUrl
-
-                    val persistProfile: (String) -> Unit = { finalAvatarBase64 ->
-                        AppSettings.ownerName = nextOwnerName
-                        AppSettings.profilePhone = nextPhone
-                        AppSettings.profilePhoneVisible = phoneVisibleDraft
-                        AppSettings.profileAvatarUrl = nextAvatarUrl
-                        AppSettings.profileAvatarBase64 = finalAvatarBase64
-                        AppSettings.profileDisplayCustomName = displayCustomNameDraft
-                        AppSettings.profileSpecialization = nextSpecialization
-                        AppSettings.persist()
-                    }
-
-                    avatarUrlErrorMessage = null
-
-                    if (!shouldProcessAvatarUrl) {
-                        persistProfile(avatarBase64Draft)
-                        return@PrimaryActionButton
-                    }
-
-                    isSaving = true
-                    runCatching {
-                        ProfileAvatarUrlProcessor.processAvatar(nextAvatarUrl) { processedBase64 ->
-                            isSaving = false
-                            if (processedBase64.isNullOrBlank()) {
-                                avatarUrlErrorMessage = Locales.t("profile_avatar_url_error")
-                                return@processAvatar
+                SecondaryActionButton(
+                    text = Locales.t("profile_pick_photo"),
+                    onClick = {
+                        avatarUrlErrorMessage = null
+                        ProfileImagePicker.pickImage { rawBase64 ->
+                            if (!rawBase64.isNullOrBlank()) {
+                                pendingRawBase64 = rawBase64
                             }
-
-                            avatarBase64Draft = processedBase64
-                            persistProfile(processedBase64)
                         }
-                    }.onFailure {
-                        isSaving = false
-                        avatarUrlErrorMessage = Locales.t("profile_avatar_url_error")
                     }
-                },
-                enabled = hasChanges && !isSaving
-            )
+                )
+
+                SecondaryActionButton(
+                    text = Locales.t("profile_remove_photo"),
+                    onClick = {
+                        avatarUrlErrorMessage = null
+                        avatarBase64Draft = ""
+                    },
+                    enabled = avatarBase64Draft.isNotBlank()
+                )
+
+                Spacer(Modifier.height(6.dp))
+
+                PrimaryActionButton(
+                    text = if (isSaving) Locales.t("loading") else Locales.t("save"),
+                    onClick = {
+                        if (isSaving) return@PrimaryActionButton
+
+                        val nextOwnerName = userNameDraft.trim()
+                        val nextPhone = phoneDraft.trim()
+                        val nextAvatarUrl = avatarUrlDraft.trim()
+                        val nextSpecialization = specializationDraft.trim()
+                        val shouldProcessAvatarUrl =
+                            nextAvatarUrl.isNotBlank() &&
+                                    nextAvatarUrl != AppSettings.profileAvatarUrl
+
+                        val persistProfile: (String) -> Unit = { finalAvatarBase64 ->
+                            AppSettings.ownerName = nextOwnerName
+                            AppSettings.profilePhone = nextPhone
+                            AppSettings.profilePhoneVisible = phoneVisibleDraft
+                            AppSettings.profileAvatarUrl = nextAvatarUrl
+                            AppSettings.profileAvatarBase64 = finalAvatarBase64
+                            AppSettings.profileDisplayCustomName = displayCustomNameDraft
+                            AppSettings.profileSpecialization = nextSpecialization
+                            AppSettings.persist()
+                        }
+
+                        avatarUrlErrorMessage = null
+
+                        if (!shouldProcessAvatarUrl) {
+                            persistProfile(avatarBase64Draft)
+                            scope.launch {
+                                MasterProfileSync.syncIfAuthenticated()
+                                    .onFailure {
+                                        CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
+                                    }
+                            }
+                            return@PrimaryActionButton
+                        }
+
+                        isSaving = true
+                        runCatching {
+                            ProfileAvatarUrlProcessor.processAvatar(nextAvatarUrl) { processedBase64 ->
+                                isSaving = false
+                                if (processedBase64.isNullOrBlank()) {
+                                    avatarUrlErrorMessage = Locales.t("profile_avatar_url_error")
+                                    return@processAvatar
+                                }
+
+                                avatarBase64Draft = processedBase64
+                                persistProfile(processedBase64)
+                                scope.launch {
+                                    MasterProfileSync.syncIfAuthenticated()
+                                        .onFailure {
+                                            CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
+                                        }
+                                }
+                            }
+                        }.onFailure {
+                            isSaving = false
+                            avatarUrlErrorMessage = Locales.t("profile_avatar_url_error")
+                        }
+                    },
+                    enabled = hasChanges && !isSaving
+                )
+            }
         }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshingProfile,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 
@@ -368,7 +421,7 @@ private fun ProfileTextField(
                 fontSize = (16 * fontScale).sp,
                 color = onSurface
             ),
-            colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+            colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = onSurface,
                 focusedBorderColor = MaterialTheme.colors.primary,
                 unfocusedBorderColor = onSurface.copy(alpha = 0.28f),

@@ -132,6 +132,130 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun syncMasterProfile(
+        userId: String,
+        ownerName: String,
+        profileDisplayCustomName: Boolean,
+        profilePhone: String,
+        profilePhoneVisible: Boolean,
+        profileSpecialization: String,
+        profileRating: Float,
+        profileAvatarUrl: String,
+        profileAvatarBase64: String,
+        clientInteractionsEnabled: Boolean,
+        serviceTemplatesJson: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+        return callRawFunction(
+            "syncMasterProfile",
+            mapOf(
+                "userId" to userId,
+                "ownerName" to ownerName,
+                "profileDisplayCustomName" to profileDisplayCustomName,
+                "profilePhone" to profilePhone,
+                "profilePhoneVisible" to profilePhoneVisible,
+                "profileSpecialization" to profileSpecialization,
+                "profileRating" to profileRating,
+                "profileAvatarUrl" to profileAvatarUrl,
+                "profileAvatarBase64" to profileAvatarBase64,
+                "clientInteractionsEnabled" to clientInteractionsEnabled,
+                "serviceTemplatesJson" to serviceTemplatesJson
+            )
+        )
+    }
+
+    actual suspend fun getMasterProfile(
+        userId: String
+    ): MasterProfilePayload {
+        ensureAuthenticated()
+
+        val functions = Firebase.functions
+
+        return suspendCancellableCoroutine { cont ->
+            functions
+                .getHttpsCallable("getMasterProfile")
+                .call(mapOf("userId" to userId))
+                .addOnSuccessListener { result ->
+                    try {
+                        val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
+
+                        val rawTemplates = map["serviceTemplates"] as? List<*> ?: emptyList<Any?>()
+                        val templates = rawTemplates.mapNotNull { item ->
+                            val entry = item as? Map<*, *> ?: return@mapNotNull null
+                            val id = entry["id"]?.toString().orEmpty()
+                            val title = entry["title"]?.toString().orEmpty()
+                            val defaultPrice = entry["defaultPrice"]?.toString().orEmpty()
+                            val isActive = when (val raw = entry["isActive"]) {
+                                is Boolean -> raw
+                                is String -> raw.equals("true", ignoreCase = true)
+                                is Number -> raw.toInt() != 0
+                                else -> false
+                            }
+
+                            if (id.isBlank() || title.isBlank()) return@mapNotNull null
+
+                            MasterServiceTemplatePayload(
+                                id = id,
+                                title = title,
+                                defaultPrice = defaultPrice,
+                                isActive = isActive
+                            )
+                        }
+
+                        val payload = MasterProfilePayload(
+                            found = map["found"]?.toString() == "true",
+                            userId = map["userId"]?.toString().orEmpty(),
+                            ownerName = map["ownerName"]?.toString().orEmpty(),
+                            profileDisplayCustomName = map["profileDisplayCustomName"]?.toString() == "true",
+                            profilePhone = map["profilePhone"]?.toString().orEmpty(),
+                            profilePhoneVisible = map["profilePhoneVisible"]?.toString() == "true",
+                            profileSpecialization = map["profileSpecialization"]?.toString().orEmpty(),
+                            profileRating = map["profileRating"]?.toString()?.toFloatOrNull() ?: 0f,
+                            profileAvatarUrl = map["profileAvatarUrl"]?.toString().orEmpty(),
+                            profileAvatarBase64 = map["profileAvatarBase64"]?.toString().orEmpty(),
+                            clientInteractionsEnabled = map["clientInteractionsEnabled"]?.toString() == "true",
+                            serviceTemplates = templates,
+                            updatedAt = map["updatedAt"]?.toString()?.toLongOrNull() ?: 0L
+                        )
+
+                        cont.resume(payload)
+                    } catch (e: Exception) {
+                        cont.resumeWithException(e)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    cont.resumeWithException(e)
+                }
+        }
+    }
+
+    private suspend fun callRawFunction(
+        name: String,
+        data: Map<String, Any?>
+    ): Map<String, String> {
+        val functions = Firebase.functions
+
+        return suspendCancellableCoroutine { cont ->
+            functions
+                .getHttpsCallable(name)
+                .call(data)
+                .addOnSuccessListener { result ->
+                    try {
+                        val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
+                        val parsed = map.entries.associate { (key, value) ->
+                            key.toString() to (value?.toString() ?: "")
+                        }
+                        cont.resume(parsed)
+                    } catch (e: Exception) {
+                        cont.resumeWithException(e)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    cont.resumeWithException(e)
+                }
+        }
+    }
+
     private suspend fun callFunction(
         name: String,
         data: Any

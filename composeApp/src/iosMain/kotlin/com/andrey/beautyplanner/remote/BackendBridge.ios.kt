@@ -107,6 +107,88 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun syncMasterProfile(
+        userId: String,
+        ownerName: String,
+        profileDisplayCustomName: Boolean,
+        profilePhone: String,
+        profilePhoneVisible: Boolean,
+        profileSpecialization: String,
+        profileRating: Float,
+        profileAvatarUrl: String,
+        profileAvatarBase64: String,
+        clientInteractionsEnabled: Boolean,
+        serviceTemplatesJson: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+        return callBackendFunction(
+            name = "syncMasterProfile",
+            payload = mapOf(
+                "userId" to userId,
+                "ownerName" to ownerName,
+                "profileDisplayCustomName" to profileDisplayCustomName.toString(),
+                "profilePhone" to profilePhone,
+                "profilePhoneVisible" to profilePhoneVisible.toString(),
+                "profileSpecialization" to profileSpecialization,
+                "profileRating" to profileRating.toString(),
+                "profileAvatarUrl" to profileAvatarUrl,
+                "profileAvatarBase64" to profileAvatarBase64,
+                "clientInteractionsEnabled" to clientInteractionsEnabled.toString(),
+                "serviceTemplatesJson" to serviceTemplatesJson
+            )
+        )
+    }
+
+    actual suspend fun getMasterProfile(
+        userId: String
+    ): MasterProfilePayload {
+        ensureAuthenticated()
+
+        val result = callBackendFunction(
+            name = "getMasterProfile",
+            payload = mapOf("userId" to userId)
+        )
+
+        val rawTemplates = result["serviceTemplates"] as? List<*> ?: emptyList<Any?>()
+        val templates = rawTemplates.mapNotNull { item ->
+            val entry = item as? Map<*, *> ?: return@mapNotNull null
+            val id = entry["id"]?.toString().orEmpty()
+            val title = entry["title"]?.toString().orEmpty()
+            val defaultPrice = entry["defaultPrice"]?.toString().orEmpty()
+            val isActive = when (val raw = entry["isActive"]) {
+                is Boolean -> raw
+                is String -> raw.equals("true", ignoreCase = true)
+                is Number -> raw.toInt() != 0
+                else -> false
+            }
+
+            if (id.isBlank() || title.isBlank()) return@mapNotNull null
+
+            MasterServiceTemplatePayload(
+                id = id,
+                title = title,
+                defaultPrice = defaultPrice,
+                isActive = isActive
+            )
+        }
+
+        return MasterProfilePayload(
+            found = result["found"]?.toString() == "true",
+            userId = result["userId"]?.toString().orEmpty(),
+            ownerName = result["ownerName"]?.toString().orEmpty(),
+            profileDisplayCustomName = result["profileDisplayCustomName"]?.toString() == "true",
+            profilePhone = result["profilePhone"]?.toString().orEmpty(),
+            profilePhoneVisible = result["profilePhoneVisible"]?.toString() == "true",
+            profileSpecialization = result["profileSpecialization"]?.toString().orEmpty(),
+            profileRating = result["profileRating"]?.toString()?.toFloatOrNull() ?: 0f,
+            profileAvatarUrl = result["profileAvatarUrl"]?.toString().orEmpty(),
+            profileAvatarBase64 = result["profileAvatarBase64"]?.toString().orEmpty(),
+            clientInteractionsEnabled = result["clientInteractionsEnabled"]?.toString() == "true",
+            serviceTemplates = templates,
+            updatedAt = result["updatedAt"]?.toString()?.toLongOrNull() ?: 0L
+        )
+    }
+
     private suspend fun callAccessFunction(
         name: String,
         payload: Map<String, String>

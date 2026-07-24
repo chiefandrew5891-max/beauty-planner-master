@@ -25,12 +25,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
+import androidx.compose.runtime.rememberCoroutineScope
+import com.andrey.beautyplanner.CloudSyncLogger
+import com.andrey.beautyplanner.remote.MasterProfileSync
+import kotlinx.coroutines.launch
 
 @Composable
 fun ClientInteractionsScreen() {
     val fontScale = AppSettings.getFontScale()
     val onBg = MaterialTheme.colors.onBackground
     val onSurface = MaterialTheme.colors.onSurface
+    val scope = rememberCoroutineScope()
 
     var showEnableConfirm by remember { mutableStateOf(false) }
 
@@ -61,6 +66,10 @@ fun ClientInteractionsScreen() {
                         AppSettings.clientInteractionsEnabled = true
                         AppSettings.persist()
                         showEnableConfirm = false
+                        scope.launch {
+                            MasterProfileSync.syncIfAuthenticated()
+                                .onFailure { CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}") }
+                        }
                     }
                 ) {
                     Text("Подтвердить")
@@ -124,6 +133,10 @@ fun ClientInteractionsScreen() {
                         } else {
                             AppSettings.clientInteractionsEnabled = false
                             AppSettings.persist()
+                            scope.launch {
+                                MasterProfileSync.syncIfAuthenticated()
+                                    .onFailure { CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}") }
+                            }
                         }
                     }
                 )
