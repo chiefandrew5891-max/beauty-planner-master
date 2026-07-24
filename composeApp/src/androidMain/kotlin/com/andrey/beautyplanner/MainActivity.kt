@@ -29,6 +29,8 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 private const val AVATAR_DOWNLOAD_CONNECT_TIMEOUT_MS = 10_000
 private const val AVATAR_DOWNLOAD_READ_TIMEOUT_MS = 15_000
@@ -218,36 +220,47 @@ class MainActivity : ComponentActivity() {
      * The crop editor uses ContentScale.Crop inside a square container of [displaySizePx].
      * With ContentScale.Crop, the bitmap is scaled so that min(bitmapW, bitmapH) = displaySizePx.
      * The [offsetXPx] / [offsetYPx] is the drag translation applied to the image in display pixels.
-     * We reverse this to find the crop center in the original bitmap, then extract [targetSize] × [targetSize].
+     * [scale] is the user zoom multiplier (where 1f is the minimum scale that still covers the crop circle).
+     * We reverse this transform to find the crop rect in bitmap coordinates.
      */
     private fun cropBitmapFromOffset(
         source: Bitmap,
         offsetXPx: Float,
         offsetYPx: Float,
         displaySizePx: Float,
+        scale: Float,
         targetSize: Int
     ): Bitmap {
+        if (displaySizePx <= 0f) {
+            return Bitmap.createScaledBitmap(source, targetSize, targetSize, true)
+        }
+
         val bitmapW = source.width.toFloat()
         val bitmapH = source.height.toFloat()
         val minDim = minOf(bitmapW, bitmapH)
-        val scale = displaySizePx / minDim
+        val baseScale = displaySizePx / minDim
+        val effectiveScale = baseScale * scale.coerceAtLeast(1f)
 
         // Center of the crop circle in bitmap coordinates
-        val cropCenterX = bitmapW / 2f - offsetXPx / scale
-        val cropCenterY = bitmapH / 2f - offsetYPx / scale
+        val cropCenterX = bitmapW / 2f - offsetXPx / effectiveScale
+        val cropCenterY = bitmapH / 2f - offsetYPx / effectiveScale
 
-        // Crop size in bitmap coordinates equals the smaller side of the bitmap
-        val cropHalf = minDim / 2f
+        val cropSize = (displaySizePx / effectiveScale).coerceIn(1f, minDim)
+        val cropHalf = cropSize / 2f
 
-        val left = (cropCenterX - cropHalf).toInt().coerceIn(0, source.width)
-        val top = (cropCenterY - cropHalf).toInt().coerceIn(0, source.height)
-        val right = (cropCenterX + cropHalf).toInt().coerceIn(0, source.width)
-        val bottom = (cropCenterY + cropHalf).toInt().coerceIn(0, source.height)
+        val maxLeft = (bitmapW - cropSize).coerceAtLeast(0f)
+        val maxTop = (bitmapH - cropSize).coerceAtLeast(0f)
+        val left = (cropCenterX - cropHalf).coerceIn(0f, maxLeft)
+        val top = (cropCenterY - cropHalf).coerceIn(0f, maxTop)
 
-        val cropW = (right - left).coerceAtLeast(1)
-        val cropH = (bottom - top).coerceAtLeast(1)
+        val requestedSquare = cropSize.roundToInt().coerceIn(1, minOf(source.width, source.height))
+        val maxLeftPx = (source.width - requestedSquare).coerceAtLeast(0)
+        val maxTopPx = (source.height - requestedSquare).coerceAtLeast(0)
+        val leftPx = floor(left).toInt().coerceIn(0, maxLeftPx)
+        val topPx = floor(top).toInt().coerceIn(0, maxTopPx)
+        val cropSquare = minOf(source.width - leftPx, source.height - topPx, requestedSquare).coerceAtLeast(1)
 
-        val cropped = Bitmap.createBitmap(source, left, top, cropW, cropH)
+        val cropped = Bitmap.createBitmap(source, leftPx, topPx, cropSquare, cropSquare)
         return Bitmap.createScaledBitmap(cropped, targetSize, targetSize, true)
     }
 
@@ -358,7 +371,7 @@ class MainActivity : ComponentActivity() {
             processAvatarUrl(url, onResult)
         }
 
-        ProfileImageCropper.cropImpl = { base64, offsetXPx, offsetYPx, displaySizePx, targetSize, onResult ->
+        ProfileImageCropper.cropImpl = { base64, offsetXPx, offsetYPx, displaySizePx, scale, targetSize, onResult ->
             runCatching {
                 val bytes = Base64.decode(base64, Base64.DEFAULT)
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -366,7 +379,7 @@ class MainActivity : ComponentActivity() {
                     onResult(null)
                     return@runCatching
                 }
-                val cropped = cropBitmapFromOffset(bitmap, offsetXPx, offsetYPx, displaySizePx, targetSize)
+                val cropped = cropBitmapFromOffset(bitmap, offsetXPx, offsetYPx, displaySizePx, scale, targetSize)
                 onResult(bitmapToBase64Jpeg(cropped, 85))
             }.onFailure {
                 onResult(null)

@@ -8,13 +8,14 @@ import ComposeApp
 final class ProfileImageCropperBridge {
 
     static func register() {
-        ProfileImageCropper.shared.cropImpl = { base64, offsetXPx, offsetYPx, displaySizePx, targetSize, onResult in
+        ProfileImageCropper.shared.cropImpl = { base64, offsetXPx, offsetYPx, displaySizePx, scale, targetSize, onResult in
             DispatchQueue.global(qos: .userInitiated).async {
                 let result = Self.crop(
                     base64: base64,
                     offsetXPx: CGFloat(offsetXPx),
                     offsetYPx: CGFloat(offsetYPx),
                     displaySizePx: CGFloat(displaySizePx),
+                    scale: CGFloat(scale),
                     targetSize: Int(targetSize)
                 )
                 DispatchQueue.main.async {
@@ -29,6 +30,7 @@ final class ProfileImageCropperBridge {
         offsetXPx: CGFloat,
         offsetYPx: CGFloat,
         displaySizePx: CGFloat,
+        scale: CGFloat,
         targetSize: Int
     ) -> String? {
         guard let data = Data(base64Encoded: base64),
@@ -42,22 +44,27 @@ final class ProfileImageCropperBridge {
 
         let bitmapW = CGFloat(cgImage.width)
         let bitmapH = CGFloat(cgImage.height)
-        let minDim = min(bitmapW, bitmapH)
+        if displaySizePx <= 0 {
+            guard let jpegData = normalised.jpegData(compressionQuality: 0.85) else { return nil }
+            return jpegData.base64EncodedString()
+        }
 
-        // ContentScale.Crop scale: min side fills displaySizePx
-        let scale = displaySizePx / minDim
+        let minDim = min(bitmapW, bitmapH)
+        let baseScale = displaySizePx / minDim
+        let effectiveScale = baseScale * max(scale, 1.0)
+        let cropSize = min(max(displaySizePx / effectiveScale, 1.0), minDim)
 
         // Center of the crop circle in bitmap coordinates
-        let cropCenterX = bitmapW / 2.0 - offsetXPx / scale
-        let cropCenterY = bitmapH / 2.0 - offsetYPx / scale
+        let cropCenterX = bitmapW / 2.0 - offsetXPx / effectiveScale
+        let cropCenterY = bitmapH / 2.0 - offsetYPx / effectiveScale
 
-        let cropHalf = minDim / 2.0
-        let left   = max(0,        cropCenterX - cropHalf)
-        let top    = max(0,        cropCenterY - cropHalf)
-        let right  = min(bitmapW,  cropCenterX + cropHalf)
-        let bottom = min(bitmapH,  cropCenterY + cropHalf)
+        let cropHalf = cropSize / 2.0
+        let maxLeftCoord = max(bitmapW - cropSize, 0)
+        let maxTopCoord = max(bitmapH - cropSize, 0)
+        let left = min(max(0, cropCenterX - cropHalf), maxLeftCoord)
+        let top = min(max(0, cropCenterY - cropHalf), maxTopCoord)
 
-        let cropRect = CGRect(x: left, y: top, width: right - left, height: bottom - top)
+        let cropRect = CGRect(x: left, y: top, width: cropSize, height: cropSize)
         guard let croppedCg = cgImage.cropping(to: cropRect) else { return nil }
 
         let targetSize2D = CGSize(width: targetSize, height: targetSize)
