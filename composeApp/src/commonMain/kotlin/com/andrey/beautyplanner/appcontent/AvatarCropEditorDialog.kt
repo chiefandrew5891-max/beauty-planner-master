@@ -2,7 +2,7 @@ package com.andrey.beautyplanner.appcontent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,9 +40,10 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.ProfileImageCropper
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
+import kotlin.math.max
 
 /**
- * Full-screen dialog that lets the user drag a selected photo to choose the crop region.
+ * Full-screen dialog that lets the user pan/zoom a selected photo under a fixed circle crop region.
  * On confirm, the cropped 512×512 JPEG base64 is passed to [onConfirm].
  */
 @Composable
@@ -57,27 +58,37 @@ fun AvatarCropEditorDialog(
 
     val avatarBitmap = rememberProfileAvatarBitmap(rawBase64)
 
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    var offsetX by remember(rawBase64) { mutableStateOf(0f) }
+    var offsetY by remember(rawBase64) { mutableStateOf(0f) }
+    var scale by remember(rawBase64) { mutableStateOf(1f) }
 
     // Physical pixel size of the crop container, tracked after layout
     var containerSizePx by remember { mutableStateOf(0f) }
 
-    // Max drag bounds (updated when avatarBitmap or containerSizePx changes)
-    val maxOffsetX: Float
-    val maxOffsetY: Float
-    if (avatarBitmap != null && containerSizePx > 0f) {
-        val bitmapW = avatarBitmap.width.toFloat()
-        val bitmapH = avatarBitmap.height.toFloat()
-        val scale = containerSizePx / minOf(bitmapW, bitmapH)
-        val displayedW = bitmapW * scale
-        val displayedH = bitmapH * scale
-        maxOffsetX = maxOf(0f, (displayedW - containerSizePx) / 2f)
-        maxOffsetY = maxOf(0f, (displayedH - containerSizePx) / 2f)
-    } else {
-        maxOffsetX = 0f
-        maxOffsetY = 0f
+    val minScale = 1f
+    val maxScale = 6f
+    val coercedScale = scale.coerceIn(minScale, maxScale)
+
+    val bitmapW = avatarBitmap?.width?.toFloat() ?: 0f
+    val bitmapH = avatarBitmap?.height?.toFloat() ?: 0f
+    val baseScale =
+        if (avatarBitmap != null && containerSizePx > 0f && bitmapW > 0f && bitmapH > 0f) {
+            max(containerSizePx / bitmapW, containerSizePx / bitmapH)
+        } else {
+            0f
+        }
+
+    fun maxOffsetsFor(scaleValue: Float): Pair<Float, Float> {
+        if (baseScale <= 0f || containerSizePx <= 0f) return 0f to 0f
+        val displayedW = bitmapW * baseScale * scaleValue
+        val displayedH = bitmapH * baseScale * scaleValue
+        return maxOf(0f, (displayedW - containerSizePx) / 2f) to
+            maxOf(0f, (displayedH - containerSizePx) / 2f)
     }
+
+    val (maxOffsetX, maxOffsetY) = maxOffsetsFor(coercedScale)
+    val clampedOffsetX = offsetX.coerceIn(-maxOffsetX, maxOffsetX)
+    val clampedOffsetY = offsetY.coerceIn(-maxOffsetY, maxOffsetY)
 
     var isProcessing by remember { mutableStateOf(false) }
 
@@ -122,10 +133,14 @@ fun AvatarCropEditorDialog(
                         .onGloballyPositioned { coords ->
                             containerSizePx = coords.size.width.toFloat()
                         }
-                        .pointerInput(maxOffsetX, maxOffsetY) {
-                            detectDragGestures { _, delta ->
-                                offsetX = (offsetX + delta.x).coerceIn(-maxOffsetX, maxOffsetX)
-                                offsetY = (offsetY + delta.y).coerceIn(-maxOffsetY, maxOffsetY)
+                        .pointerInput(baseScale, containerSizePx) {
+                            detectTransformGestures { _, pan, zoom, _ ->
+                                val nextScale = (scale * zoom).coerceIn(minScale, maxScale)
+                                val (nextMaxX, nextMaxY) = maxOffsetsFor(nextScale)
+
+                                scale = nextScale
+                                offsetX = (offsetX + pan.x).coerceIn(-nextMaxX, nextMaxX)
+                                offsetY = (offsetY + pan.y).coerceIn(-nextMaxY, nextMaxY)
                             }
                         },
                     contentAlignment = Alignment.Center
@@ -138,8 +153,10 @@ fun AvatarCropEditorDialog(
                                 .fillMaxWidth()
                                 .aspectRatio(1f)
                                 .graphicsLayer(
-                                    translationX = offsetX,
-                                    translationY = offsetY
+                                    scaleX = coercedScale,
+                                    scaleY = coercedScale,
+                                    translationX = clampedOffsetX,
+                                    translationY = clampedOffsetY
                                 ),
                             contentScale = ContentScale.Crop
                         )
@@ -188,9 +205,10 @@ fun AvatarCropEditorDialog(
                             isProcessing = true
                             ProfileImageCropper.cropImage(
                                 base64 = rawBase64,
-                                offsetXPx = offsetX,
-                                offsetYPx = offsetY,
+                                offsetXPx = clampedOffsetX,
+                                offsetYPx = clampedOffsetY,
                                 displaySizePx = containerSizePx,
+                                scale = coercedScale,
                                 targetSize = 512
                             ) { cropped ->
                                 isProcessing = false
