@@ -9,7 +9,7 @@ data class MasterServiceTemplatePayload(
 
 data class MasterProfilePayload(
     val found: Boolean,
-    val userId: String,
+    val firebaseUid: String,
     val ownerName: String,
     val profileDisplayCustomName: Boolean,
     val profilePhone: String,
@@ -20,8 +20,10 @@ data class MasterProfilePayload(
     val profileAvatarBase64: String,
     val clientInteractionsEnabled: Boolean,
     val serviceTemplates: List<MasterServiceTemplatePayload>,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val createdAt: Long
 )
+
 expect object BackendBridge {
     suspend fun ensureAuthenticated(): String
 
@@ -57,8 +59,7 @@ expect object BackendBridge {
         authProvider: String
     ): AccessStatusResponse
 
-    suspend fun syncMasterProfile(
-        userId: String,
+    suspend fun syncMyMasterProfile(
         ownerName: String,
         profileDisplayCustomName: Boolean,
         profilePhone: String,
@@ -71,7 +72,5 @@ expect object BackendBridge {
         serviceTemplatesJson: String
     ): Map<String, String>
 
-    suspend fun getMasterProfile(
-        userId: String
-    ): MasterProfilePayload
+    suspend fun getMyMasterProfile(): MasterProfilePayload
 }

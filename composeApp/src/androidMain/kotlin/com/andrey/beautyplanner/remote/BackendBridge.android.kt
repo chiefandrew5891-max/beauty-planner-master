@@ -1,70 +1,30 @@
 package com.andrey.beautyplanner.remote
 
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.functions.ktx.functions
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.functions.functions
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 actual object BackendBridge {
     actual suspend fun ensureAuthenticated(): String {
-        val auth = Firebase.auth
-        val current = auth.currentUser
-        if (current != null) return current.uid
-
-        return suspendCancellableCoroutine { cont ->
-            auth.signInAnonymously()
-                .addOnSuccessListener { result ->
-                    val uid = result.user?.uid
-                    if (uid.isNullOrBlank()) {
-                        cont.resumeWithException(
-                            IllegalStateException("Anonymous auth returned empty uid")
-                        )
-                    } else {
-                        cont.resume(uid)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    cont.resumeWithException(e)
-                }
-        }
+        val user = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        return user?.uid ?: throw IllegalStateException("User is not authenticated.")
     }
+
     actual suspend fun checkAppUpdate(
         platform: String,
         versionName: String,
         buildNumber: String
     ): Map<String, String> {
-        val functions = Firebase.functions
-
-        return suspendCancellableCoroutine { cont ->
-            functions
-                .getHttpsCallable("checkAppUpdate")
-                .call(
-                    mapOf(
-                        "platform" to platform,
-                        "versionName" to versionName,
-                        "buildNumber" to buildNumber
-                    )
-                )
-                .addOnSuccessListener { result ->
-                    try {
-                        val map = result.data as? Map<*, *>
-                            ?: throw IllegalStateException("checkAppUpdate returned non-map result")
-
-                        val parsed = map.entries.associate { (key, value) ->
-                            key.toString() to (value?.toString() ?: "")
-                        }
-
-                        cont.resume(parsed)
-                    } catch (e: Exception) {
-                        cont.resumeWithException(e)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    cont.resumeWithException(e)
-                }
-        }
+        return callRawFunction(
+            "checkAppUpdate",
+            mapOf(
+                "platform" to platform,
+                "versionName" to versionName,
+                "buildNumber" to buildNumber
+            )
+        )
     }
 
     actual suspend fun bootstrapUser(
@@ -75,8 +35,7 @@ actual object BackendBridge {
         email: String,
         displayName: String
     ): AccessStatusResponse {
-        ensureAuthenticated()
-        return callFunction(
+        val result = callRawFunction(
             "bootstrapUser",
             mapOf(
                 "installId" to installId,
@@ -87,6 +46,7 @@ actual object BackendBridge {
                 "displayName" to displayName
             )
         )
+        return result.toAccessStatusResponse()
     }
 
     actual suspend fun verifySubscription(
@@ -96,8 +56,7 @@ actual object BackendBridge {
         platform: String,
         transactionId: String
     ): AccessStatusResponse {
-        ensureAuthenticated()
-        return callFunction(
+        val result = callRawFunction(
             "verifySubscription",
             mapOf(
                 "userId" to userId,
@@ -107,11 +66,15 @@ actual object BackendBridge {
                 "transactionId" to transactionId
             )
         )
+        return result.toAccessStatusResponse()
     }
 
     actual suspend fun getAccessStatus(userId: String): AccessStatusResponse {
-        ensureAuthenticated()
-        return callFunction("getAccessStatus", mapOf("userId" to userId))
+        val result = callRawFunction(
+            "getAccessStatus",
+            mapOf("userId" to userId)
+        )
+        return result.toAccessStatusResponse()
     }
 
     actual suspend fun syncIdentity(
@@ -120,8 +83,7 @@ actual object BackendBridge {
         displayName: String,
         authProvider: String
     ): AccessStatusResponse {
-        ensureAuthenticated()
-        return callFunction(
+        val result = callRawFunction(
             "syncIdentity",
             mapOf(
                 "firebaseUid" to firebaseUid,
@@ -130,10 +92,10 @@ actual object BackendBridge {
                 "authProvider" to authProvider
             )
         )
+        return result.toAccessStatusResponse()
     }
 
-    actual suspend fun syncMasterProfile(
-        userId: String,
+    actual suspend fun syncMyMasterProfile(
         ownerName: String,
         profileDisplayCustomName: Boolean,
         profilePhone: String,
@@ -147,9 +109,8 @@ actual object BackendBridge {
     ): Map<String, String> {
         ensureAuthenticated()
         return callRawFunction(
-            "syncMasterProfile",
+            "syncMyMasterProfile",
             mapOf(
-                "userId" to userId,
                 "ownerName" to ownerName,
                 "profileDisplayCustomName" to profileDisplayCustomName,
                 "profilePhone" to profilePhone,
@@ -164,17 +125,15 @@ actual object BackendBridge {
         )
     }
 
-    actual suspend fun getMasterProfile(
-        userId: String
-    ): MasterProfilePayload {
+    actual suspend fun getMyMasterProfile(): MasterProfilePayload {
         ensureAuthenticated()
 
         val functions = Firebase.functions
 
         return suspendCancellableCoroutine { cont ->
             functions
-                .getHttpsCallable("getMasterProfile")
-                .call(mapOf("userId" to userId))
+                .getHttpsCallable("getMyMasterProfile")
+                .call(emptyMap<String, Any>())
                 .addOnSuccessListener { result ->
                     try {
                         val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
@@ -204,7 +163,7 @@ actual object BackendBridge {
 
                         val payload = MasterProfilePayload(
                             found = map["found"]?.toString() == "true",
-                            userId = map["userId"]?.toString().orEmpty(),
+                            firebaseUid = map["firebaseUid"]?.toString().orEmpty(),
                             ownerName = map["ownerName"]?.toString().orEmpty(),
                             profileDisplayCustomName = map["profileDisplayCustomName"]?.toString() == "true",
                             profilePhone = map["profilePhone"]?.toString().orEmpty(),
@@ -215,7 +174,8 @@ actual object BackendBridge {
                             profileAvatarBase64 = map["profileAvatarBase64"]?.toString().orEmpty(),
                             clientInteractionsEnabled = map["clientInteractionsEnabled"]?.toString() == "true",
                             serviceTemplates = templates,
-                            updatedAt = map["updatedAt"]?.toString()?.toLongOrNull() ?: 0L
+                            updatedAt = map["updatedAt"]?.toString()?.toLongOrNull() ?: 0L,
+                            createdAt = map["createdAt"]?.toString()?.toLongOrNull() ?: 0L
                         )
 
                         cont.resume(payload)
@@ -231,21 +191,26 @@ actual object BackendBridge {
 
     private suspend fun callRawFunction(
         name: String,
-        data: Map<String, Any?>
+        payload: Map<String, Any?>
     ): Map<String, String> {
         val functions = Firebase.functions
 
         return suspendCancellableCoroutine { cont ->
             functions
                 .getHttpsCallable(name)
-                .call(data)
+                .call(payload)
                 .addOnSuccessListener { result ->
                     try {
                         val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
-                        val parsed = map.entries.associate { (key, value) ->
-                            key.toString() to (value?.toString() ?: "")
+                        val normalized = buildMap<String, String> {
+                            map.forEach { (key, value) ->
+                                val normalizedKey = key?.toString().orEmpty()
+                                if (normalizedKey.isNotBlank()) {
+                                    put(normalizedKey, value?.toString().orEmpty())
+                                }
+                            }
                         }
-                        cont.resume(parsed)
+                        cont.resume(normalized)
                     } catch (e: Exception) {
                         cont.resumeWithException(e)
                     }
@@ -256,43 +221,20 @@ actual object BackendBridge {
         }
     }
 
-    private suspend fun callFunction(
-        name: String,
-        data: Any
-    ): AccessStatusResponse {
-        val functions = Firebase.functions
-
-        return suspendCancellableCoroutine { cont ->
-            functions
-                .getHttpsCallable(name)
-                .call(data)
-                .addOnSuccessListener { result ->
-                    try {
-                        val map = result.data as? Map<*, *>
-                            ?: throw IllegalStateException("Function $name returned non-map result")
-
-                        val parsed = AccessStatusResponse(
-                            userId = map["userId"] as? String ?: "",
-                            tier = map["tier"] as? String ?: "FREE_LIMITED",
-                            trialStartedAtMillis = (map["trialStartedAtMillis"] as? Number)?.toLong() ?: 0L,
-                            trialEndsAtMillis = (map["trialEndsAtMillis"] as? Number)?.toLong() ?: 0L,
-                            isTrialActive = map["isTrialActive"] as? Boolean ?: false,
-                            hasPremium = map["hasPremium"] as? Boolean ?: false,
-                            trialDaysLeft = (map["trialDaysLeft"] as? Number)?.toInt() ?: 0,
-                            subscriptionState = map["subscriptionState"] as? String ?: "NONE",
-                            premiumProductId = map["premiumProductId"] as? String ?: "",
-                            subscriptionExpiryMillis = (map["subscriptionExpiryMillis"] as? Number)?.toLong() ?: 0L,
-                            subscriptionAutoRenewing = map["subscriptionAutoRenewing"] as? Boolean ?: false,
-                            subscriptionOrderId = map["subscriptionOrderId"] as? String ?: ""
-                        )
-                        cont.resume(parsed)
-                    } catch (e: Exception) {
-                        cont.resumeWithException(e)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    cont.resumeWithException(e)
-                }
-        }
+    private fun Map<String, String>.toAccessStatusResponse(): AccessStatusResponse {
+        return AccessStatusResponse(
+            userId = this["userId"].orEmpty(),
+            tier = this["tier"].orEmpty(),
+            trialStartedAtMillis = this["trialStartedAtMillis"]?.toLongOrNull() ?: 0L,
+            trialEndsAtMillis = this["trialEndsAtMillis"]?.toLongOrNull() ?: 0L,
+            isTrialActive = this["isTrialActive"] == "true",
+            hasPremium = this["hasPremium"] == "true",
+            trialDaysLeft = this["trialDaysLeft"]?.toIntOrNull() ?: 0,
+            subscriptionState = this["subscriptionState"].orEmpty(),
+            premiumProductId = this["premiumProductId"].orEmpty(),
+            subscriptionExpiryMillis = this["subscriptionExpiryMillis"]?.toLongOrNull() ?: 0L,
+            subscriptionAutoRenewing = this["subscriptionAutoRenewing"] == "true",
+            subscriptionOrderId = this["subscriptionOrderId"].orEmpty()
+        )
     }
 }

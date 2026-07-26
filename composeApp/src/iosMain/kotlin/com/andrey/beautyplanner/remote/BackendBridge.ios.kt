@@ -1,6 +1,12 @@
 package com.andrey.beautyplanner.remote
 
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonPrimitive
 
 actual object BackendBridge {
 
@@ -107,8 +113,7 @@ actual object BackendBridge {
         )
     }
 
-    actual suspend fun syncMasterProfile(
-        userId: String,
+    actual suspend fun syncMyMasterProfile(
         ownerName: String,
         profileDisplayCustomName: Boolean,
         profilePhone: String,
@@ -121,10 +126,10 @@ actual object BackendBridge {
         serviceTemplatesJson: String
     ): Map<String, String> {
         ensureAuthenticated()
+
         return callBackendFunction(
-            name = "syncMasterProfile",
+            name = "syncMyMasterProfile",
             payload = mapOf(
-                "userId" to userId,
                 "ownerName" to ownerName,
                 "profileDisplayCustomName" to profileDisplayCustomName.toString(),
                 "profilePhone" to profilePhone,
@@ -139,42 +144,19 @@ actual object BackendBridge {
         )
     }
 
-    actual suspend fun getMasterProfile(
-        userId: String
-    ): MasterProfilePayload {
+    actual suspend fun getMyMasterProfile(): MasterProfilePayload {
         ensureAuthenticated()
 
         val result = callBackendFunction(
-            name = "getMasterProfile",
-            payload = mapOf("userId" to userId)
+            name = "getMyMasterProfile",
+            payload = emptyMap()
         )
 
-        val rawTemplates = result["serviceTemplates"] as? List<*> ?: emptyList<Any?>()
-        val templates = rawTemplates.mapNotNull { item ->
-            val entry = item as? Map<*, *> ?: return@mapNotNull null
-            val id = entry["id"]?.toString().orEmpty()
-            val title = entry["title"]?.toString().orEmpty()
-            val defaultPrice = entry["defaultPrice"]?.toString().orEmpty()
-            val isActive = when (val raw = entry["isActive"]) {
-                is Boolean -> raw
-                is String -> raw.equals("true", ignoreCase = true)
-                is Number -> raw.toInt() != 0
-                else -> false
-            }
-
-            if (id.isBlank() || title.isBlank()) return@mapNotNull null
-
-            MasterServiceTemplatePayload(
-                id = id,
-                title = title,
-                defaultPrice = defaultPrice,
-                isActive = isActive
-            )
-        }
+        val templates = parseServiceTemplates(result["serviceTemplates"])
 
         return MasterProfilePayload(
             found = result["found"]?.toString() == "true",
-            userId = result["userId"]?.toString().orEmpty(),
+            firebaseUid = result["firebaseUid"]?.toString().orEmpty(),
             ownerName = result["ownerName"]?.toString().orEmpty(),
             profileDisplayCustomName = result["profileDisplayCustomName"]?.toString() == "true",
             profilePhone = result["profilePhone"]?.toString().orEmpty(),
@@ -185,7 +167,8 @@ actual object BackendBridge {
             profileAvatarBase64 = result["profileAvatarBase64"]?.toString().orEmpty(),
             clientInteractionsEnabled = result["clientInteractionsEnabled"]?.toString() == "true",
             serviceTemplates = templates,
-            updatedAt = result["updatedAt"]?.toString()?.toLongOrNull() ?: 0L
+            updatedAt = result["updatedAt"]?.toString()?.toLongOrNull() ?: 0L,
+            createdAt = result["createdAt"]?.toString()?.toLongOrNull() ?: 0L
         )
     }
 
@@ -221,6 +204,46 @@ actual object BackendBridge {
 
         caller.invoke(name, payload, deferred)
         return deferred.await()
+    }
+
+    private fun parseServiceTemplates(raw: String?): List<MasterServiceTemplatePayload> {
+        if (raw.isNullOrBlank()) return emptyList()
+
+        val trimmed = raw.trim()
+        if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) {
+            return emptyList()
+        }
+
+        return runCatching {
+            val json = Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            }
+
+            val root = json.parseToJsonElement(trimmed)
+            val array = root as? JsonArray ?: return emptyList()
+
+            array.mapNotNull { item ->
+                val obj = item as? JsonObject ?: return@mapNotNull null
+
+                val id = obj["id"]?.jsonPrimitive?.contentOrNull.orEmpty()
+                val title = obj["title"]?.jsonPrimitive?.contentOrNull.orEmpty()
+                val defaultPrice = obj["defaultPrice"]?.jsonPrimitive?.contentOrNull.orEmpty()
+                val isActive =
+                    obj["isActive"]?.jsonPrimitive?.booleanOrNull
+                        ?: obj["isActive"]?.jsonPrimitive?.contentOrNull?.equals("true", ignoreCase = true)
+                        ?: false
+
+                if (id.isBlank() || title.isBlank()) return@mapNotNull null
+
+                MasterServiceTemplatePayload(
+                    id = id,
+                    title = title,
+                    defaultPrice = defaultPrice,
+                    isActive = isActive
+                )
+            }
+        }.getOrDefault(emptyList())
     }
 
     private fun String?.toBooleanStrictOrFalse(): Boolean {

@@ -50,6 +50,10 @@ import com.andrey.beautyplanner.remote.MasterProfileSync
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import kotlinx.coroutines.launch
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.width
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PersonalInfoSettingsScreen() {
@@ -71,6 +75,15 @@ fun PersonalInfoSettingsScreen() {
 
     val scope = rememberCoroutineScope()
 
+    var debugLines by remember { mutableStateOf(listOf<String>()) }
+    var debugStamp by remember { mutableStateOf(0L) }
+
+    fun appendDebug(message: String) {
+        val line = "${kotlinx.datetime.Clock.System.now()} | $message"
+        debugLines = (listOf(line) + debugLines).take(40)
+        debugStamp = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+    }
+
     val hasChanges =
         userNameDraft.trim() != AppSettings.ownerName.trim() ||
                 phoneDraft.trim() != AppSettings.profilePhone.trim() ||
@@ -85,11 +98,47 @@ fun PersonalInfoSettingsScreen() {
     fun refreshMasterProfile(force: Boolean) {
         scope.launch {
             isRefreshingProfile = true
+            appendDebug("refreshMasterProfile(start) force=$force")
+            appendDebug("before pull | backendUserId='${AppSettings.backendUserId}'")
+            appendDebug(
+                "before pull | drafts owner='${userNameDraft}', phone='${phoneDraft}', spec='${specializationDraft}', avatarBase64Len=${avatarBase64Draft.length}"
+            )
+            appendDebug(
+                "before pull | appSettings owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
+            )
+            appendDebug(
+                "before pull | sessionPulled=${MasterProfileSync.masterProfilePulledThisSession}"
+            )
+
             MasterProfileSync.pullIfAuthenticated(force = force)
+                .onSuccess {
+                    appendDebug("pullIfAuthenticated success")
+
+                    userNameDraft = AppSettings.ownerName
+                    phoneDraft = AppSettings.profilePhone
+                    avatarUrlDraft = AppSettings.profileAvatarUrl
+                    avatarBase64Draft = AppSettings.profileAvatarBase64
+                    phoneVisibleDraft = AppSettings.profilePhoneVisible
+                    displayCustomNameDraft = AppSettings.profileDisplayCustomName
+                    specializationDraft = AppSettings.profileSpecialization
+
+                    appendDebug(
+                        "after success | drafts owner='${userNameDraft}', phone='${phoneDraft}', spec='${specializationDraft}', avatarBase64Len=${avatarBase64Draft.length}"
+                    )
+                    appendDebug(
+                        "after success | appSettings owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
+                    )
+                    appendDebug(
+                        "after success | sessionPulled=${MasterProfileSync.masterProfilePulledThisSession}"
+                    )
+                }
                 .onFailure {
+                    appendDebug("pullIfAuthenticated failure: ${it.message}")
                     CloudSyncLogger.log("pullMasterProfile: failed: ${it.message}")
                 }
+
             isRefreshingProfile = false
+            appendDebug("refreshMasterProfile(done)")
         }
     }
 
@@ -213,6 +262,24 @@ fun PersonalInfoSettingsScreen() {
                 }
 
                 Divider()
+
+                DebugLoggerCard(
+                    lines = debugLines,
+                    debugStamp = debugStamp,
+                    isRefreshingProfile = isRefreshingProfile,
+                    isSaving = isSaving,
+                    backendUserId = AppSettings.backendUserId,
+                    sessionPulled = MasterProfileSync.masterProfilePulledThisSession,
+                    lastPullDebug = MasterProfileSync.lastPullDebug,
+                    draftOwner = userNameDraft,
+                    draftPhone = phoneDraft,
+                    draftSpec = specializationDraft,
+                    draftAvatarBase64Len = avatarBase64Draft.length,
+                    settingsOwner = AppSettings.ownerName,
+                    settingsPhone = AppSettings.profilePhone,
+                    settingsSpec = AppSettings.profileSpecialization,
+                    settingsAvatarBase64Len = AppSettings.profileAvatarBase64.length
+                )
 
                 ProfileTextField(
                     title = Locales.t("user_name_label"),
@@ -339,9 +406,16 @@ fun PersonalInfoSettingsScreen() {
 
                         if (!shouldProcessAvatarUrl) {
                             persistProfile(avatarBase64Draft)
+                            appendDebug(
+                                "save local(no avatar processing) | owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
+                            )
                             scope.launch {
                                 MasterProfileSync.syncIfAuthenticated()
+                                    .onSuccess {
+                                        appendDebug("syncIfAuthenticated success")
+                                    }
                                     .onFailure {
+                                        appendDebug("syncIfAuthenticated failure: ${it.message}")
                                         CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
                                     }
                             }
@@ -359,9 +433,16 @@ fun PersonalInfoSettingsScreen() {
 
                                 avatarBase64Draft = processedBase64
                                 persistProfile(processedBase64)
+                                appendDebug(
+                                    "save local(with avatar processing) | owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
+                                )
                                 scope.launch {
                                     MasterProfileSync.syncIfAuthenticated()
+                                        .onSuccess {
+                                            appendDebug("syncIfAuthenticated success")
+                                        }
                                         .onFailure {
+                                            appendDebug("syncIfAuthenticated failure: ${it.message}")
                                             CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
                                         }
                                 }
@@ -384,6 +465,98 @@ fun PersonalInfoSettingsScreen() {
     }
 }
 
+@Composable
+private fun DebugLoggerCard(
+    lines: List<String>,
+    debugStamp: Long,
+    isRefreshingProfile: Boolean,
+    isSaving: Boolean,
+    backendUserId: String,
+    sessionPulled: Boolean,
+    lastPullDebug: String,
+    draftOwner: String,
+    draftPhone: String,
+    draftSpec: String,
+    draftAvatarBase64Len: Int,
+    settingsOwner: String,
+    settingsPhone: String,
+    settingsSpec: String,
+    settingsAvatarBase64Len: Int
+) {
+    val fontScale = AppSettings.getFontScale()
+    val onSurface = MaterialTheme.colors.onSurface
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, onSurface.copy(alpha = 0.18f), RoundedCornerShape(12.dp))
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "LOGGER",
+            fontSize = (15 * fontScale).sp,
+            fontWeight = FontWeight.Bold,
+            color = onSurface
+        )
+
+        Text(
+            text = "stamp=$debugStamp | refreshing=$isRefreshingProfile | saving=$isSaving | sessionPulled=$sessionPulled",
+            fontSize = (12 * fontScale).sp,
+            color = onSurface.copy(alpha = 0.75f)
+        )
+
+        Text(
+            text = "backendUserId='$backendUserId'",
+            fontSize = (12 * fontScale).sp,
+            color = onSurface.copy(alpha = 0.75f)
+        )
+
+        Text(
+            text = "lastPullDebug=$lastPullDebug",
+            fontSize = (12 * fontScale).sp,
+            color = onSurface.copy(alpha = 0.75f)
+        )
+
+        Text(
+            text = "draft: owner='$draftOwner' | phone='$draftPhone' | spec='$draftSpec' | avatarLen=$draftAvatarBase64Len",
+            fontSize = (12 * fontScale).sp,
+            color = onSurface.copy(alpha = 0.75f)
+        )
+
+        Text(
+            text = "settings: owner='$settingsOwner' | phone='$settingsPhone' | spec='$settingsSpec' | avatarLen=$settingsAvatarBase64Len",
+            fontSize = (12 * fontScale).sp,
+            color = onSurface.copy(alpha = 0.75f)
+        )
+
+        Divider()
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            if (lines.isEmpty()) {
+                Text(
+                    text = "No logs yet",
+                    fontSize = (12 * fontScale).sp,
+                    color = onSurface.copy(alpha = 0.55f)
+                )
+            } else {
+                lines.forEach { line ->
+                    Text(
+                        text = line,
+                        fontSize = (11 * fontScale).sp,
+                        color = onSurface.copy(alpha = 0.78f)
+                    )
+                }
+            }
+        }
+    }
+}
 @Composable
 private fun ProfileTextField(
     title: String,
