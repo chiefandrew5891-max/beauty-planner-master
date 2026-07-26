@@ -73,6 +73,16 @@ fun PersonalInfoSettingsScreen() {
     var pendingRawBase64 by remember { mutableStateOf<String?>(null) }
     var isRefreshingProfile by remember { mutableStateOf(false) }
 
+    fun applySettingsToDrafts() {
+        userNameDraft = AppSettings.ownerName
+        phoneDraft = AppSettings.profilePhone
+        avatarUrlDraft = AppSettings.profileAvatarUrl
+        avatarBase64Draft = AppSettings.profileAvatarBase64
+        phoneVisibleDraft = AppSettings.profilePhoneVisible
+        displayCustomNameDraft = AppSettings.profileDisplayCustomName
+        specializationDraft = AppSettings.profileSpecialization
+    }
+
     val scope = rememberCoroutineScope()
 
     var debugLines by remember { mutableStateOf(listOf<String>()) }
@@ -98,47 +108,14 @@ fun PersonalInfoSettingsScreen() {
     fun refreshMasterProfile(force: Boolean) {
         scope.launch {
             isRefreshingProfile = true
-            appendDebug("refreshMasterProfile(start) force=$force")
-            appendDebug("before pull | backendUserId='${AppSettings.backendUserId}'")
-            appendDebug(
-                "before pull | drafts owner='${userNameDraft}', phone='${phoneDraft}', spec='${specializationDraft}', avatarBase64Len=${avatarBase64Draft.length}"
-            )
-            appendDebug(
-                "before pull | appSettings owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
-            )
-            appendDebug(
-                "before pull | sessionPulled=${MasterProfileSync.masterProfilePulledThisSession}"
-            )
-
             MasterProfileSync.pullIfAuthenticated(force = force)
                 .onSuccess {
-                    appendDebug("pullIfAuthenticated success")
-
-                    userNameDraft = AppSettings.ownerName
-                    phoneDraft = AppSettings.profilePhone
-                    avatarUrlDraft = AppSettings.profileAvatarUrl
-                    avatarBase64Draft = AppSettings.profileAvatarBase64
-                    phoneVisibleDraft = AppSettings.profilePhoneVisible
-                    displayCustomNameDraft = AppSettings.profileDisplayCustomName
-                    specializationDraft = AppSettings.profileSpecialization
-
-                    appendDebug(
-                        "after success | drafts owner='${userNameDraft}', phone='${phoneDraft}', spec='${specializationDraft}', avatarBase64Len=${avatarBase64Draft.length}"
-                    )
-                    appendDebug(
-                        "after success | appSettings owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
-                    )
-                    appendDebug(
-                        "after success | sessionPulled=${MasterProfileSync.masterProfilePulledThisSession}"
-                    )
+                    applySettingsToDrafts()
                 }
                 .onFailure {
-                    appendDebug("pullIfAuthenticated failure: ${it.message}")
                     CloudSyncLogger.log("pullMasterProfile: failed: ${it.message}")
                 }
-
             isRefreshingProfile = false
-            appendDebug("refreshMasterProfile(done)")
         }
     }
 
@@ -148,7 +125,8 @@ fun PersonalInfoSettingsScreen() {
     )
 
     LaunchedEffect(Unit) {
-        refreshMasterProfile(force = false)
+        applySettingsToDrafts()
+        refreshMasterProfile(force = true)
     }
 
     pendingRawBase64?.let { rawBase64 ->
@@ -269,7 +247,6 @@ fun PersonalInfoSettingsScreen() {
                     isRefreshingProfile = isRefreshingProfile,
                     isSaving = isSaving,
                     backendUserId = AppSettings.backendUserId,
-                    sessionPulled = MasterProfileSync.masterProfilePulledThisSession,
                     lastPullDebug = MasterProfileSync.lastPullDebug,
                     draftOwner = userNameDraft,
                     draftPhone = phoneDraft,
@@ -472,7 +449,6 @@ private fun DebugLoggerCard(
     isRefreshingProfile: Boolean,
     isSaving: Boolean,
     backendUserId: String,
-    sessionPulled: Boolean,
     lastPullDebug: String,
     draftOwner: String,
     draftPhone: String,
@@ -501,7 +477,7 @@ private fun DebugLoggerCard(
         )
 
         Text(
-            text = "stamp=$debugStamp | refreshing=$isRefreshingProfile | saving=$isSaving | sessionPulled=$sessionPulled",
+            text = "stamp=$debugStamp | refreshing=$isRefreshingProfile | saving=$isSaving",
             fontSize = (12 * fontScale).sp,
             color = onSurface.copy(alpha = 0.75f)
         )

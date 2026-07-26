@@ -6,14 +6,10 @@ import com.andrey.beautyplanner.ServiceTemplate
 import kotlinx.serialization.encodeToString
 
 object MasterProfileSync {
-    var masterProfilePulledThisSession: Boolean = false
-        private set
-
     var lastPullDebug: String = "no pull yet"
         private set
 
     fun resetSessionPullState() {
-        masterProfilePulledThisSession = false
         lastPullDebug = "session pull state reset"
     }
 
@@ -38,18 +34,20 @@ object MasterProfileSync {
     }
 
     suspend fun pullIfAuthenticated(force: Boolean = false): Result<Unit> {
-        if (!force && masterProfilePulledThisSession) {
-            lastPullDebug = "pull skipped: already pulled this session"
-            return Result.success(Unit)
-        }
-
         return runCatching {
             val payload = BackendBridge.getMyMasterProfile()
 
             lastPullDebug =
-                "payload(found=${payload.found}, firebaseUid='${payload.firebaseUid}', owner='${payload.ownerName}', phone='${payload.profilePhone}', spec='${payload.profileSpecialization}', avatarLen=${payload.profileAvatarBase64.length}, templates=${payload.serviceTemplates.size}, updatedAt=${payload.updatedAt}, createdAt=${payload.createdAt})"
+                "payload(found=${payload.found}, firebaseUid='${payload.firebaseUid}', owner='${payload.ownerName}', phone='${payload.profilePhone}', spec='${payload.profileSpecialization}', avatarLen=${payload.profileAvatarBase64.length}, templates=${payload.serviceTemplates.size}, updatedAt=${payload.updatedAt}, createdAt=${payload.createdAt}, force=$force)"
 
-            if (!payload.found) return@runCatching
+            val hasMeaningfulProfileData =
+                payload.ownerName.isNotBlank() ||
+                        payload.profilePhone.isNotBlank() ||
+                        payload.profileSpecialization.isNotBlank() ||
+                        payload.profileAvatarBase64.isNotBlank() ||
+                        payload.serviceTemplates.isNotEmpty()
+
+            if (!payload.found && !hasMeaningfulProfileData) return@runCatching
 
             AppSettings.ownerName = payload.ownerName
             AppSettings.profileDisplayCustomName = payload.profileDisplayCustomName
@@ -71,7 +69,6 @@ object MasterProfileSync {
             }
 
             AppSettings.persist()
-            masterProfilePulledThisSession = true
 
             lastPullDebug +=
                 " | applied(owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarLen=${AppSettings.profileAvatarBase64.length})"

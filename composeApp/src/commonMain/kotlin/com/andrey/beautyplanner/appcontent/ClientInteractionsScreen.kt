@@ -140,6 +140,17 @@ fun ClientInteractionsScreen() {
                         }
                     }
                 )
+                Divider()
+                Text(
+                    text = "Разрешить сервису отображать клиентам ваши свободные ячейки автоматически",
+                    fontSize = (16 * fontScale).sp,
+                    color = onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+
+                AppSwitch(
+                    
+                )
             }
 
             Text(
