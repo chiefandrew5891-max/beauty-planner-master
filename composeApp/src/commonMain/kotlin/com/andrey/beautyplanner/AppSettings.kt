@@ -73,6 +73,7 @@ private data class SettingsSnapshot(
     val profileDisplayCustomName: Boolean = false,
     val profileSpecialization: String = "",
     val clientInteractionsEnabled: Boolean = false,
+    val autoPublishBusySlots: Boolean = false,
 
     val notificationsEnabled: Boolean = false,
     val notificationSoundType: String = NotificationSoundType.DEFAULT.name,
@@ -192,6 +193,7 @@ object AppSettings {
     var profileDisplayCustomName by mutableStateOf(false)
     var profileSpecialization by mutableStateOf("")
     var clientInteractionsEnabled by mutableStateOf(false)
+    var autoPublishBusySlots by mutableStateOf(false)
 
     var notificationsEnabled by mutableStateOf(false)
     var notificationSoundType by mutableStateOf("DEFAULT")
@@ -597,6 +599,7 @@ object AppSettings {
         profileRating = snapshot.profileRating
         profileAvatarUrl = snapshot.profileAvatarUrl
         clientInteractionsEnabled = snapshot.clientInteractionsEnabled
+        autoPublishBusySlots = snapshot.autoPublishBusySlots
         profileAvatarBase64 = snapshot.profileAvatarBase64
         profileDisplayCustomName = snapshot.profileDisplayCustomName
         profileSpecialization = snapshot.profileSpecialization
@@ -666,6 +669,7 @@ object AppSettings {
             profileDisplayCustomName = profileDisplayCustomName,
             profileSpecialization = profileSpecialization,
             clientInteractionsEnabled = clientInteractionsEnabled,
+            autoPublishBusySlots = autoPublishBusySlots,
 
             notificationsEnabled = notificationsEnabled,
             notificationSoundType = notificationSoundType,

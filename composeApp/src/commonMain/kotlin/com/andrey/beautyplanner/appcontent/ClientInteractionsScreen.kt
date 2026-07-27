@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
-import androidx.compose.runtime.rememberCoroutineScope
 import com.andrey.beautyplanner.CloudSyncLogger
 import com.andrey.beautyplanner.remote.MasterProfileSync
 import kotlinx.coroutines.launch
@@ -38,6 +38,15 @@ fun ClientInteractionsScreen() {
     val scope = rememberCoroutineScope()
 
     var showEnableConfirm by remember { mutableStateOf(false) }
+
+    fun syncProfileOnly() {
+        scope.launch {
+            MasterProfileSync.syncIfAuthenticated()
+                .onFailure {
+                    CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
+                }
+        }
+    }
 
     if (showEnableConfirm) {
         AlertDialog(
@@ -66,10 +75,7 @@ fun ClientInteractionsScreen() {
                         AppSettings.clientInteractionsEnabled = true
                         AppSettings.persist()
                         showEnableConfirm = false
-                        scope.launch {
-                            MasterProfileSync.syncIfAuthenticated()
-                                .onFailure { CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}") }
-                        }
+                        syncProfileOnly()
                     }
                 ) {
                     Text("Подтвердить")
@@ -132,15 +138,21 @@ fun ClientInteractionsScreen() {
                             showEnableConfirm = true
                         } else {
                             AppSettings.clientInteractionsEnabled = false
+                            AppSettings.autoPublishBusySlots = false
                             AppSettings.persist()
-                            scope.launch {
-                                MasterProfileSync.syncIfAuthenticated()
-                                    .onFailure { CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}") }
-                            }
+                            syncProfileOnly()
                         }
                     }
                 )
-                Divider()
+            }
+
+            Divider()
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = "Разрешить сервису отображать клиентам ваши свободные ячейки автоматически",
                     fontSize = (16 * fontScale).sp,
@@ -149,7 +161,12 @@ fun ClientInteractionsScreen() {
                 )
 
                 AppSwitch(
-                    
+                    checked = AppSettings.autoPublishBusySlots,
+                    onCheckedChange = { enabled ->
+                        AppSettings.autoPublishBusySlots = enabled
+                        AppSettings.persist()
+                    },
+                    enabled = AppSettings.clientInteractionsEnabled
                 )
             }
 
@@ -163,6 +180,19 @@ fun ClientInteractionsScreen() {
                 color = onSurface.copy(alpha = 0.72f),
                 lineHeight = (20 * fontScale).sp
             )
+
+            if (AppSettings.clientInteractionsEnabled) {
+                Text(
+                    text = if (AppSettings.autoPublishBusySlots) {
+                        "Автоматическая публикация занятых интервалов включена. Клиенты будут видеть только свободные окна между уже занятыми слотами."
+                    } else {
+                        "Автоматическая публикация занятых интервалов выключена."
+                    },
+                    fontSize = (13 * fontScale).sp,
+                    color = onSurface.copy(alpha = 0.72f),
+                    lineHeight = (20 * fontScale).sp
+                )
+            }
         }
     }
 }

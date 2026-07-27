@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import com.andrey.beautyplanner.remote.MasterScheduleSync
 
 @Stable
 class AppRootState(
@@ -223,6 +224,7 @@ class AppRootState(
                 )
             )
         }
+
     fun reloadAppointmentsForProfile(profileKey: String) {
         CloudSyncLogger.log("reloadAppointmentsForProfile: profileKey=$profileKey")
 
@@ -243,6 +245,7 @@ class AppRootState(
         billingUiState = billingUiState.copy(errorMessage = null)
         initBilling()
     }
+
     fun reloadAppointmentsForCurrentProfile() {
         reloadAppointmentsForProfile(LocalProfileManager.currentProfileKey())
     }
@@ -250,6 +253,7 @@ class AppRootState(
     fun reloadAppointmentsForGuestProfile() {
         reloadAppointmentsForProfile(LocalProfileManager.guestProfileKey())
     }
+
     fun showGlobalLoading(message: String? = null) {
         globalLoadingMessage = message
         isGlobalLoading = true
@@ -259,6 +263,7 @@ class AppRootState(
         isGlobalLoading = false
         globalLoadingMessage = null
     }
+
     fun sendPasswordReset(email: String) {
         val cleanEmail = email.trim()
         if (!cleanEmail.contains("@") || !cleanEmail.contains(".")) {
@@ -291,6 +296,7 @@ class AppRootState(
             ownedPremium = accessState.hasPremium
         )
     }
+
     fun mapAuthErrorMessage(raw: String?): String {
         val text = raw?.trim().orEmpty()
         if (text.isBlank()) return Locales.t("auth_error_generic")
@@ -355,6 +361,7 @@ class AppRootState(
             else -> Locales.t("auth_error_sign_in_failed")
         }
     }
+
     fun checkForAppUpdates() {
         if (isCheckingAppUpdates) return
 
@@ -378,6 +385,7 @@ class AppRootState(
             }
         }
     }
+
     fun restoreOfflineAuthenticatedSessionIfPossible(): Boolean {
         val savedUserId = AppSettings.localProfileUserId.trim()
         val savedProviderRaw = AppSettings.lastAuthProvider.trim().uppercase()
@@ -410,7 +418,9 @@ class AppRootState(
         currentScreen = Screen.MONTH
         return true
     }
+
     var screenHistory by mutableStateOf(listOf<Screen>())
+
     fun navigateTo(screen: Screen) {
         if (currentScreen != screen) {
             screenHistory = screenHistory + currentScreen
@@ -520,6 +530,7 @@ class AppRootState(
             syncSubscriptionState()
         }
     }
+
     suspend fun enforceAuthenticatedSessionTimeoutIfNeeded() {
         val currentUser = AuthGateway.getCurrentUser() ?: return
 
@@ -542,6 +553,7 @@ class AppRootState(
         AppSettings.lastAuthenticatedAppOpenAtMillis = now
         AppSettings.persist()
     }
+
     suspend fun bootstrapAuthenticatedUser(
         providerOverride: SignInProvider? = null
     ) {
@@ -580,6 +592,7 @@ class AppRootState(
         authErrorMessage = null
         currentScreen = Screen.MONTH
     }
+
     fun continueWithGoogle() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
@@ -678,6 +691,7 @@ class AppRootState(
             }
         }
     }
+
     fun continueAnonymously() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
@@ -721,6 +735,7 @@ class AppRootState(
             }
         }
     }
+
     fun openSignInScreen() {
         authErrorMessage = null
         clearSessionLocalState()
@@ -728,6 +743,7 @@ class AppRootState(
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
     }
+
     fun clearSessionLocalState() {
         appointments.clear()
 
@@ -777,6 +793,7 @@ class AppRootState(
             }
         }
     }
+
     fun signOutCompletely() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
@@ -803,6 +820,7 @@ class AppRootState(
             }
         }
     }
+
     fun openEmailSignInScreen() {
         authErrorMessage = null
         authEmailRegisterMode = false
@@ -816,6 +834,7 @@ class AppRootState(
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_EMAIL
     }
+
     fun submitEmailAuth(
         email: String,
         password: String,
@@ -1020,6 +1039,7 @@ class AppRootState(
             }
         }
     }
+
     fun forceCloudSyncFromDebug() {
         if (cloudSyncInProgress) {
             CloudSyncLogger.log("forceCloudSyncFromDebug: skipped, sync already running")
@@ -1050,6 +1070,7 @@ class AppRootState(
             "snapshot: authUid=${currentAuthUser?.uid ?: "—"}, provider=${currentAuthUser?.provider ?: "NONE"}, backendUserId=${AppSettings.backendUserId.ifBlank { "—" }}, premiumEligible=$premiumEligible, inProgress=$cloudSyncInProgress, appointments=${appointments.size}, visible=$visibleCount"
         )
     }
+
     private suspend fun syncSubscriptionState() {
         val info = billingManager.getSubscriptionInfo()
         val now = Clock.System.now().toEpochMilliseconds()
@@ -1335,6 +1356,13 @@ class AppRootState(
             Notifications.cancelAll()
         }
 
+        scope.launch {
+            MasterScheduleSync.syncIfEligible(appointments.toList())
+                .onFailure {
+                    CloudSyncLogger.log("syncMyPublicSchedule: failed: ${it.message}")
+                }
+        }
+
         scheduleCloudSyncIfEligible()
     }
 
@@ -1447,6 +1475,7 @@ class AppRootState(
     fun dispose() {
         billingManager.dispose()
     }
+
     fun checkForAppUpdatesIfNeeded() {
         val now = Clock.System.now().toEpochMilliseconds()
         val lastCheck = AppSettings.lastUpdateCheckAtMillis
@@ -1474,6 +1503,7 @@ class AppRootState(
             }
         }
     }
+
     private fun persistAuthenticatedSession(user: AuthUser) {
         AppSettings.localProfileUserId = user.uid
         AppSettings.lastAuthProvider = user.provider.name
@@ -1482,6 +1512,7 @@ class AppRootState(
         AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
         AppSettings.persist()
     }
+
     private fun clearPersistedAuthenticatedSession() {
         AppSettings.backendUserId = ""
         AppSettings.localProfileUserId = ""
@@ -1496,6 +1527,7 @@ class AppRootState(
         AppSettings.developerPremiumOverrideEnabled = false
         AppSettings.persist()
     }
+
     private fun persistUpdateStatus(status: AppUpdateStatus) {
         AppSettings.lastUpdateCheckAtMillis = Clock.System.now().toEpochMilliseconds()
 

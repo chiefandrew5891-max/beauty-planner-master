@@ -172,6 +172,21 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun syncMyPublicSchedule(
+        autoPublishBusySlots: Boolean,
+        busySlotsJson: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+
+        return callBackendFunction(
+            name = "syncMyPublicSchedule",
+            payload = mapOf(
+                "autoPublishBusySlots" to autoPublishBusySlots.toString(),
+                "busySlotsJson" to busySlotsJson
+            )
+        )
+    }
+
     private suspend fun callAccessFunction(
         name: String,
         payload: Map<String, String>

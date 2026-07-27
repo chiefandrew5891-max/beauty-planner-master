@@ -73,4 +73,9 @@ expect object BackendBridge {
     ): Map<String, String>
 
     suspend fun getMyMasterProfile(): MasterProfilePayload
+
+    suspend fun syncMyPublicSchedule(
+        autoPublishBusySlots: Boolean,
+        busySlotsJson: String
+    ): Map<String, String>
 }
