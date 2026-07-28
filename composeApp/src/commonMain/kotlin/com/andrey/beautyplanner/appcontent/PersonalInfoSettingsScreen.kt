@@ -20,9 +20,9 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -49,10 +49,6 @@ import com.andrey.beautyplanner.ProfileImagePicker
 import com.andrey.beautyplanner.remote.MasterProfileSync
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import kotlinx.coroutines.launch
-
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.width
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -84,15 +80,6 @@ fun PersonalInfoSettingsScreen() {
     }
 
     val scope = rememberCoroutineScope()
-
-    var debugLines by remember { mutableStateOf(listOf<String>()) }
-    var debugStamp by remember { mutableStateOf(0L) }
-
-    fun appendDebug(message: String) {
-        val line = "${kotlinx.datetime.Clock.System.now()} | $message"
-        debugLines = (listOf(line) + debugLines).take(40)
-        debugStamp = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
-    }
 
     val hasChanges =
         userNameDraft.trim() != AppSettings.ownerName.trim() ||
@@ -241,23 +228,6 @@ fun PersonalInfoSettingsScreen() {
 
                 Divider()
 
-                DebugLoggerCard(
-                    lines = debugLines,
-                    debugStamp = debugStamp,
-                    isRefreshingProfile = isRefreshingProfile,
-                    isSaving = isSaving,
-                    backendUserId = AppSettings.backendUserId,
-                    lastPullDebug = MasterProfileSync.lastPullDebug,
-                    draftOwner = userNameDraft,
-                    draftPhone = phoneDraft,
-                    draftSpec = specializationDraft,
-                    draftAvatarBase64Len = avatarBase64Draft.length,
-                    settingsOwner = AppSettings.ownerName,
-                    settingsPhone = AppSettings.profilePhone,
-                    settingsSpec = AppSettings.profileSpecialization,
-                    settingsAvatarBase64Len = AppSettings.profileAvatarBase64.length
-                )
-
                 ProfileTextField(
                     title = Locales.t("user_name_label"),
                     value = userNameDraft,
@@ -383,16 +353,9 @@ fun PersonalInfoSettingsScreen() {
 
                         if (!shouldProcessAvatarUrl) {
                             persistProfile(avatarBase64Draft)
-                            appendDebug(
-                                "save local(no avatar processing) | owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
-                            )
                             scope.launch {
                                 MasterProfileSync.syncIfAuthenticated()
-                                    .onSuccess {
-                                        appendDebug("syncIfAuthenticated success")
-                                    }
                                     .onFailure {
-                                        appendDebug("syncIfAuthenticated failure: ${it.message}")
                                         CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
                                     }
                             }
@@ -410,16 +373,9 @@ fun PersonalInfoSettingsScreen() {
 
                                 avatarBase64Draft = processedBase64
                                 persistProfile(processedBase64)
-                                appendDebug(
-                                    "save local(with avatar processing) | owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarBase64Len=${AppSettings.profileAvatarBase64.length}"
-                                )
                                 scope.launch {
                                     MasterProfileSync.syncIfAuthenticated()
-                                        .onSuccess {
-                                            appendDebug("syncIfAuthenticated success")
-                                        }
                                         .onFailure {
-                                            appendDebug("syncIfAuthenticated failure: ${it.message}")
                                             CloudSyncLogger.log("syncMasterProfile: failed: ${it.message}")
                                         }
                                 }
@@ -442,97 +398,6 @@ fun PersonalInfoSettingsScreen() {
     }
 }
 
-@Composable
-private fun DebugLoggerCard(
-    lines: List<String>,
-    debugStamp: Long,
-    isRefreshingProfile: Boolean,
-    isSaving: Boolean,
-    backendUserId: String,
-    lastPullDebug: String,
-    draftOwner: String,
-    draftPhone: String,
-    draftSpec: String,
-    draftAvatarBase64Len: Int,
-    settingsOwner: String,
-    settingsPhone: String,
-    settingsSpec: String,
-    settingsAvatarBase64Len: Int
-) {
-    val fontScale = AppSettings.getFontScale()
-    val onSurface = MaterialTheme.colors.onSurface
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, onSurface.copy(alpha = 0.18f), RoundedCornerShape(12.dp))
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = "LOGGER",
-            fontSize = (15 * fontScale).sp,
-            fontWeight = FontWeight.Bold,
-            color = onSurface
-        )
-
-        Text(
-            text = "stamp=$debugStamp | refreshing=$isRefreshingProfile | saving=$isSaving",
-            fontSize = (12 * fontScale).sp,
-            color = onSurface.copy(alpha = 0.75f)
-        )
-
-        Text(
-            text = "backendUserId='$backendUserId'",
-            fontSize = (12 * fontScale).sp,
-            color = onSurface.copy(alpha = 0.75f)
-        )
-
-        Text(
-            text = "lastPullDebug=$lastPullDebug",
-            fontSize = (12 * fontScale).sp,
-            color = onSurface.copy(alpha = 0.75f)
-        )
-
-        Text(
-            text = "draft: owner='$draftOwner' | phone='$draftPhone' | spec='$draftSpec' | avatarLen=$draftAvatarBase64Len",
-            fontSize = (12 * fontScale).sp,
-            color = onSurface.copy(alpha = 0.75f)
-        )
-
-        Text(
-            text = "settings: owner='$settingsOwner' | phone='$settingsPhone' | spec='$settingsSpec' | avatarLen=$settingsAvatarBase64Len",
-            fontSize = (12 * fontScale).sp,
-            color = onSurface.copy(alpha = 0.75f)
-        )
-
-        Divider()
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(180.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            if (lines.isEmpty()) {
-                Text(
-                    text = "No logs yet",
-                    fontSize = (12 * fontScale).sp,
-                    color = onSurface.copy(alpha = 0.55f)
-                )
-            } else {
-                lines.forEach { line ->
-                    Text(
-                        text = line,
-                        fontSize = (11 * fontScale).sp,
-                        color = onSurface.copy(alpha = 0.78f)
-                    )
-                }
-            }
-        }
-    }
-}
 @Composable
 private fun ProfileTextField(
     title: String,
