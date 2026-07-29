@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Huomaa: kokeilujakson päätyttyä ilmaisversio sallii 20 merkintää. Nykyisen määräsi perusteella kokeilujakson jälkeen on jäljellä {count} paikkaa.",
     "free_limit_popup_slots_remaining_free": "Jäljellä {count} paikkaa ilmaisversiossa (raja: 20 aktiivista merkintää).",
     "free_limit_popup_limit_reached_trial": "Olet lisännyt 20 merkintää. Ilmaisversiossa kokeilujakson päätyttyä et voi lisätä uusia ilman Premiumia.",
-    "free_limit_popup_limit_reached_free": "Raja saavutettu: 20 aktiivista merkintää ilmaisversiossa. Voit lisätä uusia siirtymällä Premiumiin."
+    "free_limit_popup_limit_reached_free": "Raja saavutettu: 20 aktiivista merkintää ilmaisversiossa. Voit lisätä uusia siirtymällä Premiumiin.",
+    "booking_source_online": "Verkossa"
 }

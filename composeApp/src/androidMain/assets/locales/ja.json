@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "ご注意：無料体験終了後、無料版で保存できるのは20件までです。現在の件数に基づくと、無料体験終了後に残る枠は {count} 件です。",
     "free_limit_popup_slots_remaining_free": "無料版の残り枠は {count} 件です（上限：アクティブなエントリー20件）。",
     "free_limit_popup_limit_reached_trial": "20件のエントリーを追加しました。無料体験終了後は、Premiumプランに登録しない限り新しいエントリーを追加できません。",
-    "free_limit_popup_limit_reached_free": "上限に達しました：無料版ではアクティブなエントリー20件までです。新しく追加するにはPremiumにアップグレードしてください。"
+    "free_limit_popup_limit_reached_free": "上限に達しました：無料版ではアクティブなエントリー20件までです。新しく追加するにはPremiumにアップグレードしてください。",
+    "booking_source_online": "オンライン"
 }

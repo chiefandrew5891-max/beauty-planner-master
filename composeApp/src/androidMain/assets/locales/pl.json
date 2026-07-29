@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Uwaga: po zakończeniu okresu próbnego bezpłatna wersja pozwala na 20 wpisów. Na podstawie Twojej obecnej liczby po zakończeniu okresu próbnego pozostanie Ci {count} miejsc.",
     "free_limit_popup_slots_remaining_free": "Pozostało {count} miejsc w wersji bezpłatnej (limit: 20 aktywnych wpisów).",
     "free_limit_popup_limit_reached_trial": "Dodałeś 20 wpisów. W wersji bezpłatnej po zakończeniu okresu próbnego dodawanie nowych bez wersji Premium nie będzie możliwe.",
-    "free_limit_popup_limit_reached_free": "Osiągnięto limit: 20 aktywnych wpisów w wersji bezpłatnej. Aby dodać nowe, przejdź na Premium."
+    "free_limit_popup_limit_reached_free": "Osiągnięto limit: 20 aktywnych wpisów w wersji bezpłatnej. Aby dodać nowe, przejdź na Premium.",
+    "booking_source_online": "Online"
 }

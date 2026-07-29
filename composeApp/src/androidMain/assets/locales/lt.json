@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Pastaba: pasibaigus bandomajam laikotarpiui, nemokama versija leidžia 20 įrašų. Pagal dabartinį skaičių po bandomojo laikotarpio liks {count} vietų.",
     "free_limit_popup_slots_remaining_free": "Liko {count} vietų nemokamoje versijoje (limitas: 20 aktyvių įrašų).",
     "free_limit_popup_limit_reached_trial": "Pridėjote 20 įrašų. Nemokamoje versijoje pasibaigus bandomajam laikotarpiui negalėsite pridėti naujų be „Premium“.",
-    "free_limit_popup_limit_reached_free": "Limitas pasiektas: 20 aktyvių įrašų nemokamoje versijoje. Norėdami pridėti naujų, perikite prie „Premium“."
+    "free_limit_popup_limit_reached_free": "Limitas pasiektas: 20 aktyvių įrašų nemokamoje versijoje. Norėdami pridėti naujų, perikite prie „Premium“.",
+    "booking_source_online": "Internetu"
 }

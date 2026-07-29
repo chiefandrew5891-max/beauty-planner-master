@@ -575,5 +575,6 @@
     "avatar_crop_confirm": "Применить",
     "avatar_crop_cancel": "Отмена",
     "nav_client_interactions": "Взаимодействие с клиентами",
-    "premium_required_client_interactions": "Взаимодействие с клиентами доступно только во время пробного периода или с Premium-подпиской."
+    "premium_required_client_interactions": "Взаимодействие с клиентами доступно только во время пробного периода или с Premium-подпиской.",
+    "booking_source_online": "Онлайн"
 }

@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Bemærk: Efter prøveperioden tillader gratisversionen 20 poster. Baseret på dit nuværende antal vil du have {count} pladser tilbage efter prøveperioden.",
     "free_limit_popup_slots_remaining_free": "{count} pladser tilbage i gratisversionen (grænse: 20 aktive poster).",
     "free_limit_popup_limit_reached_trial": "Du har tilføjet 20 poster. I gratisversionen kan du ikke tilføje nye efter prøveperioden uden Premium.",
-    "free_limit_popup_limit_reached_free": "Grænsen er nået: 20 aktive poster i gratisversionen. Opgrader til Premium for at tilføje nye."
+    "free_limit_popup_limit_reached_free": "Grænsen er nået: 20 aktive poster i gratisversionen. Opgrader til Premium for at tilføje nye.",
+    "booking_source_online": "Online"
 }

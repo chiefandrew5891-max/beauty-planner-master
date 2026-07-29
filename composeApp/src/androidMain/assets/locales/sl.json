@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Opomba: po izteku preizkusnega obdobja brezplačna različica omogoča 20 vnosov. Glede na vaše trenutno število vam bo po preizkusnem obdobju ostalo še {count} mest.",
     "free_limit_popup_slots_remaining_free": "Še {count} mest v brezplačni različici (meja: 20 aktivnih vnosov).",
     "free_limit_popup_limit_reached_trial": "Dodali ste 20 vnosov. V brezplačni različici po izteku preizkusnega obdobja ne boste mogli dodajati novih brez možnosti Premium.",
-    "free_limit_popup_limit_reached_free": "Dosežena mejo: 20 aktivnih vnosov v brezplačni različici. Če želite dodati nove, nadgradite na Premium."
+    "free_limit_popup_limit_reached_free": "Dosežena mejo: 20 aktivnih vnosov v brezplačni različici. Če želite dodati nove, nadgradite na Premium.",
+    "booking_source_online": "Spletno"
 }

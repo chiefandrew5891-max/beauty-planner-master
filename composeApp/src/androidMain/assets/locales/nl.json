@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Let op: na de proefperiode staat de gratis versie 20 items toe. Op basis van uw huidige aantal heeft u na de proefperiode nog {count} plaatsen over.",
     "free_limit_popup_slots_remaining_free": "Nog {count} plaatsen over in de gratis versie (limiet: 20 actieve items).",
     "free_limit_popup_limit_reached_trial": "U heeft 20 items toegevoegd. In de gratis versie kunt u na de proefperiode geen nieuwe items toevoegen zonder Premium.",
-    "free_limit_popup_limit_reached_free": "Limiet bereikt: 20 actieve items in de gratis versie. Upgrade naar Premium om nieuwe toe te voegen."
+    "free_limit_popup_limit_reached_free": "Limiet bereikt: 20 actieve items in de gratis versie. Upgrade naar Premium om nieuwe toe te voegen.",
+    "booking_source_online": "Online"
 }

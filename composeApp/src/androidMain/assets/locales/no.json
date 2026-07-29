@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Merk: etter prøveperioden tillater gratisversjonen 20 oppføringer. Basert på ditt nåværende antall vil du ha {count} plasser igjen etter prøveperioden.",
     "free_limit_popup_slots_remaining_free": "{count} plasser igjen i gratisversjonen (grense: 20 aktive oppføringer).",
     "free_limit_popup_limit_reached_trial": "Du har lagt til 20 oppføringer. I gratisversjonen kan du ikke legge til nye etter prøveperioden uten Premium.",
-    "free_limit_popup_limit_reached_free": "Grensen er nådd: 20 aktive oppføringer i gratisversjonen. Oppgrader til Premium for å legge til nye."
+    "free_limit_popup_limit_reached_free": "Grensen er nådd: 20 aktive oppføringer i gratisversjonen. Oppgrader til Premium for å legge til nye.",
+    "booking_source_online": "Online"
 }

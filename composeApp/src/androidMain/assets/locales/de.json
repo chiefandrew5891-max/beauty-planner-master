@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Hinweis: Nach Ablauf des Testzeitraums erlaubt die kostenlose Version 20 Einträge. Basierend auf Ihrer aktuellen Anzahl verbleiben nach dem Testzeitraum noch {count} Plätze.",
     "free_limit_popup_slots_remaining_free": "Noch {count} Plätze in der kostenlosen Version verfügbar (Limit: 20 aktive Einträge).",
     "free_limit_popup_limit_reached_trial": "Sie haben 20 Einträge hinzugefügt. In der kostenlosen Version können Sie nach Ablauf des Testzeitraums ohne Premium keine neuen Einträge hinzufügen.",
-    "free_limit_popup_limit_reached_free": "Limit erreicht: 20 aktive Einträge in der kostenlosen Version. Upgrade auf Premium, um neue hinzuzufügen."
+    "free_limit_popup_limit_reached_free": "Limit erreicht: 20 aktive Einträge in der kostenlosen Version. Upgrade auf Premium, um neue hinzuzufügen.",
+    "booking_source_online": "Online"
 }

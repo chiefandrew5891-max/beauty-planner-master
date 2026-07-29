@@ -3,6 +3,7 @@ package com.andrey.beautyplanner.appcontent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,6 +33,7 @@ import com.andrey.beautyplanner.AppointmentPaymentStatus
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.effectivePaymentStatus
 import com.andrey.beautyplanner.getCurrentTimeHm
+import com.andrey.beautyplanner.isOnlineBooking
 import com.andrey.beautyplanner.utils.getLiveStatus
 import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.coroutines.delay
@@ -128,12 +131,30 @@ fun UnpaidAppointmentsScreen(
                                     .padding(14.dp),
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Text(
-                                    text = appointment.clientName,
-                                    fontSize = (16 * fontScale).sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colors.onSurface
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = appointment.clientName,
+                                        fontSize = (16 * fontScale).sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colors.onSurface,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.weight(1f, fill = false)
+                                    )
+
+                                    if (appointment.isOnlineBooking()) {
+                                        Text(
+                                            text = Locales.t("booking_source_online"),
+                                            fontSize = (12 * fontScale).sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colors.primary
+                                        )
+                                    }
+                                }
 
                                 Text(
                                     text = "${appointment.dateString} • ${appointment.time}",

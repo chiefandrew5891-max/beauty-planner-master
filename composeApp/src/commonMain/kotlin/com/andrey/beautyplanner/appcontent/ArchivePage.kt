@@ -44,6 +44,7 @@ import com.andrey.beautyplanner.ClientSuggestions
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.effectivePaymentStatus
 import com.andrey.beautyplanner.getCurrentTimeHm
+import com.andrey.beautyplanner.isOnlineBooking
 import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.getLiveStatus
 import com.andrey.beautyplanner.utils.parseHmToMinutes
@@ -815,14 +816,30 @@ private fun ArchiveRowCard(
                 .padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Text(
-                text = appointment.clientName,
-                fontSize = (16 * fontScale).sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = appointment.clientName,
+                    fontSize = (16 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
+                )
+
+                if (appointment.isOnlineBooking()) {
+                    Text(
+                        text = Locales.t("booking_source_online"),
+                        fontSize = (12 * fontScale).sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+            }
 
             Text(
                 text = "${appointment.dateString} • ${appointment.time}",
@@ -903,12 +920,27 @@ private fun ArchiveAppointmentViewDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
-                text = Locales.t("view_appointment_title"),
-                fontWeight = FontWeight.Bold,
-                fontSize = (18 * fontScale).sp,
-                color = MaterialTheme.colors.onSurface
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = Locales.t("view_appointment_title"),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = (18 * fontScale).sp,
+                    color = MaterialTheme.colors.onSurface
+                )
+
+                if (appointment.isOnlineBooking()) {
+                    Text(
+                        text = Locales.t("booking_source_online"),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = (13 * fontScale).sp,
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+            }
         },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {

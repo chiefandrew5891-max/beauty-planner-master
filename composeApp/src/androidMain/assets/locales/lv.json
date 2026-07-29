@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Piezīme: pēc izmēģinājuma perioda beigām bezmaksas versijā atļauti 20 ieraksti. Pamatojoties uz pašreizējo skaitu, pēc izmēģinājuma perioda paliks {count} vietas.",
     "free_limit_popup_slots_remaining_free": "Palikušas {count} vietas bezmaksas versijā (limits: 20 aktīvi ieraksti).",
     "free_limit_popup_limit_reached_trial": "Esat pievienojis 20 ierakstus. Bezmaksas versijā pēc izmēģinājuma perioda beigām nevarēsiet pievienot jaunus bez Premium.",
-    "free_limit_popup_limit_reached_free": "Limits sasniegts: 20 aktīvi ieraksti bezmaksas versijā. Lai pievienotu jaunus, pārejiet uz Premium."
+    "free_limit_popup_limit_reached_free": "Limits sasniegts: 20 aktīvi ieraksti bezmaksas versijā. Lai pievienotu jaunus, pārejiet uz Premium.",
+    "booking_source_online": "Tiešsaistē"
 }

@@ -31,6 +31,7 @@ import com.andrey.beautyplanner.appcontent.appFontFamily
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import com.andrey.beautyplanner.getPlatform
+import com.andrey.beautyplanner.isOnlineBooking
 
 private fun displayServiceTitle(title: String): String {
     return if (title.startsWith("service_")) {
@@ -310,19 +311,38 @@ fun BookingDialog(
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = if (initialData == null) {
-                            Locales.t("booking_new_title")
-                        } else {
-                            Locales.t("view_appointment_title")
-                        },
-                        fontSize = (22 * fontScale).sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.onSurface,
+                    Column(
                         modifier = Modifier
                             .weight(1f)
                             .padding(top = 2.dp, end = 12.dp)
-                    )
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = if (initialData == null) {
+                                    Locales.t("booking_new_title")
+                                } else {
+                                    Locales.t("view_appointment_title")
+                                },
+                                fontSize = (22 * fontScale).sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colors.onSurface,
+                                modifier = Modifier.weight(1f, fill = false)
+                            )
+
+                            if (initialData?.isOnlineBooking() == true) {
+                                Text(
+                                    text = Locales.t("booking_source_online"),
+                                    fontSize = (13 * fontScale).sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.primary
+                                )
+                            }
+                        }
+                    }
 
                     IconButton(
                         onClick = onDismiss,

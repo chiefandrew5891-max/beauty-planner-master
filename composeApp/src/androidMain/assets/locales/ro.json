@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Notă: după încheierea perioadei de probă, versiunea gratuită permite 20 de intrări. Pe baza numărului dvs. actual, vor rămâne {count} locuri după perioada de probă.",
     "free_limit_popup_slots_remaining_free": "Au mai rămas {count} locuri în versiunea gratuită (limită: 20 de intrări active).",
     "free_limit_popup_limit_reached_trial": "Ați adăugat 20 de intrări. În versiunea gratuită, după încheierea perioadei de probă, nu veți putea adăuga altele noi fără Premium.",
-    "free_limit_popup_limit_reached_free": "Limită atinsă: 20 de intrări active în versiunea gratuită. Pentru a adăuga altele noi, treceți la Premium."
+    "free_limit_popup_limit_reached_free": "Limită atinsă: 20 de intrări active în versiunea gratuită. Pentru a adăuga altele noi, treceți la Premium.",
+    "booking_source_online": "Online"
 }

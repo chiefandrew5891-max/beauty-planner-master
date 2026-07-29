@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Megjegyzés: a próbaidőszak lejárta után az ingyenes verzió 20 bejegyzést engedélyez. A jelenlegi száma alapján a próbaidőszak után {count} helye marad.",
     "free_limit_popup_slots_remaining_free": "Még {count} hely maradt az ingyenes verzióban (limit: 20 aktív bejegyzés).",
     "free_limit_popup_limit_reached_trial": "Hozzáadott 20 bejegyzést. Az ingyenes verzióban a próbaidőszak lejárta után nem adhat hozzá újakat Premium nélkül.",
-    "free_limit_popup_limit_reached_free": "Elérte a limitet: 20 aktív bejegyzés az ingyenes verzióban. Újak hozzáadásához váltson Premiumra."
+    "free_limit_popup_limit_reached_free": "Elérte a limitet: 20 aktív bejegyzés az ingyenes verzióban. Újak hozzáadásához váltson Premiumra.",
+    "booking_source_online": "Online"
 }

@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Nota: dopo il periodo di prova, la versione gratuita consente 20 voci. In base al tuo numero attuale, ti rimarranno {count} posti dopo la prova.",
     "free_limit_popup_slots_remaining_free": "Rimangono {count} posti nella versione gratuita (limite: 20 voci attive).",
     "free_limit_popup_limit_reached_trial": "Hai aggiunto 20 voci. Nella versione gratuita, dopo la prova, non potrai aggiungerne di nuove senza Premium.",
-    "free_limit_popup_limit_reached_free": "Limite raggiunto: 20 voci attive nella versione gratuita. Per aggiungerne di nuove, passa a Premium."
+    "free_limit_popup_limit_reached_free": "Limite raggiunto: 20 voci attive nella versione gratuita. Per aggiungerne di nuove, passa a Premium.",
+    "booking_source_online": "Online"
 }

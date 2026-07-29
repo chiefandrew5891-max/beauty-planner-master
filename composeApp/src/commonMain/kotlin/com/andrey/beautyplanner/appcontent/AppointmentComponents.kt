@@ -40,6 +40,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlin.math.PI
 import kotlin.math.sin
+import com.andrey.beautyplanner.isOnlineBooking
 
 private fun ddMMyyyy(dateString: String): String {
     val p = dateString.split("-")
@@ -217,14 +218,30 @@ fun AppointmentCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = appt.clientName,
-                            fontSize = (15 * fontScale).sp,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = MaterialTheme.colors.onSurface
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = appt.clientName,
+                                fontSize = (15 * fontScale).sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = MaterialTheme.colors.onSurface,
+                                modifier = Modifier.weight(1f, fill = false)
+                            )
+
+                            if (appt.isOnlineBooking()) {
+                                Text(
+                                    text = Locales.t("booking_source_online"),
+                                    fontSize = (11 * fontScale).sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.primary
+                                )
+                            }
+                        }
 
                         Spacer(Modifier.height(2.dp))
 
@@ -333,14 +350,30 @@ fun AppointmentCard(
                         .weight(1f)
                         .padding(horizontal = 8.dp)
                 ) {
-                    Text(
-                        text = appt.clientName,
-                        fontSize = (17 * fontScale).sp,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 1f)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = appt.clientName,
+                            fontSize = (17 * fontScale).sp,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 1f),
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+
+                        if (appt.isOnlineBooking()) {
+                            Text(
+                                text = Locales.t("booking_source_online"),
+                                fontSize = (11 * fontScale).sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colors.primary
+                            )
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(4.dp))
 
@@ -439,12 +472,27 @@ fun AppointmentDetailsDialog(
         AlertDialog(
             onDismissRequest = onDismiss,
             title = {
-                Text(
-                    text = Locales.t("view_appointment_title"),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = (18 * fontScale).sp,
-                    color = MaterialTheme.colors.onSurface
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = Locales.t("view_appointment_title"),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = (18 * fontScale).sp,
+                        color = MaterialTheme.colors.onSurface
+                    )
+
+                    if (appt.isOnlineBooking()) {
+                        Text(
+                            text = Locales.t("booking_source_online"),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = (13 * fontScale).sp,
+                            color = MaterialTheme.colors.primary
+                        )
+                    }
+                }
             },
             text = {
                 Column(Modifier.fillMaxWidth()) {

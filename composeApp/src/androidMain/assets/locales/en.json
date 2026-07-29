@@ -575,5 +575,6 @@
     "avatar_crop_confirm": "Apply",
     "avatar_crop_cancel": "Cancel",
     "nav_client_interactions": "Client Interactions",
-    "premium_required_client_interactions": "Client interactions are available only during the trial period or with a Premium subscription."
+    "premium_required_client_interactions": "Client interactions are available only during the trial period or with a Premium subscription.",
+    "booking_source_online": "Online"
 }

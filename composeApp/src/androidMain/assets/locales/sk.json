@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Poznámka: po skončení skúšobného obdobia umožňuje bezplatná verzia 20 záznamov. Na základe vášho aktuálneho počtu vám po skončení skúšobného obdobia zostane {count} miest.",
     "free_limit_popup_slots_remaining_free": "Zostáva {count} miest v bezplatnej verzii (limit: 20 aktívnych záznamov).",
     "free_limit_popup_limit_reached_trial": "Pridali ste 20 záznamov. V bezplatnej verzii nebude po skončení skúšobného obdobia možné pridávať nové bez Premium.",
-    "free_limit_popup_limit_reached_free": "Dosiahnutý limit: 20 aktívnych záznamov v bezplatnej verzii. Ak chcete pridať nové, prejdite na Premium."
+    "free_limit_popup_limit_reached_free": "Dosiahnutý limit: 20 aktívnych záznamov v bezplatnej verzii. Ak chcete pridať nové, prejdite na Premium.",
+    "booking_source_online": "Online"
 }

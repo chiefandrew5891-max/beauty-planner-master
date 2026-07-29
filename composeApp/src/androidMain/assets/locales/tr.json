@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Not: deneme süresi sona erdikten sonra ücretsiz sürüm 20 kayda izin verir. Mevcut sayınıza göre deneme süresinden sonra {count} yeriniz kalacaktır.",
     "free_limit_popup_slots_remaining_free": "Ücretsiz sürümde {count} yer kaldı (limit: 20 etkin kayıt).",
     "free_limit_popup_limit_reached_trial": "20 kayıt eklediniz. Deneme süresi bittikten sonra ücretsiz sürümde Premium olmadan yenilerini ekleyemezsiniz.",
-    "free_limit_popup_limit_reached_free": "Limite ulaşıldı: Ücretsiz sürümde 20 etkin kayıt. Yenilerini eklemek için Premium'a geçin."
+    "free_limit_popup_limit_reached_free": "Limite ulaşıldı: Ücretsiz sürümde 20 etkin kayıt. Yenilerini eklemek için Premium'a geçin.",
+    "booking_source_online": "Çevrimiçi"
 }

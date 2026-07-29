@@ -24,7 +24,9 @@ data class Appointment(
     val paymentStatus: String = "",
     val updatedAtMillis: Long = 0L,
     val isDeleted: Boolean = false,
-    val currency: String = "EUR"
+    val currency: String = "EUR",
+
+    val bookingSource: String = "manual"
 )
 @Serializable
 data class ServiceTemplate(

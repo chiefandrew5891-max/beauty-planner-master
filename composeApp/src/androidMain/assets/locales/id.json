@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Catatan: setelah masa percobaan berakhir, versi gratis mengizinkan 20 entri. Berdasarkan jumlah Anda saat ini, akan ada {count} tempat tersisa setelah masa percobaan.",
     "free_limit_popup_slots_remaining_free": "Tersisa {count} tempat di versi gratis (batas: 20 entri aktif).",
     "free_limit_popup_limit_reached_trial": "Anda telah menambahkan 20 entri. Dalam versi gratis setelah masa percobaan berakhir, Anda tidak dapat menambahkan yang baru tanpa Premium.",
-    "free_limit_popup_limit_reached_free": "Batas tercapai: 20 entri aktif dalam versi gratis. Untuk menambahkan yang baru, tingkatkan ke Premium."
+    "free_limit_popup_limit_reached_free": "Batas tercapai: 20 entri aktif dalam versi gratis. Untuk menambahkan yang baru, tingkatkan ke Premium.",
+    "booking_source_online": "Daring"
 }

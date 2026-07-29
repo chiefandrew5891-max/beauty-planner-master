@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Märkus: pärast prooviperioodi lõppu lubab tasuta versioon 20 kirjet. Teie praeguse arvu põhjal jääb pärast prooviperioodi alles {count} kohta.",
     "free_limit_popup_slots_remaining_free": "Tasuta versioonis on järel {count} kohta (limiit: 20 aktiivset kirjet).",
     "free_limit_popup_limit_reached_trial": "Olete lisanud 20 kirjet. Tasuta versioonis ei saa pärast prooviperioodi ilma Premiumita uusi lisada.",
-    "free_limit_popup_limit_reached_free": "Limiit täis: 20 aktiivset kirjet tasuta versioonis. Uute lisamiseks võtke kasutusele Premium."
+    "free_limit_popup_limit_reached_free": "Limiit täis: 20 aktiivset kirjet tasuta versioonis. Uute lisamiseks võtke kasutusele Premium.",
+    "booking_source_online": "Veebis"
 }

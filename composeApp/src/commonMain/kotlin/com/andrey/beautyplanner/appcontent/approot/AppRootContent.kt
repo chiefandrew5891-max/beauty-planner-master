@@ -844,7 +844,8 @@ fun AppRootContent(
                         },
                         updatedAtMillis = nowMillis,
                         isDeleted = existing?.isDeleted ?: false,
-                        currency = currencyCode
+                        currency = currencyCode,
+                        bookingSource = existing?.bookingSource ?: "manual"
                     )
 
                     state.replaceById(newAppt)

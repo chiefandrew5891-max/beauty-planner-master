@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "请注意：试用期结束后，免费版本允许 20 条记录。根据您当前的数量，试用期结束后将还剩 {count} 个位置。",
     "free_limit_popup_slots_remaining_free": "免费版本还剩 {count} 个位置（限制：20 条有效记录）。",
     "free_limit_popup_limit_reached_trial": "您已添加 20 条记录。试用期结束后，在免费版本中如果不升级到 Premium，将无法添加新记录。",
-    "free_limit_popup_limit_reached_free": "已达上限：免费版本中可保存 20 条有效记录。要添加新记录，请升级到 Premium。"
+    "free_limit_popup_limit_reached_free": "已达上限：免费版本中可保存 20 条有效记录。要添加新记录，请升级到 Premium。",
+    "booking_source_online": "在线"
 }

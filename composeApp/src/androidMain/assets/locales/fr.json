@@ -573,5 +573,6 @@
     "free_limit_popup_slots_remaining_trial": "Remarque : après la période d'essai, la version gratuite autorise 20 entrées. Selon votre nombre actuel, il vous restera {count} places après l'essai.",
     "free_limit_popup_slots_remaining_free": "Il reste {count} places dans la version gratuite (limite : 20 entrées actives).",
     "free_limit_popup_limit_reached_trial": "Vous avez ajouté 20 entrées. Dans la version gratuite après l'essai, vous ne pourrez pas en ajouter de nouvelles sans Premium.",
-    "free_limit_popup_limit_reached_free": "Limite atteinte : 20 entrées actives dans la version gratuite. Pour en ajouter de nouvelles, passez à Premium."
+    "free_limit_popup_limit_reached_free": "Limite atteinte : 20 entrées actives dans la version gratuite. Pour en ajouter de nouvelles, passez à Premium.",
+    "booking_source_online": "En ligne"
 }
