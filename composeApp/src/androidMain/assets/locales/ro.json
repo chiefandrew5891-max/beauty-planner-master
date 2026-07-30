@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Această metodă de autentificare nu este încă suportată pentru ștergerea contului.",
     "account_delete_email_missing": "Nu s-a putut determina adresa de e-mail a contului actual.",
     "account_delete_google_reauth_in_progress": "Se confirmă ștergerea cu Google...",
-    "account_delete_apple_reauth_in_progress": "Se confirmă ștergerea cu Apple..."
+    "account_delete_apple_reauth_in_progress": "Se confirmă ștergerea cu Apple...",
+    "account_delete_apple_revoke_failed": "Revocarea autorizației Apple a eșuat. Vă rugăm să încercați din nou."
 }

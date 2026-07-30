@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "このサインイン方法はアカウント削除にまだ対応していません。",
     "account_delete_email_missing": "現在のアカウントのメールアドレスを特定できません。",
     "account_delete_google_reauth_in_progress": "Googleで削除を確認中...",
-    "account_delete_apple_reauth_in_progress": "Appleで削除を確認中..."
+    "account_delete_apple_reauth_in_progress": "Appleで削除を確認中...",
+    "account_delete_apple_revoke_failed": "Apple認証の取り消しに失敗しました。もう一度お試しください。"
 }

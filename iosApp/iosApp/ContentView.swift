@@ -88,6 +88,42 @@ struct ComposeView: UIViewControllerRepresentable {
                 deferred.complete(value: successResult)
             }
         }
+        AppleDeletionBridgeConnector().reauthenticateAndRevoke = { deferred in
+            AppleAuthBridge.reauthenticateAndRevokeForDeletion { result, error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        deferred.completeExceptionally(
+                            exception: KotlinIllegalStateException(message: error as String)
+                        )
+                        return
+                    }
+
+                    guard let result = result else {
+                        deferred.completeExceptionally(
+                            exception: KotlinIllegalStateException(message: "Apple delete reauth returned null result")
+                        )
+                        return
+                    }
+
+                    var mapped: [String: String] = [:]
+                    for (keyAny, valueAny) in result {
+                        guard let key = keyAny as? String else { continue }
+
+                        if let value = valueAny as? String {
+                            mapped[key] = value
+                        } else if let value = valueAny as? NSString {
+                            mapped[key] = value as String
+                        } else if let value = valueAny as? NSNumber {
+                            mapped[key] = value.stringValue
+                        } else {
+                            mapped[key] = "\(valueAny)"
+                        }
+                    }
+
+                    deferred.complete(value: mapped)
+                }
+            }
+        }
         EmailAuthBridgeConnector().signIn = { email, password, deferred in
             GoogleAuthBridge.signInWithEmail(email, password: password) { result, error in
                 DispatchQueue.main.async {

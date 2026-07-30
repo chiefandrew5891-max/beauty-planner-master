@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Deze inlogmethode wordt nog niet ondersteund voor het verwijderen van accounts.",
     "account_delete_email_missing": "Kan het e-mailadres van het huidige account niet bepalen.",
     "account_delete_google_reauth_in_progress": "Verwijdering bevestigen met Google...",
-    "account_delete_apple_reauth_in_progress": "Verwijdering bevestigen met Apple..."
+    "account_delete_apple_reauth_in_progress": "Verwijdering bevestigen met Apple...",
+    "account_delete_apple_revoke_failed": "Intrekken van Apple-autorisatie mislukt. Probeer het opnieuw."
 }

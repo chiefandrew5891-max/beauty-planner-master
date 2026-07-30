@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Este método de inicio de sesión aún no es compatible para la eliminación de la cuenta.",
     "account_delete_email_missing": "No se pudo determinar el correo electrónico de la cuenta actual.",
     "account_delete_google_reauth_in_progress": "Confirmando eliminación con Google...",
-    "account_delete_apple_reauth_in_progress": "Confirmando eliminación con Apple..."
+    "account_delete_apple_reauth_in_progress": "Confirmando eliminación con Apple...",
+    "account_delete_apple_revoke_failed": "Error al revocar la autorización de Apple. Por favor, inténtelo de nuevo."
 }

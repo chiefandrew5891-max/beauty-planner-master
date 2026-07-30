@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Diese Anmeldemethode wird für die Kontolöschung noch nicht unterstützt.",
     "account_delete_email_missing": "E-Mail-Adresse des aktuellen Kontos konnte nicht ermittelt werden.",
     "account_delete_google_reauth_in_progress": "Löschung wird mit Google bestätigt...",
-    "account_delete_apple_reauth_in_progress": "Löschung wird mit Apple bestätigt..."
+    "account_delete_apple_reauth_in_progress": "Löschung wird mit Apple bestätigt...",
+    "account_delete_apple_revoke_failed": "Apple-Autorisierung konnte nicht widerrufen werden. Bitte versuchen Sie es erneut."
 }

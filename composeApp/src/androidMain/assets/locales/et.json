@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Seda sisselogimismeetodit ei toetata ještě konto kustutamiseks.",
     "account_delete_email_missing": "Praeguse konto e-posti aadressi ei õnnestunud tuvastada.",
     "account_delete_google_reauth_in_progress": "Kustutamise kinnitamine Google'iga...",
-    "account_delete_apple_reauth_in_progress": "Kustutamise kinnitamine Apple'iga..."
+    "account_delete_apple_reauth_in_progress": "Kustutamise kinnitamine Apple'iga...",
+    "account_delete_apple_revoke_failed": "Apple'i autoriseerimise tühistamine ebaõnnestus. Palun proovige uuesti."
 }

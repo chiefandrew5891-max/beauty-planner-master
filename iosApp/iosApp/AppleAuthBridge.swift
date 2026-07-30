@@ -8,6 +8,8 @@ import UIKit
 
     private static var currentNonce: String?
     private static var completionHandler: ((NSDictionary?, NSString?) -> Void)?
+    private static var revokeCompletionHandler: ((NSDictionary?, NSString?) -> Void)?
+    private static var deleteFlowMode: Bool = false
 
     @objc static func signInWithApple(
         completion: @escaping (NSDictionary?, NSString?) -> Void
@@ -22,6 +24,8 @@ import UIKit
         let nonce = randomNonceString()
         currentNonce = nonce
         completionHandler = completion
+        revokeCompletionHandler = nil
+        deleteFlowMode = false
 
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -37,57 +41,105 @@ import UIKit
 
     private static var delegateHolder: AppleSignInDelegate?
 
-    fileprivate static func handleAuthorization(
-        credential: ASAuthorizationAppleIDCredential
-    ) {
-        guard let nonce = currentNonce else {
-            completionHandler?(nil, "Missing login state")
-            clearState()
-            return
-        }
-
-        guard let appleIDToken = credential.identityToken else {
-            completionHandler?(nil, "Unable to fetch identity token")
-            clearState()
-            return
-        }
-
-        guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-            completionHandler?(nil, "Unable to serialize token string")
-            clearState()
-            return
-        }
-
-        let firebaseCredential = OAuthProvider.appleCredential(
-            withIDToken: idTokenString,
-            rawNonce: nonce,
-            fullName: credential.fullName
-        )
-
-        Auth.auth().signIn(with: firebaseCredential) { authResult, error in
-            if let error = error {
-                completionHandler?(nil, error.localizedDescription as NSString)
+        fileprivate static func handleAuthorization(
+            credential: ASAuthorizationAppleIDCredential
+        ) {
+            guard let nonce = currentNonce else {
+                completionHandler?(nil, "Missing login state")
+                revokeCompletionHandler?(nil, "Missing login state")
                 clearState()
                 return
             }
 
-            guard let firebaseUser = authResult?.user else {
-                completionHandler?(nil, "Firebase user is null")
+            guard let appleIDToken = credential.identityToken else {
+                completionHandler?(nil, "Unable to fetch identity token")
+                revokeCompletionHandler?(nil, "Unable to fetch identity token")
                 clearState()
                 return
             }
 
-            let dict: NSDictionary = [
-                "uid": firebaseUser.uid,
-                "email": firebaseUser.email ?? "",
-                "displayName": firebaseUser.displayName ?? "",
-                "provider": "APPLE"
-            ]
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                completionHandler?(nil, "Unable to serialize token string")
+                revokeCompletionHandler?(nil, "Unable to serialize token string")
+                clearState()
+                return
+            }
 
-            completionHandler?(dict, nil)
-            clearState()
+            let firebaseCredential = OAuthProvider.appleCredential(
+                withIDToken: idTokenString,
+                rawNonce: nonce,
+                fullName: credential.fullName
+            )
+
+            if deleteFlowMode {
+                guard let currentUser = Auth.auth().currentUser else {
+                    revokeCompletionHandler?(nil, "No authenticated user")
+                    clearState()
+                    return
+                }
+
+                guard let authCodeData = credential.authorizationCode,
+                      let authCodeString = String(data: authCodeData, encoding: .utf8),
+                      !authCodeString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    revokeCompletionHandler?(nil, "Unable to fetch authorization code")
+                    clearState()
+                    return
+                }
+
+                currentUser.reauthenticate(with: firebaseCredential) { _, reauthError in
+                    if let reauthError = reauthError {
+                        revokeCompletionHandler?(nil, reauthError.localizedDescription as NSString)
+                        clearState()
+                        return
+                    }
+
+                    Auth.auth().revokeToken(withAuthorizationCode: authCodeString) { revokeError in
+                        if let revokeError = revokeError {
+                            revokeCompletionHandler?(nil, revokeError.localizedDescription as NSString)
+                            clearState()
+                            return
+                        }
+
+                        let dict: NSDictionary = [
+                            "uid": currentUser.uid,
+                            "email": currentUser.email ?? "",
+                            "displayName": currentUser.displayName ?? "",
+                            "provider": "APPLE",
+                            "revoked": "true"
+                        ]
+
+                        revokeCompletionHandler?(dict, nil)
+                        clearState()
+                    }
+                }
+
+                return
+            }
+
+            Auth.auth().signIn(with: firebaseCredential) { authResult, error in
+                if let error = error {
+                    completionHandler?(nil, error.localizedDescription as NSString)
+                    clearState()
+                    return
+                }
+
+                guard let firebaseUser = authResult?.user else {
+                    completionHandler?(nil, "Firebase user is null")
+                    clearState()
+                    return
+                }
+
+                let dict: NSDictionary = [
+                    "uid": firebaseUser.uid,
+                    "email": firebaseUser.email ?? "",
+                    "displayName": firebaseUser.displayName ?? "",
+                    "provider": "APPLE"
+                ]
+
+                completionHandler?(dict, nil)
+                clearState()
+            }
         }
-    }
 
     fileprivate static func handleError(_ error: Error) {
         completionHandler?(nil, error.localizedDescription as NSString)
@@ -97,6 +149,8 @@ import UIKit
     private static func clearState() {
         currentNonce = nil
         completionHandler = nil
+        revokeCompletionHandler = nil
+        deleteFlowMode = false
         delegateHolder = nil
     }
 

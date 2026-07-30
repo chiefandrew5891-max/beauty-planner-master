@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Denna inloggningsmetod stöds inte ännu för radering av konto.",
     "account_delete_email_missing": "Det gick inte att fastställa e-postadressen för det aktuella kontot.",
     "account_delete_google_reauth_in_progress": "Bekräftar radering med Google...",
-    "account_delete_apple_reauth_in_progress": "Bekräftar radering med Apple..."
+    "account_delete_apple_reauth_in_progress": "Bekräftar radering med Apple...",
+    "account_delete_apple_revoke_failed": "Det gick inte att återkalla Apple-auktoriseringen. Försök igen."
 }

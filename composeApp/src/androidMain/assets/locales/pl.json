@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Ta metoda logowania nie jest jeszcze obsługiwana przy usuwaniu konta.",
     "account_delete_email_missing": "Nie można ustalić adresu e-mail bieżącego konta.",
     "account_delete_google_reauth_in_progress": "Potwierdzanie usunięcia przez Google...",
-    "account_delete_apple_reauth_in_progress": "Potwierdzanie usunięcia przez Apple..."
+    "account_delete_apple_reauth_in_progress": "Potwierdzanie usunięcia przez Apple...",
+    "account_delete_apple_revoke_failed": "Nie удалось cofnąć autoryzacji Apple. Spróbuj ponownie."
 }

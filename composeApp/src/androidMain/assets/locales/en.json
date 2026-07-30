@@ -602,5 +602,6 @@
     "account_delete_provider_not_supported": "This sign-in method is not yet supported for account deletion.",
     "account_delete_email_missing": "Unable to determine the current account email.",
     "account_delete_google_reauth_in_progress": "Confirming deletion with Google...",
-    "account_delete_apple_reauth_in_progress": "Confirming deletion with Apple..."
+    "account_delete_apple_reauth_in_progress": "Confirming deletion with Apple...",
+    "account_delete_apple_revoke_failed": "Failed to revoke Apple authorization. Please try again."
 }

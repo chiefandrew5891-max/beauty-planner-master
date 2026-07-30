@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "طريقة تسجيل الدخول هذه غير مدعومة حاليًا لحذف الحساب.",
     "account_delete_email_missing": "تعذر تحديد البريد الإلكتروني للحساب الحالي.",
     "account_delete_google_reauth_in_progress": "جاري تأكيد الحذف باستخدام Google...",
-    "account_delete_apple_reauth_in_progress": "جاري تأكيد الحذف باستخدام Apple..."
+    "account_delete_apple_reauth_in_progress": "جاري تأكيد الحذف باستخدام Apple...",
+    "account_delete_apple_revoke_failed": "فشل إلغاء تفويض Apple. يرجى المحاولة مرة أخرى."
 }

@@ -916,20 +916,24 @@ class AppRootState(
     }
 
     suspend fun reauthenticateAndDeleteAppleAccount() {
-        when (val signInResult = AuthGateway.signInWithApple()) {
-            is SignInResult.Success -> {
-                currentAuthUser = signInResult.user
-                persistAuthenticatedSession(signInResult.user)
+        val bridge = com.andrey.beautyplanner.auth.AppleDeletionBridgeConnector.reauthenticateAndRevoke
+            ?: throw IllegalStateException(Locales.t("account_delete_failed"))
+
+        try {
+            val deferred = kotlinx.coroutines.CompletableDeferred<Map<String, String>>()
+            bridge.invoke(deferred)
+            val result = deferred.await()
+
+            val uid = result["uid"].orEmpty().trim()
+            if (uid.isBlank()) {
+                throw IllegalStateException(Locales.t("account_delete_failed"))
             }
 
-            is SignInResult.Cancelled -> {
-                throw IllegalStateException(Locales.t("account_delete_requires_recent_login"))
-            }
-
-            is SignInResult.Error -> {
-                val mapped = mapAuthErrorMessage(signInResult.message)
-                throw IllegalStateException(mapped)
-            }
+            currentAuthUser = currentAuthUser?.copy(uid = uid)
+        } catch (error: Throwable) {
+            throw IllegalStateException(
+                error.message ?: Locales.t("account_delete_requires_recent_login")
+            )
         }
 
         com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
@@ -954,6 +958,7 @@ class AppRootState(
         currentScreen = Screen.AUTH_WELCOME
         authErrorMessage = null
     }
+
     fun openEmailSignInScreen() {
         authErrorMessage = null
         authEmailRegisterMode = false

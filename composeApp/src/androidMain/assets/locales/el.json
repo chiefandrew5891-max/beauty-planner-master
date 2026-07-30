@@ -600,5 +600,6 @@
     "account_delete_provider_not_supported": "Αυτή η μέθοδος σύνδεσης δεν υποστηρίζεται ακόμα για διαγραφή λογαριασμού.",
     "account_delete_email_missing": "Αδυναμία προσδιορισμού του email του τρέχοντος λογαριασμού.",
     "account_delete_google_reauth_in_progress": "Επιβεβαίωση διαγραφής μέσω Google...",
-    "account_delete_apple_reauth_in_progress": "Επιβεβαίωση διαγραφής μέσω Apple..."
+    "account_delete_apple_reauth_in_progress": "Επιβεβαίωση διαγραφής μέσω Apple...",
+    "account_delete_apple_revoke_failed": "Αποτυχία ανάκλησης της εξουσιοδότησης Apple. Παρακαλούμε δοκιμάστε ξανά."
 }
