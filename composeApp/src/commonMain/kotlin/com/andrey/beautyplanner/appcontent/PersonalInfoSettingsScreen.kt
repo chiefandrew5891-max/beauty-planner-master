@@ -49,6 +49,11 @@ import com.andrey.beautyplanner.ProfileImagePicker
 import com.andrey.beautyplanner.remote.MasterProfileSync
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import kotlinx.coroutines.launch
+import androidx.compose.material.Button
+import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import com.andrey.beautyplanner.auth.SignInProvider
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -69,6 +74,12 @@ fun PersonalInfoSettingsScreen() {
     var pendingRawBase64 by remember { mutableStateOf<String?>(null) }
     var isRefreshingProfile by remember { mutableStateOf(false) }
 
+    var showDeleteAccountWarningDialog by remember { mutableStateOf(false) }
+    var showDeleteAccountPasswordDialog by remember { mutableStateOf(false) }
+    var deleteAccountPasswordDraft by remember { mutableStateOf("") }
+    var deleteAccountPasswordError by remember { mutableStateOf<String?>(null) }
+    var isDeletingAccount by remember { mutableStateOf(false) }
+
     fun applySettingsToDrafts() {
         userNameDraft = AppSettings.ownerName
         phoneDraft = AppSettings.profilePhone
@@ -80,6 +91,8 @@ fun PersonalInfoSettingsScreen() {
     }
 
     val scope = rememberCoroutineScope()
+    val appState = com.andrey.beautyplanner.appcontent.approot.rememberAppRootState()
+    val authProvider = appState.currentAuthUser?.provider
 
     val hasChanges =
         userNameDraft.trim() != AppSettings.ownerName.trim() ||
@@ -126,6 +139,184 @@ fun PersonalInfoSettingsScreen() {
             onDismiss = {
                 pendingRawBase64 = null
             }
+        )
+    }
+    if (showDeleteAccountWarningDialog) {
+        androidx.compose.material.AlertDialog(
+            onDismissRequest = {
+                if (!isDeletingAccount) {
+                    showDeleteAccountWarningDialog = false
+                }
+            },
+            title = {
+                Text(
+                    text = Locales.t("account_delete_confirm_title"),
+                    fontSize = (18 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+            },
+            text = {
+                Text(
+                    text = Locales.t("account_delete_confirm_message"),
+                    fontSize = (14 * fontScale).sp,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f),
+                    lineHeight = (20 * fontScale).sp
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteAccountWarningDialog = false
+                        when (authProvider) {
+                            com.andrey.beautyplanner.auth.SignInProvider.EMAIL -> {
+                                deleteAccountPasswordDraft = ""
+                                deleteAccountPasswordError = null
+                                showDeleteAccountPasswordDialog = true
+                            }
+                            com.andrey.beautyplanner.auth.SignInProvider.GOOGLE -> {
+                                // TODO: start Google reauthentication flow before calling deleteMyAccount
+                            }
+                            com.andrey.beautyplanner.auth.SignInProvider.APPLE -> {
+                                // TODO: start Apple reauthentication flow before calling deleteMyAccount
+                            }
+                            else -> {
+                                // TODO: handle anonymous / unsupported provider deletion path
+                            }
+                        }
+                    },
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(Locales.t("account_delete_confirm_continue"))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        if (!isDeletingAccount) {
+                            showDeleteAccountWarningDialog = false
+                        }
+                    }
+                ) {
+                    Text(
+                        text = Locales.t("account_delete_confirm_cancel"),
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+                    )
+                }
+            },
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
+    if (showDeleteAccountPasswordDialog) {
+        androidx.compose.material.AlertDialog(
+            onDismissRequest = {
+                if (!isDeletingAccount) {
+                    showDeleteAccountPasswordDialog = false
+                    deleteAccountPasswordDraft = ""
+                    deleteAccountPasswordError = null
+                }
+            },
+            title = {
+                Text(
+                    text = Locales.t("account_delete_email_password_title"),
+                    fontSize = (18 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = Locales.t("account_delete_email_password_description"),
+                        fontSize = (14 * fontScale).sp,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.80f),
+                        lineHeight = (20 * fontScale).sp
+                    )
+
+                    OutlinedTextField(
+                        value = deleteAccountPasswordDraft,
+                        onValueChange = {
+                            deleteAccountPasswordDraft = it
+                            deleteAccountPasswordError = null
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp),
+                        placeholder = {
+                            Text(
+                                text = Locales.t("account_delete_email_password_placeholder"),
+                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.50f)
+                            )
+                        },
+                        visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                        textStyle = TextStyle(
+                            fontFamily = appFontFamily(),
+                            fontSize = (15 * fontScale).sp,
+                            color = MaterialTheme.colors.onSurface
+                        ),
+                        isError = !deleteAccountPasswordError.isNullOrBlank(),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = MaterialTheme.colors.onSurface,
+                            focusedBorderColor = MaterialTheme.colors.primary,
+                            unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.28f),
+                            focusedLabelColor = MaterialTheme.colors.primary,
+                            unfocusedLabelColor = MaterialTheme.colors.onSurface.copy(alpha = 0.68f),
+                            cursorColor = MaterialTheme.colors.primary,
+                            backgroundColor = MaterialTheme.colors.surface,
+                            placeholderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.50f),
+                            errorBorderColor = MaterialTheme.colors.error,
+                            errorCursorColor = MaterialTheme.colors.error
+                        )
+                    )
+
+                    deleteAccountPasswordError?.takeIf { it.isNotBlank() }?.let { errorText ->
+                        Text(
+                            text = errorText,
+                            fontSize = (12 * fontScale).sp,
+                            color = MaterialTheme.colors.error
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // TODO:
+                        // 1. reauthenticate email/password
+                        // 2. call backend deleteMyAccount
+                        // 3. clear local session and navigate to auth screen
+                    },
+                    enabled = deleteAccountPasswordDraft.isNotBlank() && !isDeletingAccount,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        if (isDeletingAccount) {
+                            Locales.t("account_delete_in_progress")
+                        } else {
+                            Locales.t("account_delete_email_password_confirm")
+                        }
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        if (!isDeletingAccount) {
+                            showDeleteAccountPasswordDialog = false
+                            deleteAccountPasswordDraft = ""
+                            deleteAccountPasswordError = null
+                        }
+                    }
+                ) {
+                    Text(
+                        text = Locales.t("account_delete_confirm_cancel"),
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+                    )
+                }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
     }
 
@@ -395,6 +586,33 @@ fun PersonalInfoSettingsScreen() {
                     },
                     enabled = hasChanges && !isSaving
                 )
+                Spacer(Modifier.height(10.dp))
+                Divider()
+                Spacer(Modifier.height(6.dp))
+
+                Text(
+                    text = Locales.t("account_management_title"),
+                    fontSize = (18 * fontScale).sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = onSurface.copy(alpha = 0.90f)
+                )
+
+                Text(
+                    text = Locales.t("account_management_description"),
+                    fontSize = (13 * fontScale).sp,
+                    color = onSurface.copy(alpha = 0.72f),
+                    lineHeight = (19 * fontScale).sp
+                )
+
+                AccountDeleteActionButton(
+                    text = Locales.t("account_delete_button"),
+                    onClick = {
+                        deleteAccountPasswordDraft = ""
+                        deleteAccountPasswordError = null
+                        showDeleteAccountWarningDialog = true
+                    },
+                    enabled = !isDeletingAccount
+                )
             }
         }
 
@@ -453,6 +671,38 @@ private fun ProfileTextField(
                 backgroundColor = MaterialTheme.colors.surface,
                 placeholderColor = onSurface.copy(alpha = 0.50f)
             )
+        )
+    }
+}
+
+@Composable
+private fun AccountDeleteActionButton(
+    text: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    androidx.compose.material.Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        elevation = androidx.compose.material.ButtonDefaults.elevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 6.dp,
+            disabledElevation = 0.dp
+        ),
+        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+            backgroundColor = androidx.compose.ui.graphics.Color(0xFFDB4437),
+            contentColor = androidx.compose.ui.graphics.Color.White,
+            disabledBackgroundColor = androidx.compose.ui.graphics.Color(0xFFDB4437).copy(alpha = 0.45f),
+            disabledContentColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.85f)
+        ),
+        contentPadding = PaddingValues(vertical = 14.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = (15 * AppSettings.getFontScale()).sp,
+            fontWeight = FontWeight.Medium
         )
     }
 }
