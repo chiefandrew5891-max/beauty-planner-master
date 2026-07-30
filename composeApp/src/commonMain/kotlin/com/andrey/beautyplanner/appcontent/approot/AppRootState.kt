@@ -12,6 +12,7 @@ import com.andrey.beautyplanner.billing.*
 import com.andrey.beautyplanner.notifications.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -816,7 +817,44 @@ class AppRootState(
         currentScreen = Screen.AUTH_WELCOME
         hideGlobalLoading()
     }
-///////
+    private suspend fun waitForServerConfirmedAccountDeletion(
+        timeoutMillis: Long = 180_000L,
+        pollIntervalMillis: Long = 30_000L
+    ): Boolean {
+        val startedAt = Clock.System.now().toEpochMilliseconds()
+
+        while (Clock.System.now().toEpochMilliseconds() - startedAt < timeoutMillis) {
+            val validationResult = runCatching {
+                com.andrey.beautyplanner.remote.BackendBridge.validateCurrentSession()
+            }
+
+            if (validationResult.isFailure) {
+                val message = validationResult.exceptionOrNull()?.message.orEmpty().lowercase()
+
+                val deletedOrInvalid =
+                    message.contains("not-found") ||
+                            message.contains("user not found") ||
+                            message.contains("unauthenticated") ||
+                            message.contains("no authenticated") ||
+                            message.contains("permission-denied")
+
+                if (deletedOrInvalid) {
+                    return true
+                }
+            } else {
+                val result = validationResult.getOrNull().orEmpty()
+                val ok = result["ok"].orEmpty().equals("true", ignoreCase = true)
+                if (!ok) {
+                    return true
+                }
+            }
+
+            delay(pollIntervalMillis)
+        }
+
+        return false
+    }
+
     fun switchAccount() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
@@ -904,9 +942,19 @@ class AppRootState(
             }
         }
 
-        val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
-        val deleteOk = deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
-        if (!deleteOk) {
+        val deleted = runCatching {
+            val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+            deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+        }.getOrElse { false }
+
+        val confirmedDeleted = if (deleted) {
+            true
+        } else {
+            waitForServerConfirmedAccountDeletion()
+        }
+
+        if (!confirmedDeleted) {
+            hideGlobalLoading()
             throw IllegalStateException(Locales.t("account_delete_failed"))
         }
 
@@ -933,9 +981,19 @@ class AppRootState(
             }
         }
 
-        val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
-        val deleteOk = deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
-        if (!deleteOk) {
+        val deleted = runCatching {
+            val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+            deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+        }.getOrElse { false }
+
+        val confirmedDeleted = if (deleted) {
+            true
+        } else {
+            waitForServerConfirmedAccountDeletion()
+        }
+
+        if (!confirmedDeleted) {
+            hideGlobalLoading()
             throw IllegalStateException(Locales.t("account_delete_failed"))
         }
 
@@ -966,9 +1024,19 @@ class AppRootState(
             )
         }
 
-        val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
-        val deleteOk = deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
-        if (!deleteOk) {
+        val deleted = runCatching {
+            val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+            deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+        }.getOrElse { false }
+
+        val confirmedDeleted = if (deleted) {
+            true
+        } else {
+            waitForServerConfirmedAccountDeletion()
+        }
+
+        if (!confirmedDeleted) {
+            hideGlobalLoading()
             throw IllegalStateException(Locales.t("account_delete_failed"))
         }
 

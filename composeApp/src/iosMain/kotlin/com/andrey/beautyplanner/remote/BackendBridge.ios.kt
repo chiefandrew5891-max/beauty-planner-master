@@ -186,6 +186,15 @@ actual object BackendBridge {
             )
         )
     }
+
+    actual suspend fun validateCurrentSession(): Map<String, String> {
+        ensureAuthenticated()
+
+        return callBackendFunction(
+            name = "validateCurrentSession",
+            payload = emptyMap()
+        )
+    }
     actual suspend fun deleteMyAccount(): Map<String, String> {
         ensureAuthenticated()
 

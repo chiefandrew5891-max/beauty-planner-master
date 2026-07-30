@@ -203,6 +203,13 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun validateCurrentSession(): Map<String, String> {
+        ensureAuthenticated()
+        return callRawFunction(
+            "validateCurrentSession",
+            emptyMap<String, Any>()
+        )
+    }
     actual suspend fun deleteMyAccount(): Map<String, String> {
         ensureAuthenticated()
         return callRawFunction(

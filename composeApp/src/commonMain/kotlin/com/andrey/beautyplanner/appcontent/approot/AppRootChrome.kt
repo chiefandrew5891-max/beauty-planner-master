@@ -353,6 +353,8 @@ fun AppRootChrome(
                             AppSettings.profileDisplayCustomName && customName != null -> customName
                             authDisplayName != null -> authDisplayName
                             authUser?.email?.isNotBlank() == true -> authUser.email
+                            authUser?.provider == SignInProvider.APPLE ->
+                                Locales.t("account_label_apple_fallback")
                             else -> Locales.t("account_current")
                         }
 

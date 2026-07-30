@@ -79,5 +79,7 @@ expect object BackendBridge {
         busySlotsJson: String
     ): Map<String, String>
 
+    suspend fun validateCurrentSession(): Map<String, String>
+
     suspend fun deleteMyAccount(): Map<String, String>
 }
