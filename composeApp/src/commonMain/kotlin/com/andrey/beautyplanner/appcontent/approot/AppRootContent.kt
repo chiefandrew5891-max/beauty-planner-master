@@ -791,17 +791,7 @@ fun AppRootContent(
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()
             Screen.APPEARANCE_SETTINGS -> AppearanceSettingsScreen(state = state)
-            // =========================================================
-            // TEMP HIDE FOR APP REVIEW: PERSONAL INFO / MASTER PROFILE SCREEN
-            // Экран профиля временно скрыт из пользовательского UI.
-            // BEGIN TEMP HIDE
-            // =========================================================
-            Screen.PERSONAL_INFO_SETTINGS -> {
-                // Temporarily hidden for App Store / review-safe build.
-            }
-            // =========================================================
-            // END TEMP HIDE FOR APP REVIEW: PERSONAL INFO / MASTER PROFILE SCREEN
-            // =========================================================
+            Screen.PERSONAL_INFO_SETTINGS -> PersonalInfoSettingsScreen()
         }
 
         if (state.showBookingDialog) {

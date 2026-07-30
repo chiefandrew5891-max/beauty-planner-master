@@ -223,7 +223,15 @@ fun PersonalInfoSettingsScreen() {
                         )
                     }
 
-                    ProfileRatingBlock(rating = AppSettings.profileRating)
+                    // =========================================================
+                    // TEMP HIDE FOR APP REVIEW: PROFILE RATING BLOCK
+                    // Рейтинг мастера временно скрыт на экране профиля.
+                    // BEGIN TEMP HIDE
+                    // =========================================================
+                    // ProfileRatingBlock(rating = AppSettings.profileRating)
+                    // =========================================================
+                    // END TEMP HIDE FOR APP REVIEW: PROFILE RATING BLOCK
+                    // =========================================================
                 }
 
                 Divider()
