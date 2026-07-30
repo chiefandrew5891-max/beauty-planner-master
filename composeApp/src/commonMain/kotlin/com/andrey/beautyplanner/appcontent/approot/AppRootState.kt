@@ -623,7 +623,6 @@ class AppRootState(
                             persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
-                            AppSettings.clearMasterProfileLocalState()
                             reloadAppointmentsForCurrentProfile()
                             performCloudSyncIfEligible()
                             authResolved = true
@@ -672,7 +671,6 @@ class AppRootState(
                             persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
-                            AppSettings.clearMasterProfileLocalState()
                             reloadAppointmentsForCurrentProfile()
                             refreshAccessState()
                             performCloudSyncIfEligible()

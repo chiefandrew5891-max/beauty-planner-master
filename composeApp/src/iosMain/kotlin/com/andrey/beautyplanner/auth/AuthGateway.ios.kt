@@ -5,11 +5,8 @@ import com.andrey.beautyplanner.remote.BackendBridgeConnector
 import kotlinx.coroutines.CompletableDeferred
 
 actual object AuthGateway {
-    private var localUser: AuthUser? = null
 
     actual suspend fun getCurrentUser(): AuthUser? {
-        localUser?.let { return it }
-
         val caller = BackendBridgeConnector.callBackend ?: return null
         val deferred = CompletableDeferred<Map<String, String>>()
 
@@ -34,9 +31,7 @@ actual object AuthGateway {
                 provider = provider,
                 email = result["email"].orEmpty(),
                 displayName = result["displayName"].orEmpty()
-            ).also {
-                localUser = it
-            }
+            )
         } catch (_: Throwable) {
             null
         }
@@ -55,7 +50,6 @@ actual object AuthGateway {
             val result = deferred.await()
 
             val user = mapUser(result)
-            localUser = user
             SignInResult.Success(user)
         } catch (t: Throwable) {
             SignInResult.Error(t.message ?: "Anonymous sign-in failed on iOS.")
@@ -69,11 +63,7 @@ actual object AuthGateway {
 
         launcher.invoke(deferred)
 
-        val result = deferred.await()
-        if (result is SignInResult.Success) {
-            localUser = result.user
-        }
-        return result
+        return deferred.await()
     }
 
     actual suspend fun signInWithApple(): SignInResult {
@@ -83,11 +73,7 @@ actual object AuthGateway {
 
         launcher.invoke(deferred)
 
-        val result = deferred.await()
-        if (result is SignInResult.Success) {
-            localUser = result.user
-        }
-        return result
+        return deferred.await()
     }
 
     actual suspend fun signInWithEmail(email: String, password: String): SignInResult {
@@ -114,7 +100,6 @@ actual object AuthGateway {
             }
 
             val user = mapUser(reloaded)
-            localUser = user
             SignInResult.Success(user)
         } catch (t: Throwable) {
             SignInResult.Error(t.message ?: "Email sign-in failed on iOS.")
@@ -146,7 +131,6 @@ actual object AuthGateway {
                 }
             }
 
-            localUser = null
             SignInResult.Success(mapUser(result))
         } catch (t: Throwable) {
             SignInResult.Error(t.message ?: "Email registration failed on iOS.")
@@ -184,11 +168,10 @@ actual object AuthGateway {
                 deferred.await()
             }
         }
-        localUser = null
     }
 
     actual suspend fun clearCredentialState() {
-        localUser = null
+        // no-op on iOS for now; native auth state is queried via __currentUser
     }
 
     private fun mapUser(result: Map<String, String>): AuthUser {

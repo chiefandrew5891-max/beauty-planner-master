@@ -186,9 +186,8 @@ fun PersonalInfoSettingsScreen() {
                                     runCatching {
                                         appState.reauthenticateAndDeleteGoogleAccount()
                                     }.onSuccess {
-                                        isDeletingAccount = false
-                                        deleteAccountPasswordDraft = ""
-                                        deleteAccountPasswordError = null
+                                        // success path is handled by AppRootState:
+                                        // it purges local state and navigates to AUTH_WELCOME
                                     }.onFailure { error ->
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
@@ -211,9 +210,8 @@ fun PersonalInfoSettingsScreen() {
                                     runCatching {
                                         appState.reauthenticateAndDeleteAppleAccount()
                                     }.onSuccess {
-                                        isDeletingAccount = false
-                                        deleteAccountPasswordDraft = ""
-                                        deleteAccountPasswordError = null
+                                        // success path is handled by AppRootState:
+                                        // it purges local state and navigates to AUTH_WELCOME
                                     }.onFailure { error ->
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
@@ -350,10 +348,8 @@ fun PersonalInfoSettingsScreen() {
                                     password = deleteAccountPasswordDraft
                                 )
                             }.onSuccess {
-                                isDeletingAccount = false
-                                showDeleteAccountPasswordDialog = false
-                                deleteAccountPasswordDraft = ""
-                                deleteAccountPasswordError = null
+                                // success path is handled by AppRootState:
+                                // it purges local state and navigates to AUTH_WELCOME
                             }.onFailure { error ->
                                 isDeletingAccount = false
                                 showDeleteAccountPasswordDialog = false
