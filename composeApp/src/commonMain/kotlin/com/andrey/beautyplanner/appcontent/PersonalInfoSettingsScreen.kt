@@ -177,7 +177,10 @@ fun PersonalInfoSettingsScreen() {
 
                             com.andrey.beautyplanner.auth.SignInProvider.GOOGLE -> {
                                 isDeletingAccount = true
+                                deleteAccountPasswordDraft = ""
                                 deleteAccountPasswordError = null
+                                showDeleteAccountWarningDialog = false
+                                showDeleteAccountPasswordDialog = false
 
                                 scope.launch {
                                     runCatching {
@@ -188,6 +191,9 @@ fun PersonalInfoSettingsScreen() {
                                         deleteAccountPasswordError = null
                                     }.onFailure { error ->
                                         isDeletingAccount = false
+                                        deleteAccountPasswordDraft = ""
+                                        showDeleteAccountWarningDialog = false
+                                        showDeleteAccountPasswordDialog = false
                                         deleteAccountPasswordError =
                                             error.message ?: Locales.t("account_delete_failed")
                                     }
@@ -196,7 +202,10 @@ fun PersonalInfoSettingsScreen() {
 
                             com.andrey.beautyplanner.auth.SignInProvider.APPLE -> {
                                 isDeletingAccount = true
+                                deleteAccountPasswordDraft = ""
                                 deleteAccountPasswordError = null
+                                showDeleteAccountWarningDialog = false
+                                showDeleteAccountPasswordDialog = false
 
                                 scope.launch {
                                     runCatching {
@@ -207,6 +216,9 @@ fun PersonalInfoSettingsScreen() {
                                         deleteAccountPasswordError = null
                                     }.onFailure { error ->
                                         isDeletingAccount = false
+                                        deleteAccountPasswordDraft = ""
+                                        showDeleteAccountWarningDialog = false
+                                        showDeleteAccountPasswordDialog = false
                                         deleteAccountPasswordError =
                                             error.message ?: Locales.t("account_delete_failed")
                                     }
@@ -344,6 +356,8 @@ fun PersonalInfoSettingsScreen() {
                                 deleteAccountPasswordError = null
                             }.onFailure { error ->
                                 isDeletingAccount = false
+                                showDeleteAccountPasswordDialog = false
+                                deleteAccountPasswordDraft = ""
                                 deleteAccountPasswordError =
                                     error.message ?: Locales.t("account_delete_failed")
                             }
@@ -666,6 +680,22 @@ fun PersonalInfoSettingsScreen() {
                     lineHeight = (19 * fontScale).sp
                 )
 
+                if (isDeletingAccount) {
+                    Text(
+                        text = Locales.t("account_delete_in_progress"),
+                        fontSize = (12 * fontScale).sp,
+                        color = onSurface.copy(alpha = 0.70f)
+                    )
+                }
+
+                deleteAccountPasswordError?.takeIf { it.isNotBlank() }?.let { errorText ->
+                    Text(
+                        text = errorText,
+                        fontSize = (12 * fontScale).sp,
+                        color = MaterialTheme.colors.error
+                    )
+                }
+
                 AccountDeleteActionButton(
                     text = Locales.t("account_delete_button"),
                     onClick = {
@@ -677,14 +707,6 @@ fun PersonalInfoSettingsScreen() {
                 )
 
                 Spacer(Modifier.height(36.dp))
-
-                deleteAccountPasswordError?.takeIf { it.isNotBlank() }?.let { errorText ->
-                    Text(
-                        text = errorText,
-                        fontSize = (12 * fontScale).sp,
-                        color = MaterialTheme.colors.error
-                    )
-                }
             }
         }
 
