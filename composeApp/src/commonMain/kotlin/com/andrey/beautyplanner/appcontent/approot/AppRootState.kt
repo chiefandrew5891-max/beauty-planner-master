@@ -401,30 +401,26 @@ class AppRootState(
             else -> return false
         }
 
-        currentAuthUser = AuthUser(
-            uid = savedUserId,
-            provider = provider,
-            email = savedEmail,
-            displayName = savedDisplayName
-        )
-
-        reloadAppointmentsForCurrentProfile()
-        refreshAccessState()
-        authResolved = true
+        showGlobalLoading(Locales.t("loading"))
+        authResolved = false
         authErrorMessage = null
-        currentScreen = Screen.MONTH
+        currentScreen = Screen.AUTH_WELCOME
 
         scope.launch {
             runCatching {
                 bootstrapAuthenticatedUser(providerOverride = provider)
             }.onFailure { error ->
-                CloudSyncLogger.log("restoreOfflineAuthenticatedSessionIfPossible: backend validation failed: ${error.message}")
+                CloudSyncLogger.log(
+                    "restoreOfflineAuthenticatedSessionIfPossible: backend validation failed: ${error.message}"
+                )
 
                 runCatching { AuthGateway.signOut() }
                 runCatching { AuthGateway.clearCredentialState() }
 
                 purgeDeletedAccountLocally()
             }
+
+            hideGlobalLoading()
         }
 
         return true
@@ -587,14 +583,21 @@ class AppRootState(
             SignInProvider.ANONYMOUS -> "anonymous"
         }
 
-        val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
-            installId = installId,
-            firebaseUid = currentUser.uid,
-            platform = getPlatform().backendPlatform,
-            authProvider = backendAuthProvider,
-            email = currentUser.email,
-            displayName = currentUser.displayName
-        )
+        val remote = try {
+            com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
+                installId = installId,
+                firebaseUid = currentUser.uid,
+                platform = getPlatform().backendPlatform,
+                authProvider = backendAuthProvider,
+                email = currentUser.email,
+                displayName = currentUser.displayName
+            )
+        } catch (error: Throwable) {
+            runCatching { AuthGateway.signOut() }
+            runCatching { AuthGateway.clearCredentialState() }
+            purgeDeletedAccountLocally()
+            throw error
+        }
 
         currentAuthUser = currentUser
         persistAuthenticatedSession(currentUser)
