@@ -596,5 +596,7 @@
     "account_delete_success": "Akun Anda telah dihapus secara permanen.",
     "account_delete_failed": "Gagal menghapus akun. Silakan coba lagi.",
     "account_delete_wrong_password": "Kata sandi salah.",
-    "account_delete_requires_recent_login": "Silakan masuk lagi untuk melanjutkan."
+    "account_delete_requires_recent_login": "Silakan masuk lagi untuk melanjutkan.",
+    "account_delete_provider_not_supported": "Metode masuk ini belum didukung untuk penghapusan akun.",
+    "account_delete_email_missing": "Tidak dapat menentukan email akun saat ini."
 }

@@ -596,5 +596,7 @@
     "account_delete_success": "Акаунтът ви беше изтрит за постоянно.",
     "account_delete_failed": "Неуспешно изтриване на акаунта. Моля, опитайте отново.",
     "account_delete_wrong_password": "Грешна парола.",
-    "account_delete_requires_recent_login": "Моля, влезте отново в профила си, за да продължите."
+    "account_delete_requires_recent_login": "Моля, влезте отново в профила си, за да продължите.",
+    "account_delete_provider_not_supported": "Този метод за вход все още не се поддържа за изтриване на акаунт.",
+    "account_delete_email_missing": "Не може да се установи имейлът на текущия акаунт."
 }

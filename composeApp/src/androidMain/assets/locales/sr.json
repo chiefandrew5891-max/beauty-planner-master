@@ -596,5 +596,7 @@
     "account_delete_success": "Ваш налог је трајно избрисан.",
     "account_delete_failed": "Брисање налога није успело. Покушајте поново.",
     "account_delete_wrong_password": "Погрешна лозинка.",
-    "account_delete_requires_recent_login": "Пријавите се поново да бисте наставили."
+    "account_delete_requires_recent_login": "Пријавите се поново да бисте наставили.",
+    "account_delete_provider_not_supported": "Овај начин пријаве још увек није подржан за брисање налога.",
+    "account_delete_email_missing": "Није могуће утврдити е-маил тренутног налога."
 }

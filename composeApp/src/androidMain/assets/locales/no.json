@@ -596,5 +596,7 @@
     "account_delete_success": "Kontoen din har blitt permanent slettet.",
     "account_delete_failed": "Kunne ikke slette kontoen. Vennligst prøv igjen.",
     "account_delete_wrong_password": "Feil passord.",
-    "account_delete_requires_recent_login": "Vennligst logg inn på nytt for å fortsette."
+    "account_delete_requires_recent_login": "Vennligst logg inn på nytt for å fortsette.",
+    "account_delete_provider_not_supported": "Denne innloggingsmetoden støttes ikke ennå for kontosletting.",
+    "account_delete_email_missing": "Kunne ikke fastslå e-posten til den gjeldende kontoen."
 }

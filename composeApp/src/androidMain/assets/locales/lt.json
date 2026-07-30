@@ -596,5 +596,7 @@
     "account_delete_success": "Jūsų paskyra buvo sėkmingai ištrinta visam laikui.",
     "account_delete_failed": "Nepavyko ištrinti paskyros. Bandykite dar kartą.",
     "account_delete_wrong_password": "Neteisingas slaptažodis.",
-    "account_delete_requires_recent_login": "Norėdami tęsti, prisijunkite iš naujo."
+    "account_delete_requires_recent_login": "Norėdami tęsti, prisijunkite iš naujo.",
+    "account_delete_provider_not_supported": "Šis prisijungimo būdas dar nepalaikomas paskyros ištrynimui.",
+    "account_delete_email_missing": "Nepavyko nustatyti dabartinės paskyros el. pašto."
 }

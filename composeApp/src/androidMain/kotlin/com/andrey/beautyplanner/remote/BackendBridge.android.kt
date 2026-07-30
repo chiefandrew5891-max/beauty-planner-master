@@ -203,6 +203,13 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun deleteMyAccount(): Map<String, String> {
+        ensureAuthenticated()
+        return callRawFunction(
+            "deleteMyAccount",
+            emptyMap<String, Any>()
+        )
+    }
     private suspend fun callRawFunction(
         name: String,
         payload: Map<String, Any?>

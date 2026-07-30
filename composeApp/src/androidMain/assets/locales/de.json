@@ -596,5 +596,7 @@
     "account_delete_success": "Ihr Konto wurde dauerhaft gelöscht.",
     "account_delete_failed": "Konto konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.",
     "account_delete_wrong_password": "Falsches Passwort.",
-    "account_delete_requires_recent_login": "Bitte melden Sie sich erneut an, um fortzufahren."
+    "account_delete_requires_recent_login": "Bitte melden Sie sich erneut an, um fortzufahren.",
+    "account_delete_provider_not_supported": "Diese Anmeldemethode wird für die Kontolöschung noch nicht unterstützt.",
+    "account_delete_email_missing": "E-Mail-Adresse des aktuellen Kontos konnte nicht ermittelt werden."
 }

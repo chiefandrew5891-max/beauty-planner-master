@@ -596,5 +596,7 @@
     "account_delete_success": "Hesabınız kalıcı olarak silindi.",
     "account_delete_failed": "Hesap silinemedi. Lütfen tekrar deneyin.",
     "account_delete_wrong_password": "Yanlış şifre.",
-    "account_delete_requires_recent_login": "Devam etmek için lütfen tekrar giriş yapın."
+    "account_delete_requires_recent_login": "Devam etmek için lütfen tekrar giriş yapın.",
+    "account_delete_provider_not_supported": "Bu giriş yöntemi henüz hesap silme işlemi için desteklenmiyor.",
+    "account_delete_email_missing": "Mevcut hesabın e-postası belirlenemedi."
 }

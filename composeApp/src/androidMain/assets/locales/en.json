@@ -598,5 +598,7 @@
     "account_delete_success": "Your account has been permanently deleted.",
     "account_delete_failed": "Failed to delete account. Please try again.",
     "account_delete_wrong_password": "Incorrect password.",
-    "account_delete_requires_recent_login": "Please sign in again to continue."
+    "account_delete_requires_recent_login": "Please sign in again to continue.",
+    "account_delete_provider_not_supported": "This sign-in method is not yet supported for account deletion.",
+    "account_delete_email_missing": "Unable to determine the current account email."
 }

@@ -175,13 +175,13 @@ fun PersonalInfoSettingsScreen() {
                                 showDeleteAccountPasswordDialog = true
                             }
                             com.andrey.beautyplanner.auth.SignInProvider.GOOGLE -> {
-                                // TODO: start Google reauthentication flow before calling deleteMyAccount
+                                deleteAccountPasswordError = Locales.t("account_delete_provider_not_supported")
                             }
                             com.andrey.beautyplanner.auth.SignInProvider.APPLE -> {
-                                // TODO: start Apple reauthentication flow before calling deleteMyAccount
+                                deleteAccountPasswordError = Locales.t("account_delete_provider_not_supported")
                             }
                             else -> {
-                                // TODO: handle anonymous / unsupported provider deletion path
+                                deleteAccountPasswordError = Locales.t("account_delete_provider_not_supported")
                             }
                         }
                     },
@@ -280,13 +280,40 @@ fun PersonalInfoSettingsScreen() {
                     }
                 }
             },
+
             confirmButton = {
                 Button(
                     onClick = {
-                        // TODO:
-                        // 1. reauthenticate email/password
-                        // 2. call backend deleteMyAccount
-                        // 3. clear local session and navigate to auth screen
+                        if (isDeletingAccount) return@Button
+
+                        val currentUser = appState.currentAuthUser
+                        val email = currentUser?.email.orEmpty().trim()
+
+                        if (email.isBlank()) {
+                            deleteAccountPasswordError = Locales.t("account_delete_email_missing")
+                            return@Button
+                        }
+
+                        isDeletingAccount = true
+                        deleteAccountPasswordError = null
+
+                        scope.launch {
+                            runCatching {
+                                appState.reauthenticateAndDeleteEmailAccount(
+                                    email = email,
+                                    password = deleteAccountPasswordDraft
+                                )
+                            }.onSuccess {
+                                isDeletingAccount = false
+                                showDeleteAccountPasswordDialog = false
+                                deleteAccountPasswordDraft = ""
+                                deleteAccountPasswordError = null
+                            }.onFailure { error ->
+                                isDeletingAccount = false
+                                deleteAccountPasswordError =
+                                    error.message ?: Locales.t("account_delete_failed")
+                            }
+                        }
                     },
                     enabled = deleteAccountPasswordDraft.isNotBlank() && !isDeletingAccount,
                     shape = RoundedCornerShape(12.dp)
@@ -300,6 +327,7 @@ fun PersonalInfoSettingsScreen() {
                     )
                 }
             },
+
             dismissButton = {
                 TextButton(
                     onClick = {
@@ -613,6 +641,13 @@ fun PersonalInfoSettingsScreen() {
                     },
                     enabled = !isDeletingAccount
                 )
+                deleteAccountPasswordError?.takeIf { it.isNotBlank() }?.let { errorText ->
+                    Text(
+                        text = errorText,
+                        fontSize = (12 * fontScale).sp,
+                        color = MaterialTheme.colors.error
+                    )
+                }
             }
         }
 

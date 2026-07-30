@@ -78,4 +78,6 @@ expect object BackendBridge {
         autoPublishBusySlots: Boolean,
         busySlotsJson: String
     ): Map<String, String>
+
+    suspend fun deleteMyAccount(): Map<String, String>
 }

@@ -596,5 +596,7 @@
     "account_delete_success": "Sua conta foi excluída permanentemente.",
     "account_delete_failed": "Falha ao excluir a conta. Tente novamente.",
     "account_delete_wrong_password": "Senha incorreta.",
-    "account_delete_requires_recent_login": "Faça login novamente para continuar."
+    "account_delete_requires_recent_login": "Faça login novamente para continuar.",
+    "account_delete_provider_not_supported": "Este método de login ainda não é suportado para exclusão de conta.",
+    "account_delete_email_missing": "Não foi possível determinar o e-mail da conta atual."
 }

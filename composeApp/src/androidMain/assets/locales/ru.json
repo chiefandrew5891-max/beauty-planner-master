@@ -598,5 +598,7 @@
     "account_delete_success": "Ваш аккаунт успешно и безвозвратно удален.",
     "account_delete_failed": "Не удалось удалить аккаунт. Пожалуйста, попробуйте еще раз.",
     "account_delete_wrong_password": "Неверный пароль.",
-    "account_delete_requires_recent_login": "Пожалуйста, войдите снова, чтобы продолжить."
+    "account_delete_requires_recent_login": "Пожалуйста, войдите снова, чтобы продолжить.",
+    "account_delete_provider_not_supported": "Этот способ входа пока не поддерживается для удаления аккаунта.",
+    "account_delete_email_missing": "Не удалось определить email текущего аккаунта."
 }

@@ -596,5 +596,7 @@
     "account_delete_success": "Twoje konto zostało trwale usunięte.",
     "account_delete_failed": "Nie udało się usunąć konta. Spróbuj ponownie.",
     "account_delete_wrong_password": "Nieprawidłowe hasło.",
-    "account_delete_requires_recent_login": "Zaloguj się ponownie, aby kontynuować."
+    "account_delete_requires_recent_login": "Zaloguj się ponownie, aby kontynuować.",
+    "account_delete_provider_not_supported": "Ta metoda logowania nie jest jeszcze obsługiwana przy usuwaniu konta.",
+    "account_delete_email_missing": "Nie można ustalić adresu e-mail bieżącego konta."
 }

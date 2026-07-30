@@ -596,5 +596,7 @@
     "account_delete_success": "계정이 영구적으로 삭제되었습니다.",
     "account_delete_failed": "계정을 삭제하지 못했습니다. 다시 시도해 주세요.",
     "account_delete_wrong_password": "비밀번호가 올바르지 않습니다.",
-    "account_delete_requires_recent_login": "계속하려면 다시 로그인해 주세요."
+    "account_delete_requires_recent_login": "계속하려면 다시 로그인해 주세요.",
+    "account_delete_provider_not_supported": "이 로그인 방식은 아직 계정 삭제를 지원하지 않습니다.",
+    "account_delete_email_missing": "현재 계정의 이메일을 확인할 수 없습니다."
 }

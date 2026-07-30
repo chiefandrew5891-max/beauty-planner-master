@@ -596,5 +596,7 @@
     "account_delete_success": "Il tuo account è stato eliminato definitivamente.",
     "account_delete_failed": "Impossibile eliminare l'account. Riprova.",
     "account_delete_wrong_password": "Password errata.",
-    "account_delete_requires_recent_login": "Accedi di nuovo per continuare."
+    "account_delete_requires_recent_login": "Accedi di nuovo per continuare.",
+    "account_delete_provider_not_supported": "Questo metodo di accesso non è ancora supportato per l'eliminazione dell'account.",
+    "account_delete_email_missing": "Impossibile determinare l'email dell'account corrente."
 }

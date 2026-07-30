@@ -596,5 +596,7 @@
     "account_delete_success": "Su cuenta ha sido eliminada permanentemente.",
     "account_delete_failed": "Error al eliminar la cuenta. Por favor, inténtelo de nuevo.",
     "account_delete_wrong_password": "Contraseña incorrecta.",
-    "account_delete_requires_recent_login": "Por favor, vuelva a iniciar sesión para continuar."
+    "account_delete_requires_recent_login": "Por favor, vuelva a iniciar sesión para continuar.",
+    "account_delete_provider_not_supported": "Este método de inicio de sesión aún no es compatible para la eliminación de la cuenta.",
+    "account_delete_email_missing": "No se pudo determinar el correo electrónico de la cuenta actual."
 }

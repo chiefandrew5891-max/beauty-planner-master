@@ -596,5 +596,7 @@
     "account_delete_success": "Contul dvs. a fost șters definitiv.",
     "account_delete_failed": "Ștergerea contului a eșuat. Vă rugăm să încercați din nou.",
     "account_delete_wrong_password": "Parolă incorectă.",
-    "account_delete_requires_recent_login": "Vă rugăm să vă conectați din nou pentru a continua."
+    "account_delete_requires_recent_login": "Vă rugăm să vă conectați din nou pentru a continua.",
+    "account_delete_provider_not_supported": "Această metodă de autentificare nu este încă suportată pentru ștergerea contului.",
+    "account_delete_email_missing": "Nu s-a putut determina adresa de e-mail a contului actual."
 }

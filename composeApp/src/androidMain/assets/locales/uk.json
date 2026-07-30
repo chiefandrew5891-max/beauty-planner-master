@@ -596,5 +596,7 @@
     "account_delete_success": "Ваш акаунт успішно та назавжди видалено.",
     "account_delete_failed": "Не вдалося видалити акаунт. Будь ласка, спробуйте ще раз.",
     "account_delete_wrong_password": "Невірний пароль.",
-    "account_delete_requires_recent_login": "Будь ласка, увійдіть знову, щоб продовжити."
+    "account_delete_requires_recent_login": "Будь ласка, увійдіть знову, щоб продовжити.",
+    "account_delete_provider_not_supported": "Цей спосіб входу наразі не підтримується для видалення акаунта.",
+    "account_delete_email_missing": "Не вдалося визначити email поточного акаунта."
 }

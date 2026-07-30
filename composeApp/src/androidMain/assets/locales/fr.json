@@ -596,5 +596,7 @@
     "account_delete_success": "Votre compte a été supprimé définitivement.",
     "account_delete_failed": "Échec de la suppression du compte. Veuillez réessayer.",
     "account_delete_wrong_password": "Mot de passe incorrect.",
-    "account_delete_requires_recent_login": "Veuillez vous reconnecter pour continuer."
+    "account_delete_requires_recent_login": "Veuillez vous reconnecter pour continuer.",
+    "account_delete_provider_not_supported": "Ce mode de connexion n'est pas encore pris en charge pour la suppression de compte.",
+    "account_delete_email_missing": "Impossible de déterminer l'e-mail du compte actuel."
 }

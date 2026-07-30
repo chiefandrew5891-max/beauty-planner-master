@@ -596,5 +596,7 @@
     "account_delete_success": "アカウントが永久に削除されました。",
     "account_delete_failed": "アカウントの削除に失敗しました。もう一度お試しください。",
     "account_delete_wrong_password": "パスワードが正しくありません。",
-    "account_delete_requires_recent_login": "続行するには再ログインしてください。"
+    "account_delete_requires_recent_login": "続行するには再ログインしてください。",
+    "account_delete_provider_not_supported": "このサインイン方法はアカウント削除にまだ対応していません。",
+    "account_delete_email_missing": "現在のアカウントのメールアドレスを特定できません。"
 }

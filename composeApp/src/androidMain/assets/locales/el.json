@@ -596,5 +596,7 @@
     "account_delete_success": "Ο λογαριασμός σας διαγράφηκε οριστικά.",
     "account_delete_failed": "Αποτυχία διαγραφής λογαριασμού. Παρακαλούμε δοκιμάστε ξανά.",
     "account_delete_wrong_password": "Λανθασμένος κωδικός πρόσβασης.",
-    "account_delete_requires_recent_login": "Παρακαλούμε συνδεθείτε ξανά για να συνεχίσετε."
+    "account_delete_requires_recent_login": "Παρακαλούμε συνδεθείτε ξανά για να συνεχίσετε.",
+    "account_delete_provider_not_supported": "Αυτή η μέθοδος σύνδεσης δεν υποστηρίζεται ακόμα για διαγραφή λογαριασμού.",
+    "account_delete_email_missing": "Αδυναμία προσδιορισμού του email του τρέχοντος λογαριασμού."
 }

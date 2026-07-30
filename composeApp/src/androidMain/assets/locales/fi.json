@@ -596,5 +596,7 @@
     "account_delete_success": "Tilisi on poistettu lopullisesti.",
     "account_delete_failed": "Tilin poistaminen epäonnistui. Yritä uudelleen.",
     "account_delete_wrong_password": "Väärä salasana.",
-    "account_delete_requires_recent_login": "Kirjaudu uudelleen sisään jatkaaksesi."
+    "account_delete_requires_recent_login": "Kirjaudu uudelleen sisään jatkaaksesi.",
+    "account_delete_provider_not_supported": "Tätä kirjautumistapaa ei vielä tueta tilin poistamiseen.",
+    "account_delete_email_missing": "Nykyisen tilin sähköpostiosoitetta ei saatu selville."
 }

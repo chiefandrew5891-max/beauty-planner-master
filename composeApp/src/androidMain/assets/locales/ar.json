@@ -596,5 +596,7 @@
     "account_delete_success": "تم حذف حسابك نهائيًا.",
     "account_delete_failed": "فشل حذف الحساب. يرجى المحاولة مرة أخرى.",
     "account_delete_wrong_password": "كلمة المرور غير صحيحة.",
-    "account_delete_requires_recent_login": "يرجى تسجيل الدخول مرة أخرى للمتابعة."
+    "account_delete_requires_recent_login": "يرجى تسجيل الدخول مرة أخرى للمتابعة.",
+    "account_delete_provider_not_supported": "طريقة تسجيل الدخول هذه غير مدعومة حاليًا لحذف الحساب.",
+    "account_delete_email_missing": "تعذر تحديد البريد الإلكتروني للحساب الحالي."
 }

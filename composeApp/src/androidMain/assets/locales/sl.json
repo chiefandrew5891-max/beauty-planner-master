@@ -596,5 +596,7 @@
     "account_delete_success": "Vaš račun je bil trajno izbrisan.",
     "account_delete_failed": "Brisanje računa ni uspelo. Prosimo, poskusite znova.",
     "account_delete_wrong_password": "Napačno geslo.",
-    "account_delete_requires_recent_login": "Za nadaljevanje se znova prijavite."
+    "account_delete_requires_recent_login": "Za nadaljevanje se znova prijavite.",
+    "account_delete_provider_not_supported": "Ta način prijave še ni podprt za izbris računa.",
+    "account_delete_email_missing": "Ni mogoče ugotoviti e-pošte trenutnega računa."
 }

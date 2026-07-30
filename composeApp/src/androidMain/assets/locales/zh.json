@@ -596,5 +596,7 @@
     "account_delete_success": "您的账号已永久删除。",
     "account_delete_failed": "删除账号失败，请重试。",
     "account_delete_wrong_password": "密码错误。",
-    "account_delete_requires_recent_login": "请重新登录以继续。"
+    "account_delete_requires_recent_login": "请重新登录以继续。",
+    "account_delete_provider_not_supported": "暂不支持使用此登录方式删除账号。",
+    "account_delete_email_missing": "无法确定当前账号的电子邮件。"
 }

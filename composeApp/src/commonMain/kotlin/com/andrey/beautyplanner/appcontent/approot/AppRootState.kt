@@ -821,6 +821,59 @@ class AppRootState(
         }
     }
 
+    suspend fun reauthenticateAndDeleteEmailAccount(
+        email: String,
+        password: String
+    ) {
+        val cleanEmail = email.trim()
+        val cleanPassword = password.trim()
+
+        if (cleanEmail.isBlank()) {
+            throw IllegalStateException(Locales.t("account_delete_email_missing"))
+        }
+
+        if (cleanPassword.isBlank()) {
+            throw IllegalStateException(Locales.t("account_delete_wrong_password"))
+        }
+
+        when (val reauthResult = AuthGateway.signInWithEmail(cleanEmail, cleanPassword)) {
+            is SignInResult.Success -> {
+                currentAuthUser = reauthResult.user
+                persistAuthenticatedSession(reauthResult.user)
+            }
+
+            is SignInResult.Cancelled -> {
+                throw IllegalStateException(Locales.t("account_delete_requires_recent_login"))
+            }
+
+            is SignInResult.Error -> {
+                val mapped = mapAuthErrorMessage(reauthResult.message)
+                throw IllegalStateException(mapped)
+            }
+        }
+
+        com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+
+        DataManager.saveToDatabase(
+            data = emptyList(),
+            profileKey = LocalProfileManager.currentProfileKey()
+        )
+
+        clearSessionLocalState()
+
+        AuthGateway.signOut()
+        AuthGateway.clearCredentialState()
+
+        currentAuthUser = null
+        clearPersistedAuthenticatedSession()
+
+        reloadAppointmentsForGuestProfile()
+        refreshAccessState()
+
+        screenHistory = emptyList()
+        currentScreen = Screen.AUTH_WELCOME
+        authErrorMessage = null
+    }
     fun openEmailSignInScreen() {
         authErrorMessage = null
         authEmailRegisterMode = false

@@ -596,5 +596,7 @@
     "account_delete_success": "Váš účet byl trvale smazán.",
     "account_delete_failed": "Smazání účtu se nezdařilo. Zkuste to prosím znovu.",
     "account_delete_wrong_password": "Nesprávné heslo.",
-    "account_delete_requires_recent_login": "Pro pokračování se prosím znovu přihlaste."
+    "account_delete_requires_recent_login": "Pro pokračování se prosím znovu přihlaste.",
+    "account_delete_provider_not_supported": "Tento způsob přihlášení zatím není pro smazání účtu podporován.",
+    "account_delete_email_missing": "Nelze určit e-mail aktuálního účtu."
 }

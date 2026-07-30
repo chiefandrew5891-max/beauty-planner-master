@@ -596,5 +596,7 @@
     "account_delete_success": "Teie konto on jäädavalt kustutatud.",
     "account_delete_failed": "Konto kustutamine ebaõnnestus. Palun proovige uuesti.",
     "account_delete_wrong_password": "Vale parool.",
-    "account_delete_requires_recent_login": "Jätkamiseks logige uuesti sisse."
+    "account_delete_requires_recent_login": "Jätkamiseks logige uuesti sisse.",
+    "account_delete_provider_not_supported": "Seda sisselogimismeetodit ei toetata ještě konto kustutamiseks.",
+    "account_delete_email_missing": "Praeguse konto e-posti aadressi ei õnnestunud tuvastada."
 }

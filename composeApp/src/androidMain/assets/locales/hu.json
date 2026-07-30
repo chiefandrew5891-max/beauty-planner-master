@@ -596,5 +596,7 @@
     "account_delete_success": "Fiókja véglegesen törölve lett.",
     "account_delete_failed": "A fiók törlése nem sikerült. Kérjük, próbálja újra.",
     "account_delete_wrong_password": "Helytelen jelszó.",
-    "account_delete_requires_recent_login": "A folytatáshoz kérjük, jelentkezzen be újra."
+    "account_delete_requires_recent_login": "A folytatáshoz kérjük, jelentkezzen be újra.",
+    "account_delete_provider_not_supported": "Ez a bejelentkezési mód még nem támogatott a fiók törléséhez.",
+    "account_delete_email_missing": "Nem sikerült meghatározni a jelenlegi fiók e-mail-címét."
 }
