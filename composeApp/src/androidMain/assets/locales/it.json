@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Password errata.",
     "account_delete_requires_recent_login": "Accedi di nuovo per continuare.",
     "account_delete_provider_not_supported": "Questo metodo di accesso non è ancora supportato per l'eliminazione dell'account.",
-    "account_delete_email_missing": "Impossibile determinare l'email dell'account corrente."
+    "account_delete_email_missing": "Impossibile determinare l'email dell'account corrente.",
+    "account_delete_google_reauth_in_progress": "Conferma dell'eliminazione con Google in corso...",
+    "account_delete_apple_reauth_in_progress": "Conferma dell'eliminazione con Apple in corso..."
 }

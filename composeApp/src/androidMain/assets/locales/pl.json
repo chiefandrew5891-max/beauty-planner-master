@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Nieprawidłowe hasło.",
     "account_delete_requires_recent_login": "Zaloguj się ponownie, aby kontynuować.",
     "account_delete_provider_not_supported": "Ta metoda logowania nie jest jeszcze obsługiwana przy usuwaniu konta.",
-    "account_delete_email_missing": "Nie można ustalić adresu e-mail bieżącego konta."
+    "account_delete_email_missing": "Nie można ustalić adresu e-mail bieżącego konta.",
+    "account_delete_google_reauth_in_progress": "Potwierdzanie usunięcia przez Google...",
+    "account_delete_apple_reauth_in_progress": "Potwierdzanie usunięcia przez Apple..."
 }

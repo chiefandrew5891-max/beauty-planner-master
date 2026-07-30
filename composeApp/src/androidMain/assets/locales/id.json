@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Kata sandi salah.",
     "account_delete_requires_recent_login": "Silakan masuk lagi untuk melanjutkan.",
     "account_delete_provider_not_supported": "Metode masuk ini belum didukung untuk penghapusan akun.",
-    "account_delete_email_missing": "Tidak dapat menentukan email akun saat ini."
+    "account_delete_email_missing": "Tidak dapat menentukan email akun saat ini.",
+    "account_delete_google_reauth_in_progress": "Mengonfirmasi penghapusan dengan Google...",
+    "account_delete_apple_reauth_in_progress": "Mengonfirmasi penghapusan dengan Apple..."
 }

@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Feil passord.",
     "account_delete_requires_recent_login": "Vennligst logg inn på nytt for å fortsette.",
     "account_delete_provider_not_supported": "Denne innloggingsmetoden støttes ikke ennå for kontosletting.",
-    "account_delete_email_missing": "Kunne ikke fastslå e-posten til den gjeldende kontoen."
+    "account_delete_email_missing": "Kunne ikke fastslå e-posten til den gjeldende kontoen.",
+    "account_delete_google_reauth_in_progress": "Bekrefter sletting med Google...",
+    "account_delete_apple_reauth_in_progress": "Bekrefter sletting med Apple..."
 }

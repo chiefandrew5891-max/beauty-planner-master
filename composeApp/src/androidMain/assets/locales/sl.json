@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Napačno geslo.",
     "account_delete_requires_recent_login": "Za nadaljevanje se znova prijavite.",
     "account_delete_provider_not_supported": "Ta način prijave še ni podprt za izbris računa.",
-    "account_delete_email_missing": "Ni mogoče ugotoviti e-pošte trenutnega računa."
+    "account_delete_email_missing": "Ni mogoče ugotoviti e-pošte trenutnega računa.",
+    "account_delete_google_reauth_in_progress": "Potrjevanje izbrisa z Google...",
+    "account_delete_apple_reauth_in_progress": "Potrjevanje izbrisa z Apple..."
 }

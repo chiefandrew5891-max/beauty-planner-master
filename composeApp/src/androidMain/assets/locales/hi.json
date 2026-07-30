@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "गलत पासवर्ड।",
     "account_delete_requires_recent_login": "जारी रखने के लिए कृपया फिर से साइन इन करें।",
     "account_delete_provider_not_supported": "खाता हटाने के लिए यह साइन-इन विधि अभी समर्थित नहीं है।",
-    "account_delete_email_missing": "वर्तमान खाते के ईमेल का पता लगाने में असमर्थ।"
+    "account_delete_email_missing": "वर्तमान खाते के ईमेल का पता लगाने में असमर्थ।",
+    "account_delete_google_reauth_in_progress": "Google के साथ हटाने की पुष्टि की जा रही है...",
+    "account_delete_apple_reauth_in_progress": "Apple के साथ हटाने की पुष्टि की जा रही है..."
 }

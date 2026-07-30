@@ -874,6 +874,86 @@ class AppRootState(
         currentScreen = Screen.AUTH_WELCOME
         authErrorMessage = null
     }
+
+    suspend fun reauthenticateAndDeleteGoogleAccount() {
+        when (val signInResult = AuthGateway.signInWithGoogle()) {
+            is SignInResult.Success -> {
+                currentAuthUser = signInResult.user
+                persistAuthenticatedSession(signInResult.user)
+            }
+
+            is SignInResult.Cancelled -> {
+                throw IllegalStateException(Locales.t("account_delete_requires_recent_login"))
+            }
+
+            is SignInResult.Error -> {
+                val mapped = mapAuthErrorMessage(signInResult.message)
+                throw IllegalStateException(mapped)
+            }
+        }
+
+        com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+
+        DataManager.saveToDatabase(
+            data = emptyList(),
+            profileKey = LocalProfileManager.currentProfileKey()
+        )
+
+        clearSessionLocalState()
+
+        AuthGateway.signOut()
+        AuthGateway.clearCredentialState()
+
+        currentAuthUser = null
+        clearPersistedAuthenticatedSession()
+
+        reloadAppointmentsForGuestProfile()
+        refreshAccessState()
+
+        screenHistory = emptyList()
+        currentScreen = Screen.AUTH_WELCOME
+        authErrorMessage = null
+    }
+
+    suspend fun reauthenticateAndDeleteAppleAccount() {
+        when (val signInResult = AuthGateway.signInWithApple()) {
+            is SignInResult.Success -> {
+                currentAuthUser = signInResult.user
+                persistAuthenticatedSession(signInResult.user)
+            }
+
+            is SignInResult.Cancelled -> {
+                throw IllegalStateException(Locales.t("account_delete_requires_recent_login"))
+            }
+
+            is SignInResult.Error -> {
+                val mapped = mapAuthErrorMessage(signInResult.message)
+                throw IllegalStateException(mapped)
+            }
+        }
+
+        com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+
+        DataManager.saveToDatabase(
+            data = emptyList(),
+            profileKey = LocalProfileManager.currentProfileKey()
+        )
+
+        clearSessionLocalState()
+
+        AuthGateway.signOut()
+        AuthGateway.clearCredentialState()
+
+        currentAuthUser = null
+        clearPersistedAuthenticatedSession()
+
+        reloadAppointmentsForGuestProfile()
+        refreshAccessState()
+
+        screenHistory = emptyList()
+        currentScreen = Screen.AUTH_WELCOME
+        authErrorMessage = null
+    }
     fun openEmailSignInScreen() {
         authErrorMessage = null
         authEmailRegisterMode = false

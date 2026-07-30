@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Senha incorreta.",
     "account_delete_requires_recent_login": "Faça login novamente para continuar.",
     "account_delete_provider_not_supported": "Este método de login ainda não é suportado para exclusão de conta.",
-    "account_delete_email_missing": "Não foi possível determinar o e-mail da conta atual."
+    "account_delete_email_missing": "Não foi possível determinar o e-mail da conta atual.",
+    "account_delete_google_reauth_in_progress": "Confirmando exclusão com o Google...",
+    "account_delete_apple_reauth_in_progress": "Confirmando exclusão com a Apple..."
 }

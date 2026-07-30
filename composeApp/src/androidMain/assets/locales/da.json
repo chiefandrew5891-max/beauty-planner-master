@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Forkert adgangskode.",
     "account_delete_requires_recent_login": "Log ind igen for at fortsætte.",
     "account_delete_provider_not_supported": "Denne loginmetode understøttes endnu ikke til kontosletning.",
-    "account_delete_email_missing": "Kan ikke bestemme den aktuelle kontos e-mail."
+    "account_delete_email_missing": "Kan ikke bestemme den aktuelle kontos e-mail.",
+    "account_delete_google_reauth_in_progress": "Bekræfter sletning med Google...",
+    "account_delete_apple_reauth_in_progress": "Bekræfter sletning med Apple..."
 }

@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Mot de passe incorrect.",
     "account_delete_requires_recent_login": "Veuillez vous reconnecter pour continuer.",
     "account_delete_provider_not_supported": "Ce mode de connexion n'est pas encore pris en charge pour la suppression de compte.",
-    "account_delete_email_missing": "Impossible de déterminer l'e-mail du compte actuel."
+    "account_delete_email_missing": "Impossible de déterminer l'e-mail du compte actuel.",
+    "account_delete_google_reauth_in_progress": "Confirmation de la suppression avec Google...",
+    "account_delete_apple_reauth_in_progress": "Confirmation de la suppression avec Apple..."
 }

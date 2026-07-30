@@ -600,5 +600,7 @@
     "account_delete_wrong_password": "Incorrect password.",
     "account_delete_requires_recent_login": "Please sign in again to continue.",
     "account_delete_provider_not_supported": "This sign-in method is not yet supported for account deletion.",
-    "account_delete_email_missing": "Unable to determine the current account email."
+    "account_delete_email_missing": "Unable to determine the current account email.",
+    "account_delete_google_reauth_in_progress": "Confirming deletion with Google...",
+    "account_delete_apple_reauth_in_progress": "Confirming deletion with Apple..."
 }

@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "كلمة المرور غير صحيحة.",
     "account_delete_requires_recent_login": "يرجى تسجيل الدخول مرة أخرى للمتابعة.",
     "account_delete_provider_not_supported": "طريقة تسجيل الدخول هذه غير مدعومة حاليًا لحذف الحساب.",
-    "account_delete_email_missing": "تعذر تحديد البريد الإلكتروني للحساب الحالي."
+    "account_delete_email_missing": "تعذر تحديد البريد الإلكتروني للحساب الحالي.",
+    "account_delete_google_reauth_in_progress": "جاري تأكيد الحذف باستخدام Google...",
+    "account_delete_apple_reauth_in_progress": "جاري تأكيد الحذف باستخدام Apple..."
 }

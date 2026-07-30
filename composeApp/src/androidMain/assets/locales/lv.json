@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Nepareiza parole.",
     "account_delete_requires_recent_login": "Lūdzu, piesakieties vēlreiz, lai turpinātu.",
     "account_delete_provider_not_supported": "Šī pieteikšanās metode vēl netiek atbalstīta konta dzēšanai.",
-    "account_delete_email_missing": "Neizdevās noteikt pašreizējā konta e-pastu."
+    "account_delete_email_missing": "Neizdevās noteikt pašreizējā konta e-pastu.",
+    "account_delete_google_reauth_in_progress": "Apstiprina dzēšanu ar Google...",
+    "account_delete_apple_reauth_in_progress": "Apstiprina dzēšanu ar Apple..."
 }

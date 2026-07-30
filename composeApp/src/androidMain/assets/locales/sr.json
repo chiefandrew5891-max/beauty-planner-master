@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Погрешна лозинка.",
     "account_delete_requires_recent_login": "Пријавите се поново да бисте наставили.",
     "account_delete_provider_not_supported": "Овај начин пријаве још увек није подржан за брисање налога.",
-    "account_delete_email_missing": "Није могуће утврдити е-маил тренутног налога."
+    "account_delete_email_missing": "Није могуће утврдити е-маил тренутног налога.",
+    "account_delete_google_reauth_in_progress": "Потврђивање брисања путем Google-а...",
+    "account_delete_apple_reauth_in_progress": "Потврђивање брисања путем Apple-а..."
 }

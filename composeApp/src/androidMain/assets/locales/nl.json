@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Onjuist wachtwoord.",
     "account_delete_requires_recent_login": "Meld u opnieuw aan om door te gaan.",
     "account_delete_provider_not_supported": "Deze inlogmethode wordt nog niet ondersteund voor het verwijderen van accounts.",
-    "account_delete_email_missing": "Kan het e-mailadres van het huidige account niet bepalen."
+    "account_delete_email_missing": "Kan het e-mailadres van het huidige account niet bepalen.",
+    "account_delete_google_reauth_in_progress": "Verwijdering bevestigen met Google...",
+    "account_delete_apple_reauth_in_progress": "Verwijdering bevestigen met Apple..."
 }

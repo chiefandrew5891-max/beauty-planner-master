@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Nesprávné heslo.",
     "account_delete_requires_recent_login": "Pro pokračování se prosím znovu přihlaste.",
     "account_delete_provider_not_supported": "Tento způsob přihlášení zatím není pro smazání účtu podporován.",
-    "account_delete_email_missing": "Nelze určit e-mail aktuálního účtu."
+    "account_delete_email_missing": "Nelze určit e-mail aktuálního účtu.",
+    "account_delete_google_reauth_in_progress": "Potvrzování smazání přes Google...",
+    "account_delete_apple_reauth_in_progress": "Potvrzování smazání přes Apple..."
 }

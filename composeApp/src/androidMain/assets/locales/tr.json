@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Yanlış şifre.",
     "account_delete_requires_recent_login": "Devam etmek için lütfen tekrar giriş yapın.",
     "account_delete_provider_not_supported": "Bu giriş yöntemi henüz hesap silme işlemi için desteklenmiyor.",
-    "account_delete_email_missing": "Mevcut hesabın e-postası belirlenemedi."
+    "account_delete_email_missing": "Mevcut hesabın e-postası belirlenemedi.",
+    "account_delete_google_reauth_in_progress": "Silme işlemi Google ile onaylanıyor...",
+    "account_delete_apple_reauth_in_progress": "Silme işlemi Apple ile onaylanıyor..."
 }

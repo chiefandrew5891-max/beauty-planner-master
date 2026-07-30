@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Helytelen jelszó.",
     "account_delete_requires_recent_login": "A folytatáshoz kérjük, jelentkezzen be újra.",
     "account_delete_provider_not_supported": "Ez a bejelentkezési mód még nem támogatott a fiók törléséhez.",
-    "account_delete_email_missing": "Nem sikerült meghatározni a jelenlegi fiók e-mail-címét."
+    "account_delete_email_missing": "Nem sikerült meghatározni a jelenlegi fiók e-mail-címét.",
+    "account_delete_google_reauth_in_progress": "Törlés megerősítése Google-fiókkal...",
+    "account_delete_apple_reauth_in_progress": "Törlés megerősítése Apple-fiókkal..."
 }

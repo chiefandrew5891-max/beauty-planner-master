@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Грешна парола.",
     "account_delete_requires_recent_login": "Моля, влезте отново в профила си, за да продължите.",
     "account_delete_provider_not_supported": "Този метод за вход все още не се поддържа за изтриване на акаунт.",
-    "account_delete_email_missing": "Не може да се установи имейлът на текущия акаунт."
+    "account_delete_email_missing": "Не може да се установи имейлът на текущия акаунт.",
+    "account_delete_google_reauth_in_progress": "Потвърждаване на изтриването с Google...",
+    "account_delete_apple_reauth_in_progress": "Потвърждаване на изтриването с Apple..."
 }

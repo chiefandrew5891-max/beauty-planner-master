@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Невірний пароль.",
     "account_delete_requires_recent_login": "Будь ласка, увійдіть знову, щоб продовжити.",
     "account_delete_provider_not_supported": "Цей спосіб входу наразі не підтримується для видалення акаунта.",
-    "account_delete_email_missing": "Не вдалося визначити email поточного акаунта."
+    "account_delete_email_missing": "Не вдалося визначити email поточного акаунта.",
+    "account_delete_google_reauth_in_progress": "Підтвердження видалення через Google...",
+    "account_delete_apple_reauth_in_progress": "Підтвердження видалення через Apple..."
 }

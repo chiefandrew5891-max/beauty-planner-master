@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Felaktigt lösenord.",
     "account_delete_requires_recent_login": "Logga in igen för att fortsätta.",
     "account_delete_provider_not_supported": "Denna inloggningsmetod stöds inte ännu för radering av konto.",
-    "account_delete_email_missing": "Det gick inte att fastställa e-postadressen för det aktuella kontot."
+    "account_delete_email_missing": "Det gick inte att fastställa e-postadressen för det aktuella kontot.",
+    "account_delete_google_reauth_in_progress": "Bekräftar radering med Google...",
+    "account_delete_apple_reauth_in_progress": "Bekräftar radering med Apple..."
 }

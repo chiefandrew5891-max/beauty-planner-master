@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Neteisingas slaptažodis.",
     "account_delete_requires_recent_login": "Norėdami tęsti, prisijunkite iš naujo.",
     "account_delete_provider_not_supported": "Šis prisijungimo būdas dar nepalaikomas paskyros ištrynimui.",
-    "account_delete_email_missing": "Nepavyko nustatyti dabartinės paskyros el. pašto."
+    "account_delete_email_missing": "Nepavyko nustatyti dabartinės paskyros el. pašto.",
+    "account_delete_google_reauth_in_progress": "Ištrynimas tvirtinamas su „Google“...",
+    "account_delete_apple_reauth_in_progress": "Ištrynimas tvirtinamas su „Apple“..."
 }

@@ -598,5 +598,7 @@
     "account_delete_wrong_password": "Väärä salasana.",
     "account_delete_requires_recent_login": "Kirjaudu uudelleen sisään jatkaaksesi.",
     "account_delete_provider_not_supported": "Tätä kirjautumistapaa ei vielä tueta tilin poistamiseen.",
-    "account_delete_email_missing": "Nykyisen tilin sähköpostiosoitetta ei saatu selville."
+    "account_delete_email_missing": "Nykyisen tilin sähköpostiosoitetta ei saatu selville.",
+    "account_delete_google_reauth_in_progress": "Vahvistetaan poistoa Google-tilillä...",
+    "account_delete_apple_reauth_in_progress": "Vahvistetaan poistoa Apple-tilillä..."
 }

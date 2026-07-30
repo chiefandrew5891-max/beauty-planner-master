@@ -174,14 +174,48 @@ fun PersonalInfoSettingsScreen() {
                                 deleteAccountPasswordError = null
                                 showDeleteAccountPasswordDialog = true
                             }
+
                             com.andrey.beautyplanner.auth.SignInProvider.GOOGLE -> {
-                                deleteAccountPasswordError = Locales.t("account_delete_provider_not_supported")
+                                isDeletingAccount = true
+                                deleteAccountPasswordError = null
+
+                                scope.launch {
+                                    runCatching {
+                                        appState.reauthenticateAndDeleteGoogleAccount()
+                                    }.onSuccess {
+                                        isDeletingAccount = false
+                                        deleteAccountPasswordDraft = ""
+                                        deleteAccountPasswordError = null
+                                    }.onFailure { error ->
+                                        isDeletingAccount = false
+                                        deleteAccountPasswordError =
+                                            error.message ?: Locales.t("account_delete_failed")
+                                    }
+                                }
                             }
+
                             com.andrey.beautyplanner.auth.SignInProvider.APPLE -> {
-                                deleteAccountPasswordError = Locales.t("account_delete_provider_not_supported")
+                                isDeletingAccount = true
+                                deleteAccountPasswordError = null
+
+                                scope.launch {
+                                    runCatching {
+                                        appState.reauthenticateAndDeleteAppleAccount()
+                                    }.onSuccess {
+                                        isDeletingAccount = false
+                                        deleteAccountPasswordDraft = ""
+                                        deleteAccountPasswordError = null
+                                    }.onFailure { error ->
+                                        isDeletingAccount = false
+                                        deleteAccountPasswordError =
+                                            error.message ?: Locales.t("account_delete_failed")
+                                    }
+                                }
                             }
+
                             else -> {
-                                deleteAccountPasswordError = Locales.t("account_delete_provider_not_supported")
+                                deleteAccountPasswordError =
+                                    Locales.t("account_delete_provider_not_supported")
                             }
                         }
                     },
