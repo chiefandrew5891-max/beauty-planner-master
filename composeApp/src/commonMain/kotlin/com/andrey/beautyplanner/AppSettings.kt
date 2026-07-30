@@ -492,6 +492,24 @@ object AppSettings {
         persist()
     }
 
+    fun clearMasterProfileLocalState() {
+        ownerName = ""
+        profilePhone = ""
+        profilePhoneVisible = true
+        profileRating = DEFAULT_PROFILE_RATING
+        profileAvatarUrl = ""
+        profileAvatarBase64 = ""
+        profileDisplayCustomName = false
+        profileSpecialization = ""
+        clientInteractionsEnabled = false
+
+        serviceTemplates = defaultServiceTemplates()
+        weeklyBlockedIntervals = emptyList()
+        scheduleDateOverrides = emptyList()
+
+        cloudSettingsUpdatedAtMillis = 0L
+        persist()
+    }
     fun isPinSet(): Boolean = adminPinHash.isNotBlank()
 
     fun isPinValidFormat(pin: String): Boolean =

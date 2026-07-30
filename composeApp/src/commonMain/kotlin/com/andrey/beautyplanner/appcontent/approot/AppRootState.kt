@@ -401,8 +401,6 @@ class AppRootState(
             else -> return false
         }
 
-        if (savedUserId.isBlank()) return false
-
         currentAuthUser = AuthUser(
             uid = savedUserId,
             provider = provider,
@@ -410,14 +408,25 @@ class AppRootState(
             displayName = savedDisplayName
         )
 
-        AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
-        AppSettings.persist()
-
         reloadAppointmentsForCurrentProfile()
         refreshAccessState()
         authResolved = true
         authErrorMessage = null
         currentScreen = Screen.MONTH
+
+        scope.launch {
+            runCatching {
+                bootstrapAuthenticatedUser(providerOverride = provider)
+            }.onFailure { error ->
+                CloudSyncLogger.log("restoreOfflineAuthenticatedSessionIfPossible: backend validation failed: ${error.message}")
+
+                runCatching { AuthGateway.signOut() }
+                runCatching { AuthGateway.clearCredentialState() }
+
+                purgeDeletedAccountLocally()
+            }
+        }
+
         return true
     }
 
@@ -563,6 +572,9 @@ class AppRootState(
 
         val currentUser = AuthGateway.getCurrentUser()
             ?: throw IllegalStateException("No authenticated user session found")
+        if (currentUser.uid.isBlank()) {
+            throw IllegalStateException("Authenticated user has blank uid")
+        }
 
         if (providerOverride == null && currentUser.provider == SignInProvider.ANONYMOUS) {
             throw IllegalStateException("Anonymous session is not restored automatically")
@@ -586,6 +598,7 @@ class AppRootState(
 
         currentAuthUser = currentUser
         persistAuthenticatedSession(currentUser)
+        AppSettings.clearMasterProfileLocalState()
         com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
         reloadAppointmentsForCurrentProfile()
         refreshAccessState(Clock.System.now().toEpochMilliseconds())
@@ -621,6 +634,7 @@ class AppRootState(
                             persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
+                            AppSettings.clearMasterProfileLocalState()
                             reloadAppointmentsForCurrentProfile()
                             performCloudSyncIfEligible()
                             authResolved = true
@@ -669,6 +683,7 @@ class AppRootState(
                             persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
+                            AppSettings.clearMasterProfileLocalState()
                             reloadAppointmentsForCurrentProfile()
                             refreshAccessState()
                             performCloudSyncIfEligible()
@@ -767,6 +782,7 @@ class AppRootState(
 
         bookingReadOnly = false
         selectedTimeSlot = ""
+        AppSettings.clearMasterProfileLocalState()
     }
 
     private fun purgeDeletedAccountLocally() {
@@ -782,10 +798,15 @@ class AppRootState(
         currentAuthUser = null
         clearPersistedAuthenticatedSession()
 
+        AppSettings.clearMasterProfileLocalState()
         AppSettings.lastAuthProvider = ""
         AppSettings.lastAuthEmail = ""
         AppSettings.lastAuthDisplayName = ""
         AppSettings.localProfileUserId = ""
+        AppSettings.backendUserId = ""
+        AppSettings.cachedTrialEndsAtMillis = 0L
+        AppSettings.trialStartedAtMillis = 0L
+        AppSettings.premiumUnlocked = false
         AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
         AppSettings.persist()
 
@@ -810,6 +831,7 @@ class AppRootState(
                     clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
+                    AppSettings.clearMasterProfileLocalState()
                     reloadAppointmentsForGuestProfile()
                     refreshAccessState()
 
@@ -837,6 +859,7 @@ class AppRootState(
                     clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
+                    AppSettings.clearMasterProfileLocalState()
                     reloadAppointmentsForGuestProfile()
                     refreshAccessState()
 
@@ -1049,6 +1072,7 @@ class AppRootState(
                                 persistAuthenticatedSession(result.user)
 
                                 clearSessionLocalState()
+                                AppSettings.clearMasterProfileLocalState()
                                 reloadAppointmentsForCurrentProfile()
                                 refreshAccessState()
 
