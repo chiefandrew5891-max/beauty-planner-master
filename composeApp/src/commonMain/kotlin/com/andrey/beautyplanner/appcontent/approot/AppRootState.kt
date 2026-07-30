@@ -401,28 +401,21 @@ class AppRootState(
             else -> return false
         }
 
-        showGlobalLoading(Locales.t("loading"))
-        authResolved = false
+        currentAuthUser = AuthUser(
+            uid = savedUserId,
+            provider = provider,
+            email = savedEmail,
+            displayName = savedDisplayName
+        )
+
+        AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
+        AppSettings.persist()
+
+        reloadAppointmentsForCurrentProfile()
+        refreshAccessState()
+        authResolved = true
         authErrorMessage = null
-        currentScreen = Screen.AUTH_WELCOME
-
-        scope.launch {
-            runCatching {
-                bootstrapAuthenticatedUser(providerOverride = provider)
-            }.onFailure { error ->
-                CloudSyncLogger.log(
-                    "restoreOfflineAuthenticatedSessionIfPossible: backend validation failed: ${error.message}"
-                )
-
-                runCatching { AuthGateway.signOut() }
-                runCatching { AuthGateway.clearCredentialState() }
-
-                purgeDeletedAccountLocally()
-            }
-
-            hideGlobalLoading()
-        }
-
+        currentScreen = Screen.MONTH
         return true
     }
 
@@ -583,21 +576,14 @@ class AppRootState(
             SignInProvider.ANONYMOUS -> "anonymous"
         }
 
-        val remote = try {
-            com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
-                installId = installId,
-                firebaseUid = currentUser.uid,
-                platform = getPlatform().backendPlatform,
-                authProvider = backendAuthProvider,
-                email = currentUser.email,
-                displayName = currentUser.displayName
-            )
-        } catch (error: Throwable) {
-            runCatching { AuthGateway.signOut() }
-            runCatching { AuthGateway.clearCredentialState() }
-            purgeDeletedAccountLocally()
-            throw error
-        }
+        val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
+            installId = installId,
+            firebaseUid = currentUser.uid,
+            platform = getPlatform().backendPlatform,
+            authProvider = backendAuthProvider,
+            email = currentUser.email,
+            displayName = currentUser.displayName
+        )
 
         currentAuthUser = currentUser
         persistAuthenticatedSession(currentUser)
