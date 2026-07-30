@@ -816,7 +816,7 @@ class AppRootState(
         currentScreen = Screen.AUTH_WELCOME
         hideGlobalLoading()
     }
-
+///////
     fun switchAccount() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
