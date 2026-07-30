@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Nykyisen tilin sähköpostiosoitetta ei saatu selville.",
     "account_delete_google_reauth_in_progress": "Vahvistetaan poistoa Google-tilillä...",
     "account_delete_apple_reauth_in_progress": "Vahvistetaan poistoa Apple-tilillä...",
-    "account_delete_apple_revoke_failed": "Apple-valtuutuksen peruuttaminen epäonnistui. Yritä uudelleen."
+    "account_delete_apple_revoke_failed": "Apple-valtuutuksen peruuttaminen epäonnistui. Yritä uudelleen.",
+    "account_label_apple_fallback": "Apple-tili"
 }

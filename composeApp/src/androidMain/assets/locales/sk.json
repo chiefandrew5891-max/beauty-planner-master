@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Nedaří sa určiť e-mail aktuálneho účtu.",
     "account_delete_google_reauth_in_progress": "Potvrdzovanie vymazania cez Google...",
     "account_delete_apple_reauth_in_progress": "Potvrdzovanie vymazania cez Apple...",
-    "account_delete_apple_revoke_failed": "Zrušenie autorizácie Apple sa nepodarilo. Skúste to prosím znova."
+    "account_delete_apple_revoke_failed": "Zrušenie autorizácie Apple sa nepodarilo. Skúste to prosím znova.",
+    "account_label_apple_fallback": "Účet Apple"
 }

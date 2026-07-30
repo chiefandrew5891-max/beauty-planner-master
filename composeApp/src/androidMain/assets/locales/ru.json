@@ -603,5 +603,6 @@
     "account_delete_email_missing": "Не удалось определить email текущего аккаунта.",
     "account_delete_google_reauth_in_progress": "Подтверждение удаления через Google...",
     "account_delete_apple_reauth_in_progress": "Подтверждение удаления через Apple...",
-    "account_delete_apple_revoke_failed": "Не удалось отозвать авторизацию Apple. Пожалуйста, попробуйте еще раз."
+    "account_delete_apple_revoke_failed": "Не удалось отозвать авторизацию Apple. Пожалуйста, попробуйте еще раз.",
+    "account_label_apple_fallback": "Аккаунт Apple"
 }

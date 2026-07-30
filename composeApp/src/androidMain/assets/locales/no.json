@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Kunne ikke fastslå e-posten til den gjeldende kontoen.",
     "account_delete_google_reauth_in_progress": "Bekrefter sletting med Google...",
     "account_delete_apple_reauth_in_progress": "Bekrefter sletting med Apple...",
-    "account_delete_apple_revoke_failed": "Kunne ikke tilbakekalle Apple-autorisasjonen. Vennligst prøv igjen."
+    "account_delete_apple_revoke_failed": "Kunne ikke tilbakekalle Apple-autorisasjonen. Vennligst prøv igjen.",
+    "account_label_apple_fallback": "Apple-konto"
 }

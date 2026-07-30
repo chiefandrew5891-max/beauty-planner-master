@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Kan ikke bestemme den aktuelle kontos e-mail.",
     "account_delete_google_reauth_in_progress": "Bekræfter sletning med Google...",
     "account_delete_apple_reauth_in_progress": "Bekræfter sletning med Apple...",
-    "account_delete_apple_revoke_failed": "Kunne ikke tilbagekalde Apple-godkendelse. Prøv venligst igen."
+    "account_delete_apple_revoke_failed": "Kunne ikke tilbagekalde Apple-godkendelse. Prøv venligst igen.",
+    "account_label_apple_fallback": "Apple-konto"
 }

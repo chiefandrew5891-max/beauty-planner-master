@@ -601,5 +601,6 @@
     "account_delete_email_missing": "वर्तमान खाते के ईमेल का पता लगाने में असमर्थ।",
     "account_delete_google_reauth_in_progress": "Google के साथ हटाने की पुष्टि की जा रही है...",
     "account_delete_apple_reauth_in_progress": "Apple के साथ हटाने की पुष्टि की जा रही है...",
-    "account_delete_apple_revoke_failed": "Apple का प्रमाणीकरण रद्द करने में विफल। कृपया पुनः प्रयास करें।"
+    "account_delete_apple_revoke_failed": "Apple का प्रमाणीकरण रद्द करने में विफल। कृपया पुनः प्रयास करें।",
+    "account_label_apple_fallback": "Apple खाता"
 }

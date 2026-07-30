@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Nem sikerült meghatározni a jelenlegi fiók e-mail-címét.",
     "account_delete_google_reauth_in_progress": "Törlés megerősítése Google-fiókkal...",
     "account_delete_apple_reauth_in_progress": "Törlés megerősítése Apple-fiókkal...",
-    "account_delete_apple_revoke_failed": "Az Apple-authorization visszavonása nem sikerült. Kérjük, próbálja újra."
+    "account_delete_apple_revoke_failed": "Az Apple-authorization visszavonása nem sikerült. Kérjük, próbálja újra.",
+    "account_label_apple_fallback": "Apple-fiók"
 }

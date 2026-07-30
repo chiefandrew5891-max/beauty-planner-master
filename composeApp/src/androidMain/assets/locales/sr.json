@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Није могуће утврдити е-маил тренутног налога.",
     "account_delete_google_reauth_in_progress": "Потврђивање брисања путем Google-а...",
     "account_delete_apple_reauth_in_progress": "Потврђивање брисања путем Apple-а...",
-    "account_delete_apple_revoke_failed": "Опозивање Apple овлашћења није успело. Покушајте поново."
+    "account_delete_apple_revoke_failed": "Опозивање Apple овлашћења није успело. Покушајте поново.",
+    "account_label_apple_fallback": "Apple налог"
 }

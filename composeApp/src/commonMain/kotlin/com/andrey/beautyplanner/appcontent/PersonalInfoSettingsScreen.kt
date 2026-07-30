@@ -181,6 +181,7 @@ fun PersonalInfoSettingsScreen() {
                                 deleteAccountPasswordError = null
                                 showDeleteAccountWarningDialog = false
                                 showDeleteAccountPasswordDialog = false
+                                appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
                                 scope.launch {
                                     runCatching {
@@ -189,6 +190,7 @@ fun PersonalInfoSettingsScreen() {
                                         // success path is handled by AppRootState:
                                         // it purges local state and navigates to AUTH_WELCOME
                                     }.onFailure { error ->
+                                        appState.hideGlobalLoading()
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
                                         showDeleteAccountWarningDialog = false
@@ -205,6 +207,7 @@ fun PersonalInfoSettingsScreen() {
                                 deleteAccountPasswordError = null
                                 showDeleteAccountWarningDialog = false
                                 showDeleteAccountPasswordDialog = false
+                                appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
                                 scope.launch {
                                     runCatching {
@@ -213,6 +216,7 @@ fun PersonalInfoSettingsScreen() {
                                         // success path is handled by AppRootState:
                                         // it purges local state and navigates to AUTH_WELCOME
                                     }.onFailure { error ->
+                                        appState.hideGlobalLoading()
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
                                         showDeleteAccountWarningDialog = false
@@ -341,6 +345,8 @@ fun PersonalInfoSettingsScreen() {
                         isDeletingAccount = true
                         deleteAccountPasswordError = null
 
+                        appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
+
                         scope.launch {
                             runCatching {
                                 appState.reauthenticateAndDeleteEmailAccount(
@@ -351,6 +357,7 @@ fun PersonalInfoSettingsScreen() {
                                 // success path is handled by AppRootState:
                                 // it purges local state and navigates to AUTH_WELCOME
                             }.onFailure { error ->
+                                appState.hideGlobalLoading()
                                 isDeletingAccount = false
                                 showDeleteAccountPasswordDialog = false
                                 deleteAccountPasswordDraft = ""

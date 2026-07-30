@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Kan het e-mailadres van het huidige account niet bepalen.",
     "account_delete_google_reauth_in_progress": "Verwijdering bevestigen met Google...",
     "account_delete_apple_reauth_in_progress": "Verwijdering bevestigen met Apple...",
-    "account_delete_apple_revoke_failed": "Intrekken van Apple-autorisatie mislukt. Probeer het opnieuw."
+    "account_delete_apple_revoke_failed": "Intrekken van Apple-autorisatie mislukt. Probeer het opnieuw.",
+    "account_label_apple_fallback": "Apple-account"
 }

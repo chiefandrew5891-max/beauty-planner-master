@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Impossibile determinare l'email dell'account corrente.",
     "account_delete_google_reauth_in_progress": "Conferma dell'eliminazione con Google in corso...",
     "account_delete_apple_reauth_in_progress": "Conferma dell'eliminazione con Apple in corso...",
-    "account_delete_apple_revoke_failed": "Impossibile revocare l'autorizzazione Apple. Riprova."
+    "account_delete_apple_revoke_failed": "Impossibile revocare l'autorizzazione Apple. Riprova.",
+    "account_label_apple_fallback": "Account Apple"
 }

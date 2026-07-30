@@ -678,6 +678,16 @@ class AppRootState(
                             authErrorMessage = null
                             currentScreen = Screen.MONTH
                         }.onFailure { error ->
+                            runCatching { AuthGateway.signOut() }
+                            runCatching { AuthGateway.clearCredentialState() }
+
+                            currentAuthUser = null
+                            clearPersistedAuthenticatedSession()
+                            clearSessionLocalState()
+                            reloadAppointmentsForGuestProfile()
+                            refreshAccessState()
+                            authResolved = true
+                            currentScreen = Screen.AUTH_WELCOME
                             authErrorMessage = mapAuthErrorMessage(error.message)
                         }
                     }
@@ -804,6 +814,7 @@ class AppRootState(
         authErrorMessage = null
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
+        hideGlobalLoading()
     }
 
     fun switchAccount() {

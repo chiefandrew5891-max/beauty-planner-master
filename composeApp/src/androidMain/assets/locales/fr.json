@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Impossible de déterminer l'e-mail du compte actuel.",
     "account_delete_google_reauth_in_progress": "Confirmation de la suppression avec Google...",
     "account_delete_apple_reauth_in_progress": "Confirmation de la suppression avec Apple...",
-    "account_delete_apple_revoke_failed": "Échec de la révocation de l'autorisation Apple. Veuillez réessayer."
+    "account_delete_apple_revoke_failed": "Échec de la révocation de l'autorisation Apple. Veuillez réessayer.",
+    "account_label_apple_fallback": "Compte Apple"
 }

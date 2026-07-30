@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Ni mogoče ugotoviti e-pošte trenutnega računa.",
     "account_delete_google_reauth_in_progress": "Potrjevanje izbrisa z Google...",
     "account_delete_apple_reauth_in_progress": "Potrjevanje izbrisa z Apple...",
-    "account_delete_apple_revoke_failed": "Preklic pooblastila Apple ni uspel. Prosimo, poskusite znova."
+    "account_delete_apple_revoke_failed": "Preklic pooblastila Apple ni uspel. Prosimo, poskusite znova.",
+    "account_label_apple_fallback": "Račun Apple"
 }

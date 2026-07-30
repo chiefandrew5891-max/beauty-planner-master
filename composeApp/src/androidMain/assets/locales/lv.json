@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Neizdevās noteikt pašreizējā konta e-pastu.",
     "account_delete_google_reauth_in_progress": "Apstiprina dzēšanu ar Google...",
     "account_delete_apple_reauth_in_progress": "Apstiprina dzēšanu ar Apple...",
-    "account_delete_apple_revoke_failed": "Neizdevās atsaukt Apple autorizāciju. Lūdzu, mēģiniet vēlreiz."
+    "account_delete_apple_revoke_failed": "Neizdevās atsaukt Apple autorizāciju. Lūdzu, mēģiniet vēlreiz.",
+    "account_label_apple_fallback": "Apple konts"
 }

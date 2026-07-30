@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Nu s-a putut determina adresa de e-mail a contului actual.",
     "account_delete_google_reauth_in_progress": "Se confirmă ștergerea cu Google...",
     "account_delete_apple_reauth_in_progress": "Se confirmă ștergerea cu Apple...",
-    "account_delete_apple_revoke_failed": "Revocarea autorizației Apple a eșuat. Vă rugăm să încercați din nou."
+    "account_delete_apple_revoke_failed": "Revocarea autorizației Apple a eșuat. Vă rugăm să încercați din nou.",
+    "account_label_apple_fallback": "Cont Apple"
 }

@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Tidak dapat menentukan email akun saat ini.",
     "account_delete_google_reauth_in_progress": "Mengonfirmasi penghapusan dengan Google...",
     "account_delete_apple_reauth_in_progress": "Mengonfirmasi penghapusan dengan Apple...",
-    "account_delete_apple_revoke_failed": "Gagal mencabut otorisasi Apple. Silakan coba lagi."
+    "account_delete_apple_revoke_failed": "Gagal mencabut otorisasi Apple. Silakan coba lagi.",
+    "account_label_apple_fallback": "Akun Apple"
 }

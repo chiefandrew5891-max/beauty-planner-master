@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Mevcut hesabın e-postası belirlenemedi.",
     "account_delete_google_reauth_in_progress": "Silme işlemi Google ile onaylanıyor...",
     "account_delete_apple_reauth_in_progress": "Silme işlemi Apple ile onaylanıyor...",
-    "account_delete_apple_revoke_failed": "Apple yetkilendirmesi iptal edilemedi. Lütfen tekrar deneyin."
+    "account_delete_apple_revoke_failed": "Apple yetkilendirmesi iptal edilemedi. Lütfen tekrar deneyin.",
+    "account_label_apple_fallback": "Apple Hesabı"
 }

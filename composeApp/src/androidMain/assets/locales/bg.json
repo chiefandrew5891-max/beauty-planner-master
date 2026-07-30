@@ -601,5 +601,6 @@
     "account_delete_email_missing": "Не може да се установи имейлът на текущия акаунт.",
     "account_delete_google_reauth_in_progress": "Потвърждаване на изтриването с Google...",
     "account_delete_apple_reauth_in_progress": "Потвърждаване на изтриването с Apple...",
-    "account_delete_apple_revoke_failed": "Неуспешно отмяна на оторизацията от Apple. Моля, опитайте отново."
+    "account_delete_apple_revoke_failed": "Неуспешно отмяна на оторизацията от Apple. Моля, опитайте отново.",
+    "account_label_apple_fallback": "Apple акаунт"
 }
