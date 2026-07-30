@@ -186,7 +186,14 @@ actual object BackendBridge {
             )
         )
     }
+    actual suspend fun deleteMyAccount(): Map<String, String> {
+        ensureAuthenticated()
 
+        return callBackendFunction(
+            name = "deleteMyAccount",
+            payload = emptyMap()
+        )
+    }
     private suspend fun callAccessFunction(
         name: String,
         payload: Map<String, String>

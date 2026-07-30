@@ -38,6 +38,33 @@ import UIKit
         delegateHolder = delegate
         controller.performRequests()
     }
+        @objc static func reauthenticateAndRevokeForDeletion(
+            completion: @escaping (NSDictionary?, NSString?) -> Void
+        ) {
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+                  let rootViewController = window.rootViewController else {
+                completion(nil, "Root view controller not found")
+                return
+            }
+
+            let nonce = randomNonceString()
+            currentNonce = nonce
+            revokeCompletionHandler = completion
+            completionHandler = nil
+            deleteFlowMode = true
+
+            let request = ASAuthorizationAppleIDProvider().createRequest()
+            request.requestedScopes = []
+            request.nonce = sha256(nonce)
+
+            let controller = ASAuthorizationController(authorizationRequests: [request])
+            let delegate = AppleSignInDelegate(rootViewController: rootViewController)
+            controller.delegate = delegate
+            controller.presentationContextProvider = delegate
+            delegateHolder = delegate
+            controller.performRequests()
+        }
 
     private static var delegateHolder: AppleSignInDelegate?
 
