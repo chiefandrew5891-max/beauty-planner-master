@@ -401,6 +401,8 @@ class AppRootState(
             else -> return false
         }
 
+        if (savedUserId.isBlank()) return false
+
         currentAuthUser = AuthUser(
             uid = savedUserId,
             provider = provider,
@@ -767,6 +769,35 @@ class AppRootState(
         selectedTimeSlot = ""
     }
 
+    private fun purgeDeletedAccountLocally() {
+        clearSessionLocalState()
+
+        runCatching {
+            DataManager.saveToDatabase(
+                data = emptyList(),
+                profileKey = LocalProfileManager.currentProfileKey()
+            )
+        }
+
+        currentAuthUser = null
+        clearPersistedAuthenticatedSession()
+
+        AppSettings.lastAuthProvider = ""
+        AppSettings.lastAuthEmail = ""
+        AppSettings.lastAuthDisplayName = ""
+        AppSettings.localProfileUserId = ""
+        AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
+        AppSettings.persist()
+
+        reloadAppointmentsForGuestProfile()
+        refreshAccessState()
+
+        authResolved = true
+        authErrorMessage = null
+        screenHistory = emptyList()
+        currentScreen = Screen.AUTH_WELCOME
+    }
+
     fun switchAccount() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
@@ -858,26 +889,10 @@ class AppRootState(
             throw IllegalStateException(Locales.t("account_delete_failed"))
         }
 
-        DataManager.saveToDatabase(
-            data = emptyList(),
-            profileKey = LocalProfileManager.currentProfileKey()
-        )
-
-        clearSessionLocalState()
-
         AuthGateway.signOut()
         AuthGateway.clearCredentialState()
 
-        currentAuthUser = null
-        clearPersistedAuthenticatedSession()
-
-        reloadAppointmentsForGuestProfile()
-        refreshAccessState()
-
-        authResolved = true
-        screenHistory = emptyList()
-        currentScreen = Screen.AUTH_WELCOME
-        authErrorMessage = null
+        purgeDeletedAccountLocally()
     }
 
     suspend fun reauthenticateAndDeleteGoogleAccount() {
@@ -903,26 +918,10 @@ class AppRootState(
             throw IllegalStateException(Locales.t("account_delete_failed"))
         }
 
-        DataManager.saveToDatabase(
-            data = emptyList(),
-            profileKey = LocalProfileManager.currentProfileKey()
-        )
-
-        clearSessionLocalState()
-
         AuthGateway.signOut()
         AuthGateway.clearCredentialState()
 
-        currentAuthUser = null
-        clearPersistedAuthenticatedSession()
-
-        reloadAppointmentsForGuestProfile()
-        refreshAccessState()
-
-        authResolved = true
-        screenHistory = emptyList()
-        currentScreen = Screen.AUTH_WELCOME
-        authErrorMessage = null
+        purgeDeletedAccountLocally()
     }
 
     suspend fun reauthenticateAndDeleteAppleAccount() {
@@ -952,26 +951,10 @@ class AppRootState(
             throw IllegalStateException(Locales.t("account_delete_failed"))
         }
 
-        DataManager.saveToDatabase(
-            data = emptyList(),
-            profileKey = LocalProfileManager.currentProfileKey()
-        )
-
-        clearSessionLocalState()
-
         AuthGateway.signOut()
         AuthGateway.clearCredentialState()
 
-        currentAuthUser = null
-        clearPersistedAuthenticatedSession()
-
-        reloadAppointmentsForGuestProfile()
-        refreshAccessState()
-
-        authResolved = true
-        screenHistory = emptyList()
-        currentScreen = Screen.AUTH_WELCOME
-        authErrorMessage = null
+        purgeDeletedAccountLocally()
     }
 
     fun openEmailSignInScreen() {
