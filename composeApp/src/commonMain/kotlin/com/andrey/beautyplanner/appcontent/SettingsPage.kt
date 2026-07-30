@@ -235,6 +235,13 @@ fun SettingsPage(
                 color = onBg
             )
 
+            // =========================================================
+            // TEMP HIDE FOR APP REVIEW: MASTER PROFILE SETTINGS BLOCK
+            // Блок профиля мастера временно скрыт из Settings.
+            // Логику перехода не удалять, только скрытие UI.
+            // BEGIN TEMP HIDE
+            // =========================================================
+            /*
             SettingsSectionBlock(
                 title = Locales.t("profile_settings_title"),
                 description = Locales.t("profile_settings_description"),
@@ -250,6 +257,10 @@ fun SettingsPage(
                 modifier = Modifier.padding(vertical = 2.dp),
                 color = onSurface.copy(alpha = 0.10f)
             )
+            */
+            // =========================================================
+            // END TEMP HIDE FOR APP REVIEW: MASTER PROFILE SETTINGS BLOCK
+            // =========================================================
 
             SettingsSectionBlock(
                 title = Locales.t("appearance_settings"),

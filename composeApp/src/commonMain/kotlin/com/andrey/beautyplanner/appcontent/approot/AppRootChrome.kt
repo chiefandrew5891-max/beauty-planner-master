@@ -326,16 +326,21 @@ fun AppRootChrome(
                         } else {
                             Locales.t("account_anonymous")
                         }
+                        // =========================================================
+                        // TEMP HIDE FOR APP REVIEW: PROFILE HEADER TAP (GUEST)
+                        // Отключаем переход в профиль по тапу на header.
+                        // BEGIN TEMP HIDE
+                        // =========================================================
                         DrawerAccountHeader(
                             initials = guestInitials,
                             title = guestTitle,
                             subtitle = null,
                             provider = SignInProvider.ANONYMOUS,
-                            onProfileClick = {
-                                state.navigateTo(Screen.PERSONAL_INFO_SETTINGS)
-                                state.closeDrawer()
-                            }
+                            onProfileClick = null
                         )
+                        // =========================================================
+                        // END TEMP HIDE FOR APP REVIEW: PROFILE HEADER TAP (GUEST)
+                        // =========================================================
 
                         DrawerSubscriptionInfo()
 
@@ -375,16 +380,21 @@ fun AppRootChrome(
                             )
                         }
 
+                        // =========================================================
+                        // TEMP HIDE FOR APP REVIEW: PROFILE HEADER TAP (AUTHORIZED)
+                        // Отключаем переход в профиль по тапу на header.
+                        // BEGIN TEMP HIDE
+                        // =========================================================
                         DrawerAccountHeader(
                             initials = initials,
                             title = title,
                             subtitle = subtitle,
                             provider = authUser?.provider,
-                            onProfileClick = {
-                                state.navigateTo(Screen.PERSONAL_INFO_SETTINGS)
-                                state.closeDrawer()
-                            }
+                            onProfileClick = null
                         )
+                        // =========================================================
+                        // END TEMP HIDE FOR APP REVIEW: PROFILE HEADER TAP (AUTHORIZED)
+                        // =========================================================
 
                         DrawerSubscriptionInfo()
 
@@ -440,6 +450,13 @@ fun AppRootChrome(
                         state.closeDrawer()
                     }
 
+                    // =========================================================
+                    // TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS NAV ENTRY
+                    // Скрыто временно для review-сборки.
+                    // Вернуть после возобновления работы над BeautyBooker integration.
+                    // BEGIN TEMP HIDE
+                    // =========================================================
+                    /*
                     DrawerItem(
                         title = Locales.t("nav_client_interactions"),
                         selected = state.currentScreen == Screen.CLIENT_INTERACTIONS
@@ -458,6 +475,10 @@ fun AppRootChrome(
                         state.currentScreen = Screen.CLIENT_INTERACTIONS
                         state.closeDrawer()
                     }
+                    */
+                    // =========================================================
+                    // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS NAV ENTRY
+                    // =========================================================
 
                     DrawerItem(
                         title = Locales.t("nav_settings"),

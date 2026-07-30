@@ -273,7 +273,18 @@ fun AppRootContent(
                 )
             }
 
-            Screen.CLIENT_INTERACTIONS -> ClientInteractionsScreen()
+            // =========================================================
+            // TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS SCREEN
+            // Экран временно скрыт из пользовательского UI.
+            // Логику и файл экрана не удалять.
+            // BEGIN TEMP HIDE
+            // =========================================================
+            Screen.CLIENT_INTERACTIONS -> {
+                // Temporarily hidden for App Store / review-safe build.
+            }
+            // =========================================================
+            // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS SCREEN
+            // =========================================================
 
             Screen.MONTH -> {
                 var nowTimeHm by remember { mutableStateOf(getCurrentTimeHm()) }
@@ -780,7 +791,17 @@ fun AppRootContent(
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()
             Screen.APPEARANCE_SETTINGS -> AppearanceSettingsScreen(state = state)
-            Screen.PERSONAL_INFO_SETTINGS -> PersonalInfoSettingsScreen()
+            // =========================================================
+            // TEMP HIDE FOR APP REVIEW: PERSONAL INFO / MASTER PROFILE SCREEN
+            // Экран профиля временно скрыт из пользовательского UI.
+            // BEGIN TEMP HIDE
+            // =========================================================
+            Screen.PERSONAL_INFO_SETTINGS -> {
+                // Temporarily hidden for App Store / review-safe build.
+            }
+            // =========================================================
+            // END TEMP HIDE FOR APP REVIEW: PERSONAL INFO / MASTER PROFILE SCREEN
+            // =========================================================
         }
 
         if (state.showBookingDialog) {
