@@ -852,7 +852,11 @@ class AppRootState(
             }
         }
 
-        com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+        val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+        val deleteOk = deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+        if (!deleteOk) {
+            throw IllegalStateException(Locales.t("account_delete_failed"))
+        }
 
         DataManager.saveToDatabase(
             data = emptyList(),
@@ -870,6 +874,7 @@ class AppRootState(
         reloadAppointmentsForGuestProfile()
         refreshAccessState()
 
+        authResolved = true
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
         authErrorMessage = null
@@ -892,7 +897,11 @@ class AppRootState(
             }
         }
 
-        com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+        val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+        val deleteOk = deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+        if (!deleteOk) {
+            throw IllegalStateException(Locales.t("account_delete_failed"))
+        }
 
         DataManager.saveToDatabase(
             data = emptyList(),
@@ -910,6 +919,7 @@ class AppRootState(
         reloadAppointmentsForGuestProfile()
         refreshAccessState()
 
+        authResolved = true
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
         authErrorMessage = null
@@ -936,7 +946,11 @@ class AppRootState(
             )
         }
 
-        com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+        val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+        val deleteOk = deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+        if (!deleteOk) {
+            throw IllegalStateException(Locales.t("account_delete_failed"))
+        }
 
         DataManager.saveToDatabase(
             data = emptyList(),
@@ -954,6 +968,7 @@ class AppRootState(
         reloadAppointmentsForGuestProfile()
         refreshAccessState()
 
+        authResolved = true
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
         authErrorMessage = null

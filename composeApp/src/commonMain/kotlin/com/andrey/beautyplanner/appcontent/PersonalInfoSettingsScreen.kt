@@ -675,6 +675,9 @@ fun PersonalInfoSettingsScreen() {
                     },
                     enabled = !isDeletingAccount
                 )
+
+                Spacer(Modifier.height(36.dp))
+
                 deleteAccountPasswordError?.takeIf { it.isNotBlank() }?.let { errorText ->
                     Text(
                         text = errorText,
