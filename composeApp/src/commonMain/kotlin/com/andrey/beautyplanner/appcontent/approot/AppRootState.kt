@@ -14,8 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -31,6 +29,8 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import com.andrey.beautyplanner.remote.MasterScheduleSync
+
+private var globalAppRootStateInstance: AppRootState? = null
 
 @Stable
 class AppRootState(
@@ -1778,13 +1778,21 @@ class AppRootState(
 
 @Composable
 fun rememberAppRootState(): AppRootState {
+    // Если экземпляр уже создан (владельцем-корнем AppRoot) — возвращаем его,
+    // чтобы все экраны работали с ОДНИМ и тем же состоянием (общий overlay, навигация и т.д.)
+    globalAppRootStateInstance?.let { return it }
+
     val appointments = remember { mutableStateListOf<Appointment>() }
     val today = remember { Clock.System.todayIn(TimeZone.currentSystemDefault()) }
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val state = remember { AppRootState(appointments, today, drawerState, scope) }
+    val state = remember {
+        AppRootState(appointments, today, drawerState, scope).also {
+            globalAppRootStateInstance = it
+        }
+    }
 
     LaunchedEffect(Unit) {
         val startCode = AppSettings.languageCodes[AppSettings.selectedLanguage] ?: "en"

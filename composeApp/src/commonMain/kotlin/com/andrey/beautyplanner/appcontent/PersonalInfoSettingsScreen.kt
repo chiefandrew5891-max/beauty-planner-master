@@ -57,7 +57,7 @@ import com.andrey.beautyplanner.auth.SignInProvider
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PersonalInfoSettingsScreen() {
+fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.approot.AppRootState) {
     val fontScale = AppSettings.getFontScale()
     val onBg = MaterialTheme.colors.onBackground
     val onSurface = MaterialTheme.colors.onSurface
@@ -91,7 +91,7 @@ fun PersonalInfoSettingsScreen() {
     }
 
     val scope = rememberCoroutineScope()
-    val appState = com.andrey.beautyplanner.appcontent.approot.rememberAppRootState()
+    //val appState = com.andrey.beautyplanner.appcontent.approot.rememberAppRootState()
     val authProvider = appState.currentAuthUser?.provider
 
     val hasChanges =

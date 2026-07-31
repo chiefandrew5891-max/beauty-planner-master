@@ -791,7 +791,7 @@ fun AppRootContent(
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()
             Screen.APPEARANCE_SETTINGS -> AppearanceSettingsScreen(state = state)
-            Screen.PERSONAL_INFO_SETTINGS -> PersonalInfoSettingsScreen()
+            Screen.PERSONAL_INFO_SETTINGS -> PersonalInfoSettingsScreen(appState = state)
         }
 
         if (state.showBookingDialog) {
