@@ -512,117 +512,147 @@ fun AppRootChrome(
                         state.currentScreen == Screen.PREMIUM_ACCESS
 
             Box(modifier = Modifier.fillMaxSize()) {
-                Scaffold(
-                    modifier = Modifier.statusBarsPadding(),
-                    topBar = {
-                        when {
-                            isAuthWelcomeScreen -> {
-                                // no top bar on the root auth screen
-                            }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Scaffold(
+                        modifier = Modifier.statusBarsPadding(),
+                        topBar = {
+                            when {
+                                isAuthWelcomeScreen -> {
+                                    // no top bar on the root auth screen
+                                }
 
-                            isAuthEmailScreen -> {
-                                TopAppBar(
-                                    backgroundColor = MaterialTheme.colors.surface,
-                                    elevation = 2.dp,
-                                    contentPadding = PaddingValues(horizontal = 8.dp)
-                                ) {
-                                    Box(Modifier.fillMaxSize()) {
-                                        IconButton(
-                                            onClick = {
-                                                state.currentScreen = Screen.AUTH_WELCOME
-                                            },
-                                            modifier = Modifier.align(Alignment.CenterStart)
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.AutoMirrored.Filled.Reply,
-                                                contentDescription = Locales.t("cd_back"),
-                                                tint = MaterialTheme.colors.primary
-                                            )
+                                isAuthEmailScreen -> {
+                                    TopAppBar(
+                                        backgroundColor = MaterialTheme.colors.surface,
+                                        elevation = 2.dp,
+                                        contentPadding = PaddingValues(horizontal = 8.dp)
+                                    ) {
+                                        Box(Modifier.fillMaxSize()) {
+                                            IconButton(
+                                                onClick = {
+                                                    state.currentScreen = Screen.AUTH_WELCOME
+                                                },
+                                                modifier = Modifier.align(Alignment.CenterStart)
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.Reply,
+                                                    contentDescription = Locales.t("cd_back"),
+                                                    tint = MaterialTheme.colors.primary
+                                                )
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            else -> {
-                                val showBackButton = !isHomeScreen
+                                else -> {
+                                    val showBackButton = !isHomeScreen
 
-                                TopAppBar(
-                                    backgroundColor = MaterialTheme.colors.surface,
-                                    elevation = 2.dp,
-                                    contentPadding = PaddingValues(horizontal = 8.dp)
-                                ) {
-                                    Box(Modifier.fillMaxSize()) {
-                                        IconButton(
-                                            onClick = {
-                                                if (showBackButton) {
-                                                    state.navigateBack()
-                                                } else {
-                                                    state.openDrawer()
-                                                }
-                                            },
-                                            modifier = Modifier.align(Alignment.CenterStart)
-                                        ) {
-                                            Icon(
-                                                imageVector = if (showBackButton) {
-                                                    Icons.AutoMirrored.Filled.Reply
-                                                } else {
-                                                    Icons.Default.Menu
-                                                },
-                                                contentDescription = if (showBackButton) {
-                                                    Locales.t("cd_back")
-                                                } else {
-                                                    Locales.t("cd_menu")
-                                                },
-                                                tint = MaterialTheme.colors.primary
-                                            )
-                                        }
-
-                                        Row(
-                                            modifier = Modifier.align(Alignment.CenterEnd),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            if (isNestedScreen) {
-                                                IconButton(
-                                                    onClick = { state.navigateHome() }
-                                                ) {
-                                                    Icon(
-                                                        imageVector = Icons.Default.Home,
-                                                        contentDescription = Locales.t("nav_main"),
-                                                        tint = MaterialTheme.colors.primary,
-                                                        modifier = Modifier.size(24.dp)
-                                                    )
-                                                }
-                                                Spacer(Modifier.width(4.dp))
-                                            }
-
+                                    TopAppBar(
+                                        backgroundColor = MaterialTheme.colors.surface,
+                                        elevation = 2.dp,
+                                        contentPadding = PaddingValues(horizontal = 8.dp)
+                                    ) {
+                                        Box(Modifier.fillMaxSize()) {
                                             IconButton(
                                                 onClick = {
-                                                    if (state.currentScreen == Screen.SETTINGS) {
-                                                        state.navigateHome()
+                                                    if (showBackButton) {
+                                                        state.navigateBack()
                                                     } else {
-                                                        state.screenHistory = emptyList()
-                                                        state.currentScreen = Screen.SETTINGS
+                                                        state.openDrawer()
                                                     }
-                                                }
+                                                },
+                                                modifier = Modifier.align(Alignment.CenterStart)
                                             ) {
                                                 Icon(
-                                                    imageVector = Icons.Default.Settings,
-                                                    contentDescription = Locales.t("cd_settings"),
-                                                    tint = if (state.currentScreen == Screen.SETTINGS) {
-                                                        MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                                                    imageVector = if (showBackButton) {
+                                                        Icons.AutoMirrored.Filled.Reply
                                                     } else {
-                                                        MaterialTheme.colors.primary
-                                                    }
+                                                        Icons.Default.Menu
+                                                    },
+                                                    contentDescription = if (showBackButton) {
+                                                        Locales.t("cd_back")
+                                                    } else {
+                                                        Locales.t("cd_menu")
+                                                    },
+                                                    tint = MaterialTheme.colors.primary
                                                 )
+                                            }
+
+                                            Row(
+                                                modifier = Modifier.align(Alignment.CenterEnd),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                if (isNestedScreen) {
+                                                    IconButton(
+                                                        onClick = { state.navigateHome() }
+                                                    ) {
+                                                        Icon(
+                                                            imageVector = Icons.Default.Home,
+                                                            contentDescription = Locales.t("nav_main"),
+                                                            tint = MaterialTheme.colors.primary,
+                                                            modifier = Modifier.size(24.dp)
+                                                        )
+                                                    }
+                                                    Spacer(Modifier.width(4.dp))
+                                                }
+
+                                                IconButton(
+                                                    onClick = {
+                                                        if (state.currentScreen == Screen.SETTINGS) {
+                                                            state.navigateHome()
+                                                        } else {
+                                                            state.screenHistory = emptyList()
+                                                            state.currentScreen = Screen.SETTINGS
+                                                        }
+                                                    }
+                                                ) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Settings,
+                                                        contentDescription = Locales.t("cd_settings"),
+                                                        tint = if (state.currentScreen == Screen.SETTINGS) {
+                                                            MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                                                        } else {
+                                                            MaterialTheme.colors.primary
+                                                        }
+                                                    )
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                    ) { padding ->
+                        content(padding)
                     }
-                ) { padding ->
-                    content(padding)
+
+                    if (state.isGlobalLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black.copy(alpha = 0.35f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(14.dp)
+                            ) {
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colors.primary
+                                )
+
+                                state.globalLoadingMessage?.takeIf { it.isNotBlank() }?.let { message ->
+                                    Text(
+                                        text = message,
+                                        color = Color.White,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (state.isGlobalLoading) {
