@@ -10,4 +10,5 @@ expect object AuthGateway {
     suspend fun sendPasswordReset(email: String): SignInResult
     suspend fun signOut()
     suspend fun clearCredentialState()
+    suspend fun prepareForNewSignIn()
 }

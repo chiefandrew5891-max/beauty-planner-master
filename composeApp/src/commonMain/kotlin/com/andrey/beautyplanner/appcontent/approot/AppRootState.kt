@@ -30,7 +30,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import com.andrey.beautyplanner.remote.MasterScheduleSync
 
-private var globalAppRootStateInstance: AppRootState? = null
 
 @Stable
 class AppRootState(
@@ -636,8 +635,10 @@ class AppRootState(
                         }.onFailure { throwable ->
                             runCatching { AuthGateway.signOut() }
                             runCatching { AuthGateway.clearCredentialState() }
-                            currentAuthUser = null
-                            authErrorMessage = mapAuthErrorMessage(throwable.message)
+
+                            resetToSignedOutState(
+                                keepAuthErrorMessage = mapAuthErrorMessage(throwable.message)
+                            )
                         }
                     }
                     is SignInResult.Cancelled -> {
@@ -690,14 +691,9 @@ class AppRootState(
                             runCatching { AuthGateway.signOut() }
                             runCatching { AuthGateway.clearCredentialState() }
 
-                            currentAuthUser = null
-                            clearPersistedAuthenticatedSession()
-                            clearSessionLocalState()
-                            reloadAppointmentsForGuestProfile()
-                            refreshAccessState()
-                            authResolved = true
-                            currentScreen = Screen.AUTH_WELCOME
-                            authErrorMessage = mapAuthErrorMessage(error.message)
+                            resetToSignedOutState(
+                                keepAuthErrorMessage = mapAuthErrorMessage(error.message)
+                            )
                         }
                     }
 
@@ -789,6 +785,21 @@ class AppRootState(
         bookingReadOnly = false
         selectedTimeSlot = ""
         AppSettings.clearMasterProfileLocalState()
+    }
+
+    private fun resetToSignedOutState(
+        keepAuthErrorMessage: String? = null
+    ) {
+        currentAuthUser = null
+        clearPersistedAuthenticatedSession()
+        clearSessionLocalState()
+        AppSettings.clearMasterProfileLocalState()
+        reloadAppointmentsForGuestProfile()
+        refreshAccessState()
+        authResolved = false
+        screenHistory = emptyList()
+        currentScreen = Screen.AUTH_WELCOME
+        authErrorMessage = keepAuthErrorMessage
     }
 
     private fun purgeDeletedAccountLocally() {
@@ -1827,21 +1838,13 @@ class AppRootState(
 
 @Composable
 fun rememberAppRootState(): AppRootState {
-    // Если экземпляр уже создан (владельцем-корнем AppRoot) — возвращаем его,
-    // чтобы все экраны работали с ОДНИМ и тем же состоянием (общий overlay, навигация и т.д.)
-    globalAppRootStateInstance?.let { return it }
-
     val appointments = remember { mutableStateListOf<Appointment>() }
     val today = remember { Clock.System.todayIn(TimeZone.currentSystemDefault()) }
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val state = remember {
-        AppRootState(appointments, today, drawerState, scope).also {
-            globalAppRootStateInstance = it
-        }
-    }
+    val state = remember { AppRootState(appointments, today, drawerState, scope) }
 
     LaunchedEffect(Unit) {
         val startCode = AppSettings.languageCodes[AppSettings.selectedLanguage] ?: "en"

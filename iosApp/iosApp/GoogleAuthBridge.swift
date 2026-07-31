@@ -203,6 +203,23 @@ import GoogleSignIn
         }
     }
 
+    @objc static func prepareForNewSignIn() -> NSString? {
+        do {
+            if Auth.auth().currentUser != nil {
+                try Auth.auth().signOut()
+            }
+
+            GIDSignIn.sharedInstance.signOut()
+            GIDSignIn.sharedInstance.disconnect { error in
+                // intentionally ignored, best-effort cleanup
+            }
+
+            return nil
+        } catch {
+            return error.localizedDescription as NSString
+        }
+    }
+
     @objc static func callBackend(
         _ name: String,
         payload: NSDictionary,

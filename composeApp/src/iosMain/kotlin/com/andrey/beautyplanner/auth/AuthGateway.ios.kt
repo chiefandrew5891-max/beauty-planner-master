@@ -57,6 +57,8 @@ actual object AuthGateway {
     }
 
     actual suspend fun signInWithGoogle(): SignInResult {
+        runCatching { prepareForNewSignIn() }
+
         val deferred = CompletableDeferred<SignInResult>()
         val launcher = GoogleSignInBridge.startGoogleSignIn
             ?: return SignInResult.Error("Google Sign-In bridge is not connected.")
@@ -67,6 +69,8 @@ actual object AuthGateway {
     }
 
     actual suspend fun signInWithApple(): SignInResult {
+        runCatching { prepareForNewSignIn() }
+
         val deferred = CompletableDeferred<SignInResult>()
         val launcher = AppleSignInBridge.startAppleSignIn
             ?: return SignInResult.Error("Apple Sign-In bridge is not connected.")
@@ -172,6 +176,16 @@ actual object AuthGateway {
 
     actual suspend fun clearCredentialState() {
         // no-op on iOS for now; native auth state is queried via __currentUser
+    }
+
+    actual suspend fun prepareForNewSignIn() {
+        val caller = BackendBridgeConnector.callBackend ?: return
+        val deferred = CompletableDeferred<Map<String, String>>()
+
+        runCatching {
+            caller.invoke("__prepareForNewSignIn", emptyMap(), deferred)
+            deferred.await()
+        }
     }
 
     private fun mapUser(result: Map<String, String>): AuthUser {

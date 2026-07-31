@@ -75,6 +75,8 @@ actual object AuthGateway {
         val serverClientId = getServerClientId(activity)
             ?: return SignInResult.Error(Locales.t("auth_google_failed"))
 
+        runCatching { prepareForNewSignIn() }
+
         val credentialManagerResult = tryCredentialManagerGoogleSignIn(
             activity = activity,
             serverClientId = serverClientId
@@ -260,6 +262,24 @@ actual object AuthGateway {
         }
     }
 
+    actual suspend fun prepareForNewSignIn() {
+        runCatching { Firebase.auth.signOut() }
+
+        AndroidAppContext.activity?.let { activity ->
+            runCatching {
+                GoogleSignIn.getClient(
+                    activity,
+                    buildGoogleSignInOptions(
+                        getServerClientId(activity).orEmpty()
+                    )
+                ).signOut()
+            }.onFailure {
+                Log.w("AuthGateway", "GoogleSignInClient signOut during prepareForNewSignIn failed", it)
+            }
+        }
+
+        runCatching { clearCredentialState() }
+    }
     private fun getServerClientId(activity: android.app.Activity): String? {
         val webClientIdRes = activity.resources.getIdentifier(
             "default_web_client_id",

@@ -325,6 +325,17 @@ struct ComposeView: UIViewControllerRepresentable {
                 return
             }
 
+            if name == "__prepareForNewSignIn" {
+                if let error = GoogleAuthBridge.prepareForNewSignIn() {
+                    deferred.completeExceptionally(
+                        exception: KotlinIllegalStateException(message: error as String)
+                    )
+                } else {
+                    deferred.complete(value: [:])
+                }
+                return
+            }
+
             let nsPayload = NSMutableDictionary()
             for (key, value) in payload {
                 nsPayload[key] = value

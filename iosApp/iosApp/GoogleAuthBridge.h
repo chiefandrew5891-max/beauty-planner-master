@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)signInAnonymouslyWithCompletion:(void (^)(NSDictionary * _Nullable result, NSString * _Nullable error))completion;
 + (NSDictionary * _Nullable)currentUser;
 + (NSString * _Nullable)signOutUser;
++ (NSString * _Nullable)prepareForNewSignIn;
 + (void)callBackend:(NSString *)name
         payload:(NSDictionary *)payload
         completion:(void (^)(NSDictionary * _Nullable result, NSString * _Nullable error))completion;
