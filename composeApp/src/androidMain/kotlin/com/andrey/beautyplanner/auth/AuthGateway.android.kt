@@ -84,15 +84,38 @@ actual object AuthGateway {
             return credentialManagerResult
         }
 
+        // Если пользователь сам отменил выбор аккаунта — не ретраим,
+        // иначе снова откроется системный диалог.
+        if (credentialManagerResult is SignInResult.Cancelled) {
+            return credentialManagerResult
+        }
+
         Log.w(
             "AuthGateway",
-            "Credential Manager Google sign-in failed, fallback to GoogleSignInClient"
+            "Credential Manager Google sign-in failed, retry after clearing state"
+        )
+
+        // Первая попытка часто падает из-за протухшего credential state
+        // после signOut/удаления аккаунта. Чистим и пробуем ещё раз.
+        runCatching { clearCredentialState() }
+
+        val retryResult = tryCredentialManagerGoogleSignIn(
+            activity = activity,
+            serverClientId = serverClientId
+        )
+        if (retryResult is SignInResult.Success) {
+            return retryResult
+        }
+
+        Log.w(
+            "AuthGateway",
+            "Credential Manager retry failed, fallback to GoogleSignInClient"
         )
 
         return tryLegacyGoogleSignIn(
             activity = activity,
             serverClientId = serverClientId,
-            primaryFailure = credentialManagerResult
+            primaryFailure = retryResult
         )
     }
 

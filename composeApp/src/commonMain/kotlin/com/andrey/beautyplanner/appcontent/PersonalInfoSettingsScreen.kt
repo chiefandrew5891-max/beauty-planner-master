@@ -183,22 +183,15 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                                 showDeleteAccountPasswordDialog = false
                                 appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
-                                scope.launch {
-                                    runCatching {
-                                        appState.reauthenticateAndDeleteGoogleAccount()
-                                    }.onSuccess {
-                                        // success path is handled by AppRootState:
-                                        // it purges local state and navigates to AUTH_WELCOME
-                                    }.onFailure { error ->
-                                        appState.hideGlobalLoading()
+                                appState.startDeleteGoogleAccount(
+                                    onError = { msg ->
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
                                         showDeleteAccountWarningDialog = false
                                         showDeleteAccountPasswordDialog = false
-                                        deleteAccountPasswordError =
-                                            error.message ?: Locales.t("account_delete_failed")
+                                        deleteAccountPasswordError = msg
                                     }
-                                }
+                                )
                             }
 
                             com.andrey.beautyplanner.auth.SignInProvider.APPLE -> {
@@ -209,22 +202,15 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                                 showDeleteAccountPasswordDialog = false
                                 appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
-                                scope.launch {
-                                    runCatching {
-                                        appState.reauthenticateAndDeleteAppleAccount()
-                                    }.onSuccess {
-                                        // success path is handled by AppRootState:
-                                        // it purges local state and navigates to AUTH_WELCOME
-                                    }.onFailure { error ->
-                                        appState.hideGlobalLoading()
+                                appState.startDeleteGoogleAccount(
+                                    onError = { msg ->
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
                                         showDeleteAccountWarningDialog = false
                                         showDeleteAccountPasswordDialog = false
-                                        deleteAccountPasswordError =
-                                            error.message ?: Locales.t("account_delete_failed")
+                                        deleteAccountPasswordError = msg
                                     }
-                                }
+                                )
                             }
 
                             else -> {
@@ -347,24 +333,17 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
 
                         appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
-                        scope.launch {
-                            runCatching {
-                                appState.reauthenticateAndDeleteEmailAccount(
-                                    email = email,
-                                    password = deleteAccountPasswordDraft
-                                )
-                            }.onSuccess {
-                                // success path is handled by AppRootState:
-                                // it purges local state and navigates to AUTH_WELCOME
-                            }.onFailure { error ->
-                                appState.hideGlobalLoading()
+                        appState.startDeleteGoogleAccount(
+                            email = email,
+                            password = deleteAccountPasswordDraft,
+                            onError = { msg ->
                                 isDeletingAccount = false
-                                showDeleteAccountPasswordDialog = false
                                 deleteAccountPasswordDraft = ""
-                                deleteAccountPasswordError =
-                                    error.message ?: Locales.t("account_delete_failed")
+                                showDeleteAccountWarningDialog = false
+                                showDeleteAccountPasswordDialog = false
+                                deleteAccountPasswordError = msg
                             }
-                        }
+                        )
                     },
                     enabled = deleteAccountPasswordDraft.isNotBlank() && !isDeletingAccount,
                     shape = RoundedCornerShape(12.dp)

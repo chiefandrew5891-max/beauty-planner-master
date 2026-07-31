@@ -605,6 +605,7 @@ class AppRootState(
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
             try {
+                runCatching { AuthGateway.clearCredentialState() }
                 when (val result = AuthGateway.signInWithGoogle()) {
                     is SignInResult.Success -> {
                         runCatching {
@@ -633,6 +634,9 @@ class AppRootState(
                             authErrorMessage = null
                             currentScreen = Screen.MONTH
                         }.onFailure { throwable ->
+                            runCatching { AuthGateway.signOut() }
+                            runCatching { AuthGateway.clearCredentialState() }
+                            currentAuthUser = null
                             authErrorMessage = mapAuthErrorMessage(throwable.message)
                         }
                     }
@@ -652,6 +656,7 @@ class AppRootState(
     fun continueWithApple() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
+            runCatching { AuthGateway.clearCredentialState() }
             try {
                 when (val result = AuthGateway.signInWithApple()) {
                     is SignInResult.Success -> {
@@ -787,6 +792,7 @@ class AppRootState(
     }
 
     private fun purgeDeletedAccountLocally() {
+        hideGlobalLoading()
         clearSessionLocalState()
 
         runCatching {
@@ -910,6 +916,47 @@ class AppRootState(
                 }
             } finally {
                 hideGlobalLoading()
+            }
+        }
+    }
+
+    fun startDeleteGoogleAccount(
+        onError: (String) -> Unit
+    ) {
+        scope.launch {
+            runCatching {
+                reauthenticateAndDeleteGoogleAccount()
+            }.onFailure { error ->
+                hideGlobalLoading()
+                onError(error.message ?: Locales.t("account_delete_failed"))
+            }
+        }
+    }
+
+    fun startDeleteAppleAccount(
+        onError: (String) -> Unit
+    ) {
+        scope.launch {
+            runCatching {
+                reauthenticateAndDeleteAppleAccount()
+            }.onFailure { error ->
+                hideGlobalLoading()
+                onError(error.message ?: Locales.t("account_delete_failed"))
+            }
+        }
+    }
+
+    fun startDeleteEmailAccount(
+        email: String,
+        password: String,
+        onError: (String) -> Unit
+    ) {
+        scope.launch {
+            runCatching {
+                reauthenticateAndDeleteEmailAccount(email, password)
+            }.onFailure { error ->
+                hideGlobalLoading()
+                onError(error.message ?: Locales.t("account_delete_failed"))
             }
         }
     }
