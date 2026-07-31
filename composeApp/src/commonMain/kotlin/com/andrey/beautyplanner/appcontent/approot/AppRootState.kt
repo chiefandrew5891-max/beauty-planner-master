@@ -1051,7 +1051,7 @@ class AppRootState(
 
         purgeDeletedAccountLocally()
     }
-//
+
     fun openEmailSignInScreen() {
         authErrorMessage = null
         authEmailRegisterMode = false
