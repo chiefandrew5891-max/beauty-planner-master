@@ -866,6 +866,7 @@ class AppRootState(
 
     fun switchAccount() {
         scope.launch {
+            drawerState.close()
             showGlobalLoading(Locales.t("loading"))
             try {
                 runCatching {
@@ -894,6 +895,7 @@ class AppRootState(
 
     fun signOutCompletely() {
         scope.launch {
+            drawerState.close()
             showGlobalLoading(Locales.t("loading"))
             try {
                 runCatching {
