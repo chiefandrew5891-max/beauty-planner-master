@@ -202,7 +202,7 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                                 showDeleteAccountPasswordDialog = false
                                 appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
-                                appState.startDeleteGoogleAccount(
+                                appState.startDeleteAppleAccount(
                                     onError = { msg ->
                                         isDeletingAccount = false
                                         deleteAccountPasswordDraft = ""
@@ -333,7 +333,7 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
 
                         appState.showGlobalLoading(Locales.t("account_delete_in_progress"))
 
-                        appState.startDeleteGoogleAccount(
+                        appState.startDeleteEmailAccount(
                             email = email,
                             password = deleteAccountPasswordDraft,
                             onError = { msg ->
