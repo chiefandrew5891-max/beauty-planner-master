@@ -13,6 +13,7 @@ import com.andrey.beautyplanner.notifications.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -942,10 +943,12 @@ class AppRootState(
             }
         }
 
-        val deleted = runCatching {
-            val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
-            deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
-        }.getOrElse { false }
+        val deleted = withTimeoutOrNull(30_000L) {
+            runCatching {
+                val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+                deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+            }.getOrElse { false }
+        } ?: false
 
         val confirmedDeleted = if (deleted) {
             true
@@ -981,10 +984,12 @@ class AppRootState(
             }
         }
 
-        val deleted = runCatching {
-            val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
-            deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
-        }.getOrElse { false }
+        val deleted = withTimeoutOrNull(30_000L) {
+            runCatching {
+                val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+                deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+            }.getOrElse { false }
+        } ?: false
 
         val confirmedDeleted = if (deleted) {
             true
@@ -1024,11 +1029,12 @@ class AppRootState(
             )
         }
 
-        val deleted = runCatching {
-            val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
-            deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
-        }.getOrElse { false }
-
+        val deleted = withTimeoutOrNull(30_000L) {
+            runCatching {
+                val deleteResult = com.andrey.beautyplanner.remote.BackendBridge.deleteMyAccount()
+                deleteResult["ok"].orEmpty().equals("true", ignoreCase = true)
+            }.getOrElse { false }
+        } ?: false
         val confirmedDeleted = if (deleted) {
             true
         } else {
