@@ -20,13 +20,15 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 import kotlinx.datetime.LocalDate
 import kotlin.math.roundToInt
+import com.andrey.beautyplanner.Appointment
 
 @Composable
 fun CollapsingCalendarHeader(
     today: LocalDate,
     calendarViewDate: LocalDate,
     selectedDate: LocalDate,
-    collapseProgress: Float, // 0..1 (0 = expanded, 1 = collapsed)
+    appointments: List<Appointment>,
+    collapseProgress: Float,
     onExpandRequest: () -> Unit,
     onDateClick: (LocalDate) -> Unit,
     expandedMonthRow: @Composable () -> Unit
@@ -91,6 +93,7 @@ fun CollapsingCalendarHeader(
                 monthDate = calendarViewDate,
                 today = today,
                 selectedDate = selectedDate,
+                appointments = appointments,
                 onDateClick = onDateClick
             )
         }

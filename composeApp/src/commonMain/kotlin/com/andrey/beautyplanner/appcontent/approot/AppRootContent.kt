@@ -459,7 +459,8 @@ fun AppRootContent(
                                         MonthCalendarGrid(
                                             monthDate = state.calendarViewDate,
                                             today = state.today,
-                                            selectedDate = state.selectedDate
+                                            selectedDate = state.selectedDate,
+                                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments)
                                         ) { date ->
                                             state.selectedDate = date
                                             state.navigateTo(Screen.DAY_DETAILS)

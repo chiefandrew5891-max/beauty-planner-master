@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import com.andrey.beautyplanner.Locales
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -109,6 +110,7 @@ fun MonthCalendarGrid(
     monthDate: LocalDate,
     today: LocalDate,
     selectedDate: LocalDate,
+    appointments: List<Appointment> = emptyList(),
     onDateClick: (LocalDate) -> Unit
 ) {
     val isLeap = monthDate.year % 4 == 0 && (monthDate.year % 100 != 0 || monthDate.year % 400 == 0)
@@ -123,6 +125,13 @@ fun MonthCalendarGrid(
     val dayOfWeekOffset = firstDayOfMonth.dayOfWeek.ordinal
     val days = (1..daysInMonth).toList()
     val fontScale = AppSettings.getFontScale()
+
+    val appointmentDates = remember(appointments) {
+        appointments
+            .filterNot { it.isDeleted }
+            .mapNotNull { runCatching { LocalDate.parse(it.dateString) }.getOrNull() }
+            .toSet()
+    }
 
     val totalCells = dayOfWeekOffset + daysInMonth
     val rows = ((totalCells + 6) / 7).coerceAtLeast(5)
@@ -141,7 +150,6 @@ fun MonthCalendarGrid(
 
         val cellSize = effectiveWidth / 7
         val weekdayHeight = 24.dp
-        val weekdayBottomSpacing = 8.dp
         val gridBottomPadding = 6.dp
         val gridHeight = cellSize * rows + gridBottomPadding
 
@@ -155,75 +163,84 @@ fun MonthCalendarGrid(
                 weekdays.forEach { day ->
                     Box(
                         modifier = Modifier
-                            .weight(1f)
+                            .width(cellSize)
                             .height(weekdayHeight),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = com.andrey.beautyplanner.Locales.t(day),
-                            textAlign = TextAlign.Center,
-                            fontSize = (11 * fontScale).sp,
+                            text = Locales.t(day),
+                            fontSize = (13 * fontScale).sp,
                             color = Color.Gray,
-                            fontWeight = FontWeight.Bold
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(weekdayBottomSpacing))
+            Spacer(modifier = Modifier.height(8.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(7),
-                modifier = Modifier
-                    .width(effectiveWidth)
-                    .height(gridHeight),
+                modifier = Modifier.height(gridHeight),
                 userScrollEnabled = false
             ) {
                 items(dayOfWeekOffset) {
-                    Box(
-                        modifier = Modifier
-                            .size(cellSize)
-                            .padding(3.dp)
-                    )
+                    Spacer(modifier = Modifier.size(cellSize))
                 }
 
                 items(days) { day ->
-                    val dateForCell = LocalDate(monthDate.year, monthDate.month, day)
-                    val isToday = dateForCell == today
-                    val isSelected = dateForCell == selectedDate
-                    val isPast = dateForCell < today
-                    val interactionSource = remember { MutableInteractionSource() }
+                    val date = LocalDate(monthDate.year, monthDate.month, day)
+                    val isSelected = date == selectedDate
+                    val isToday = date == today
+                    val isPastDay = date < today
+                    val hasAppointments = date in appointmentDates
+
+                    val textColor = when {
+                        isSelected -> Color.White
+                        isToday -> MaterialTheme.colors.primary
+                        isPastDay -> MaterialTheme.colors.onSurface.copy(alpha = 0.38f)
+                        else -> MaterialTheme.colors.onBackground
+                    }
+
+                    val backgroundColor = when {
+                        isSelected -> MaterialTheme.colors.primary
+                        isToday -> MaterialTheme.colors.primary.copy(alpha = 0.10f)
+                        else -> Color.Transparent
+                    }
 
                     Box(
                         modifier = Modifier
                             .size(cellSize)
-                            .padding(3.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(
-                                when {
-                                    isSelected -> MaterialTheme.colors.primary
-                                    isToday -> MaterialTheme.colors.primary.copy(alpha = 0.25f)
-                                    else -> Color.Transparent
-                                }
-                            )
+                            .padding(4.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(backgroundColor)
                             .combinedClickable(
-                                interactionSource = interactionSource,
+                                interactionSource = remember { MutableInteractionSource() },
                                 indication = LocalIndication.current,
-                                onClick = { onDateClick(dateForCell) }
-                            ),
-                        contentAlignment = Alignment.Center
+                                onClick = { onDateClick(date) },
+                                onLongClick = { onDateClick(date) }
+                            )
                     ) {
                         Text(
                             text = day.toString(),
-                            color = when {
-                                isSelected -> Color.White
-                                isPast -> Color.Gray.copy(alpha = 0.4f)
-                                isToday -> MaterialTheme.colors.primary
-                                else -> MaterialTheme.colors.onBackground
-                            },
-                            fontWeight = if (isSelected || isToday) FontWeight.ExtraBold else FontWeight.Normal,
-                            fontSize = (15 * fontScale).sp
+                            fontSize = (18 * fontScale).sp,
+                            fontWeight = if (isSelected || isToday) FontWeight.SemiBold else FontWeight.Normal,
+                            color = textColor,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.Center)
                         )
+
+                        if (isPastDay && hasAppointments && !isSelected) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 8.dp)
+                                    .width(16.dp)
+                                    .height(2.dp)
+                                    .clip(RoundedCornerShape(50))
+                                    .background(MaterialTheme.colors.primary.copy(alpha = 0.90f))
+                            )
+                        }
                     }
                 }
             }
