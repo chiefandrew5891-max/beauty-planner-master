@@ -604,5 +604,7 @@
     "account_delete_google_reauth_in_progress": "Confirming deletion with Google...",
     "account_delete_apple_reauth_in_progress": "Confirming deletion with Apple...",
     "account_delete_apple_revoke_failed": "Failed to revoke Apple authorization. Please try again.",
-    "account_label_apple_fallback": "Apple Account"
+    "account_label_apple_fallback": "Apple Account",
+    "about_app_description": "App description",
+    "about_app_upcoming_updates": "Upcoming updates"
 }

@@ -25,7 +25,9 @@ object AppUpdateChecker {
                 latestVersion = result["latestVersion"].orEmpty(),
                 latestBuild = result["latestBuild"].orEmpty(),
                 storeUrl = result["storeUrl"].orEmpty(),
-                errorMessage = result["errorMessage"].orEmpty()
+                errorMessage = result["errorMessage"].orEmpty(),
+                aboutDescription = result["aboutDescription"].orEmpty(),
+                aboutUpcoming = result["aboutUpcoming"].orEmpty()
             )
         } catch (t: Throwable) {
             AppUpdateStatus(

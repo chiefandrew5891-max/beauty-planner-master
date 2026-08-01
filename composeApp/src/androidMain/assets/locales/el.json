@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Επιβεβαίωση διαγραφής μέσω Google...",
     "account_delete_apple_reauth_in_progress": "Επιβεβαίωση διαγραφής μέσω Apple...",
     "account_delete_apple_revoke_failed": "Αποτυχία ανάκλησης της εξουσιοδότησης Apple. Παρακαλούμε δοκιμάστε ξανά.",
-    "account_label_apple_fallback": "Λογαριασμός Apple"
+    "account_label_apple_fallback": "Λογαριασμός Apple",
+    "about_app_description": "Περιγραφή εφαρμογής",
+    "about_app_upcoming_updates": "Αναμενόμενες ενημερώσεις"
 }

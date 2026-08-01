@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Потврђивање брисања путем Google-а...",
     "account_delete_apple_reauth_in_progress": "Потврђивање брисања путем Apple-а...",
     "account_delete_apple_revoke_failed": "Опозивање Apple овлашћења није успело. Покушајте поново.",
-    "account_label_apple_fallback": "Apple налог"
+    "account_label_apple_fallback": "Apple налог",
+    "about_app_description": "Опис апликације",
+    "about_app_upcoming_updates": "Очекивана ажурирања"
 }

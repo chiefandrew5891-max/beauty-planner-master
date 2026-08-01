@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Bekræfter sletning med Google...",
     "account_delete_apple_reauth_in_progress": "Bekræfter sletning med Apple...",
     "account_delete_apple_revoke_failed": "Kunne ikke tilbagekalde Apple-godkendelse. Prøv venligst igen.",
-    "account_label_apple_fallback": "Apple-konto"
+    "account_label_apple_fallback": "Apple-konto",
+    "about_app_description": "Appbeskrivelse",
+    "about_app_upcoming_updates": "Kommende opdateringer"
 }

@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Verwijdering bevestigen met Google...",
     "account_delete_apple_reauth_in_progress": "Verwijdering bevestigen met Apple...",
     "account_delete_apple_revoke_failed": "Intrekken van Apple-autorisatie mislukt. Probeer het opnieuw.",
-    "account_label_apple_fallback": "Apple-account"
+    "account_label_apple_fallback": "Apple-account",
+    "about_app_description": "App-beschrijving",
+    "about_app_upcoming_updates": "Verwachte updates"
 }

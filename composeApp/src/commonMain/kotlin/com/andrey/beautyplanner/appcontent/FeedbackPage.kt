@@ -17,17 +17,33 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.AppUpdateStatus
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.StoreOpener
+import com.andrey.beautyplanner.AboutRemoteTextParser
+import androidx.compose.runtime.remember
 
 @Composable
 fun FeedbackPage(
-    phone: String,
+    aboutDescriptionRaw: String,
+    aboutUpcomingRaw: String,
     updateStatus: AppUpdateStatus,
     isCheckingUpdates: Boolean,
-    onCallClick: (String) -> Unit,
     onCheckUpdatesClick: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
     val appInfo = AppInfoProvider.get()
+
+    val currentLanguage = Locales.currentLanguage
+    val aboutDescriptionText = remember(aboutDescriptionRaw, currentLanguage) {
+        AboutRemoteTextParser.resolveLocalizedText(
+            raw = aboutDescriptionRaw,
+            currentLanguage = currentLanguage
+        )
+    }
+    val aboutUpcomingText = remember(aboutUpcomingRaw, currentLanguage) {
+        AboutRemoteTextParser.resolveLocalizedText(
+            raw = aboutUpcomingRaw,
+            currentLanguage = currentLanguage
+        )
+    }
 
     val updateStatusText = when {
         updateStatus.errorMessage.isNotBlank() -> updateStatus.errorMessage
@@ -81,17 +97,31 @@ fun FeedbackPage(
             Spacer(modifier = Modifier.padding(top = 4.dp))
 
             Text(
-                text = "${Locales.t("support_phone_label")}: ${
-                    if (phone.isBlank()) Locales.t("support_phone_empty") else phone
-                }",
+                text = Locales.t("about_app_description"),
                 fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colors.onSurface
             )
 
-            PrimaryActionButton(
-                text = Locales.t("support_call"),
-                onClick = { onCallClick(phone) },
-                enabled = phone.isNotBlank()
+            Text(
+                text = aboutDescriptionText,
+                fontSize = (14 * fontScale).sp,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+            )
+
+            Spacer(modifier = Modifier.padding(top = 4.dp))
+
+            Text(
+                text = Locales.t("about_app_upcoming_updates"),
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colors.onSurface
+            )
+
+            Text(
+                text = aboutUpcomingText,
+                fontSize = (14 * fontScale).sp,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
             )
 
             Spacer(modifier = Modifier.padding(top = 4.dp))
@@ -107,6 +137,7 @@ fun FeedbackPage(
                 onClick = onCheckUpdatesClick,
                 enabled = !isCheckingUpdates
             )
+
             if (isCheckingUpdates) {
                 Text(
                     text = Locales.t("about_app_checking_updates"),

@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Apstiprina dzēšanu ar Google...",
     "account_delete_apple_reauth_in_progress": "Apstiprina dzēšanu ar Apple...",
     "account_delete_apple_revoke_failed": "Neizdevās atsaukt Apple autorizāciju. Lūdzu, mēģiniet vēlreiz.",
-    "account_label_apple_fallback": "Apple konts"
+    "account_label_apple_fallback": "Apple konts",
+    "about_app_description": "Lietotnes apraksts",
+    "about_app_upcoming_updates": "Gaidāmie atjauninājumi"
 }

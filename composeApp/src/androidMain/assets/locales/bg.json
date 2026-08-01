@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Потвърждаване на изтриването с Google...",
     "account_delete_apple_reauth_in_progress": "Потвърждаване на изтриването с Apple...",
     "account_delete_apple_revoke_failed": "Неуспешно отмяна на оторизацията от Apple. Моля, опитайте отново.",
-    "account_label_apple_fallback": "Apple акаунт"
+    "account_label_apple_fallback": "Apple акаунт",
+    "about_app_description": "Описание на приложението",
+    "about_app_upcoming_updates": "Предстоящи актуализации"
 }

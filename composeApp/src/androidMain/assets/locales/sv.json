@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Bekräftar radering med Google...",
     "account_delete_apple_reauth_in_progress": "Bekräftar radering med Apple...",
     "account_delete_apple_revoke_failed": "Det gick inte att återkalla Apple-auktoriseringen. Försök igen.",
-    "account_label_apple_fallback": "Apple-konto"
+    "account_label_apple_fallback": "Apple-konto",
+    "about_app_description": "Appbeskrivning",
+    "about_app_upcoming_updates": "Kommande uppdateringar"
 }

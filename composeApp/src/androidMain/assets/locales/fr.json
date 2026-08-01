@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Confirmation de la suppression avec Google...",
     "account_delete_apple_reauth_in_progress": "Confirmation de la suppression avec Apple...",
     "account_delete_apple_revoke_failed": "Échec de la révocation de l'autorisation Apple. Veuillez réessayer.",
-    "account_label_apple_fallback": "Compte Apple"
+    "account_label_apple_fallback": "Compte Apple",
+    "about_app_description": "Description de l'application",
+    "about_app_upcoming_updates": "Mises à jour à venir"
 }

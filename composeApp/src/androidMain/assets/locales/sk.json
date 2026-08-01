@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Potvrdzovanie vymazania cez Google...",
     "account_delete_apple_reauth_in_progress": "Potvrdzovanie vymazania cez Apple...",
     "account_delete_apple_revoke_failed": "Zrušenie autorizácie Apple sa nepodarilo. Skúste to prosím znova.",
-    "account_label_apple_fallback": "Účet Apple"
+    "account_label_apple_fallback": "Účet Apple",
+    "about_app_description": "Popis aplikácie",
+    "about_app_upcoming_updates": "Očakávané aktualizácie"
 }

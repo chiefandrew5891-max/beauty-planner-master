@@ -6,5 +6,7 @@ data class AppUpdateStatus(
     val latestVersion: String = "",
     val latestBuild: String = "",
     val storeUrl: String = "",
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    val aboutDescription: String = "",
+    val aboutUpcoming: String = ""
 )

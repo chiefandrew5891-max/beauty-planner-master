@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "Löschung wird mit Google bestätigt...",
     "account_delete_apple_reauth_in_progress": "Löschung wird mit Apple bestätigt...",
     "account_delete_apple_revoke_failed": "Apple-Autorisierung konnte nicht widerrufen werden. Bitte versuchen Sie es erneut.",
-    "account_label_apple_fallback": "Apple-Konto"
+    "account_label_apple_fallback": "Apple-Konto",
+    "about_app_description": "App-Beschreibung",
+    "about_app_upcoming_updates": "Kommende Updates"
 }

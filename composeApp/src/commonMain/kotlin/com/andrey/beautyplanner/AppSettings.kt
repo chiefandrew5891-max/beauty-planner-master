@@ -131,6 +131,8 @@ private data class SettingsSnapshot(
     val lastKnownLatestVersion: String = "",
     val lastKnownLatestBuild: String = "",
     val lastKnownStoreUrl: String = "",
+    val aboutDescription: String = "",
+    val aboutUpcoming: String = "",
 )
 
 object AppSettings {
@@ -280,6 +282,9 @@ object AppSettings {
     var lastKnownLatestVersion by mutableStateOf("")
     var lastKnownLatestBuild by mutableStateOf("")
     var lastKnownStoreUrl by mutableStateOf("")
+
+    var aboutDescription: String = ""
+    var aboutUpcoming: String = ""
 
     fun currencySymbol(): String {
         return currencySymbolFor(selectedCurrency, useShortTextCurrency)
@@ -669,6 +674,9 @@ object AppSettings {
         lastKnownLatestBuild = snapshot.lastKnownLatestBuild
         lastKnownStoreUrl = snapshot.lastKnownStoreUrl
 
+        aboutDescription = snapshot.aboutDescription
+        aboutUpcoming = snapshot.aboutUpcoming
+
         val code = languageCodes[selectedLanguage] ?: "en"
         Locales.currentLanguage = code
     }
@@ -743,6 +751,9 @@ object AppSettings {
             lastKnownLatestVersion = lastKnownLatestVersion,
             lastKnownLatestBuild = lastKnownLatestBuild,
             lastKnownStoreUrl = lastKnownStoreUrl,
+
+            aboutDescription = aboutDescription,
+            aboutUpcoming = aboutUpcoming,
         )
 
         runCatching {

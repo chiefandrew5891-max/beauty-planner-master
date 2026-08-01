@@ -602,5 +602,7 @@
     "account_delete_google_reauth_in_progress": "جاري تأكيد الحذف باستخدام Google...",
     "account_delete_apple_reauth_in_progress": "جاري تأكيد الحذف باستخدام Apple...",
     "account_delete_apple_revoke_failed": "فشل إلغاء تفويض Apple. يرجى المحاولة مرة أخرى.",
-    "account_label_apple_fallback": "حساب Apple"
+    "account_label_apple_fallback": "حساب Apple",
+    "about_app_description": "وصف التطبيق",
+    "about_app_upcoming_updates": "التحديثات القادمة"
 }

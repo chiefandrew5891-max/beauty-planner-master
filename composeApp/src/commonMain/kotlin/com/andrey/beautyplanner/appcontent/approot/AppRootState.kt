@@ -1880,6 +1880,8 @@ class AppRootState(
             AppSettings.lastKnownLatestVersion = status.latestVersion
             AppSettings.lastKnownLatestBuild = status.latestBuild
             AppSettings.lastKnownStoreUrl = status.storeUrl
+            AppSettings.aboutDescription = status.aboutDescription
+            AppSettings.aboutUpcoming = status.aboutUpcoming
         }
 
         AppSettings.persist()

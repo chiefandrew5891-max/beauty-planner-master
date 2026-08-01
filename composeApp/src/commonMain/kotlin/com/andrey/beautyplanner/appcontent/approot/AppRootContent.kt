@@ -242,12 +242,10 @@ fun AppRootContent(
             }
 
             Screen.FEEDBACK -> FeedbackPage(
-                phone = AppSettings.servicePhone,
+                aboutDescriptionRaw = AppSettings.aboutDescription,
+                aboutUpcomingRaw = AppSettings.aboutUpcoming,
                 updateStatus = state.appUpdateStatus,
                 isCheckingUpdates = state.isCheckingAppUpdates,
-                onCallClick = { phone ->
-                    if (phone.isNotBlank()) PhoneCaller.call(phone)
-                },
                 onCheckUpdatesClick = {
                     state.checkForAppUpdates()
                 }
