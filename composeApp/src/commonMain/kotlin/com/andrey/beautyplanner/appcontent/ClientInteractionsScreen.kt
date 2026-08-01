@@ -39,13 +39,13 @@ import kotlinx.coroutines.launch
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 @Composable
-fun ClientInteractionsScreen() {
+fun ClientInteractionsScreen(
+    appState: com.andrey.beautyplanner.appcontent.approot.AppRootState
+) {
     val fontScale = AppSettings.getFontScale()
     val onBg = MaterialTheme.colors.onBackground
     val onSurface = MaterialTheme.colors.onSurface
     val scope = rememberCoroutineScope()
-
-    val appState = rememberAppRootState()
 
     var showEnableConfirm by remember { mutableStateOf(false) }
     var publishDebugStatus by remember { mutableStateOf("no publish yet") }
