@@ -503,6 +503,14 @@ class AppRootState(
         }.onFailure {
             CloudSyncLogger.log("postLoginFullSync: cloud sync failed: ${it.message}")
         }
+
+        runCatching {
+            val status = AppUpdateChecker.check()
+            appUpdateStatus = status
+            persistUpdateStatus(status)
+        }.onFailure {
+            CloudSyncLogger.log("postLoginFullSync: app update fetch failed: ${it.message}")
+        }
     }
     fun resetLivePreviews() {
         currentLiveDarkMode = AppSettings.isDarkMode
@@ -623,6 +631,13 @@ class AppRootState(
             performCloudSyncIfEligible()
         }.onFailure {
             CloudSyncLogger.log("bootstrapAuthenticatedUser: cloud sync failed: ${it.message}")
+        }
+        runCatching {
+            val status = AppUpdateChecker.check()
+            appUpdateStatus = status
+            persistUpdateStatus(status)
+        }.onFailure {
+            CloudSyncLogger.log("bootstrapAuthenticatedUser: app update fetch failed: ${it.message}")
         }
 
         authResolved = true
@@ -1901,6 +1916,7 @@ fun rememberAppRootState(): AppRootState {
     LaunchedEffect(Unit) {
         val startCode = AppSettings.languageCodes[AppSettings.selectedLanguage] ?: "en"
         Locales.currentLanguage = startCode
+        state.checkForAppUpdatesIfNeeded()
         Locales.init()
 
         val nowMillis = Clock.System.now().toEpochMilliseconds()

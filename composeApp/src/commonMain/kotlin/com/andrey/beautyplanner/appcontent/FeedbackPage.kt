@@ -19,6 +19,8 @@ import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.StoreOpener
 import com.andrey.beautyplanner.AboutRemoteTextParser
 import androidx.compose.runtime.remember
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun FeedbackPage(
@@ -64,6 +66,7 @@ fun FeedbackPage(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
