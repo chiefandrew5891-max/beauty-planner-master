@@ -62,6 +62,19 @@ fun AppRootDialogs(state: AppRootState) {
             shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
         )
     }
+    if (state.authInfoDialogMessage != null) {
+        AlertDialog(
+            onDismissRequest = { state.authInfoDialogMessage = null },
+            title = { Text(Locales.t("auth_email_title")) },
+            text = { Text(state.authInfoDialogMessage.orEmpty()) },
+            confirmButton = {
+                TextButton(onClick = { state.authInfoDialogMessage = null }) {
+                    Text(Locales.t("close"))
+                }
+            },
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+        )
+    }
     if (state.backupSuccessMessage != null) {
         AlertDialog(
             onDismissRequest = { state.backupSuccessMessage = null },

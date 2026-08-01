@@ -1191,7 +1191,8 @@ class AppRootState(
                     when (val result = AuthGateway.registerWithEmail(cleanEmail, cleanPassword)) {
                         is SignInResult.Success -> {
                             authEmailRegisterMode = false
-                            authErrorMessage =
+                            authErrorMessage = null
+                            authInfoDialogMessage =
                                 Locales.t("auth_email_verification_sent") + " " + cleanEmail
                         }
 
