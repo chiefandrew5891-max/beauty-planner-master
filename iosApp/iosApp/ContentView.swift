@@ -7,8 +7,8 @@ struct ComposeView: UIViewControllerRepresentable {
         let signInBridge = GoogleSignInBridge()
         let appleBridge = AppleSignInBridge()
 
-        ContactsPermissionHelper.requestPermission { granted in
-        }
+        //ContactsPermissionHelper.requestPermission { granted in
+        //}
 
         signInBridge.startGoogleSignIn = { deferred in
             GoogleAuthBridge.signInWithGoogle { result, error in
