@@ -65,6 +65,7 @@ class AppRootState(
     var authResolved by mutableStateOf(false)
     var authErrorMessage by mutableStateOf<String?>(null)
     var authEmailRegisterMode by mutableStateOf(false)
+    var authInfoDialogMessage by mutableStateOf<String?>(null)
 
     var backupEncryptEnabled by mutableStateOf(true)
     var backupPassword by mutableStateOf("")
@@ -608,9 +609,22 @@ class AppRootState(
         persistAuthenticatedSession(currentUser)
         AppSettings.clearMasterProfileLocalState()
         com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+
+        runCatching {
+            com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
+        }.onFailure {
+            CloudSyncLogger.log("bootstrapAuthenticatedUser: profile pull failed: ${it.message}")
+        }
+
         reloadAppointmentsForCurrentProfile()
         refreshAccessState(Clock.System.now().toEpochMilliseconds())
-        performCloudSyncIfEligible()
+
+        runCatching {
+            performCloudSyncIfEligible()
+        }.onFailure {
+            CloudSyncLogger.log("bootstrapAuthenticatedUser: cloud sync failed: ${it.message}")
+        }
+
         authResolved = true
         authErrorMessage = null
         currentScreen = Screen.MONTH
@@ -1226,14 +1240,20 @@ class AppRootState(
 
                                 clearSessionLocalState()
                                 AppSettings.clearMasterProfileLocalState()
+
+                                runCatching {
+                                    com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
+                                }.onFailure {
+                                    CloudSyncLogger.log("emailSignIn: profile pull failed: ${it.message}")
+                                }
+
                                 reloadAppointmentsForCurrentProfile()
                                 refreshAccessState()
 
-                                try {
+                                runCatching {
                                     performCloudSyncIfEligible()
-                                } catch (e: Throwable) {
-                                    authErrorMessage = e.message ?: Locales.t("auth_email_sign_in_failed")
-                                    return@launch
+                                }.onFailure {
+                                    CloudSyncLogger.log("emailSignIn: cloud sync failed: ${it.message}")
                                 }
 
                                 authResolved = true
