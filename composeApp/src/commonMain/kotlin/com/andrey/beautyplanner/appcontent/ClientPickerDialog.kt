@@ -60,19 +60,19 @@ fun ClientPickerDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = Locales.t("stats_client_picker_title"),
-                fontSize = (19 * fontScale).sp,
-                fontWeight = FontWeight.Bold,
-                color = onSurface
-            )
-        },
+        title = null,
         text = {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = Locales.t("stats_client_picker_title"),
+                    fontSize = (19 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = onSurface
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
 
                 OutlinedTextField(
                     value = query,

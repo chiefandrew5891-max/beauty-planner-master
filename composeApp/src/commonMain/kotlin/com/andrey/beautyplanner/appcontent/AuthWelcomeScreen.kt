@@ -98,11 +98,13 @@ fun AuthWelcomeScreen(
                         BrandedAuthButton(
                             text = Locales.t("auth_apple"),
                             onClick = onContinueWithApple,
-                            backgroundColor = Color.Black,
-                            contentColor = Color.White,
-                            borderColor = Color.Black,
+                            backgroundColor = Color.White,
+                            contentColor = Color(0xFF1F1F1F),
+                            borderColor = Color(0xFFDADCE0),
                             leadingContent = {
-                                AppleGlyphIcon()
+                                AppleGlyphIcon(
+                                    tint = Color(0xFF1F1F1F)
+                                )
                             }
                         )
                     }
