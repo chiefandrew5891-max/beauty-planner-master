@@ -65,7 +65,7 @@ fun StatsPage(
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {
-        val isTablet = maxWidth >= 900.dp
+        val isTablet = maxWidth >= 700.dp
         val fontScale = AppSettings.getFontScale()
 
         val primaryText = UiColors.primaryText()

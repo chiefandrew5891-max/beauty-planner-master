@@ -766,7 +766,7 @@ private fun AccountDeleteActionButton(
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth()
     ) {
-        val isTablet = maxWidth >= 900.dp
+        val isTablet = maxWidth >= 700.dp
 
         androidx.compose.material.Button(
             onClick = onClick,

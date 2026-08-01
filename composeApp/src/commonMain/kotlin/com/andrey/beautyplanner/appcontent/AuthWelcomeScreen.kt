@@ -40,7 +40,7 @@ fun AuthWelcomeScreen(
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {
-        val isTablet = maxWidth >= 900.dp
+        val isTablet = maxWidth >= 700.dp
 
         // Смещение контента:
         // phone -> чуть выше центра
