@@ -113,7 +113,7 @@ fun AuthWelcomeScreen(
                         text = Locales.t("auth_email_sign_in"),
                         onClick = onContinueWithEmail,
                         backgroundColor = Color.White,
-                        contentColor = onSurface,
+                        contentColor = Color(0xFF1F1F1F),
                         borderColor = onSurface.copy(alpha = 0.14f),
                         leadingContent = {
                             MailIcon()
@@ -124,7 +124,7 @@ fun AuthWelcomeScreen(
                         text = Locales.t("auth_anonymous"),
                         onClick = onContinueAnonymously,
                         backgroundColor = Color.White,
-                        contentColor = onSurface,
+                        contentColor = Color(0xFF1F1F1F),
                         borderColor = onSurface.copy(alpha = 0.14f),
                         leadingContent = {
                             Text(

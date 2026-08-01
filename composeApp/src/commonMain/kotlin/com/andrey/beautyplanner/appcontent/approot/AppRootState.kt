@@ -635,6 +635,8 @@ class AppRootState(
             showGlobalLoading(Locales.t("loading"))
             try {
                 runCatching { AuthGateway.clearCredentialState() }
+                runCatching { AuthGateway.prepareForNewSignIn() }
+
                 when (val result = AuthGateway.signInWithGoogle()) {
                     is SignInResult.Success -> {
                         runCatching {
@@ -690,6 +692,7 @@ class AppRootState(
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
             runCatching { AuthGateway.clearCredentialState() }
+            runCatching { AuthGateway.prepareForNewSignIn() }
             try {
                 when (val result = AuthGateway.signInWithApple()) {
                     is SignInResult.Success -> {
@@ -1187,6 +1190,9 @@ class AppRootState(
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
             try {
+                runCatching { AuthGateway.clearCredentialState() }
+                runCatching { AuthGateway.prepareForNewSignIn() }
+
                 if (authEmailRegisterMode) {
                     when (val result = AuthGateway.registerWithEmail(cleanEmail, cleanPassword)) {
                         is SignInResult.Success -> {
