@@ -145,13 +145,14 @@ fun MailIcon(
 
 @Composable
 fun AppleGlyphIcon(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color = Color.White
 ) {
     Text(
         text = "",
         modifier = modifier,
-        color = Color.White,
+        color = color,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontSize = 24.sp
     )
 }

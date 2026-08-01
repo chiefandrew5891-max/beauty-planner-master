@@ -103,7 +103,7 @@ fun AuthWelcomeScreen(
                             borderColor = Color(0xFFDADCE0),
                             leadingContent = {
                                 AppleGlyphIcon(
-                                    tint = Color(0xFF1F1F1F)
+                                    color = Color(0xFF1F1F1F)
                                 )
                             }
                         )
