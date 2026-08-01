@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Nisu pronađene kupovine za obnovu.",
     "premium_already_owned": "Premium je već aktivan",
     "premium_store_unavailable": "Plaćanje u prodavnici trenutno nije dostupno.",
-    "premium_product_not_found": "Premium proizvod nije pronađen u prodavnici.",
+    "premium_product_not_found": "Претплате тренутно нису доступне. Покушајте поново касније.",
     "premium_section_title": "Pretplata i pristup",
     "premium_status_label": "Trenutni status",
     "premium_trial_days_left": "Preostalo dana probnog perioda",

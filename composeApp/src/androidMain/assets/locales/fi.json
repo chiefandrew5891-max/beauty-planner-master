@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Palautettavia ostoksia ei löytynyt.",
     "premium_already_owned": "Premium on jo aktiivinen",
     "premium_store_unavailable": "Kaupan laskutus ei ole tällä hetkellä käytettävissä.",
-    "premium_product_not_found": "Premium-tuotetta ei löytynyt kaupasta.",
+    "premium_product_not_found": "Tilaukset eivät ole tällä hetkellä saatavilla. Yritä uudelleen myöhemmin.",
     "premium_section_title": "Tilaus ja käyttöoikeus",
     "premium_status_label": "Nykyinen tila",
     "premium_trial_days_left": "Kokeilujakson päiviä jäljellä",

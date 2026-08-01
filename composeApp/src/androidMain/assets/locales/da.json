@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Der blev ikke fundet nogen køb at gendanne.",
     "premium_already_owned": "Premium er allerede aktivt",
     "premium_store_unavailable": "Butiksfakturering er i øjeblikket utilgængelig.",
-    "premium_product_not_found": "Premium-produktet blev ikke fundet i butikken.",
+    "premium_product_not_found": "Abonnementer er midlertidigt utilgængelige. Prøv venligst igen senere.",
     "premium_section_title": "Abonnement og adgang",
     "premium_status_label": "Nuværende status",
     "premium_trial_days_left": "Dage tilbage af prøveperiode",

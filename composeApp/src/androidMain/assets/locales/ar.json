@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "لا توجد مشتريات للاستعادة.",
     "premium_already_owned": "Premium مُفعّل بالفعل",
     "premium_store_unavailable": "خدمات الدفع في المتجر غير متوفرة حالياً.",
-    "premium_product_not_found": "لم يتم العثور على المنتج المميز في المتجر.",
+    "premium_product_not_found": "الاشتراكات غير متاحة حاليًا. يرجى المحاولة لاحقًا.",
     "premium_section_title": "الاشتراك والوصول",
     "premium_status_label": "الحالة الحالية",
     "premium_trial_days_left": "الأيام المتبقية من التجربة",

@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "पुनर्स्थापित करने के लिए कोई खरीदारी नहीं मिली।",
     "premium_already_owned": "Premium पहले से ही सक्रिय है",
     "premium_store_unavailable": "स्टोर बिलिंग वर्तमान में अनुपलब्ध है।",
-    "premium_product_not_found": "स्टोर में प्रीमियम उत्पाद नहीं मिला।",
+    "premium_product_not_found": "सदस्यताएँ वर्तमान में उपलब्ध नहीं हैं। कृपया बाद में पुनः प्रयास करें।",
     "premium_section_title": "सदस्यता और पहुंच",
     "premium_status_label": "वर्तमान स्थिति",
     "premium_trial_days_left": "परीक्षण अवधि के शेष दिन",

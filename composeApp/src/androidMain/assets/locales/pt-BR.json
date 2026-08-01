@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Nenhuma compra encontrada para restaurar.",
     "premium_already_owned": "Premium já está ativo",
     "premium_store_unavailable": "O faturamento da loja não está disponível no momento.",
-    "premium_product_not_found": "O produto premium não foi encontrado na loja.",
+    "premium_product_not_found": "As assinaturas não estão disponíveis no momento. Tente novamente mais tarde.",
     "premium_section_title": "Assinatura e acesso",
     "premium_status_label": "Status atual",
     "premium_trial_days_left": "Dias restantes de teste",

@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Geri yüklenecek satın alma bulunamadı.",
     "premium_already_owned": "Premium zaten aktif",
     "premium_store_unavailable": "Mağaza faturalandırması şu anda kullanılamıyor.",
-    "premium_product_not_found": "Premium ürün mağazada bulunamadı.",
+    "premium_product_not_found": "Abonelikler şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
     "premium_section_title": "Abonelik ve erişim",
     "premium_status_label": "Mevcut durum",
     "premium_trial_days_left": "Kalan deneme günleri",

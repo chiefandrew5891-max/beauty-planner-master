@@ -1430,8 +1430,9 @@ class AppRootState(
                 }
                 if (product == null) {
                     billingUiState = billingUiState.copy(
-                        status = BillingStatus.ERROR,
-                        errorMessage = Locales.t("premium_product_not_found")
+                        status = BillingStatus.READY,
+                        errorMessage = Locales.t("premium_product_not_found"),
+                        ownedPremium = accessState.hasPremium
                     )
                     return@launch
                 }

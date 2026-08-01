@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Ingen kjøp ble funnet å gjenopprette.",
     "premium_already_owned": "Premium er allerede aktivt",
     "premium_store_unavailable": "Butikkfakturering er for øyeblikket utilgjengelig.",
-    "premium_product_not_found": "Premium-produktet ble ikke funnet i butikken.",
+    "premium_product_not_found": "Abonnementer er for øyeblikket utilgjengelige. Vennligst prøv igjen senere.",
     "premium_section_title": "Abonnement og tilgang",
     "premium_status_label": "Nåværende status",
     "premium_trial_days_left": "Dager igjen av prøveperiode",

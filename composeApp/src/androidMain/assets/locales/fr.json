@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Aucun achat à restaurer.",
     "premium_already_owned": "Premium est déjà actif",
     "premium_store_unavailable": "La facturation du Store est actuellement indisponible.",
-    "premium_product_not_found": "Le produit Premium n'a pas été trouvé dans le Store.",
+    "premium_product_not_found": "Les abonnements ne sont pas disponibles pour le moment. Veuillez réessayer plus tard.",
     "premium_section_title": "Abonnement et accès",
     "premium_status_label": "Statut actuel",
     "premium_trial_days_left": "Jours d'essai restants",

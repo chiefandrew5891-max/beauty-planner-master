@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "復元する購入情報が見つかりませんでした。",
     "premium_already_owned": "Premiumは既に有効です",
     "premium_store_unavailable": "ストア決済は現在ご利用いただけません。",
-    "premium_product_not_found": "プレミアム商品はストアで見つかりませんでした。",
+    "premium_product_not_found": "現在、サブスクリプションはご利用いただけません。後ほどもう一度お試しください。",
     "premium_section_title": "定期購入とアクセス権",
     "premium_status_label": "現在のステータス",
     "premium_trial_days_left": "試用期間の残り日数",

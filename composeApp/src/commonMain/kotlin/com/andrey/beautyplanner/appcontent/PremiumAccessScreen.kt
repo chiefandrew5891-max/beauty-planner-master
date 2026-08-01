@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -26,10 +28,8 @@ import com.andrey.beautyplanner.StoreOpener
 import com.andrey.beautyplanner.billing.BillingStatus
 import com.andrey.beautyplanner.billing.BillingUiState
 import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_ID
-import kotlinx.datetime.Clock
 import com.andrey.beautyplanner.getPlatform
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.layout.fillMaxWidth
+import kotlinx.datetime.Clock
 
 private const val TERMS_OF_USE_URL = "https://sites.google.com/view/beautyplanner/terms-of-use"
 
@@ -125,17 +125,44 @@ fun PremiumAccessScreen(
                         text = message,
                         fontSize = (15 * fontScale).sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colors.onBackground
+                        color = MaterialTheme.colors.onBackground,
+                        lineHeight = (22 * fontScale).sp
                     )
                 }
 
                 if (!billingUiState.errorMessage.isNullOrBlank()) {
-                    Spacer(modifier = Modifier.padding(top = 16.dp))
-                    Text(
-                        text = billingUiState.errorMessage.orEmpty(),
-                        fontSize = (14 * fontScale).sp,
-                        color = MaterialTheme.colors.error
-                    )
+                    Spacer(modifier = Modifier.padding(top = 18.dp))
+
+                    val isStoreUnavailableMessage =
+                        billingUiState.errorMessage == Locales.t("premium_product_not_found") ||
+                                billingUiState.errorMessage == Locales.t("premium_store_unavailable")
+
+                    if (isStoreUnavailableMessage) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = MaterialTheme.colors.primary.copy(alpha = 0.10f),
+                                    shape = RoundedCornerShape(14.dp)
+                                )
+                                .padding(horizontal = 14.dp, vertical = 12.dp)
+                        ) {
+                            Text(
+                                text = billingUiState.errorMessage.orEmpty(),
+                                fontSize = (14 * fontScale).sp,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colors.primary.copy(alpha = 0.92f),
+                                lineHeight = (20 * fontScale).sp
+                            )
+                        }
+                    } else {
+                        Text(
+                            text = billingUiState.errorMessage.orEmpty(),
+                            fontSize = (14 * fontScale).sp,
+                            color = MaterialTheme.colors.error,
+                            lineHeight = (20 * fontScale).sp
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.padding(top = 24.dp))

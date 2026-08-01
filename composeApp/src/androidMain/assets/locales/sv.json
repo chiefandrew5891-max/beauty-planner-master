@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Inga köp hittades att återställa.",
     "premium_already_owned": "Premium är redan aktivt",
     "premium_store_unavailable": "Butiksbetalning är för närvarande inte tillgänglig.",
-    "premium_product_not_found": "Premiumprodukten hittades inte i butiken.",
+    "premium_product_not_found": "Prenumerationer är för närvarande inte tillgängliga. Försök igen senare.",
     "premium_section_title": "Prenumeration och åtkomst",
     "premium_status_label": "Aktuell status",
     "premium_trial_days_left": "Dagar kvar av provperiod",

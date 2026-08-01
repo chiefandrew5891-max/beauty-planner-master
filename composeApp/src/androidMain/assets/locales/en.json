@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "No purchases found to restore.",
     "premium_already_owned": "Premium is already active",
     "premium_store_unavailable": "Store billing is currently unavailable.",
-    "premium_product_not_found": "Premium product was not found in the store.",
+    "premium_product_not_found": "Subscriptions are currently unavailable. Please try again later.",
     "premium_section_title": "Subscription and Access",
     "premium_status_label": "Current status",
     "premium_trial_days_left": "Trial days left",

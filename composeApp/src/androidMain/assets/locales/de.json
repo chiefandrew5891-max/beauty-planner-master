@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "Keine wiederherstellbaren Käufe gefunden.",
     "premium_already_owned": "Premium ist bereits aktiv",
     "premium_store_unavailable": "Die Store-Abrechnung ist derzeit nicht verfügbar.",
-    "premium_product_not_found": "Das Premium-Produkt wurde im Store nicht gefunden.",
+    "premium_product_not_found": "Abonnements sind derzeit nicht verfügbar. Bitte versuchen Sie es später erneut.",
     "premium_section_title": "Abonnement und Zugriff",
     "premium_status_label": "Aktueller Status",
     "premium_trial_days_left": "Verbleibende Testtage",

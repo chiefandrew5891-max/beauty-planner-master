@@ -140,7 +140,7 @@
     "premium_nothing_to_restore": "복원할 구매 내역이 없습니다.",
     "premium_already_owned": "Premium 기능이 이미 활성화되어 있습니다",
     "premium_store_unavailable": "스토어 결제는 현재 사용할 수 없습니다.",
-    "premium_product_not_found": "스토어에서 프리미엄 상품을 찾을 수 없습니다.",
+    "premium_product_not_found": "현재 구독을 이용할 수 없습니다. 나중에 다시 시도해 주세요.",
     "premium_section_title": "구독 및 액세스 권한",
     "premium_status_label": "현재 상태",
     "premium_trial_days_left": "체험 기간 남은 일수",
