@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -72,362 +73,377 @@ fun ArchivePage(
     premiumEnabled: Boolean,
     onOpenPremium: () -> Unit
 ) {
-    val fontScale = AppSettings.getFontScale()
-    val onBg = MaterialTheme.colors.onBackground
-    val onSurface = MaterialTheme.colors.onSurface
-    val scrollState = rememberScrollState()
-
-    var sortMode by remember { mutableStateOf(ArchiveSortMode.NEWEST) }
-    var paymentFilter by remember { mutableStateOf(ArchivePaymentFilter.ALL) }
-
-    var periodFrom by remember { mutableStateOf<LocalDate?>(null) }
-    var periodTo by remember { mutableStateOf<LocalDate?>(null) }
-
-    var showClientPicker by remember { mutableStateOf(false) }
-    var showPeriodExpanded by remember { mutableStateOf(false) }
-    var showFromDatePicker by remember { mutableStateOf(false) }
-    var showToDatePicker by remember { mutableStateOf(false) }
-
-    var serviceFilter by remember { mutableStateOf("") }
-    var selectedClient by remember { mutableStateOf<ClientSuggestion?>(null) }
-
-    var viewingAppointment by remember { mutableStateOf<Appointment?>(null) }
-
-    val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-    val nowMinutes = runCatching { parseHmToMinutes(getCurrentTimeHm()) }.getOrNull() ?: 0
-
-    val allClients = remember(appointments) {
-        ClientSuggestions.fromAppointments(
-            appointments = appointments.filterNot { it.isDeleted },
-            limit = 1000
-        )
-    }
-
-    val serviceOptions = remember(appointments) {
-        buildList {
-            add("")
-            appointments
-                .filterNot { it.isDeleted }
-                .forEach { appointment ->
-                    val title = serviceDisplay(appointment)
-                    if (title.isNotBlank() && !contains(title)) {
-                        add(title)
-                    }
-                }
-        }.sortedBy { it.lowercase() }
-    }
-
-    val filtered = remember(
-        appointments,
-        periodFrom,
-        periodTo,
-        selectedClient,
-        serviceFilter,
-        sortMode,
-        paymentFilter,
-        today,
-        nowMinutes
-    ) {
-        appointments
-            .asSequence()
-            .filter { !it.isDeleted }
-            .filter { appointment ->
-                runCatching {
-                    getLiveStatus(
-                        appt = appointment,
-                        nowDate = today,
-                        nowMinutes = nowMinutes
-                    ) == LiveStatusKey.DONE
-                }.getOrDefault(false)
-            }
-            .filter { appointment ->
-                val appointmentDate = runCatching {
-                    LocalDate.parse(appointment.dateString)
-                }.getOrNull() ?: return@filter true
-
-                val from = periodFrom
-                val to = periodTo
-
-                val fromOk = from?.let { appointmentDate >= it } ?: true
-                val toOk = to?.let { appointmentDate <= it } ?: true
-                fromOk && toOk
-            }
-            .filter { appointment ->
-                val selected = selectedClient?.displayName?.trim().orEmpty()
-                if (selected.isBlank()) {
-                    true
-                } else {
-                    appointment.clientName.contains(selected, ignoreCase = true)
-                }
-            }
-            .filter { appointment ->
-                serviceFilter.isBlank() ||
-                        serviceDisplay(appointment).equals(serviceFilter, ignoreCase = true) ||
-                        appointment.serviceName.equals(serviceFilter, ignoreCase = true)
-            }
-            .filter { appointment ->
-                when (paymentFilter) {
-                    ArchivePaymentFilter.PAID ->
-                        appointment.effectivePaymentStatus() == AppointmentPaymentStatus.PAID
-
-                    ArchivePaymentFilter.PAYMENT_LATER ->
-                        appointment.effectivePaymentStatus() == AppointmentPaymentStatus.PAYMENT_LATER
-
-                    ArchivePaymentFilter.PAID_AFTER_DELAY ->
-                        appointment.effectivePaymentStatus() == AppointmentPaymentStatus.PAID_AFTER_DELAY
-
-                    ArchivePaymentFilter.ALL -> true
-                }
-            }
-            .sortedWith(
-                when (sortMode) {
-                    ArchiveSortMode.NEWEST ->
-                        compareByDescending<Appointment> { it.dateString }
-                            .thenByDescending { it.time }
-
-                    ArchiveSortMode.OLDEST ->
-                        compareBy<Appointment> { it.dateString }
-                            .thenBy { it.time }
-                }
-            )
-            .toList()
-    }
-
-    val totalCount = filtered.size
-    val totalRevenue = filtered.sumOf {
-        it.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
-    }
-    val totalHours = filtered.sumOf {
-        val minutes = if (it.durationMinutes > 0) it.durationMinutes else it.durationHours * 60
-        minutes / 60.0
-    }
-
-    val selectedSortLabel = when (sortMode) {
-        ArchiveSortMode.NEWEST -> Locales.t("archive_sort_newest")
-        ArchiveSortMode.OLDEST -> Locales.t("archive_sort_oldest")
-    }
-
-    CenteredContentContainer(
+    BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            Text(
-                text = Locales.t("archive_title"),
-                fontSize = (22 * fontScale).sp,
-                fontWeight = FontWeight.Bold,
-                color = onBg
+        val isTablet = maxWidth >= 900.dp
+        val fontScale = AppSettings.getFontScale()
+        val onBg = MaterialTheme.colors.onBackground
+        val onSurface = MaterialTheme.colors.onSurface
+        val scrollState = rememberScrollState()
+
+        var sortMode by remember { mutableStateOf(ArchiveSortMode.NEWEST) }
+        var paymentFilter by remember { mutableStateOf(ArchivePaymentFilter.ALL) }
+
+        var periodFrom by remember { mutableStateOf<LocalDate?>(null) }
+        var periodTo by remember { mutableStateOf<LocalDate?>(null) }
+
+        var showClientPicker by remember { mutableStateOf(false) }
+        var showPeriodExpanded by remember { mutableStateOf(false) }
+        var showFromDatePicker by remember { mutableStateOf(false) }
+        var showToDatePicker by remember { mutableStateOf(false) }
+
+        var serviceFilter by remember { mutableStateOf("") }
+        var selectedClient by remember { mutableStateOf<ClientSuggestion?>(null) }
+
+        var viewingAppointment by remember { mutableStateOf<Appointment?>(null) }
+
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val nowMinutes = runCatching { parseHmToMinutes(getCurrentTimeHm()) }.getOrNull() ?: 0
+
+        val allClients = remember(appointments) {
+            ClientSuggestions.fromAppointments(
+                appointments = appointments.filterNot { it.isDeleted },
+                limit = 1000
             )
+        }
 
-            Text(
-                text = Locales.t("archive_hint"),
-                fontSize = (14 * fontScale).sp,
-                color = onBg.copy(alpha = 0.7f)
-            )
-
-            if (!premiumEnabled) {
-                Text(
-                    text = Locales.t("premium_required_archive"),
-                    color = MaterialTheme.colors.error,
-                    fontSize = (14 * fontScale).sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                OutlinedButton(
-                    onClick = onOpenPremium,
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(Locales.t("premium_open_screen_btn"))
-                }
-            }
-
-            Text(
-                text = Locales.t("archive_filters_title"),
-                fontSize = (16 * fontScale).sp,
-                fontWeight = FontWeight.SemiBold,
-                color = if (premiumEnabled) onSurface else onSurface.copy(alpha = 0.55f)
-            )
-
-            CompactSelectionDialogField(
-                label = Locales.t("archive_sort_label"),
-                selected = selectedSortLabel,
-                items = listOf(
-                    Locales.t("archive_sort_newest"),
-                    Locales.t("archive_sort_oldest")
-                ),
-                onSelect = { value ->
-                    sortMode = when (value) {
-                        Locales.t("archive_sort_oldest") -> ArchiveSortMode.OLDEST
-                        else -> ArchiveSortMode.NEWEST
+        val serviceOptions = remember(appointments) {
+            buildList {
+                add("")
+                appointments
+                    .filterNot { it.isDeleted }
+                    .forEach { appointment ->
+                        val title = serviceDisplay(appointment)
+                        if (title.isNotBlank() && !contains(title)) {
+                            add(title)
+                        }
                     }
-                },
-                enabled = premiumEnabled
-            )
+            }.sortedBy { it.lowercase() }
+        }
 
-            CompactSelectionDialogField(
-                label = Locales.t("archive_service_filter_label"),
-                selected = if (serviceFilter.isBlank()) {
-                    Locales.t("archive_service_all")
-                } else {
-                    serviceFilter
-                },
-                items = serviceOptions.map {
-                    if (it.isBlank()) Locales.t("archive_service_all") else it
-                },
-                onSelect = { value ->
-                    serviceFilter = if (value == Locales.t("archive_service_all")) "" else value
-                },
-                enabled = premiumEnabled
-            )
+        val filtered = remember(
+            appointments,
+            periodFrom,
+            periodTo,
+            selectedClient,
+            serviceFilter,
+            sortMode,
+            paymentFilter,
+            today,
+            nowMinutes
+        ) {
+            appointments
+                .asSequence()
+                .filter { !it.isDeleted }
+                .filter { appointment ->
+                    runCatching {
+                        getLiveStatus(
+                            appt = appointment,
+                            nowDate = today,
+                            nowMinutes = nowMinutes
+                        ) == LiveStatusKey.DONE
+                    }.getOrDefault(false)
+                }
+                .filter { appointment ->
+                    val appointmentDate = runCatching {
+                        LocalDate.parse(appointment.dateString)
+                    }.getOrNull() ?: return@filter true
 
-            ArchivePeriodPickerBlock(
-                periodFrom = periodFrom,
-                periodTo = periodTo,
-                expanded = showPeriodExpanded,
-                onToggle = { showPeriodExpanded = !showPeriodExpanded },
-                onOpenFrom = { showFromDatePicker = true },
-                onOpenTo = { showToDatePicker = true },
-                onClear = {
-                    periodFrom = null
-                    periodTo = null
-                },
-                enabled = premiumEnabled
-            )
+                    val from = periodFrom
+                    val to = periodTo
 
-            ClientFilterButton(
-                selectedClientName = selectedClient?.displayName,
-                onClick = { showClientPicker = true },
-                onClear = { selectedClient = null },
-                enabled = premiumEnabled
-            )
-
-            PaymentFilterRows(
-                paymentFilter = paymentFilter,
-                onSelect = { paymentFilter = it },
-                enabled = premiumEnabled
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                StatLine(
-                    label = Locales.t("archive_total_records"),
-                    value = if (premiumEnabled) totalCount.toString() else "—",
-                    fontScale = fontScale
-                )
-                StatLine(
-                    label = Locales.t("archive_total_revenue"),
-                    value = if (premiumEnabled) {
-                        formatMoney(totalRevenue, AppSettings.selectedCurrency)
+                    val fromOk = from?.let { appointmentDate >= it } ?: true
+                    val toOk = to?.let { appointmentDate <= it } ?: true
+                    fromOk && toOk
+                }
+                .filter { appointment ->
+                    val selected = selectedClient?.displayName?.trim().orEmpty()
+                    if (selected.isBlank()) {
+                        true
                     } else {
-                        "—"
-                    },
-                    fontScale = fontScale
-                )
-                StatLine(
-                    label = Locales.t("archive_total_hours"),
-                    value = if (premiumEnabled) formatHours(totalHours) else "—",
-                    fontScale = fontScale
-                )
-            }
+                        appointment.clientName.contains(selected, ignoreCase = true)
+                    }
+                }
+                .filter { appointment ->
+                    serviceFilter.isBlank() ||
+                            serviceDisplay(appointment).equals(serviceFilter, ignoreCase = true) ||
+                            appointment.serviceName.equals(serviceFilter, ignoreCase = true)
+                }
+                .filter { appointment ->
+                    when (paymentFilter) {
+                        ArchivePaymentFilter.PAID ->
+                            appointment.effectivePaymentStatus() == AppointmentPaymentStatus.PAID
 
-            Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f))
+                        ArchivePaymentFilter.PAYMENT_LATER ->
+                            appointment.effectivePaymentStatus() == AppointmentPaymentStatus.PAYMENT_LATER
 
-            if (premiumEnabled) {
-                if (filtered.isEmpty()) {
+                        ArchivePaymentFilter.PAID_AFTER_DELAY ->
+                            appointment.effectivePaymentStatus() == AppointmentPaymentStatus.PAID_AFTER_DELAY
+
+                        ArchivePaymentFilter.ALL -> true
+                    }
+                }
+                .sortedWith(
+                    when (sortMode) {
+                        ArchiveSortMode.NEWEST ->
+                            compareByDescending<Appointment> { it.dateString }
+                                .thenByDescending { it.time }
+
+                        ArchiveSortMode.OLDEST ->
+                            compareBy<Appointment> { it.dateString }
+                                .thenBy { it.time }
+                    }
+                )
+                .toList()
+        }
+
+        val totalCount = filtered.size
+        val totalRevenue = filtered.sumOf {
+            it.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
+        }
+        val totalHours = filtered.sumOf {
+            val minutes = if (it.durationMinutes > 0) it.durationMinutes else it.durationHours * 60
+            minutes / 60.0
+        }
+
+        val selectedSortLabel = when (sortMode) {
+            ArchiveSortMode.NEWEST -> Locales.t("archive_sort_newest")
+            ArchiveSortMode.OLDEST -> Locales.t("archive_sort_oldest")
+        }
+
+        @Composable
+        fun ScreenContent() {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Text(
+                    text = Locales.t("archive_title"),
+                    fontSize = (22 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = onBg
+                )
+
+                Text(
+                    text = Locales.t("archive_hint"),
+                    fontSize = (14 * fontScale).sp,
+                    color = onBg.copy(alpha = 0.7f)
+                )
+
+                if (!premiumEnabled) {
                     Text(
-                        text = Locales.t("archive_no_results"),
-                        color = onSurface.copy(alpha = 0.7f),
-                        fontSize = (14 * fontScale).sp
+                        text = Locales.t("premium_required_archive"),
+                        color = MaterialTheme.colors.error,
+                        fontSize = (14 * fontScale).sp,
+                        fontWeight = FontWeight.SemiBold
                     )
-                } else {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+
+                    OutlinedButton(
+                        onClick = onOpenPremium,
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        filtered.forEach { appointment ->
-                            ArchiveRowCard(
-                                appointment = appointment,
-                                onClick = { viewingAppointment = appointment }
-                            )
+                        Text(Locales.t("premium_open_screen_btn"))
+                    }
+                }
+
+                Text(
+                    text = Locales.t("archive_filters_title"),
+                    fontSize = (16 * fontScale).sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (premiumEnabled) onSurface else onSurface.copy(alpha = 0.55f)
+                )
+
+                CompactSelectionDialogField(
+                    label = Locales.t("archive_sort_label"),
+                    selected = selectedSortLabel,
+                    items = listOf(
+                        Locales.t("archive_sort_newest"),
+                        Locales.t("archive_sort_oldest")
+                    ),
+                    onSelect = { value ->
+                        sortMode = when (value) {
+                            Locales.t("archive_sort_oldest") -> ArchiveSortMode.OLDEST
+                            else -> ArchiveSortMode.NEWEST
+                        }
+                    },
+                    enabled = premiumEnabled
+                )
+
+                CompactSelectionDialogField(
+                    label = Locales.t("archive_service_filter_label"),
+                    selected = if (serviceFilter.isBlank()) {
+                        Locales.t("archive_service_all")
+                    } else {
+                        serviceFilter
+                    },
+                    items = serviceOptions.map {
+                        if (it.isBlank()) Locales.t("archive_service_all") else it
+                    },
+                    onSelect = { value ->
+                        serviceFilter = if (value == Locales.t("archive_service_all")) "" else value
+                    },
+                    enabled = premiumEnabled
+                )
+
+                ArchivePeriodPickerBlock(
+                    periodFrom = periodFrom,
+                    periodTo = periodTo,
+                    expanded = showPeriodExpanded,
+                    onToggle = { showPeriodExpanded = !showPeriodExpanded },
+                    onOpenFrom = { showFromDatePicker = true },
+                    onOpenTo = { showToDatePicker = true },
+                    onClear = {
+                        periodFrom = null
+                        periodTo = null
+                    },
+                    enabled = premiumEnabled
+                )
+
+                ClientFilterButton(
+                    selectedClientName = selectedClient?.displayName,
+                    onClick = { showClientPicker = true },
+                    onClear = { selectedClient = null },
+                    enabled = premiumEnabled,
+                    compactTabletMode = isTablet
+                )
+
+                PaymentFilterRows(
+                    paymentFilter = paymentFilter,
+                    onSelect = { paymentFilter = it },
+                    enabled = premiumEnabled
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    StatLine(
+                        label = Locales.t("archive_total_records"),
+                        value = if (premiumEnabled) totalCount.toString() else "—",
+                        fontScale = fontScale
+                    )
+                    StatLine(
+                        label = Locales.t("archive_total_revenue"),
+                        value = if (premiumEnabled) {
+                            formatMoney(totalRevenue, AppSettings.selectedCurrency)
+                        } else {
+                            "—"
+                        },
+                        fontScale = fontScale
+                    )
+                    StatLine(
+                        label = Locales.t("archive_total_hours"),
+                        value = if (premiumEnabled) formatHours(totalHours) else "—",
+                        fontScale = fontScale
+                    )
+                }
+
+                Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f))
+
+                if (premiumEnabled) {
+                    if (filtered.isEmpty()) {
+                        Text(
+                            text = Locales.t("archive_no_results"),
+                            color = onSurface.copy(alpha = 0.7f),
+                            fontSize = (14 * fontScale).sp
+                        )
+                    } else {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            filtered.forEach { appointment ->
+                                ArchiveRowCard(
+                                    appointment = appointment,
+                                    onClick = { viewingAppointment = appointment }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    if (premiumEnabled && showClientPicker) {
-        ClientPickerDialog(
-            clients = allClients,
-            selectedClientName = selectedClient?.displayName,
-            onDismiss = { showClientPicker = false },
-            onClear = {
-                selectedClient = null
-                showClientPicker = false
-            },
-            onSelect = { client ->
-                selectedClient = client
-                showClientPicker = false
+        if (isTablet) {
+            CenteredNarrowContentContainer(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                ScreenContent()
             }
-        )
-    }
+        } else {
+            ScreenContent()
+        }
 
-    if (premiumEnabled && showFromDatePicker) {
-        val initialDate = periodFrom
-            ?: periodTo
-            ?: defaultArchiveDate(filtered, earliest = true)
-
-        StatsDatePickerDialog(
-            title = Locales.t("archive_period_from"),
-            initialSelectedDate = initialDate,
-            initialMonthDate = initialDate,
-            onDismiss = { showFromDatePicker = false },
-            onConfirm = { picked ->
-                val currentTo = periodTo
-                periodFrom = picked
-                if (currentTo != null && picked > currentTo) {
-                    periodTo = picked
+        if (premiumEnabled && showClientPicker) {
+            ClientPickerDialog(
+                clients = allClients,
+                selectedClientName = selectedClient?.displayName,
+                onDismiss = { showClientPicker = false },
+                onClear = {
+                    selectedClient = null
+                    showClientPicker = false
+                },
+                onSelect = { client ->
+                    selectedClient = client
+                    showClientPicker = false
                 }
-                showFromDatePicker = false
-                showPeriodExpanded = true
-            }
-        )
-    }
-
-    if (premiumEnabled && showToDatePicker) {
-        val initialDate = periodTo
-            ?: periodFrom
-            ?: defaultArchiveDate(filtered, earliest = false)
-
-        StatsDatePickerDialog(
-            title = Locales.t("archive_period_to"),
-            initialSelectedDate = initialDate,
-            initialMonthDate = initialDate,
-            onDismiss = { showToDatePicker = false },
-            onConfirm = { picked ->
-                val currentFrom = periodFrom
-                periodTo = picked
-                if (currentFrom != null && picked < currentFrom) {
-                    periodFrom = picked
-                }
-                showToDatePicker = false
-                showPeriodExpanded = true
-            }
-        )
-    }
-
-    if (premiumEnabled) {
-        viewingAppointment?.let { appointment ->
-            ArchiveAppointmentViewDialog(
-                appointment = appointment,
-                onDismiss = { viewingAppointment = null }
             )
+        }
+
+        if (premiumEnabled && showFromDatePicker) {
+            val initialDate = periodFrom
+                ?: periodTo
+                ?: defaultArchiveDate(filtered, earliest = true)
+
+            StatsDatePickerDialog(
+                title = Locales.t("archive_period_from"),
+                initialSelectedDate = initialDate,
+                initialMonthDate = initialDate,
+                onDismiss = { showFromDatePicker = false },
+                onConfirm = { picked ->
+                    val currentTo = periodTo
+                    periodFrom = picked
+                    if (currentTo != null && picked > currentTo) {
+                        periodTo = picked
+                    }
+                    showFromDatePicker = false
+                    showPeriodExpanded = true
+                }
+            )
+        }
+
+        if (premiumEnabled && showToDatePicker) {
+            val initialDate = periodTo
+                ?: periodFrom
+                ?: defaultArchiveDate(filtered, earliest = false)
+
+            StatsDatePickerDialog(
+                title = Locales.t("archive_period_to"),
+                initialSelectedDate = initialDate,
+                initialMonthDate = initialDate,
+                onDismiss = { showToDatePicker = false },
+                onConfirm = { picked ->
+                    val currentFrom = periodFrom
+                    periodTo = picked
+                    if (currentFrom != null && picked < currentFrom) {
+                        periodFrom = picked
+                    }
+                    showToDatePicker = false
+                    showPeriodExpanded = true
+                }
+            )
+        }
+
+        if (premiumEnabled) {
+            viewingAppointment?.let { appointment ->
+                ArchiveAppointmentViewDialog(
+                    appointment = appointment,
+                    onDismiss = { viewingAppointment = null }
+                )
+            }
         }
     }
 }
@@ -726,36 +742,71 @@ private fun ClientFilterButton(
     selectedClientName: String?,
     onClick: () -> Unit,
     onClear: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean,
+    compactTabletMode: Boolean
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        OutlinedButton(
-            onClick = onClick,
-            enabled = enabled,
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(14.dp)
+    if (compactTabletMode) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = if (selectedClientName.isNullOrBlank()) {
-                    Locales.t("archive_client_filter_label")
-                } else {
-                    "${Locales.t("archive_client_filter_label")}: $selectedClientName"
-                },
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        if (!selectedClientName.isNullOrBlank()) {
-            TextButton(
-                onClick = onClear,
-                enabled = enabled
+            OutlinedButton(
+                onClick = onClick,
+                enabled = enabled,
+                modifier = Modifier.fillMaxWidth(0.62f),
+                shape = RoundedCornerShape(14.dp)
             ) {
-                Text(Locales.t("archive_filter_clear"))
+                Text(
+                    text = if (selectedClientName.isNullOrBlank()) {
+                        Locales.t("archive_client_filter_label")
+                    } else {
+                        "${Locales.t("archive_client_filter_label")}: $selectedClientName"
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            if (!selectedClientName.isNullOrBlank()) {
+                TextButton(
+                    onClick = onClear,
+                    enabled = enabled
+                ) {
+                    Text(Locales.t("archive_filter_clear"))
+                }
+            }
+        }
+    } else {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedButton(
+                onClick = onClick,
+                enabled = enabled,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text(
+                    text = if (selectedClientName.isNullOrBlank()) {
+                        Locales.t("archive_client_filter_label")
+                    } else {
+                        "${Locales.t("archive_client_filter_label")}: $selectedClientName"
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            if (!selectedClientName.isNullOrBlank()) {
+                TextButton(
+                    onClick = onClear,
+                    enabled = enabled
+                ) {
+                    Text(Locales.t("archive_filter_clear"))
+                }
             }
         }
     }
@@ -1007,31 +1058,37 @@ private fun ArchiveAppointmentViewDialog(
                 Text(Locales.t("close"))
             }
         },
-        dismissButton = {},
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(18.dp)
     )
 }
 
 private fun serviceDisplay(appointment: Appointment): String {
-    return if (appointment.serviceName.startsWith("service_")) {
-        Locales.t(appointment.serviceName)
+    val service = appointment.serviceName.trim()
+    return if (service.startsWith("service_")) {
+        Locales.t(service)
     } else {
-        appointment.serviceName
+        service.ifBlank { Locales.t("stats_unknown_service") }
     }
 }
 
-private fun formatMoney(value: Double, currencyCode: String): String {
-    val rounded = (value * 100.0).roundToInt() / 100.0
+private fun formatMoney(
+    value: Double,
+    currencyCode: String
+): String {
+    val rounded = (value * 100).roundToInt() / 100.0
     val text = if (rounded % 1.0 == 0.0) {
         rounded.toInt().toString()
     } else {
         rounded.toString()
     }
-    return AppSettings.formatMoneyAmount(text, currencyCode)
+    return AppSettings.formatMoneyAmount(
+        amount = text,
+        currencyCode = currencyCode
+    )
 }
 
 private fun formatHours(hours: Double): String {
-    val rounded = (hours * 10.0).roundToInt() / 10.0
+    val rounded = (hours * 10).roundToInt() / 10.0
     return if (rounded % 1.0 == 0.0) {
         rounded.toInt().toString()
     } else {
@@ -1043,13 +1100,12 @@ private fun defaultArchiveDate(
     appointments: List<Appointment>,
     earliest: Boolean
 ): LocalDate {
-    val parsedDates = appointments.mapNotNull {
+    val dates = appointments.mapNotNull {
         runCatching { LocalDate.parse(it.dateString) }.getOrNull()
     }
-
     return when {
-        parsedDates.isEmpty() -> LocalDate(2026, 1, 1)
-        earliest -> parsedDates.minOrNull() ?: LocalDate(2026, 1, 1)
-        else -> parsedDates.maxOrNull() ?: LocalDate(2026, 1, 1)
+        dates.isEmpty() -> Clock.System.todayIn(TimeZone.currentSystemDefault())
+        earliest -> dates.minOrNull() ?: Clock.System.todayIn(TimeZone.currentSystemDefault())
+        else -> dates.maxOrNull() ?: Clock.System.todayIn(TimeZone.currentSystemDefault())
     }
 }

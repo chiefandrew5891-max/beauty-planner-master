@@ -54,6 +54,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.andrey.beautyplanner.auth.SignInProvider
+import androidx.compose.foundation.layout.BoxWithConstraints
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -678,15 +679,20 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                     )
                 }
 
-                AccountDeleteActionButton(
-                    text = Locales.t("account_delete_button"),
-                    onClick = {
-                        deleteAccountPasswordDraft = ""
-                        deleteAccountPasswordError = null
-                        showDeleteAccountWarningDialog = true
-                    },
-                    enabled = !isDeletingAccount
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AccountDeleteActionButton(
+                        text = Locales.t("account_delete_button"),
+                        onClick = {
+                            deleteAccountPasswordDraft = ""
+                            deleteAccountPasswordError = null
+                            showDeleteAccountWarningDialog = true
+                        },
+                        enabled = !isDeletingAccount
+                    )
+                }
 
                 Spacer(Modifier.height(36.dp))
             }
@@ -757,28 +763,38 @@ private fun AccountDeleteActionButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
-    androidx.compose.material.Button(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        elevation = androidx.compose.material.ButtonDefaults.elevation(
-            defaultElevation = 4.dp,
-            pressedElevation = 6.dp,
-            disabledElevation = 0.dp
-        ),
-        colors = androidx.compose.material.ButtonDefaults.buttonColors(
-            backgroundColor = androidx.compose.ui.graphics.Color(0xFFDB4437),
-            contentColor = androidx.compose.ui.graphics.Color.White,
-            disabledBackgroundColor = androidx.compose.ui.graphics.Color(0xFFDB4437).copy(alpha = 0.45f),
-            disabledContentColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.85f)
-        ),
-        contentPadding = PaddingValues(vertical = 14.dp)
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            text = text,
-            fontSize = (15 * AppSettings.getFontScale()).sp,
-            fontWeight = FontWeight.Medium
-        )
+        val isTablet = maxWidth >= 900.dp
+
+        androidx.compose.material.Button(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = if (isTablet) {
+                Modifier.fillMaxWidth(0.62f)
+            } else {
+                Modifier.fillMaxWidth()
+            },
+            shape = RoundedCornerShape(14.dp),
+            elevation = androidx.compose.material.ButtonDefaults.elevation(
+                defaultElevation = 4.dp,
+                pressedElevation = 6.dp,
+                disabledElevation = 0.dp
+            ),
+            colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                backgroundColor = androidx.compose.ui.graphics.Color(0xFFDB4437),
+                contentColor = androidx.compose.ui.graphics.Color.White,
+                disabledBackgroundColor = androidx.compose.ui.graphics.Color(0xFFDB4437).copy(alpha = 0.45f),
+                disabledContentColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.85f)
+            ),
+            contentPadding = PaddingValues(vertical = 14.dp)
+        ) {
+            Text(
+                text = text,
+                fontSize = (15 * AppSettings.getFontScale()).sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }

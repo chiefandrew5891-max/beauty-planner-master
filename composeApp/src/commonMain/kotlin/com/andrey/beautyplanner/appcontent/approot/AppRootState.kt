@@ -487,6 +487,22 @@ class AppRootState(
         }
     }
 
+    private suspend fun runPostLoginFullSync() {
+        runCatching {
+            com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
+        }.onFailure {
+            CloudSyncLogger.log("postLoginFullSync: profile pull failed: ${it.message}")
+        }
+
+        reloadAppointmentsForCurrentProfile()
+        refreshAccessState()
+
+        runCatching {
+            performCloudSyncIfEligible()
+        }.onFailure {
+            CloudSyncLogger.log("postLoginFullSync: cloud sync failed: ${it.message}")
+        }
+    }
     fun resetLivePreviews() {
         currentLiveDarkMode = AppSettings.isDarkMode
         fontScale = AppSettings.getFontScale()
@@ -627,8 +643,10 @@ class AppRootState(
                             persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
-                            reloadAppointmentsForCurrentProfile()
-                            performCloudSyncIfEligible()
+                            AppSettings.clearMasterProfileLocalState()
+
+                            runPostLoginFullSync()
+
                             authResolved = true
                             authErrorMessage = null
                             currentScreen = Screen.MONTH
@@ -681,9 +699,10 @@ class AppRootState(
                             persistAuthenticatedSession(result.user)
 
                             clearSessionLocalState()
-                            reloadAppointmentsForCurrentProfile()
-                            refreshAccessState()
-                            performCloudSyncIfEligible()
+                            AppSettings.clearMasterProfileLocalState()
+
+                            runPostLoginFullSync()
+
                             authResolved = true
                             authErrorMessage = null
                             currentScreen = Screen.MONTH
