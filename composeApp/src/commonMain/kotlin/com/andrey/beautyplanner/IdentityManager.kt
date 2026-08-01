@@ -20,4 +20,9 @@ object IdentityManager {
         AppSettings.persist()
         return generated
     }
+
+    fun resetInstallId() {
+        AppSettings.installId = ""
+        AppSettings.persist()
+    }
 }

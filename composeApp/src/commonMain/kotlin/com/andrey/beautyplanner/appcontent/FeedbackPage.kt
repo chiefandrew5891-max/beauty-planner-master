@@ -39,11 +39,6 @@ fun FeedbackPage(
                     append(": ")
                     append(updateStatus.latestVersion)
                 }
-                if (updateStatus.latestBuild.isNotBlank()) {
-                    append(" (")
-                    append(updateStatus.latestBuild)
-                    append(")")
-                }
             }
         }
         else -> Locales.t("about_app_up_to_date")
@@ -73,12 +68,6 @@ fun FeedbackPage(
 
             Text(
                 text = "${Locales.t("about_app_version")}: ${appInfo.versionName}",
-                fontSize = (16 * fontScale).sp,
-                color = MaterialTheme.colors.onSurface
-            )
-
-            Text(
-                text = "${Locales.t("about_app_build")}: ${appInfo.buildNumber}",
                 fontSize = (16 * fontScale).sp,
                 color = MaterialTheme.colors.onSurface
             )

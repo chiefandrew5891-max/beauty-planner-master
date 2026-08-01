@@ -828,6 +828,7 @@ class AppRootState(
     ) {
         currentAuthUser = null
         clearPersistedAuthenticatedSession()
+        IdentityManager.resetInstallId()
         clearSessionLocalState()
         AppSettings.clearMasterProfileLocalState()
         reloadAppointmentsForGuestProfile()
@@ -919,6 +920,7 @@ class AppRootState(
                 runCatching {
                     AuthGateway.signOut()
                     AuthGateway.clearCredentialState()
+                    IdentityManager.resetInstallId()
 
                     currentAuthUser = null
                     clearPersistedAuthenticatedSession()
@@ -948,6 +950,7 @@ class AppRootState(
                 runCatching {
                     AuthGateway.signOut()
                     AuthGateway.clearCredentialState()
+                    IdentityManager.resetInstallId()
 
                     currentAuthUser = null
                     clearPersistedAuthenticatedSession()
