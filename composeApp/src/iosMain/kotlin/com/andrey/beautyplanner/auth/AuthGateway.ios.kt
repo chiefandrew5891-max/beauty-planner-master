@@ -3,6 +3,7 @@ package com.andrey.beautyplanner.auth
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.remote.BackendBridgeConnector
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.withTimeoutOrNull
 
 actual object AuthGateway {
 
@@ -12,7 +13,10 @@ actual object AuthGateway {
 
         return try {
             caller.invoke("__currentUser", emptyMap(), deferred)
-            val result = deferred.await()
+
+            val result = withTimeoutOrNull(5000) {
+                deferred.await()
+            } ?: return null
 
             val uid = result["uid"].orEmpty().trim()
             if (uid.isBlank()) return null

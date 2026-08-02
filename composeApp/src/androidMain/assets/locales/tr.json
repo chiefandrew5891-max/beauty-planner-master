@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Apple yetkilendirmesi iptal edilemedi. Lütfen tekrar deneyin.",
     "account_label_apple_fallback": "Apple Hesabı",
     "about_app_description": "Uygulama açıklaması",
-    "about_app_upcoming_updates": "Gelecek güncellemeler"
+    "about_app_upcoming_updates": "Gelecek güncellemeler",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Çalışma alanınız yükleniyor…"
 }

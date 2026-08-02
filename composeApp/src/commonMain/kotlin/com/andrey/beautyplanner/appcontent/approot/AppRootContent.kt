@@ -96,6 +96,10 @@ fun AppRootContent(
         )
         return
     }
+    if (!state.authResolved) {
+        SessionLoadingScreen()
+        return
+    }
 
     if (pendingPinAfterSplash) {
         LaunchedEffect(Unit) {
@@ -270,18 +274,26 @@ fun AppRootContent(
                     }
                 )
             }
-
+            // =========================================================
+            // TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS SCREEN
+            // Экран временно скрыт из пользовательского UI.
+            // Логику и файл экрана не удалять.
+            // BEGIN TEMP HIDE
+            // =========================================================
             Screen.CLIENT_INTERACTIONS -> {
-                val nowMillis = Clock.System.now().toEpochMilliseconds()
-                if (!AccessManager.hasFeature(PremiumFeature.STATS, nowMillis)) {
-                    state.showPremiumRequired(
-                        message = Locales.t("premium_required_client_interactions"),
-                        returnTo = Screen.MONTH
-                    )
-                } else {
-                    ClientInteractionsScreen(appState = state)
-                }
+             //   val nowMillis = Clock.System.now().toEpochMilliseconds()
+             //   if (!AccessManager.hasFeature(PremiumFeature.STATS, nowMillis)) {
+              //      state.showPremiumRequired(
+              //          message = Locales.t("premium_required_client_interactions"),
+              //          returnTo = Screen.MONTH
+              //      )
+              //  } else {
+              //      ClientInteractionsScreen(appState = state)
+             //   }
             }
+            // =========================================================
+            // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS SCREEN
+            // =========================================================
 
             Screen.MONTH -> {
                 var nowTimeHm by remember { mutableStateOf(getCurrentTimeHm()) }

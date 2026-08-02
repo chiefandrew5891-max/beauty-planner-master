@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Det gick inte att återkalla Apple-auktoriseringen. Försök igen.",
     "account_label_apple_fallback": "Apple-konto",
     "about_app_description": "Appbeskrivning",
-    "about_app_upcoming_updates": "Kommande uppdateringar"
+    "about_app_upcoming_updates": "Kommande uppdateringar",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Laddar din arbetsyta…"
 }

@@ -606,5 +606,7 @@
     "account_delete_apple_revoke_failed": "Не удалось отозвать авторизацию Apple. Пожалуйста, попробуйте еще раз.",
     "account_label_apple_fallback": "Аккаунт Apple",
     "about_app_description": "Описание приложения",
-    "about_app_upcoming_updates": "Ожидаемые обновления"
+    "about_app_upcoming_updates": "Ожидаемые обновления",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Загрузка вашего рабочего пространства…"
 }

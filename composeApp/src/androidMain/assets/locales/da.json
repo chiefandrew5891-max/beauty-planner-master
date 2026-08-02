@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Kunne ikke tilbagekalde Apple-godkendelse. Prøv venligst igen.",
     "account_label_apple_fallback": "Apple-konto",
     "about_app_description": "Appbeskrivelse",
-    "about_app_upcoming_updates": "Kommende opdateringer"
+    "about_app_upcoming_updates": "Kommende opdateringer",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Indlæser dit arbejdsområde…"
 }

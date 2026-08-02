@@ -606,5 +606,7 @@
     "account_delete_apple_revoke_failed": "Failed to revoke Apple authorization. Please try again.",
     "account_label_apple_fallback": "Apple Account",
     "about_app_description": "App description",
-    "about_app_upcoming_updates": "Upcoming updates"
+    "about_app_upcoming_updates": "Upcoming updates",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Loading your workspace…"
 }

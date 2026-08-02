@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Apple का प्रमाणीकरण रद्द करने में विफल। कृपया पुनः प्रयास करें।",
     "account_label_apple_fallback": "Apple खाता",
     "about_app_description": "ऐप का विवरण",
-    "about_app_upcoming_updates": "आगामी अपडेट"
+    "about_app_upcoming_updates": "आगामी अपडेट",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "आपका वर्कस्पेस लोड हो रहा है…"
 }

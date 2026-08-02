@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Revocarea autorizației Apple a eșuat. Vă rugăm să încercați din nou.",
     "account_label_apple_fallback": "Cont Apple",
     "about_app_description": "Descrierea aplicației",
-    "about_app_upcoming_updates": "Actualizări viitoare"
+    "about_app_upcoming_updates": "Actualizări viitoare",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Se încarcă spațiul dvs. de lucru…"
 }

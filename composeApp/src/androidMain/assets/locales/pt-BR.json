@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Falha ao revogar a autorização da Apple. Tente novamente.",
     "account_label_apple_fallback": "Conta Apple",
     "about_app_description": "Descrição do aplicativo",
-    "about_app_upcoming_updates": "Próximas atualizações"
+    "about_app_upcoming_updates": "Próximas atualizações",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Carregando seu espaço de trabalho…"
 }

@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Apple 권한 부여를 철회하지 못했습니다. 다시 시도해 주세요.",
     "account_label_apple_fallback": "Apple 계정",
     "about_app_description": "앱 설명",
-    "about_app_upcoming_updates": "예정된 업데이트"
+    "about_app_upcoming_updates": "예정된 업데이트",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "작업 공간을 불러오는 중…"
 }

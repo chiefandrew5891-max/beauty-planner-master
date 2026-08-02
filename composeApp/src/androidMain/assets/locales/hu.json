@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Az Apple-authorization visszavonása nem sikerült. Kérjük, próbálja újra.",
     "account_label_apple_fallback": "Apple-fiók",
     "about_app_description": "Alkalmazás leírása",
-    "about_app_upcoming_updates": "Várható frissítések"
+    "about_app_upcoming_updates": "Várható frissítések",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Munkaterület betöltése…"
 }

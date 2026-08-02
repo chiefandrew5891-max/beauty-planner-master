@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "فشل إلغاء تفويض Apple. يرجى المحاولة مرة أخرى.",
     "account_label_apple_fallback": "حساب Apple",
     "about_app_description": "وصف التطبيق",
-    "about_app_upcoming_updates": "التحديثات القادمة"
+    "about_app_upcoming_updates": "التحديثات القادمة",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "جاري تحميل مساحة العمل الخاصة بك…"
 }

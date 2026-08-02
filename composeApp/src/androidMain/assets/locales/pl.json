@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Nie удалось cofnąć autoryzacji Apple. Spróbuj ponownie.",
     "account_label_apple_fallback": "Konto Apple",
     "about_app_description": "Opis aplikacji",
-    "about_app_upcoming_updates": "Nadchodzące aktualizacje"
+    "about_app_upcoming_updates": "Nadchodzące aktualizacje",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Wczytywanie Twojej przestrzeni roboczej…"
 }

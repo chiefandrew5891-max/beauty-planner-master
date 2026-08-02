@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Неуспешно отмяна на оторизацията от Apple. Моля, опитайте отново.",
     "account_label_apple_fallback": "Apple акаунт",
     "about_app_description": "Описание на приложението",
-    "about_app_upcoming_updates": "Предстоящи актуализации"
+    "about_app_upcoming_updates": "Предстоящи актуализации",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Зареждане на вашето работно пространство…"
 }

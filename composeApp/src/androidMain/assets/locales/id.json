@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Gagal mencabut otorisasi Apple. Silakan coba lagi.",
     "account_label_apple_fallback": "Akun Apple",
     "about_app_description": "Deskripsi aplikasi",
-    "about_app_upcoming_updates": "Pembaruan mendatang"
+    "about_app_upcoming_updates": "Pembaruan mendatang",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Memuat ruang kerja Anda…"
 }

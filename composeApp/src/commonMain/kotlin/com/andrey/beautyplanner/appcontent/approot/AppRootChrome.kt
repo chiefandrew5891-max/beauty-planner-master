@@ -294,6 +294,9 @@ fun AppRootChrome(
             }
         }
     }
+    val drawerGesturesEnabled =
+        state.currentScreen != Screen.AUTH_WELCOME &&
+        state.currentScreen != Screen.AUTH_EMAIL
 
     Surface(
         color = bg,
@@ -301,6 +304,7 @@ fun AppRootChrome(
     ) {
         ModalDrawer(
             drawerState = state.drawerState,
+            gesturesEnabled = drawerGesturesEnabled,
             drawerContent = {
                 Column(
                     modifier = Modifier
@@ -447,6 +451,13 @@ fun AppRootChrome(
                         state.closeDrawer()
                     }
 
+                    // =========================================================
+                    // TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS NAV ENTRY
+                    // Скрыто временно для review-сборки.
+                    // Вернуть после возобновления работы над BeautyBooker integration.
+                    // BEGIN TEMP HIDE
+                    // =========================================================
+                    /*
                     DrawerItem(
                         title = Locales.t("nav_client_interactions"),
                         selected = state.currentScreen == Screen.CLIENT_INTERACTIONS
@@ -465,6 +476,11 @@ fun AppRootChrome(
                         state.currentScreen = Screen.CLIENT_INTERACTIONS
                         state.closeDrawer()
                     }
+                    */
+                    // =========================================================
+                    // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS NAV ENTRY
+                    // =========================================================
+
 
                     DrawerItem(
                         title = Locales.t("nav_settings"),

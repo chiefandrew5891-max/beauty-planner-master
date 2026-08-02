@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Αποτυχία ανάκλησης της εξουσιοδότησης Apple. Παρακαλούμε δοκιμάστε ξανά.",
     "account_label_apple_fallback": "Λογαριασμός Apple",
     "about_app_description": "Περιγραφή εφαρμογής",
-    "about_app_upcoming_updates": "Αναμενόμενες ενημερώσεις"
+    "about_app_upcoming_updates": "Αναμενόμενες ενημερώσεις",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Φόρτωση του χώρου εργασίας σας…"
 }

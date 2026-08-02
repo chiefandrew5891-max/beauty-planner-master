@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "撤销 Apple 授权失败，请重试。",
     "account_label_apple_fallback": "Apple 账号",
     "about_app_description": "应用描述",
-    "about_app_upcoming_updates": "即将推出的更新"
+    "about_app_upcoming_updates": "即将推出的更新",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "正在加载您的工作区…"
 }

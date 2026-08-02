@@ -604,6 +604,9 @@ class AppRootState(
             SignInProvider.ANONYMOUS -> "anonymous"
         }
 
+        currentAuthUser = currentUser
+        persistAuthenticatedSession(currentUser)
+
         val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
             installId = installId,
             firebaseUid = currentUser.uid,
@@ -613,8 +616,6 @@ class AppRootState(
             displayName = currentUser.displayName
         )
 
-        currentAuthUser = currentUser
-        persistAuthenticatedSession(currentUser)
         AppSettings.clearMasterProfileLocalState()
         com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
 

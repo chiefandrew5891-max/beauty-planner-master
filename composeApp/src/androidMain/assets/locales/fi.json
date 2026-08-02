@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Apple-valtuutuksen peruuttaminen epäonnistui. Yritä uudelleen.",
     "account_label_apple_fallback": "Apple-tili",
     "about_app_description": "Sovelluksen kuvaus",
-    "about_app_upcoming_updates": "Tulevat päivitykset"
+    "about_app_upcoming_updates": "Tulevat päivitykset",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Ladataan työtilaasi…"
 }

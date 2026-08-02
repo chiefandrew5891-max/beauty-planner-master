@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Apple-Autorisierung konnte nicht widerrufen werden. Bitte versuchen Sie es erneut.",
     "account_label_apple_fallback": "Apple-Konto",
     "about_app_description": "App-Beschreibung",
-    "about_app_upcoming_updates": "Kommende Updates"
+    "about_app_upcoming_updates": "Kommende Updates",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Ihr Arbeitsbereich wird geladen…"
 }

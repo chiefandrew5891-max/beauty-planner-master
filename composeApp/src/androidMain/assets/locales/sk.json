@@ -604,5 +604,7 @@
     "account_delete_apple_revoke_failed": "Zrušenie autorizácie Apple sa nepodarilo. Skúste to prosím znova.",
     "account_label_apple_fallback": "Účet Apple",
     "about_app_description": "Popis aplikácie",
-    "about_app_upcoming_updates": "Očakávané aktualizácie"
+    "about_app_upcoming_updates": "Očakávané aktualizácie",
+    "session_loading_title": "Beauty Planner",
+    "session_loading_subtitle": "Načítava sa váš pracovný priestor…"
 }

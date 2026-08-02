@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.coroutines.withTimeout
 
 actual object BackendBridge {
 
@@ -234,7 +235,10 @@ actual object BackendBridge {
             ?: error("iOS backend bridge is not connected.")
 
         caller.invoke(name, payload, deferred)
-        return deferred.await()
+
+        return withTimeout(8000) {
+            deferred.await()
+        }
     }
 
     private fun parseServiceTemplates(raw: String?): List<MasterServiceTemplatePayload> {
