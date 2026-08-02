@@ -606,5 +606,6 @@
     "about_app_description": "Περιγραφή εφαρμογής",
     "about_app_upcoming_updates": "Αναμενόμενες ενημερώσεις",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Φόρτωση του χώρου εργασίας σας…"
+    "session_loading_subtitle": "Φόρτωση του χώρου εργασίας σας…",
+    "session_loading_guest_subtitle": "Προετοιμασία σύνδεσης…"
 }

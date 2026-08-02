@@ -606,5 +606,6 @@
     "about_app_description": "Uygulama açıklaması",
     "about_app_upcoming_updates": "Gelecek güncellemeler",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Çalışma alanınız yükleniyor…"
+    "session_loading_subtitle": "Çalışma alanınız yükleniyor…",
+    "session_loading_guest_subtitle": "Oturum açma hazırlanıyor…"
 }

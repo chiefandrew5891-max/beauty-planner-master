@@ -606,5 +606,6 @@
     "about_app_description": "Описание на приложението",
     "about_app_upcoming_updates": "Предстоящи актуализации",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Зареждане на вашето работно пространство…"
+    "session_loading_subtitle": "Зареждане на вашето работно пространство…",
+    "session_loading_guest_subtitle": "Подготовка за вход…"
 }

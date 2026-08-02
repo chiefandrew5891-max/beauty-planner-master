@@ -30,7 +30,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import com.andrey.beautyplanner.remote.MasterScheduleSync
 
-
 @Stable
 class AppRootState(
     val appointments: SnapshotStateList<Appointment>,
@@ -512,6 +511,7 @@ class AppRootState(
             CloudSyncLogger.log("postLoginFullSync: app update fetch failed: ${it.message}")
         }
     }
+
     fun resetLivePreviews() {
         currentLiveDarkMode = AppSettings.isDarkMode
         fontScale = AppSettings.getFontScale()
@@ -633,6 +633,7 @@ class AppRootState(
         }.onFailure {
             CloudSyncLogger.log("bootstrapAuthenticatedUser: cloud sync failed: ${it.message}")
         }
+
         runCatching {
             val status = AppUpdateChecker.check()
             appUpdateStatus = status
@@ -849,7 +850,7 @@ class AppRootState(
         AppSettings.clearMasterProfileLocalState()
         reloadAppointmentsForGuestProfile()
         refreshAccessState()
-        authResolved = false
+        authResolved = true
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
         authErrorMessage = keepAuthErrorMessage
@@ -890,6 +891,7 @@ class AppRootState(
         currentScreen = Screen.AUTH_WELCOME
         hideGlobalLoading()
     }
+
     private suspend fun waitForServerConfirmedAccountDeletion(
         timeoutMillis: Long = 180_000L,
         pollIntervalMillis: Long = 30_000L
@@ -1313,6 +1315,7 @@ class AppRootState(
         }
 
         val nowMillis = Clock.System.now().toEpochMilliseconds()
+
         val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
         if (!premiumEligible) {
             CloudSyncLogger.log("performCloudSyncIfEligible: skipped, no premium access")
@@ -1953,6 +1956,7 @@ fun rememberAppRootState(): AppRootState {
                     }
 
                 state.currentScreen = Screen.AUTH_WELCOME
+                state.authResolved = true
             }
         }
 
@@ -1969,4 +1973,3 @@ fun rememberAppRootState(): AppRootState {
 
     return state
 }
-//

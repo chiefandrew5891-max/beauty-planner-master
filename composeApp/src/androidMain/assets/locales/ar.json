@@ -606,5 +606,6 @@
     "about_app_description": "وصف التطبيق",
     "about_app_upcoming_updates": "التحديثات القادمة",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "جاري تحميل مساحة العمل الخاصة بك…"
+    "session_loading_subtitle": "جاري تحميل مساحة العمل الخاصة بك…",
+    "session_loading_guest_subtitle": "جاري تحضير تسجيل الدخول…"
 }

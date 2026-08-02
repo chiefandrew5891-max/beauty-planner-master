@@ -77,6 +77,7 @@ fun AppRootContent(
 ) {
     var showSplash by rememberSaveable { mutableStateOf(true) }
     var pendingPinAfterSplash by rememberSaveable { mutableStateOf(false) }
+    var showPostSplashLoader by rememberSaveable { mutableStateOf(false) }
     val ownerName = AppSettings.ownerName.trim()
 
     var viewingAppt by remember { mutableStateOf<Appointment?>(null) }
@@ -89,6 +90,7 @@ fun AppRootContent(
             ownerName = ownerName,
             onAnimationFinished = {
                 showSplash = false
+                showPostSplashLoader = true
                 if (state.mustCreatePin || (state.locked && !state.mustCreatePin)) {
                     pendingPinAfterSplash = true
                 }
@@ -96,8 +98,27 @@ fun AppRootContent(
         )
         return
     }
-    if (!state.authResolved) {
-        SessionLoadingScreen()
+
+    LaunchedEffect(showPostSplashLoader, state.authResolved) {
+        if (showPostSplashLoader && state.authResolved) {
+            delay(900)
+            showPostSplashLoader = false
+        }
+    }
+
+    if (showPostSplashLoader || !state.authResolved) {
+        val hasSavedAuthenticatedSession =
+            AppSettings.localProfileUserId.isNotBlank() &&
+                    AppSettings.lastAuthProvider.isNotBlank()
+
+        val loaderSubtitle =
+            if (hasSavedAuthenticatedSession) {
+                Locales.t("session_loading_subtitle")
+            } else {
+                Locales.t("session_loading_guest_subtitle")
+            }
+
+        SessionLoadingScreen(subtitle = loaderSubtitle)
         return
     }
 

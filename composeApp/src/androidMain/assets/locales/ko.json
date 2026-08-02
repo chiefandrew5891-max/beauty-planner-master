@@ -606,5 +606,6 @@
     "about_app_description": "앱 설명",
     "about_app_upcoming_updates": "예정된 업데이트",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "작업 공간을 불러오는 중…"
+    "session_loading_subtitle": "작업 공간을 불러오는 중…",
+    "session_loading_guest_subtitle": "로그인 준비 중…"
 }

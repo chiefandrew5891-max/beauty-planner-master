@@ -606,5 +606,6 @@
     "about_app_description": "Lietotnes apraksts",
     "about_app_upcoming_updates": "Gaidāmie atjauninājumi",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Tiek ielādēta jūsu darba vieta…"
+    "session_loading_subtitle": "Tiek ielādēta jūsu darba vieta…",
+    "session_loading_guest_subtitle": "Tiek gatavota pieteikšanās…"
 }

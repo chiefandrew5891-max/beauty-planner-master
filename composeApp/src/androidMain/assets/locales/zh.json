@@ -606,5 +606,6 @@
     "about_app_description": "应用描述",
     "about_app_upcoming_updates": "即将推出的更新",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "正在加载您的工作区…"
+    "session_loading_subtitle": "正在加载您的工作区…",
+    "session_loading_guest_subtitle": "正在准备登录…"
 }

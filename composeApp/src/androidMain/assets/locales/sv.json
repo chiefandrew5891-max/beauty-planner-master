@@ -606,5 +606,6 @@
     "about_app_description": "Appbeskrivning",
     "about_app_upcoming_updates": "Kommande uppdateringar",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Laddar din arbetsyta…"
+    "session_loading_subtitle": "Laddar din arbetsyta…",
+    "session_loading_guest_subtitle": "Förbereder inloggning…"
 }

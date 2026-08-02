@@ -606,5 +606,6 @@
     "about_app_description": "Rakenduse kirjeldus",
     "about_app_upcoming_updates": "Oodatavad uuendused",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Teie tööala laadimine…"
+    "session_loading_subtitle": "Teie tööala laadimine…",
+    "session_loading_guest_subtitle": "Sisselogimise ettevalmistamine…"
 }

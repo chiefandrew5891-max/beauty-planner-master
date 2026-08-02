@@ -606,5 +606,6 @@
     "about_app_description": "Deskripsi aplikasi",
     "about_app_upcoming_updates": "Pembaruan mendatang",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Memuat ruang kerja Anda…"
+    "session_loading_subtitle": "Memuat ruang kerja Anda…",
+    "session_loading_guest_subtitle": "Menyiapkan masuk…"
 }

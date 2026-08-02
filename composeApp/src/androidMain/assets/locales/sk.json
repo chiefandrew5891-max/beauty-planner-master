@@ -606,5 +606,6 @@
     "about_app_description": "Popis aplikácie",
     "about_app_upcoming_updates": "Očakávané aktualizácie",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Načítava sa váš pracovný priestor…"
+    "session_loading_subtitle": "Načítava sa váš pracovný priestor…",
+    "session_loading_guest_subtitle": "Príprava prihlásenia…"
 }

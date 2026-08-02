@@ -29,7 +29,9 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 
 @Composable
-fun SessionLoadingScreen() {
+fun SessionLoadingScreen(
+    subtitle: String = Locales.t("session_loading_subtitle")
+) {
     val fontScale = AppSettings.getFontScale()
     val infiniteTransition = rememberInfiniteTransition(label = "session-loader")
 
@@ -98,7 +100,7 @@ fun SessionLoadingScreen() {
             Spacer(modifier = Modifier.size(20.dp))
 
             Text(
-                text = Locales.t("session_loading_subtitle"),
+                text = subtitle,
                 fontSize = (14 * fontScale).sp,
                 color = subtitleColor
             )

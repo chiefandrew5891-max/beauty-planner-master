@@ -606,5 +606,6 @@
     "about_app_description": "アプリの説明",
     "about_app_upcoming_updates": "今後のアップデート",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "ワークスペースを読み込んでいます…"
+    "session_loading_subtitle": "ワークスペースを読み込んでいます…",
+    "session_loading_guest_subtitle": "サインインの準備中…"
 }

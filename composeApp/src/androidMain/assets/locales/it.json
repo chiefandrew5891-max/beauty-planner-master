@@ -606,5 +606,6 @@
     "about_app_description": "Descrizione dell'app",
     "about_app_upcoming_updates": "Prossimi aggiornamenti",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "Caricamento del tuo spazio di lavoro…"
+    "session_loading_subtitle": "Caricamento del tuo spazio di lavoro…",
+    "session_loading_guest_subtitle": "Preparazione dell'accesso…"
 }

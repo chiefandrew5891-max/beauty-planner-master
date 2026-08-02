@@ -606,5 +606,6 @@
     "about_app_description": "ऐप का विवरण",
     "about_app_upcoming_updates": "आगामी अपडेट",
     "session_loading_title": "Beauty Planner",
-    "session_loading_subtitle": "आपका वर्कस्पेस लोड हो रहा है…"
+    "session_loading_subtitle": "आपका वर्कस्पेस लोड हो रहा है…",
+    "session_loading_guest_subtitle": "साइन-इन तैयार किया जा रहा है…"
 }
