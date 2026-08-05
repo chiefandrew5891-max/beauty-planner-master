@@ -1518,7 +1518,16 @@ class AppRootState(
                     )
                 ) {
                     is PurchaseResult.Success -> {
+                        println(  //Logs
+                            "buyPremium success: productId=${result.productId}, " +
+                                    "purchaseToken=${result.purchaseToken}, transactionId=${result.transactionId}"
+                        )
                         runCatching {
+                            println(
+                                "verifySubscription request: userId=${AppSettings.backendUserId}, " +
+                                        "productId=${result.productId}, purchaseToken=${result.purchaseToken}, " +
+                                        "transactionId=${result.transactionId}, platform=${getPlatform().backendPlatform}"
+                            )
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.verifySubscription(
                                 userId = AppSettings.backendUserId,
                                 productId = result.productId,

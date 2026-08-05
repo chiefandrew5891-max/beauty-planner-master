@@ -267,16 +267,23 @@ fun SettingsPage(
                 color = onSurface.copy(alpha = 0.10f)
             )
 
-            val premiumStatusText = when (accessState.tier) {
-                AccessTier.TRIAL -> Locales.t("premium_status_trial")
-                AccessTier.FREE_LIMITED -> Locales.t("premium_status_free")
-                AccessTier.PREMIUM -> Locales.t("premium_status_premium")
+            val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
+
+            val isPremiumActive =
+                accessState.tier == AccessTier.PREMIUM ||
+                        accessState.hasPremium ||
+                        hasActiveSubscriptionState
+
+            val premiumStatusText = when {
+                isPremiumActive -> Locales.t("premium_status_premium")
+                accessState.tier == AccessTier.TRIAL -> Locales.t("premium_status_trial")
+                else -> Locales.t("premium_status_free")
             }
 
-            val premiumHintText = when (accessState.tier) {
-                AccessTier.TRIAL -> Locales.t("premium_trial_active_hint")
-                AccessTier.FREE_LIMITED -> Locales.t("premium_free_limited_hint")
-                AccessTier.PREMIUM -> Locales.t("premium_active_hint")
+            val premiumHintText = when {
+                isPremiumActive -> Locales.t("premium_active_hint")
+                accessState.tier == AccessTier.TRIAL -> Locales.t("premium_trial_active_hint")
+                else -> Locales.t("premium_free_limited_hint")
             }
 
             SettingsSectionBlock(
@@ -290,7 +297,7 @@ fun SettingsPage(
                         color = onSurface
                     )
 
-                    if (accessState.isTrialActive) {
+                    if (!isPremiumActive && accessState.isTrialActive) {
                         Text(
                             text = "${Locales.t("premium_trial_days_left")}: ${accessState.trialDaysLeft}",
                             fontSize = (14 * fontScale).sp,

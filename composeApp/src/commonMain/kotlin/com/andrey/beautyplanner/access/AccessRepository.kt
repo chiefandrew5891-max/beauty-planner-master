@@ -23,29 +23,42 @@ object AccessRepository {
     }
 
     fun getCachedAccessState(nowMillis: Long): AccessState {
-        val tier = when (AppSettings.cachedAccessTier) {
-            "PREMIUM" -> AccessTier.PREMIUM
-            "TRIAL" -> AccessTier.TRIAL
-            else -> AccessTier.FREE_LIMITED
-        }
+        val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
 
-        val daysLeft = if (AppSettings.cachedTrialEndsAtMillis > nowMillis) {
+        val hasEffectivePremium =
+            AppSettings.cachedHasPremium ||
+                    AppSettings.cachedAccessTier == "PREMIUM" ||
+                    hasActiveSubscriptionState
+
+        val trialEndsAtMillis = AppSettings.cachedTrialEndsAtMillis
+
+        val daysLeft = if (trialEndsAtMillis > nowMillis) {
             ceil(
-                (AppSettings.cachedTrialEndsAtMillis - nowMillis).toDouble() /
+                (trialEndsAtMillis - nowMillis).toDouble() /
                         (24 * 60 * 60 * 1000.0)
             ).toInt().coerceAtLeast(0)
         } else {
             0
         }
 
-        val trialEndsAtMillis = AppSettings.cachedTrialEndsAtMillis
+        val tier = when {
+            hasEffectivePremium -> AccessTier.PREMIUM
+            AppSettings.cachedAccessTier == "TRIAL" -> AccessTier.TRIAL
+            else -> AccessTier.FREE_LIMITED
+        }
+
+        val isTrialActive =
+            !hasEffectivePremium &&
+                    tier == AccessTier.TRIAL &&
+                    trialEndsAtMillis > nowMillis
+
         return AccessState(
             tier = tier,
             trialStartedAtMillis = AppSettings.trialStartedAtMillis,
             trialEndsAtMillis = trialEndsAtMillis,
-            isTrialActive = tier == AccessTier.TRIAL && trialEndsAtMillis > nowMillis,
-            hasPremium = AppSettings.cachedHasPremium,
-            trialDaysLeft = daysLeft
+            isTrialActive = isTrialActive,
+            hasPremium = hasEffectivePremium,
+            trialDaysLeft = if (hasEffectivePremium) 0 else daysLeft
         )
     }
 }

@@ -45,6 +45,8 @@ actual class BillingManager actual constructor() {
             purchaser.invoke(productId, obfuscatedAccountId, deferred)
             val result = deferred.await()
 
+            println("BillingManager.ios purchasePremium result = $result")
+
             PurchaseResult.Success(
                 productId = result["productId"] ?: productId,
                 purchaseToken = result["purchaseToken"].orEmpty(),

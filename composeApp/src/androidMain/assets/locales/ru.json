@@ -609,5 +609,6 @@
     "about_app_upcoming_updates": "Ожидаемые обновления",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Загрузка вашего рабочего пространства…",
-    "session_loading_guest_subtitle": "Подготовка ко входу…"
+    "session_loading_guest_subtitle": "Подготовка ко входу…",
+    "billing_account_binding_active_message": "Premium уже привязан к текущему аккаунту приложения:"
 }

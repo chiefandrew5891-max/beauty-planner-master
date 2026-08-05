@@ -607,5 +607,6 @@
     "about_app_upcoming_updates": "Várható frissítések",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Munkaterület betöltése…",
-    "session_loading_guest_subtitle": "Bejelentkezés előkészítése…"
+    "session_loading_guest_subtitle": "Bejelentkezés előkészítése…",
+    "billing_account_binding_active_message": "A Premium már társítva van a jelenlegi alkalmazásfiókhoz:"
 }

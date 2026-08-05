@@ -9,6 +9,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
+
+        StoreKitBridge.startObservingTransactions()
+
         return true
     }
 }

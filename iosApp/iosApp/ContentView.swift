@@ -4,11 +4,9 @@ import ComposeApp
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
+        
         let signInBridge = GoogleSignInBridge()
         let appleBridge = AppleSignInBridge()
-
-        //ContactsPermissionHelper.requestPermission { granted in
-        //}
 
         signInBridge.startGoogleSignIn = { deferred in
             GoogleAuthBridge.signInWithGoogle { result, error in
@@ -387,27 +385,17 @@ struct ComposeView: UIViewControllerRepresentable {
             }
         }
         ContactsAutocompleteBridgeConnector().isPermissionGranted = { deferred in
-            let granted = ContactsPermissionHelper.isPermissionGranted()
-            deferred.complete(value: granted)
+            deferred.complete(value: false)
         }
 
         ContactsAutocompleteBridgeConnector().requestPermission = { deferred in
-            ContactsPermissionHelper.requestPermission { granted in
-                deferred.complete(value: granted)
-            }
+            deferred.complete(value: false)
         }
 
-        ContactsAutocompleteBridgeConnector().findSuggestions = { query, limit, deferred in
-            ContactsPermissionHelper.findSuggestions(query: query, limit: Int(limit)) { results in
-                let mapped: [[String: String]] = results.map { item in
-                    [
-                        "displayName": item["displayName"] ?? "",
-                        "phone": item["phone"] ?? ""
-                    ]
-                }
-                deferred.complete(value: mapped)
-            }
+        ContactsAutocompleteBridgeConnector().findSuggestions = { _, _, deferred in
+            deferred.complete(value: [])
         }
+        
         BackupCryptoBridgeConnector().encrypt = { plaintext, password, saltBase64, iterations, deferred in
             var error: NSError?
             let result = BackupCryptoBridge.encrypt(
@@ -530,6 +518,8 @@ struct ComposeView: UIViewControllerRepresentable {
                 }
 
                 guard let result = result as? [String: String] else {
+                    print("ContentView purchaseProduct bridge result:", result)// logs
+
                     deferred.completeExceptionally(
                         exception: KotlinIllegalStateException(message: "Purchase result is empty")
                     )

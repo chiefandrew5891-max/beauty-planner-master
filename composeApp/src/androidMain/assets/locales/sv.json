@@ -607,5 +607,6 @@
     "about_app_upcoming_updates": "Kommande uppdateringar",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Laddar din arbetsyta…",
-    "session_loading_guest_subtitle": "Förbereder inloggning…"
+    "session_loading_guest_subtitle": "Förbereder inloggning…",
+    "billing_account_binding_active_message": "Premium är redan kopplat till det aktuella appkontot:"
 }

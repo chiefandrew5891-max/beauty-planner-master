@@ -609,5 +609,6 @@
     "about_app_upcoming_updates": "Upcoming updates",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Loading your workspace…",
-    "session_loading_guest_subtitle": "Preparing sign-in…"
+    "session_loading_guest_subtitle": "Preparing sign-in…",
+    "billing_account_binding_active_message": "Premium is already linked to the current app account:"
 }

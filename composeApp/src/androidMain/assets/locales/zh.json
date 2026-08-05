@@ -607,5 +607,6 @@
     "about_app_upcoming_updates": "即将推出的更新",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "正在加载您的工作区…",
-    "session_loading_guest_subtitle": "正在准备登录…"
+    "session_loading_guest_subtitle": "正在准备登录…",
+    "billing_account_binding_active_message": "Premium 已绑定到当前应用账号："
 }

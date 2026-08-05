@@ -607,5 +607,6 @@
     "about_app_upcoming_updates": "التحديثات القادمة",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "جاري تحميل مساحة العمل الخاصة بك…",
-    "session_loading_guest_subtitle": "جاري تحضير تسجيل الدخول…"
+    "session_loading_guest_subtitle": "جاري تحضير تسجيل الدخول…",
+    "billing_account_binding_active_message": "اشتراك Premium مرتبط بالفعل بحساب التطبيق الحالي:"
 }

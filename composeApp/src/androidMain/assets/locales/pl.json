@@ -607,5 +607,6 @@
     "about_app_upcoming_updates": "Nadchodzące aktualizacje",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Wczytywanie Twojej przestrzeni roboczej…",
-    "session_loading_guest_subtitle": "Przygotowywanie logowania…"
+    "session_loading_guest_subtitle": "Przygotowywanie logowania…",
+    "billing_account_binding_active_message": "Konto Premium jest już powiązane z bieżącym kontem w aplikacji:"
 }

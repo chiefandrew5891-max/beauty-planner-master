@@ -15,9 +15,6 @@
         </dict>
     </array>
 
-    <key>NSContactsUsageDescription</key>
-    <string>Beauty Planner uses your contacts to quickly suggest client names and phone numbers when creating appointments.</string>
-
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
 

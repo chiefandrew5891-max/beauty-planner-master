@@ -607,5 +607,6 @@
     "about_app_upcoming_updates": "Tulevat päivitykset",
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Ladataan työtilaasi…",
-    "session_loading_guest_subtitle": "Valmistellaan kirjautumista…"
+    "session_loading_guest_subtitle": "Valmistellaan kirjautumista…",
+    "billing_account_binding_active_message": "Premium on jo yhdistetty nykyiseen sovellustiliin:"
 }

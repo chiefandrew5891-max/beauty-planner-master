@@ -49,18 +49,23 @@ fun PremiumAccessScreen(
     val fontScale = AppSettings.getFontScale()
     val linkColor = MaterialTheme.colors.primary
 
-    val subtitle = when {
-        accessState.tier == AccessTier.PREMIUM -> Locales.t("premium_active_subtitle")
-        accessState.isTrialActive -> Locales.t("premium_trial_active_subtitle")
-        else -> Locales.t("premium_trial_expired_subtitle")
-    }
-
     val premiumProduct = billingUiState.products.firstOrNull {
         it.productId == PREMIUM_SUBS_PRODUCT_ID
     }
 
+    val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
+
     val isPremiumActive =
-        billingUiState.ownedPremium || accessState.tier == AccessTier.PREMIUM
+        billingUiState.ownedPremium ||
+                accessState.tier == AccessTier.PREMIUM ||
+                accessState.hasPremium ||
+                hasActiveSubscriptionState
+
+    val subtitle = when {
+        isPremiumActive -> Locales.t("premium_active_subtitle")
+        accessState.isTrialActive -> Locales.t("premium_trial_active_subtitle")
+        else -> Locales.t("premium_trial_expired_subtitle")
+    }
 
     val buyButtonText = when {
         isPremiumActive ->
@@ -130,7 +135,7 @@ fun PremiumAccessScreen(
                     )
                 }
 
-                if (!billingUiState.errorMessage.isNullOrBlank()) {
+                if (!isPremiumActive && !billingUiState.errorMessage.isNullOrBlank()) {
                     Spacer(modifier = Modifier.padding(top = 18.dp))
 
                     val isStoreUnavailableMessage =
@@ -251,10 +256,15 @@ fun PremiumAccessScreen(
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 Text(
-                    text = if (isGuestUser) {
-                        Locales.t("premium_guest_binding_impossible_message")
-                    } else {
-                        Locales.t("billing_account_binding_message")
+                    text = when {
+                        isGuestUser ->
+                            Locales.t("premium_guest_binding_impossible_message")
+
+                        isPremiumActive ->
+                            Locales.t("billing_account_binding_active_message")
+
+                        else ->
+                            Locales.t("billing_account_binding_message")
                     },
                     fontSize = (14 * fontScale).sp,
                     color = MaterialTheme.colors.onBackground.copy(alpha = 0.85f),
