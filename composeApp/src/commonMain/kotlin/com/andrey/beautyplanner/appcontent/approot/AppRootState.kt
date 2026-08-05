@@ -1491,11 +1491,13 @@ class AppRootState(
                 )
                 return@launch
             }
+
             showGlobalLoading(Locales.t("loading"))
             try {
                 val product = billingUiState.products.firstOrNull {
                     it.productId == PREMIUM_SUBS_PRODUCT_ID
                 }
+
                 if (product == null) {
                     billingUiState = billingUiState.copy(
                         status = BillingStatus.READY,
@@ -1504,13 +1506,16 @@ class AppRootState(
                     )
                     return@launch
                 }
+
                 billingUiState = billingUiState.copy(
                     status = BillingStatus.PURCHASING,
                     errorMessage = null
                 )
+
                 val accountId = currentAuthUser?.uid?.ifBlank { null }
                     ?: AppSettings.backendUserId.ifBlank { null }
                     ?: IdentityManager.getOrCreateInstallId()
+
                 when (
                     val result = billingManager.purchasePremium(
                         productId = product.productId,
@@ -1518,23 +1523,30 @@ class AppRootState(
                     )
                 ) {
                     is PurchaseResult.Success -> {
-                        println(  //Logs
-                            "buyPremium success: productId=${result.productId}, " +
-                                    "purchaseToken=${result.purchaseToken}, transactionId=${result.transactionId}"
-                        )
-                        runCatching {
-                            println(
-                                "verifySubscription request: userId=${AppSettings.backendUserId}, " +
-                                        "productId=${result.productId}, purchaseToken=${result.purchaseToken}, " +
-                                        "transactionId=${result.transactionId}, platform=${getPlatform().backendPlatform}"
+                        val platformCode = getPlatform().backendPlatform.uppercase().let {
+                            if (it == "IOS") "APP_STORE" else "PLAY"
+                        }
+                        val isIosPlatform = platformCode == "APP_STORE"
+
+                        val info = billingManager.getSubscriptionInfo()
+                        val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
+
+                        if (isIosPlatform && localSubscriptionActive) {
+                            com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
+                                productId = info.productId.ifBlank { result.productId },
+                                subscriptionState = info.state.name,
+                                expiryMillis = info.expiryTimeMillis ?: 0L,
+                                autoRenewing = info.isAutoRenewing
                             )
+                            refreshAccessState()
+                        }
+
+                        runCatching {
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.verifySubscription(
                                 userId = AppSettings.backendUserId,
                                 productId = result.productId,
                                 purchaseToken = result.purchaseToken,
-                                platform = getPlatform().backendPlatform.uppercase().let {
-                                    if (it == "IOS") "APP_STORE" else "PLAY"
-                                },
+                                platform = platformCode,
                                 transactionId = result.transactionId
                             )
                             com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
@@ -1544,14 +1556,46 @@ class AppRootState(
                                 errorMessage = null,
                                 ownedPremium = accessState.hasPremium
                             )
+
+                            scope.launch {
+                                delay(2000L)
+                                runCatching {
+                                    val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
+                                        AppSettings.backendUserId
+                                    )
+                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                    refreshAccessState()
+                                }
+                            }
                         }.onFailure { e ->
-                            billingUiState = billingUiState.copy(
-                                status = BillingStatus.ERROR,
-                                errorMessage = e.message ?: "Backend verification failed",
-                                ownedPremium = accessState.hasPremium
-                            )
+                            if (isIosPlatform && localSubscriptionActive) {
+                                billingUiState = billingUiState.copy(
+                                    status = BillingStatus.PURCHASED,
+                                    errorMessage = null,
+                                    ownedPremium = true
+                                )
+                                refreshAccessState()
+
+                                scope.launch {
+                                    delay(2500L)
+                                    runCatching {
+                                        val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
+                                            AppSettings.backendUserId
+                                        )
+                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                        refreshAccessState()
+                                    }
+                                }
+                            } else {
+                                billingUiState = billingUiState.copy(
+                                    status = BillingStatus.ERROR,
+                                    errorMessage = e.message ?: "Backend verification failed",
+                                    ownedPremium = accessState.hasPremium
+                                )
+                            }
                         }
                     }
+
                     is PurchaseResult.Cancelled -> {
                         billingUiState = billingUiState.copy(
                             status = BillingStatus.READY,
@@ -1559,6 +1603,7 @@ class AppRootState(
                             ownedPremium = accessState.hasPremium
                         )
                     }
+
                     is PurchaseResult.Error -> {
                         billingUiState = billingUiState.copy(
                             status = BillingStatus.ERROR,
@@ -1586,9 +1631,11 @@ class AppRootState(
                 }
                 return@launch
             }
+
             if (!silent) {
                 showGlobalLoading(Locales.t("loading"))
             }
+
             try {
                 if (!silent) {
                     billingUiState = billingUiState.copy(
@@ -1596,8 +1643,23 @@ class AppRootState(
                         errorMessage = null
                     )
                 }
-                when (val result = billingManager.restorePurchases()) {
+
+                when (billingManager.restorePurchases()) {
                     is RestoreResult.Restored -> {
+                        val isIosPlatform = getPlatform().backendPlatform.uppercase() == "IOS"
+                        val info = billingManager.getSubscriptionInfo()
+                        val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
+
+                        if (isIosPlatform && localSubscriptionActive) {
+                            com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
+                                productId = info.productId.ifBlank { PREMIUM_SUBS_PRODUCT_ID },
+                                subscriptionState = info.state.name,
+                                expiryMillis = info.expiryTimeMillis ?: 0L,
+                                autoRenewing = info.isAutoRenewing
+                            )
+                            refreshAccessState()
+                        }
+
                         runCatching {
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
                                 AppSettings.backendUserId
@@ -1609,14 +1671,46 @@ class AppRootState(
                                 errorMessage = if (silent) null else Locales.t("premium_restored"),
                                 ownedPremium = accessState.hasPremium
                             )
+
+                            scope.launch {
+                                delay(2000L)
+                                runCatching {
+                                    val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
+                                        AppSettings.backendUserId
+                                    )
+                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                    refreshAccessState()
+                                }
+                            }
                         }.onFailure { e ->
-                            billingUiState = billingUiState.copy(
-                                status = BillingStatus.ERROR,
-                                errorMessage = e.message ?: Locales.t("premium_restore_failed"),
-                                ownedPremium = accessState.hasPremium
-                            )
+                            if (isIosPlatform && localSubscriptionActive) {
+                                billingUiState = billingUiState.copy(
+                                    status = BillingStatus.READY,
+                                    errorMessage = if (silent) null else Locales.t("premium_restored"),
+                                    ownedPremium = true
+                                )
+                                refreshAccessState()
+
+                                scope.launch {
+                                    delay(2500L)
+                                    runCatching {
+                                        val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
+                                            AppSettings.backendUserId
+                                        )
+                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                        refreshAccessState()
+                                    }
+                                }
+                            } else {
+                                billingUiState = billingUiState.copy(
+                                    status = BillingStatus.ERROR,
+                                    errorMessage = e.message ?: Locales.t("premium_restore_failed"),
+                                    ownedPremium = accessState.hasPremium
+                                )
+                            }
                         }
                     }
+
                     is RestoreResult.NothingToRestore -> {
                         billingUiState = billingUiState.copy(
                             status = BillingStatus.READY,
@@ -1624,12 +1718,11 @@ class AppRootState(
                             ownedPremium = accessState.hasPremium
                         )
                     }
+
                     is RestoreResult.Error -> {
                         billingUiState = billingUiState.copy(
                             status = if (silent) BillingStatus.READY else BillingStatus.ERROR,
-                            errorMessage = if (silent) null else result.message.ifBlank {
-                                Locales.t("premium_restore_failed")
-                            },
+                            errorMessage = if (silent) null else Locales.t("premium_restore_failed"),
                             ownedPremium = accessState.hasPremium
                         )
                     }

@@ -22,6 +22,24 @@ object AccessRepository {
         AppSettings.persist()
     }
 
+    fun applyLocalPremiumFallback(
+        productId: String,
+        subscriptionState: String,
+        expiryMillis: Long,
+        autoRenewing: Boolean
+    ) {
+        AppSettings.premiumSubscriptionState = subscriptionState
+        AppSettings.premiumSubscribedProductId = productId
+        AppSettings.premiumSubscriptionExpiryMillis = expiryMillis
+        AppSettings.premiumSubscriptionAutoRenewing = autoRenewing
+
+        AppSettings.cachedAccessTier = "PREMIUM"
+        AppSettings.cachedHasPremium = true
+        AppSettings.cachedSubscriptionState = subscriptionState
+
+        AppSettings.persist()
+    }
+
     fun getCachedAccessState(nowMillis: Long): AccessState {
         val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
 
