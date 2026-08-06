@@ -133,6 +133,10 @@ private data class SettingsSnapshot(
     val lastKnownStoreUrl: String = "",
     val aboutDescription: String = "",
     val aboutUpcoming: String = "",
+    val premiumLastOwnerAuthUserId: String = "",
+    val premiumLastOwnerBackendUserId: String = "",
+    val localPremiumFallbackBlocked: Boolean = false,
+    val localPremiumFallbackPendingSync: Boolean = false,
 )
 
 object AppSettings {
@@ -282,6 +286,11 @@ object AppSettings {
     var lastKnownLatestVersion by mutableStateOf("")
     var lastKnownLatestBuild by mutableStateOf("")
     var lastKnownStoreUrl by mutableStateOf("")
+
+    var premiumLastOwnerAuthUserId by mutableStateOf("")
+    var premiumLastOwnerBackendUserId by mutableStateOf("")
+    var localPremiumFallbackBlocked by mutableStateOf(false)
+    var localPremiumFallbackPendingSync by mutableStateOf(false)
 
     var aboutDescription: String = ""
     var aboutUpcoming: String = ""
@@ -677,6 +686,11 @@ object AppSettings {
         aboutDescription = snapshot.aboutDescription
         aboutUpcoming = snapshot.aboutUpcoming
 
+        premiumLastOwnerAuthUserId = snapshot.premiumLastOwnerAuthUserId
+        premiumLastOwnerBackendUserId = snapshot.premiumLastOwnerBackendUserId
+        localPremiumFallbackBlocked = snapshot.localPremiumFallbackBlocked
+        localPremiumFallbackPendingSync = snapshot.localPremiumFallbackPendingSync
+
         val code = languageCodes[selectedLanguage] ?: "en"
         Locales.currentLanguage = code
     }
@@ -754,6 +768,11 @@ object AppSettings {
 
             aboutDescription = aboutDescription,
             aboutUpcoming = aboutUpcoming,
+
+            premiumLastOwnerAuthUserId = premiumLastOwnerAuthUserId,
+            premiumLastOwnerBackendUserId = premiumLastOwnerBackendUserId,
+            localPremiumFallbackBlocked = localPremiumFallbackBlocked,
+            localPremiumFallbackPendingSync = localPremiumFallbackPendingSync,
         )
 
         runCatching {

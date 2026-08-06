@@ -771,12 +771,18 @@ fun AppRootContent(
                 },
                 onDisablePremium = {
                     AppSettings.developerPremiumOverrideEnabled = false
-                    AppSettings.persist()
+                    com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
+                        blockAutoFallback = true
+                    )
                     state.refreshAccessState()
                 },
                 onResetTrialToNow = {
                     val now = Clock.System.now().toEpochMilliseconds()
                     val trialEnds = now + 14L * 24L * 60L * 60L * 1000L
+
+                    com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
+                        blockAutoFallback = true
+                    )
 
                     AppSettings.trialStartedAtMillis = now
                     AppSettings.cachedAccessTier = "TRIAL"
@@ -790,6 +796,16 @@ fun AppRootContent(
                     val now = Clock.System.now().toEpochMilliseconds()
 
                     AppSettings.trialStartedAtMillis = 0L
+
+                    AppSettings.premiumSubscriptionState = "NONE"
+                    AppSettings.premiumSubscribedProductId = ""
+                    AppSettings.premiumSubscriptionToken = ""
+                    AppSettings.premiumSubscriptionStartMillis = 0L
+                    AppSettings.premiumSubscriptionExpiryMillis = 0L
+                    AppSettings.premiumSubscriptionAutoRenewing = false
+                    AppSettings.premiumOrderId = ""
+                    AppSettings.premiumLastVerifiedAtMillis = 0L
+
                     AppSettings.cachedAccessTier = "FREE_LIMITED"
                     AppSettings.cachedTrialEndsAtMillis = 0L
                     AppSettings.cachedHasPremium = false

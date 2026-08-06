@@ -31,18 +31,25 @@ fun PrimaryActionButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    alignStart: Boolean = false
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = if (alignStart) Alignment.CenterStart else Alignment.Center
     ) {
         Button(
             onClick = onClick,
             enabled = enabled,
             modifier = Modifier
                 .widthIn(max = DefaultActionButtonMaxWidth)
-                .fillMaxWidth()
+                .then(
+                    if (alignStart) {
+                        Modifier
+                    } else {
+                        Modifier.fillMaxWidth()
+                    }
+                )
                 .height(DefaultActionButtonHeight),
             shape = DefaultActionButtonShape
         ) {
@@ -59,18 +66,25 @@ fun SecondaryActionButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    alignStart: Boolean = false
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = if (alignStart) Alignment.CenterStart else Alignment.Center
     ) {
         OutlinedButton(
             onClick = onClick,
             enabled = enabled,
             modifier = Modifier
                 .widthIn(max = DefaultActionButtonMaxWidth)
-                .fillMaxWidth()
+                .then(
+                    if (alignStart) {
+                        Modifier
+                    } else {
+                        Modifier.fillMaxWidth()
+                    }
+                )
                 .height(DefaultActionButtonHeight),
             shape = DefaultActionButtonShape
         ) {

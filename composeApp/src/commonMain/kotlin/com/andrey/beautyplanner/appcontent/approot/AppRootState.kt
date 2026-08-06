@@ -617,7 +617,10 @@ class AppRootState(
         )
 
         AppSettings.clearMasterProfileLocalState()
-        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+            remote = remote,
+            currentAuthUserId = currentAuthUser?.uid
+        )
 
         runCatching {
             com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
@@ -665,7 +668,10 @@ class AppRootState(
                                 email = result.user.email,
                                 displayName = result.user.displayName
                             )
-                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                remote = remote,
+                                currentAuthUserId = currentAuthUser?.uid
+                            )
                             com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
                                 firebaseUid = result.user.uid,
                                 email = result.user.email,
@@ -722,7 +728,10 @@ class AppRootState(
                                 email = result.user.email,
                                 displayName = result.user.displayName
                             )
-                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                remote = remote,
+                                currentAuthUserId = currentAuthUser?.uid
+                            )
                             com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
                                 firebaseUid = result.user.uid,
                                 email = result.user.email,
@@ -788,7 +797,10 @@ class AppRootState(
                         displayName = user.displayName
                     )
                     currentAuthUser = user
-                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                        remote = remote,
+                        currentAuthUserId = currentAuthUser?.uid
+                    )
 
                     clearPersistedAuthenticatedSession()
 
@@ -1249,7 +1261,10 @@ class AppRootState(
                                     return@launch
                                 }
 
-                                com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                                com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                    remote = remote,
+                                    currentAuthUserId = currentAuthUser?.uid
+                                )
 
                                 try {
                                     com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
@@ -1549,7 +1564,10 @@ class AppRootState(
                                 platform = platformCode,
                                 transactionId = result.transactionId
                             )
-                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                remote = remote,
+                                currentAuthUserId = currentAuthUser?.uid
+                            )
                             refreshAccessState()
                             billingUiState = billingUiState.copy(
                                 status = BillingStatus.PURCHASED,
@@ -1651,20 +1669,28 @@ class AppRootState(
                         val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
 
                         if (isIosPlatform && localSubscriptionActive) {
-                            com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
+                            val applied = com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
+                                currentAuthUserId = currentAuthUser?.uid,
+                                currentBackendUserId = AppSettings.backendUserId,
                                 productId = info.productId.ifBlank { PREMIUM_SUBS_PRODUCT_ID },
                                 subscriptionState = info.state.name,
                                 expiryMillis = info.expiryTimeMillis ?: 0L,
                                 autoRenewing = info.isAutoRenewing
                             )
-                            refreshAccessState()
+
+                            if (applied) {
+                                refreshAccessState()
+                            }
                         }
 
                         runCatching {
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
                                 AppSettings.backendUserId
                             )
-                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(remote)
+                            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                remote = remote,
+                                currentAuthUserId = currentAuthUser?.uid
+                            )
                             refreshAccessState()
                             billingUiState = billingUiState.copy(
                                 status = BillingStatus.READY,
@@ -1879,6 +1905,22 @@ class AppRootState(
         }
     }
 
+    private fun handleAuthenticatedUserChange(user: AuthUser) {
+        val previousAuthUserId = AppSettings.localProfileUserId
+
+        val authUserChanged =
+            previousAuthUserId.isNotBlank() && previousAuthUserId != user.uid
+
+        if (authUserChanged) {
+            com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
+                blockAutoFallback = true
+            )
+            AppSettings.backendUserId = ""
+        }
+
+        persistAuthenticatedSession(user)
+    }
+
     fun tryBuildShiftChain(
         day: String,
         baseIgnoreId: String?,
@@ -1985,12 +2027,10 @@ class AppRootState(
         AppSettings.lastAuthEmail = ""
         AppSettings.lastAuthDisplayName = ""
         AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
-        AppSettings.cachedAccessTier = "FREE_LIMITED"
-        AppSettings.cachedTrialEndsAtMillis = 0L
-        AppSettings.cachedHasPremium = false
-        AppSettings.cachedSubscriptionState = "NONE"
         AppSettings.developerPremiumOverrideEnabled = false
-        AppSettings.persist()
+        com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
+            blockAutoFallback = true
+        )
     }
 
     private fun persistUpdateStatus(status: AppUpdateStatus) {

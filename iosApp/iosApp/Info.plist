@@ -1,26 +1,29 @@
 <plist version="1.0">
-<dict>
-    <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
+    <dict>
+        <key>CADisableMinimumFrameDurationOnPhone</key>
+        <true/>
 
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.405856030276-1dn1b5m5nk7sgjgdi811cl08j74ql5n2</string>
-            </array>
-        </dict>
-    </array>
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>com.googleusercontent.apps.405856030276-1dn1b5m5nk7sgjgdi811cl08j74ql5n2</string>
+                </array>
+            </dict>
+        </array>
 
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
+        <key>ITSAppUsesNonExemptEncryption</key>
+        <false/>
 
-    <key>UISupportedInterfaceOrientations</key>
-    <array>
-        <string>UIInterfaceOrientationPortrait</string>
-    </array>
-</dict>
+        <key>NSContactsUsageDescription</key>
+        <string>BeautyPlanner does not currently use the device Contacts in this version. Any client information shown in the app is created and stored locally by the user within the app. This permission string is included only because the app bundle may reference contact-related APIs.</string>
+
+        <key>UISupportedInterfaceOrientations</key>
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+        </array>
+    </dict>
 </plist>

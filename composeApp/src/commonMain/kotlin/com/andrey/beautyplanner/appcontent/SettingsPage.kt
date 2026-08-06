@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -44,9 +46,6 @@ import com.andrey.beautyplanner.AccessState
 import com.andrey.beautyplanner.AccessTier
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.ui.text.TextStyle
-import com.andrey.beautyplanner.appcontent.appFontFamily
 
 @Composable
 fun SettingsPage(
@@ -119,8 +118,7 @@ fun SettingsPage(
 
     if (showDeveloperPasswordDialog) {
         AlertDialog(
-            onDismissRequest = {
-            },
+            onDismissRequest = {},
             title = {
                 Text(
                     text = Locales.t("developer_password_title"),
@@ -221,314 +219,330 @@ fun SettingsPage(
     }
 
     CenteredContentContainer {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = Locales.t("nav_settings"),
-                fontSize = (22 * fontScale).sp,
-                fontWeight = FontWeight.Bold,
-                color = onBg
-            )
+            val isTabletLayout = maxWidth >= 700.dp
 
-            SettingsSectionBlock(
-                title = Locales.t("profile_settings_title"),
-                description = Locales.t("profile_settings_description"),
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("profile_settings_open"),
-                        onClick = onOpenPersonalInfoSettings
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            SettingsSectionBlock(
-                title = Locales.t("appearance_settings"),
-                description = Locales.t("appearance_settings_hint"),
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("appearance_settings"),
-                        onClick = onOpenAppearanceSettings
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
-
-            val isPremiumActive =
-                accessState.tier == AccessTier.PREMIUM ||
-                        accessState.hasPremium ||
-                        hasActiveSubscriptionState
-
-            val premiumStatusText = when {
-                isPremiumActive -> Locales.t("premium_status_premium")
-                accessState.tier == AccessTier.TRIAL -> Locales.t("premium_status_trial")
-                else -> Locales.t("premium_status_free")
-            }
-
-            val premiumHintText = when {
-                isPremiumActive -> Locales.t("premium_active_hint")
-                accessState.tier == AccessTier.TRIAL -> Locales.t("premium_trial_active_hint")
-                else -> Locales.t("premium_free_limited_hint")
-            }
-
-            SettingsSectionBlock(
-                title = Locales.t("premium_section_title"),
-                description = premiumHintText,
-                extraContent = {
-                    Text(
-                        text = "${Locales.t("premium_status_label")}: $premiumStatusText",
-                        fontSize = (16 * fontScale).sp,
-                        fontWeight = FontWeight.Medium,
-                        color = onSurface
-                    )
-
-                    if (!isPremiumActive && accessState.isTrialActive) {
-                        Text(
-                            text = "${Locales.t("premium_trial_days_left")}: ${accessState.trialDaysLeft}",
-                            fontSize = (14 * fontScale).sp,
-                            color = onSurface.copy(alpha = 0.80f)
-                        )
-
-                        Text(
-                            text = Locales.t("premium_trial_limit_notice"),
-                            fontSize = (14 * fontScale).sp,
-                            color = onSurface.copy(alpha = 0.80f)
-                        )
-                    }
-                },
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("premium_open_screen_btn"),
-                        onClick = onOpenPremiumScreen
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            SettingsSectionBlock(
-                title = Locales.t("my_services"),
-                description = Locales.t("my_services_hint"),
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("my_services"),
-                        onClick = onOpenServiceTemplates
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            SettingsSectionBlock(
-                title = Locales.t("work_schedule"),
-                description = Locales.t("work_schedule_hint"),
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("work_schedule"),
-                        onClick = onOpenWorkSchedule
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            SettingsSectionBlock(
-                title = Locales.t("notifications_section"),
-                description = Locales.t("notifications_settings_hint"),
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("notifications_settings_open"),
-                        onClick = onOpenNotificationSettings
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            SettingsSectionBlock(
-                title = Locales.t("backup_settings_title"),
-                description = Locales.t("backup_settings_hint"),
-                extraContent = if (!dbOpsAllowed) {
-                    {
-                        Text(
-                            text = Locales.t("backup_pin_required_hint"),
-                            color = onSurface.copy(alpha = 0.72f),
-                            fontSize = (12 * fontScale).sp
-                        )
-                    }
-                } else null,
-                actionButton = {
-                    PrimaryActionButton(
-                        text = Locales.t("backup_settings_open"),
-                        onClick = onOpenBackupSettings
-                    )
-                }
-            )
-
-            Divider(
-                modifier = Modifier.padding(vertical = 2.dp),
-                color = onSurface.copy(alpha = 0.10f)
-            )
-
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
                 Text(
-                    text = Locales.t("security_section"),
-                    fontSize = (16 * fontScale).sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = onSurface.copy(alpha = 0.85f),
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            if (showDeveloperPasswordDialog) return@clickable
-
-                            securityTapCount += 1
-                            if (securityTapCount >= 15) {
-                                securityTapCount = 0
-                                developerPasswordInput = ""
-                                developerPasswordError = false
-                                showDeveloperPasswordDialog = true
-                            }
-                        }
+                    text = Locales.t("nav_settings"),
+                    fontSize = (22 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = onBg
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = Locales.t("pin_enabled"),
-                        fontSize = (16 * fontScale).sp,
-                        color = onSurface
-                    )
-
-                    AppSwitch(
-                        checked = pendingPinEnabledValue,
-                        onCheckedChange = { newValue ->
-                            if (newValue) {
-                                if (AppSettings.isPinSet()) {
-                                    AppSettings.pinEnabled = true
-                                    AppSettings.persist()
-                                    pendingPinEnabledValue = true
-                                } else {
-                                    pendingPinEnabledValue = false
-                                    onSetOrChangePin()
-                                }
-                            } else {
-                                pendingPinEnabledValue = false
-                                showDisablePinConfirm = true
-                            }
-                        }
-                    )
-                }
-
-                Spacer(Modifier.height(12.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val pinBtnText =
-                        if (AppSettings.isPinSet()) Locales.t("pin_change") else Locales.t("pin_set")
-
-                    Button(
-                        onClick = onSetOrChangePin,
-                        modifier = Modifier
-                            .weight(0.45f)
-                            .height(38.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        elevation = ButtonDefaults.elevation(0.dp, 0.dp),
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
-                    ) {
-                        Text(
-                            text = pinBtnText,
-                            fontSize = (13 * fontScale).sp,
-                            maxLines = 1
+                SettingsSectionBlock(
+                    title = Locales.t("profile_settings_title"),
+                    description = Locales.t("profile_settings_description"),
+                    actionButton = {
+                        PrimaryActionButton(
+                            text = Locales.t("profile_settings_open"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenPersonalInfoSettings
                         )
                     }
+                )
 
-                    Spacer(modifier = Modifier.weight(0.1f))
-
-                    OutlinedButton(
-                        onClick = onRemovePin,
-                        modifier = Modifier
-                            .weight(0.45f)
-                            .height(38.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        enabled = AppSettings.isPinSet(),
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
-                    ) {
-                        Text(
-                            text = Locales.t("pin_remove"),
-                            color = onSurface,
-                            fontSize = (13 * fontScale).sp,
-                            maxLines = 1
-                        )
-                    }
-                }
-            }
-
-            if (AppSettings.developerModeUnlocked) {
                 Divider(
                     modifier = Modifier.padding(vertical = 2.dp),
                     color = onSurface.copy(alpha = 0.10f)
                 )
 
                 SettingsSectionBlock(
-                    title = Locales.t("developer_mode_title"),
-                    description = Locales.t("developer_mode_hint"),
+                    title = Locales.t("appearance_settings"),
+                    description = Locales.t("appearance_settings_hint"),
                     actionButton = {
                         PrimaryActionButton(
-                            text = Locales.t("developer_mode_open"),
-                            onClick = onOpenDeveloperAccess
+                            text = Locales.t("appearance_settings"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenAppearanceSettings
                         )
                     }
                 )
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = onSurface.copy(alpha = 0.10f)
+                )
+
+                val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
+
+                val isPremiumActive =
+                    accessState.tier == AccessTier.PREMIUM ||
+                            accessState.hasPremium ||
+                            hasActiveSubscriptionState
+
+                val premiumStatusText = when {
+                    isPremiumActive -> Locales.t("premium_status_premium")
+                    accessState.tier == AccessTier.TRIAL -> Locales.t("premium_status_trial")
+                    else -> Locales.t("premium_status_free")
+                }
+
+                val premiumHintText = when {
+                    isPremiumActive -> Locales.t("premium_active_hint")
+                    accessState.tier == AccessTier.TRIAL -> Locales.t("premium_trial_active_hint")
+                    else -> Locales.t("premium_free_limited_hint")
+                }
+
+                SettingsSectionBlock(
+                    title = Locales.t("premium_section_title"),
+                    description = premiumHintText,
+                    alignButtonStart = isTabletLayout,
+                    extraContent = {
+                        Text(
+                            text = "${Locales.t("premium_status_label")}: $premiumStatusText",
+                            fontSize = (16 * fontScale).sp,
+                            fontWeight = FontWeight.Medium,
+                            color = onSurface
+                        )
+
+                        if (!isPremiumActive && accessState.isTrialActive) {
+                            Text(
+                                text = "${Locales.t("premium_trial_days_left")}: ${accessState.trialDaysLeft}",
+                                fontSize = (14 * fontScale).sp,
+                                color = onSurface.copy(alpha = 0.80f)
+                            )
+
+                            Text(
+                                text = Locales.t("premium_trial_limit_notice"),
+                                fontSize = (14 * fontScale).sp,
+                                color = onSurface.copy(alpha = 0.80f)
+                            )
+                        }
+                    },
+                    actionButton = {
+                        PrimaryActionButton(
+                            text = Locales.t("premium_open_screen_btn"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenPremiumScreen
+                        )
+                    }
+                )
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = onSurface.copy(alpha = 0.10f)
+                )
+
+                SettingsSectionBlock(
+                    title = Locales.t("my_services"),
+                    description = Locales.t("my_services_hint"),
+                    actionButton = {
+                        PrimaryActionButton(
+                            text = Locales.t("my_services"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenServiceTemplates
+                        )
+                    }
+                )
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = onSurface.copy(alpha = 0.10f)
+                )
+
+                SettingsSectionBlock(
+                    title = Locales.t("work_schedule"),
+                    description = Locales.t("work_schedule_hint"),
+                    actionButton = {
+                        PrimaryActionButton(
+                            text = Locales.t("work_schedule"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenWorkSchedule
+                        )
+                    }
+                )
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = onSurface.copy(alpha = 0.10f)
+                )
+
+                SettingsSectionBlock(
+                    title = Locales.t("notifications_section"),
+                    description = Locales.t("notifications_settings_hint"),
+                    actionButton = {
+                        PrimaryActionButton(
+                            text = Locales.t("notifications_settings_open"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenNotificationSettings
+                        )
+                    }
+                )
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = onSurface.copy(alpha = 0.10f)
+                )
+
+                SettingsSectionBlock(
+                    title = Locales.t("backup_settings_title"),
+                    description = Locales.t("backup_settings_hint"),
+                    alignButtonStart = isTabletLayout,
+                    extraContent = if (!dbOpsAllowed) {
+                        {
+                            Text(
+                                text = Locales.t("backup_pin_required_hint"),
+                                color = onSurface.copy(alpha = 0.72f),
+                                fontSize = (12 * fontScale).sp
+                            )
+                        }
+                    } else null,
+                    actionButton = {
+                        PrimaryActionButton(
+                            text = Locales.t("backup_settings_open"),
+                            alignStart = isTabletLayout,
+                            onClick = onOpenBackupSettings
+                        )
+                    }
+                )
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = onSurface.copy(alpha = 0.10f)
+                )
+
+                Column {
+                    Text(
+                        text = Locales.t("security_section"),
+                        fontSize = (16 * fontScale).sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = onSurface.copy(alpha = 0.85f),
+                        modifier = Modifier
+                            .padding(bottom = 10.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                if (showDeveloperPasswordDialog) return@clickable
+
+                                securityTapCount += 1
+                                if (securityTapCount >= 15) {
+                                    securityTapCount = 0
+                                    developerPasswordInput = ""
+                                    developerPasswordError = false
+                                    showDeveloperPasswordDialog = true
+                                }
+                            }
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = Locales.t("pin_enabled"),
+                            fontSize = (16 * fontScale).sp,
+                            color = onSurface
+                        )
+
+                        AppSwitch(
+                            checked = pendingPinEnabledValue,
+                            onCheckedChange = { newValue ->
+                                if (newValue) {
+                                    if (AppSettings.isPinSet()) {
+                                        AppSettings.pinEnabled = true
+                                        AppSettings.persist()
+                                        pendingPinEnabledValue = true
+                                    } else {
+                                        pendingPinEnabledValue = false
+                                        onSetOrChangePin()
+                                    }
+                                } else {
+                                    pendingPinEnabledValue = false
+                                    showDisablePinConfirm = true
+                                }
+                            }
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val pinBtnText =
+                            if (AppSettings.isPinSet()) Locales.t("pin_change") else Locales.t("pin_set")
+
+                        Button(
+                            onClick = onSetOrChangePin,
+                            modifier = Modifier
+                                .weight(0.45f)
+                                .height(38.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                        ) {
+                            Text(
+                                text = pinBtnText,
+                                fontSize = (13 * fontScale).sp,
+                                maxLines = 1
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.weight(0.1f))
+
+                        OutlinedButton(
+                            onClick = onRemovePin,
+                            modifier = Modifier
+                                .weight(0.45f)
+                                .height(38.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            enabled = AppSettings.isPinSet(),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                        ) {
+                            Text(
+                                text = Locales.t("pin_remove"),
+                                color = onSurface,
+                                fontSize = (13 * fontScale).sp,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
+
+                if (AppSettings.developerModeUnlocked) {
+                    Divider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = onSurface.copy(alpha = 0.10f)
+                    )
+
+                    SettingsSectionBlock(
+                        title = Locales.t("developer_mode_title"),
+                        description = Locales.t("developer_mode_hint"),
+                        actionButton = {
+                            PrimaryActionButton(
+                                text = Locales.t("developer_mode_open"),
+                                alignStart = isTabletLayout,
+                                onClick = onOpenDeveloperAccess
+                            )
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                Text(
+                    text = Locales.t("privacy_policy"),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp, bottom = 4.dp)
+                        .clickable { onOpenPrivacyPolicy() },
+                    color = onSurface.copy(alpha = 0.72f),
+                    fontSize = (11 * fontScale).sp,
+                    textDecoration = TextDecoration.Underline
+                )
             }
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            Text(
-                text = Locales.t("privacy_policy"),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 2.dp, bottom = 4.dp)
-                    .clickable { onOpenPrivacyPolicy() },
-                color = onSurface.copy(alpha = 0.72f),
-                fontSize = (11 * fontScale).sp,
-                textDecoration = TextDecoration.Underline
-            )
         }
     }
 }
@@ -621,11 +635,13 @@ fun SettingsDropdown(
         }
     }
 }
+
 @Composable
 private fun SettingsSectionBlock(
     title: String,
     description: String,
     extraContent: (@Composable () -> Unit)? = null,
+    alignButtonStart: Boolean = false,
     actionButton: @Composable () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
@@ -653,6 +669,11 @@ private fun SettingsSectionBlock(
 
         Spacer(Modifier.height(2.dp))
 
-        actionButton()
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = if (alignButtonStart) Alignment.CenterStart else Alignment.Center
+        ) {
+            actionButton()
+        }
     }
 }
