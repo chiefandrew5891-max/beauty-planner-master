@@ -17,6 +17,10 @@ object MasterProfileSync {
         return runCatching {
             val serviceTemplatesJson =
                 CloudSyncJson.json.encodeToString(AppSettings.serviceTemplates)
+            val weeklyBlockedIntervalsJson =
+                CloudSyncJson.json.encodeToString(AppSettings.weeklyBlockedIntervals)
+            val scheduleDateOverridesJson =
+                CloudSyncJson.json.encodeToString(AppSettings.scheduleDateOverrides)
 
             BackendBridge.syncMyMasterProfile(
                 ownerName = AppSettings.ownerName,
@@ -28,7 +32,9 @@ object MasterProfileSync {
                 profileAvatarUrl = AppSettings.profileAvatarUrl,
                 profileAvatarBase64 = AppSettings.profileAvatarBase64,
                 clientInteractionsEnabled = AppSettings.clientInteractionsEnabled,
-                serviceTemplatesJson = serviceTemplatesJson
+                serviceTemplatesJson = serviceTemplatesJson,
+                weeklyBlockedIntervalsJson = weeklyBlockedIntervalsJson,
+                scheduleDateOverridesJson = scheduleDateOverridesJson
             )
         }
     }

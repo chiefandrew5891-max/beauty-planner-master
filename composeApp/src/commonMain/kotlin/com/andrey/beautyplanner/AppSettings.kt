@@ -494,19 +494,24 @@ object AppSettings {
         reminderHoursBefore = snapshot.reminderHoursBefore
         reminderMinutesBefore = snapshot.reminderMinutesBefore
 
-        serviceTemplates = if (snapshot.serviceTemplates.isNotEmpty()) {
-            snapshot.serviceTemplates
-        } else {
-            defaultServiceTemplates()
+        if (snapshot.serviceTemplates.isNotEmpty()) {
+            serviceTemplates = snapshot.serviceTemplates
+        } else if (serviceTemplates.isEmpty()) {
+            serviceTemplates = defaultServiceTemplates()
         }
 
-        weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals
-        scheduleDateOverrides = snapshot.scheduleDateOverrides
+        if (snapshot.weeklyBlockedIntervals.isNotEmpty() || weeklyBlockedIntervals.isEmpty()) {
+            weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals
+        }
+
+        if (snapshot.scheduleDateOverrides.isNotEmpty() || scheduleDateOverrides.isEmpty()) {
+            scheduleDateOverrides = snapshot.scheduleDateOverrides
+        }
         cloudSettingsUpdatedAtMillis = snapshot.updatedAtMillis
         persist()
     }
 
-    fun clearMasterProfileLocalState() {
+    fun clearMasterProfileLocalState(clearMasterData: Boolean = false) {
         ownerName = ""
         profilePhone = ""
         profilePhoneVisible = true
@@ -517,9 +522,11 @@ object AppSettings {
         profileSpecialization = ""
         clientInteractionsEnabled = false
 
-        serviceTemplates = defaultServiceTemplates()
-        weeklyBlockedIntervals = emptyList()
-        scheduleDateOverrides = emptyList()
+        if (clearMasterData) {
+            serviceTemplates = defaultServiceTemplates()
+            weeklyBlockedIntervals = emptyList()
+            scheduleDateOverrides = emptyList()
+        }
 
         cloudSettingsUpdatedAtMillis = 0L
         persist()
@@ -662,10 +669,10 @@ object AppSettings {
         cachedHasPremium = snapshot.cachedHasPremium
         cachedSubscriptionState = snapshot.cachedSubscriptionState
 
-        serviceTemplates = if (snapshot.serviceTemplates.isNotEmpty()) {
-            snapshot.serviceTemplates
-        } else {
-            defaultServiceTemplates()
+        serviceTemplates = when {
+            snapshot.serviceTemplates.isNotEmpty() -> snapshot.serviceTemplates
+            serviceTemplates.isNotEmpty() -> serviceTemplates
+            else -> defaultServiceTemplates()
         }
 
         weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals

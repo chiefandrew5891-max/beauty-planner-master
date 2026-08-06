@@ -604,8 +604,7 @@ class AppRootState(
             SignInProvider.ANONYMOUS -> "anonymous"
         }
 
-        currentAuthUser = currentUser
-        persistAuthenticatedSession(currentUser)
+        handleAuthenticatedUserChange(currentUser)
 
         val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
             installId = installId,
@@ -660,6 +659,10 @@ class AppRootState(
                 when (val result = AuthGateway.signInWithGoogle()) {
                     is SignInResult.Success -> {
                         runCatching {
+                            handleAuthenticatedUserChange(result.user)
+                            clearSessionLocalState()
+                            AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                 installId = IdentityManager.getOrCreateInstallId(),
                                 firebaseUid = result.user.uid,
@@ -668,21 +671,18 @@ class AppRootState(
                                 email = result.user.email,
                                 displayName = result.user.displayName
                             )
+
                             com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
                                 remote = remote,
-                                currentAuthUserId = currentAuthUser?.uid
+                                currentAuthUserId = result.user.uid
                             )
+
                             com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
                                 firebaseUid = result.user.uid,
                                 email = result.user.email,
                                 displayName = result.user.displayName,
                                 authProvider = result.user.provider.name.lowercase()
                             )
-                            currentAuthUser = result.user
-                            persistAuthenticatedSession(result.user)
-
-                            clearSessionLocalState()
-                            AppSettings.clearMasterProfileLocalState()
 
                             runPostLoginFullSync()
 
@@ -720,6 +720,10 @@ class AppRootState(
                 when (val result = AuthGateway.signInWithApple()) {
                     is SignInResult.Success -> {
                         runCatching {
+                            handleAuthenticatedUserChange(result.user)
+                            clearSessionLocalState()
+                            AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                 installId = IdentityManager.getOrCreateInstallId(),
                                 firebaseUid = result.user.uid,
@@ -728,21 +732,18 @@ class AppRootState(
                                 email = result.user.email,
                                 displayName = result.user.displayName
                             )
+
                             com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
                                 remote = remote,
-                                currentAuthUserId = currentAuthUser?.uid
+                                currentAuthUserId = result.user.uid
                             )
+
                             com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
                                 firebaseUid = result.user.uid,
                                 email = result.user.email,
                                 displayName = result.user.displayName,
                                 authProvider = result.user.provider.name.lowercase()
                             )
-                            currentAuthUser = result.user
-                            persistAuthenticatedSession(result.user)
-
-                            clearSessionLocalState()
-                            AppSettings.clearMasterProfileLocalState()
 
                             runPostLoginFullSync()
 
@@ -796,13 +797,13 @@ class AppRootState(
                         email = user.email,
                         displayName = user.displayName
                     )
+                    clearPersistedAuthenticatedSession()
                     currentAuthUser = user
+
                     com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
                         remote = remote,
-                        currentAuthUserId = currentAuthUser?.uid
+                        currentAuthUserId = user.uid
                     )
-
-                    clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
                     reloadAppointmentsForGuestProfile()
@@ -859,7 +860,7 @@ class AppRootState(
         clearPersistedAuthenticatedSession()
         IdentityManager.resetInstallId()
         clearSessionLocalState()
-        AppSettings.clearMasterProfileLocalState()
+        AppSettings.clearMasterProfileLocalState(clearMasterData = false)
         reloadAppointmentsForGuestProfile()
         refreshAccessState()
         authResolved = true
@@ -956,7 +957,7 @@ class AppRootState(
                     clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
-                    AppSettings.clearMasterProfileLocalState()
+                    AppSettings.clearMasterProfileLocalState(clearMasterData = false)
                     reloadAppointmentsForGuestProfile()
                     refreshAccessState()
 
@@ -986,7 +987,7 @@ class AppRootState(
                     clearPersistedAuthenticatedSession()
 
                     clearSessionLocalState()
-                    AppSettings.clearMasterProfileLocalState()
+                    AppSettings.clearMasterProfileLocalState(clearMasterData = false)
                     reloadAppointmentsForGuestProfile()
                     refreshAccessState()
 
@@ -1247,6 +1248,10 @@ class AppRootState(
                     when (val result = AuthGateway.signInWithEmail(cleanEmail, cleanPassword)) {
                         is SignInResult.Success -> {
                             try {
+                                handleAuthenticatedUserChange(result.user)
+                                clearSessionLocalState()
+                                AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+
                                 val remote = try {
                                     com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                         installId = IdentityManager.getOrCreateInstallId(),
@@ -1263,7 +1268,7 @@ class AppRootState(
 
                                 com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
                                     remote = remote,
-                                    currentAuthUserId = currentAuthUser?.uid
+                                    currentAuthUserId = result.user.uid
                                 )
 
                                 try {
@@ -1277,12 +1282,6 @@ class AppRootState(
                                     authErrorMessage = e.message ?: Locales.t("auth_email_sign_in_failed")
                                     return@launch
                                 }
-
-                                currentAuthUser = result.user
-                                persistAuthenticatedSession(result.user)
-
-                                clearSessionLocalState()
-                                AppSettings.clearMasterProfileLocalState()
 
                                 runCatching {
                                     com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
@@ -1547,13 +1546,18 @@ class AppRootState(
                         val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
 
                         if (isIosPlatform && localSubscriptionActive) {
-                            com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
+                            val applied = com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
+                                currentAuthUserId = currentAuthUser?.uid,
+                                currentBackendUserId = AppSettings.backendUserId,
                                 productId = info.productId.ifBlank { result.productId },
                                 subscriptionState = info.state.name,
                                 expiryMillis = info.expiryTimeMillis ?: 0L,
                                 autoRenewing = info.isAutoRenewing
                             )
-                            refreshAccessState()
+
+                            if (applied) {
+                                refreshAccessState()
+                            }
                         }
 
                         runCatching {
@@ -1581,7 +1585,10 @@ class AppRootState(
                                     val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
                                         AppSettings.backendUserId
                                     )
-                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                        remote = refreshed,
+                                        currentAuthUserId = currentAuthUser?.uid
+                                    )
                                     refreshAccessState()
                                 }
                             }
@@ -1600,7 +1607,10 @@ class AppRootState(
                                         val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
                                             AppSettings.backendUserId
                                         )
-                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                            remote = refreshed,
+                                            currentAuthUserId = currentAuthUser?.uid
+                                        )
                                         refreshAccessState()
                                     }
                                 }
@@ -1704,7 +1714,10 @@ class AppRootState(
                                     val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
                                         AppSettings.backendUserId
                                     )
-                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                        remote = refreshed,
+                                        currentAuthUserId = currentAuthUser?.uid
+                                    )
                                     refreshAccessState()
                                 }
                             }
@@ -1723,7 +1736,10 @@ class AppRootState(
                                         val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
                                             AppSettings.backendUserId
                                         )
-                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(refreshed)
+                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                            remote = refreshed,
+                                            currentAuthUserId = currentAuthUser?.uid
+                                        )
                                         refreshAccessState()
                                     }
                                 }
@@ -1905,22 +1921,6 @@ class AppRootState(
         }
     }
 
-    private fun handleAuthenticatedUserChange(user: AuthUser) {
-        val previousAuthUserId = AppSettings.localProfileUserId
-
-        val authUserChanged =
-            previousAuthUserId.isNotBlank() && previousAuthUserId != user.uid
-
-        if (authUserChanged) {
-            com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
-                blockAutoFallback = true
-            )
-            AppSettings.backendUserId = ""
-        }
-
-        persistAuthenticatedSession(user)
-    }
-
     fun tryBuildShiftChain(
         day: String,
         baseIgnoreId: String?,
@@ -2018,6 +2018,22 @@ class AppRootState(
         AppSettings.lastAuthDisplayName = user.displayName
         AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
         AppSettings.persist()
+    }
+
+    private fun handleAuthenticatedUserChange(user: AuthUser) {
+        val previousAuthUserId = AppSettings.localProfileUserId
+        val authUserChanged =
+            previousAuthUserId.isNotBlank() && previousAuthUserId != user.uid
+
+        if (authUserChanged) {
+            com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
+                blockAutoFallback = true
+            )
+            AppSettings.backendUserId = ""
+        }
+
+        currentAuthUser = user
+        persistAuthenticatedSession(user)
     }
 
     private fun clearPersistedAuthenticatedSession() {

@@ -69,7 +69,9 @@ expect object BackendBridge {
         profileAvatarUrl: String,
         profileAvatarBase64: String,
         clientInteractionsEnabled: Boolean,
-        serviceTemplatesJson: String
+        serviceTemplatesJson: String,
+        weeklyBlockedIntervalsJson: String,
+        scheduleDateOverridesJson: String
     ): Map<String, String>
 
     suspend fun getMyMasterProfile(): MasterProfilePayload
