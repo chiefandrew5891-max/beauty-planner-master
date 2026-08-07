@@ -2,7 +2,10 @@ package com.andrey.beautyplanner.remote
 
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.CloudSyncJson
+import com.andrey.beautyplanner.ScheduleDateOverride
 import com.andrey.beautyplanner.ServiceTemplate
+import com.andrey.beautyplanner.WeeklyBlockedInterval
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 
 object MasterProfileSync {
@@ -44,14 +47,16 @@ object MasterProfileSync {
             val payload = BackendBridge.getMyMasterProfile()
 
             lastPullDebug =
-                "payload(found=${payload.found}, firebaseUid='${payload.firebaseUid}', owner='${payload.ownerName}', phone='${payload.profilePhone}', spec='${payload.profileSpecialization}', avatarLen=${payload.profileAvatarBase64.length}, templates=${payload.serviceTemplates.size}, updatedAt=${payload.updatedAt}, createdAt=${payload.createdAt}, force=$force)"
+                "payload(found=${payload.found}, firebaseUid='${payload.firebaseUid}', owner='${payload.ownerName}', phone='${payload.profilePhone}', spec='${payload.profileSpecialization}', avatarLen=${payload.profileAvatarBase64.length}, templates=${payload.serviceTemplates.size}, weeklyBlockedIntervalsJsonLen=${payload.weeklyBlockedIntervalsJson.length}, scheduleDateOverridesJsonLen=${payload.scheduleDateOverridesJson.length}, updatedAt=${payload.updatedAt}, createdAt=${payload.createdAt}, force=$force)"
 
             val hasMeaningfulProfileData =
                 payload.ownerName.isNotBlank() ||
                         payload.profilePhone.isNotBlank() ||
                         payload.profileSpecialization.isNotBlank() ||
                         payload.profileAvatarBase64.isNotBlank() ||
-                        payload.serviceTemplates.isNotEmpty()
+                        payload.serviceTemplates.isNotEmpty() ||
+                        payload.weeklyBlockedIntervalsJson.isNotBlank() ||
+                        payload.scheduleDateOverridesJson.isNotBlank()
 
             if (!payload.found && !hasMeaningfulProfileData) return@runCatching
 
@@ -74,10 +79,24 @@ object MasterProfileSync {
                 )
             }
 
+            AppSettings.weeklyBlockedIntervals =
+                runCatching {
+                    CloudSyncJson.json.decodeFromString<List<WeeklyBlockedInterval>>(
+                        payload.weeklyBlockedIntervalsJson
+                    )
+                }.getOrDefault(emptyList())
+
+            AppSettings.scheduleDateOverrides =
+                runCatching {
+                    CloudSyncJson.json.decodeFromString<List<ScheduleDateOverride>>(
+                        payload.scheduleDateOverridesJson
+                    )
+                }.getOrDefault(emptyList())
+
             AppSettings.persist()
 
             lastPullDebug +=
-                " | applied(owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarLen=${AppSettings.profileAvatarBase64.length})"
+                " | applied(owner='${AppSettings.ownerName}', phone='${AppSettings.profilePhone}', spec='${AppSettings.profileSpecialization}', avatarLen=${AppSettings.profileAvatarBase64.length}, templates=${AppSettings.serviceTemplates.size}, weeklyBlockedIntervals=${AppSettings.weeklyBlockedIntervals.size}, scheduleDateOverrides=${AppSettings.scheduleDateOverrides.size})"
         }.onFailure { error ->
             lastPullDebug = "pull failed: ${error.message}"
         }

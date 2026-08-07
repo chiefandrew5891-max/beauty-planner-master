@@ -850,7 +850,6 @@ class AppRootState(
 
         bookingReadOnly = false
         selectedTimeSlot = ""
-        AppSettings.clearMasterProfileLocalState()
     }
 
     private fun resetToSignedOutState(

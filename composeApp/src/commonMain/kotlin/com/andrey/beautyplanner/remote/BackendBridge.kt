@@ -20,6 +20,8 @@ data class MasterProfilePayload(
     val profileAvatarBase64: String,
     val clientInteractionsEnabled: Boolean,
     val serviceTemplates: List<MasterServiceTemplatePayload>,
+    val weeklyBlockedIntervalsJson: String,
+    val scheduleDateOverridesJson: String,
     val updatedAt: Long,
     val createdAt: Long
 )

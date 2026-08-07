@@ -57,6 +57,7 @@ import com.andrey.beautyplanner.PremiumFeature
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
+import androidx.compose.foundation.layout.height
 
 
 @Composable
@@ -262,6 +263,17 @@ fun AppRootChrome(
             else -> Locales.t("premium_subscription_inactive")
         }
 
+        val shouldShowDaysLine = isPremiumActive && expiryMillis > 0L
+
+        val daysLeft = if (shouldShowDaysLine) {
+            calculateSubscriptionDaysLeft(
+                expiryMillis = expiryMillis,
+                nowMillis = nowMillis
+            )
+        } else {
+            0
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -276,19 +288,14 @@ fun AppRootChrome(
                 overflow = TextOverflow.Ellipsis
             )
 
-            if (isPremiumActive && expiryMillis > nowMillis) {
-                val daysLeft = calculateSubscriptionDaysLeft(
-                    expiryMillis = expiryMillis,
-                    nowMillis = nowMillis
-                )
-
-                Spacer(Modifier.padding(top = 2.dp))
+            if (shouldShowDaysLine) {
+                Spacer(Modifier.height(2.dp))
 
                 Text(
-                    text = "${Locales.t("premium_subscription_expires")}: ${formatSubscriptionExpiry(expiryMillis)} • ${Locales.daysCount(daysLeft)}",
+                    text = "${Locales.t("premium_subscription_days_left")}: ${Locales.daysCount(daysLeft)}",
                     color = onSurface.copy(alpha = 0.54f),
                     fontSize = 11.sp,
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }

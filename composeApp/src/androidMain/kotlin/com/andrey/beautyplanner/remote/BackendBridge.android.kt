@@ -105,7 +105,9 @@ actual object BackendBridge {
         profileAvatarUrl: String,
         profileAvatarBase64: String,
         clientInteractionsEnabled: Boolean,
-        serviceTemplatesJson: String
+        serviceTemplatesJson: String,
+        weeklyBlockedIntervalsJson: String,
+        scheduleDateOverridesJson: String
     ): Map<String, String> {
         ensureAuthenticated()
         return callRawFunction(
@@ -120,7 +122,9 @@ actual object BackendBridge {
                 "profileAvatarUrl" to profileAvatarUrl,
                 "profileAvatarBase64" to profileAvatarBase64,
                 "clientInteractionsEnabled" to clientInteractionsEnabled,
-                "serviceTemplatesJson" to serviceTemplatesJson
+                "serviceTemplatesJson" to serviceTemplatesJson,
+                "weeklyBlockedIntervalsJson" to weeklyBlockedIntervalsJson,
+                "scheduleDateOverridesJson" to scheduleDateOverridesJson
             )
         )
     }
@@ -174,6 +178,8 @@ actual object BackendBridge {
                             profileAvatarBase64 = map["profileAvatarBase64"]?.toString().orEmpty(),
                             clientInteractionsEnabled = map["clientInteractionsEnabled"]?.toString() == "true",
                             serviceTemplates = templates,
+                            weeklyBlockedIntervalsJson = map["weeklyBlockedIntervalsJson"]?.toString().orEmpty(),
+                            scheduleDateOverridesJson = map["scheduleDateOverridesJson"]?.toString().orEmpty(),
                             updatedAt = map["updatedAt"]?.toString()?.toLongOrNull() ?: 0L,
                             createdAt = map["createdAt"]?.toString()?.toLongOrNull() ?: 0L
                         )
@@ -210,6 +216,7 @@ actual object BackendBridge {
             emptyMap<String, Any>()
         )
     }
+
     actual suspend fun deleteMyAccount(): Map<String, String> {
         ensureAuthenticated()
         return callRawFunction(
@@ -217,6 +224,7 @@ actual object BackendBridge {
             emptyMap<String, Any>()
         )
     }
+
     private suspend fun callRawFunction(
         name: String,
         payload: Map<String, Any?>

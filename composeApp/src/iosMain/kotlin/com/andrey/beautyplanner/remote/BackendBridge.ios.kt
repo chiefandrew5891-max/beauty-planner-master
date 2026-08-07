@@ -1,13 +1,13 @@
 package com.andrey.beautyplanner.remote
 
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.coroutines.withTimeout
 
 actual object BackendBridge {
 
@@ -124,7 +124,9 @@ actual object BackendBridge {
         profileAvatarUrl: String,
         profileAvatarBase64: String,
         clientInteractionsEnabled: Boolean,
-        serviceTemplatesJson: String
+        serviceTemplatesJson: String,
+        weeklyBlockedIntervalsJson: String,
+        scheduleDateOverridesJson: String
     ): Map<String, String> {
         ensureAuthenticated()
 
@@ -140,7 +142,9 @@ actual object BackendBridge {
                 "profileAvatarUrl" to profileAvatarUrl,
                 "profileAvatarBase64" to profileAvatarBase64,
                 "clientInteractionsEnabled" to clientInteractionsEnabled.toString(),
-                "serviceTemplatesJson" to serviceTemplatesJson
+                "serviceTemplatesJson" to serviceTemplatesJson,
+                "weeklyBlockedIntervalsJson" to weeklyBlockedIntervalsJson,
+                "scheduleDateOverridesJson" to scheduleDateOverridesJson
             )
         )
     }
@@ -168,6 +172,8 @@ actual object BackendBridge {
             profileAvatarBase64 = result["profileAvatarBase64"]?.toString().orEmpty(),
             clientInteractionsEnabled = result["clientInteractionsEnabled"]?.toString() == "true",
             serviceTemplates = templates,
+            weeklyBlockedIntervalsJson = result["weeklyBlockedIntervalsJson"]?.toString().orEmpty(),
+            scheduleDateOverridesJson = result["scheduleDateOverridesJson"]?.toString().orEmpty(),
             updatedAt = result["updatedAt"]?.toString()?.toLongOrNull() ?: 0L,
             createdAt = result["createdAt"]?.toString()?.toLongOrNull() ?: 0L
         )
@@ -196,6 +202,7 @@ actual object BackendBridge {
             payload = emptyMap()
         )
     }
+
     actual suspend fun deleteMyAccount(): Map<String, String> {
         ensureAuthenticated()
 
@@ -204,6 +211,7 @@ actual object BackendBridge {
             payload = emptyMap()
         )
     }
+
     private suspend fun callAccessFunction(
         name: String,
         payload: Map<String, String>
