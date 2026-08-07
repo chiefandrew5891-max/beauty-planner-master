@@ -279,6 +279,15 @@ fun PremiumAccessScreen(
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colors.primary
                 )
+                if (!isIos) {
+                    Spacer(modifier = Modifier.padding(top = 6.dp))
+                    Text(
+                        text = Locales.t("billing_account_binding_google_play_note"),
+                        fontSize = (13 * fontScale).sp,
+                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.72f),
+                        lineHeight = (18 * fontScale).sp
+                    )
+                }
 
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 

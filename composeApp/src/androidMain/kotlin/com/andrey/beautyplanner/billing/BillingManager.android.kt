@@ -13,10 +13,8 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.andrey.beautyplanner.AndroidAppContext
-import com.andrey.beautyplanner.AppSettings
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import com.android.billingclient.api.QueryProductDetailsResult
 
 actual class BillingManager actual constructor() {
 
@@ -69,9 +67,10 @@ actual class BillingManager actual constructor() {
                 pendingPurchaseContinuation = null
                 callback(
                     PurchaseResult.Error(
-                        billingResult.debugMessage.ifBlank {
-                            "Google Play Billing error."
-                        }
+                        buildBillingErrorMessage(
+                            operation = "purchase update",
+                            billingResult = billingResult
+                        )
                     )
                 )
             }
@@ -129,9 +128,7 @@ actual class BillingManager actual constructor() {
             .build()
 
         return suspendCancellableCoroutine { cont ->
-            billingClient.queryProductDetailsAsync(
-                params
-            ) { billingResult: BillingResult, result: com.android.billingclient.api.QueryProductDetailsResult ->
+            billingClient.queryProductDetailsAsync(params) { billingResult, result ->
                 if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
                     cachedProductDetails = emptyMap()
                     cachedBillingProducts = emptyMap()
@@ -141,11 +138,11 @@ actual class BillingManager actual constructor() {
 
                 val detailsList: List<ProductDetails> = result.productDetailsList.orEmpty()
 
-                cachedProductDetails = detailsList.associateBy { details: ProductDetails ->
+                cachedProductDetails = detailsList.associateBy { details ->
                     details.productId
                 }
 
-                val mappedProducts = detailsList.mapNotNull { details: ProductDetails ->
+                val mappedProducts = detailsList.mapNotNull { details ->
                     val subscriptionOffers = details.subscriptionOfferDetails.orEmpty()
                     val selectedOffer = subscriptionOffers.firstOrNull() ?: return@mapNotNull null
                     val pricingPhase = selectedOffer.pricingPhases.pricingPhaseList.firstOrNull()
@@ -213,9 +210,10 @@ actual class BillingManager actual constructor() {
                 if (cont.isActive) {
                     cont.resume(
                         PurchaseResult.Error(
-                            result.debugMessage.ifBlank {
-                                "Unable to launch purchase flow."
-                            }
+                            buildBillingErrorMessage(
+                                operation = "launchBillingFlow",
+                                billingResult = result
+                            )
                         )
                     )
                 }
@@ -237,27 +235,26 @@ actual class BillingManager actual constructor() {
                 if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
                     cont.resume(
                         RestoreResult.Error(
-                            billingResult.debugMessage.ifBlank {
-                                "Failed to restore purchases."
-                            }
+                            buildBillingErrorMessage(
+                                operation = "restore purchases",
+                                billingResult = billingResult
+                            )
                         )
                     )
                     return@queryPurchasesAsync
                 }
 
-                val premiumPurchase = purchases.firstOrNull { purchase ->
-                    purchase.products.contains(PREMIUM_SUBS_PRODUCT_ID) &&
-                            purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                val owned = purchases.orEmpty().firstOrNull {
+                    it.products.contains(PREMIUM_SUBS_PRODUCT_ID)
                 }
 
-                if (premiumPurchase == null) {
-                    clearStoredSubscriptionState()
+                if (owned == null) {
                     cont.resume(RestoreResult.NothingToRestore)
                     return@queryPurchasesAsync
                 }
 
                 handleSuccessfulPurchase(
-                    purchase = premiumPurchase,
+                    purchase = owned,
                     productId = PREMIUM_SUBS_PRODUCT_ID
                 ) { ok, message ->
                     if (ok) {
@@ -265,7 +262,7 @@ actual class BillingManager actual constructor() {
                     } else {
                         cont.resume(
                             RestoreResult.Error(
-                                message ?: "Failed to finalize restored purchase."
+                                message ?: "Restore acknowledgement failed."
                             )
                         )
                     }
@@ -290,91 +287,120 @@ actual class BillingManager actual constructor() {
                     return@queryPurchasesAsync
                 }
 
-                val subPurchase = purchases.firstOrNull { purchase ->
-                    purchase.products.contains(PREMIUM_SUBS_PRODUCT_ID) &&
-                            purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                val purchase = purchases.orEmpty().firstOrNull {
+                    it.products.contains(PREMIUM_SUBS_PRODUCT_ID)
                 }
 
-                if (subPurchase == null) {
+                if (purchase == null) {
                     cont.resume(SubscriptionInfo(state = SubscriptionState.NONE))
                     return@queryPurchasesAsync
                 }
 
-                val now = System.currentTimeMillis()
+                val state = when (purchase.purchaseState) {
+                    Purchase.PurchaseState.PURCHASED -> SubscriptionState.ACTIVE
+                    Purchase.PurchaseState.PENDING -> SubscriptionState.ON_HOLD
+                    else -> SubscriptionState.NONE
+                }
 
                 cont.resume(
                     SubscriptionInfo(
-                        state = SubscriptionState.ACTIVE,
+                        state = state,
                         productId = PREMIUM_SUBS_PRODUCT_ID,
-                        purchaseToken = subPurchase.purchaseToken,
-                        isAutoRenewing = subPurchase.isAutoRenewing,
-                        startTimeMillis = subPurchase.purchaseTime,
+                        purchaseToken = purchase.purchaseToken,
+                        isAutoRenewing = purchase.isAutoRenewing,
+                        startTimeMillis = purchase.purchaseTime,
                         expiryTimeMillis = null,
-                        lastVerifiedAtMillis = now
+                        lastVerifiedAtMillis = System.currentTimeMillis()
                     )
                 )
             }
         }
     }
 
+    actual fun dispose() {
+        if (billingClient.isReady) {
+            billingClient.endConnection()
+        }
+        pendingPurchaseContinuation = null
+        cachedProductDetails = emptyMap()
+        cachedBillingProducts = emptyMap()
+    }
+
     private fun handleSuccessfulPurchase(
         purchase: Purchase,
         productId: String,
-        done: (Boolean, String?) -> Unit
+        onDone: (Boolean, String?) -> Unit
     ) {
-        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) {
-            done(false, "Purchase is not completed.")
+        if (!purchase.products.contains(productId)) {
+            onDone(false, "Purchased product does not match requested subscription.")
             return
         }
 
-        fun finalizeEntitlement() {
-            val now = System.currentTimeMillis()
-            AppSettings.premiumSubscribedProductId = productId
-            AppSettings.premiumSubscriptionToken = purchase.purchaseToken
-            AppSettings.premiumSubscriptionStartMillis = purchase.purchaseTime
-            AppSettings.premiumSubscriptionAutoRenewing = purchase.isAutoRenewing
-            AppSettings.premiumSubscriptionState = "PENDING_BACKEND_VERIFICATION"
-            AppSettings.premiumLastVerifiedAtMillis = now
-            AppSettings.persist()
-            done(true, null)
+        if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) {
+            onDone(false, "Purchase is not completed.")
+            return
         }
 
         if (purchase.isAcknowledged) {
-            finalizeEntitlement()
+            onDone(true, null)
             return
         }
 
-        val ackParams = AcknowledgePurchaseParams.newBuilder()
+        val params = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        billingClient.acknowledgePurchase(ackParams) { billingResult ->
+        billingClient.acknowledgePurchase(params) { billingResult ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                finalizeEntitlement()
+                onDone(true, null)
             } else {
-                done(
+                onDone(
                     false,
-                    billingResult.debugMessage.ifBlank { "Acknowledge failed." }
+                    buildBillingErrorMessage(
+                        operation = "acknowledgePurchase",
+                        billingResult = billingResult
+                    )
                 )
             }
         }
     }
 
-    private fun clearStoredSubscriptionState() {
-        AppSettings.premiumSubscriptionState = "NONE"
-        AppSettings.premiumSubscribedProductId = ""
-        AppSettings.premiumSubscriptionToken = ""
-        AppSettings.premiumSubscriptionStartMillis = 0L
-        AppSettings.premiumSubscriptionExpiryMillis = 0L
-        AppSettings.premiumSubscriptionAutoRenewing = false
-        AppSettings.premiumLastVerifiedAtMillis = System.currentTimeMillis()
-        AppSettings.persist()
-    }
+    private fun buildBillingErrorMessage(
+        operation: String,
+        billingResult: BillingResult
+    ): String {
+        val code = billingResult.responseCode
+        val debugMessage = billingResult.debugMessage.ifBlank { "No debug message from Google Play." }
 
-    actual fun dispose() {
-        pendingPurchaseContinuation = null
-        if (billingClient.isReady) {
-            billingClient.endConnection()
+        val humanReadableHint = when (code) {
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE ->
+                "Google Play Billing is unavailable on this device/account or this app build is not eligible for billing tests."
+
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE ->
+                "The subscription item is unavailable for this account, country, track, or installed app version."
+
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR ->
+                "Google Play reported a developer/configuration error. Usually this means Play Console setup, signing, track installation source, or offer configuration mismatch."
+
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED ->
+                "This device or Play Store version does not support the requested billing feature."
+
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED ->
+                "This Google Play account already owns the subscription."
+
+            BillingClient.BillingResponseCode.NETWORK_ERROR ->
+                "Network error while talking to Google Play."
+
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE ->
+                "Google Play service is temporarily unavailable."
+
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED ->
+                "Google Play Billing service got disconnected."
+
+            else ->
+                "Google Play Billing returned an error."
         }
+
+        return "$humanReadableHint [operation=$operation, code=$code, debugMessage=$debugMessage]"
     }
 }
