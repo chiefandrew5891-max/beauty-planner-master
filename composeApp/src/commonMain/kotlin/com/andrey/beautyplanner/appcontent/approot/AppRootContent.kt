@@ -45,6 +45,11 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import com.andrey.beautyplanner.auth.SignInProvider
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.Brush
 
 private const val APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS = 24L * 60L * 60L * 1000L
 
@@ -328,8 +333,12 @@ fun AppRootContent(
                 val nowMin = remember(nowTimeHm) {
                     com.andrey.beautyplanner.utils.parseHmToMinutes(nowTimeHm) ?: 0
                 }
-                val visibleAppointmentsCount =
-                    AppointmentSyncUtils.visibleAppointmentsCount(state.appointments)
+                val activeAppointmentsCount = getUpcomingAppointmentsCount(
+                    appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                    today = state.today,
+                    nowTime = nowTimeHm
+                )
+
                 val appointmentLimitNotice = run {
                     val nowMs = Clock.System.now().toEpochMilliseconds()
                     val isEffectivelyFreeLimited = !AccessManager.hasPremiumScreenAccess(nowMs)
@@ -337,7 +346,7 @@ fun AppRootContent(
                         null
                     } else {
                         val remainingSlots = AccessManager.getRemainingFreeSlots(
-                            currentAppointmentsCount = visibleAppointmentsCount,
+                            currentAppointmentsCount = activeAppointmentsCount,
                             nowMillis = nowMs
                         )
                         if (AccessManager.shouldShowFreeLimitWarning(remainingSlots)) {
@@ -351,13 +360,29 @@ fun AppRootContent(
 
                 val listState = rememberLazyListState()
 
-                val upcoming by remember(nowTimeHm, state.today, state.appointments.size) {
+                val upcoming by remember(
+                    nowTimeHm,
+                    state.today,
+                    state.appointments.size,
+                    state.accessState.tier,
+                    state.accessState.isTrialActive
+                ) {
                     derivedStateOf {
-                        getUpcomingAppointments(
+                        val upcomingAll = getUpcomingAppointments(
                             appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
                             today = state.today,
                             nowTime = nowTimeHm
                         )
+
+                        val shouldLimitUpcomingOnHome =
+                            state.accessState.tier != AccessTier.PREMIUM &&
+                                    !state.accessState.isTrialActive
+
+                        if (shouldLimitUpcomingOnHome) {
+                            upcomingAll.take(AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT)
+                        } else {
+                            upcomingAll
+                        }
                     }
                 }
 
@@ -857,10 +882,14 @@ fun AppRootContent(
                     val isNewAppointment = existing == null
 
                     if (isNewAppointment) {
+                        val currentActiveAppointmentsCount = getUpcomingAppointmentsCount(
+                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                            today = state.today,
+                            nowTime = getCurrentTimeHm()
+                        )
+
                         val canCreate = AccessManager.canCreateAppointment(
-                            currentAppointmentsCount = AppointmentSyncUtils.visibleAppointmentsCount(
-                                state.appointments
-                            ),
+                            currentAppointmentsCount = currentActiveAppointmentsCount,
                             nowMillis = nowMillis
                         )
 
@@ -904,33 +933,40 @@ fun AppRootContent(
                     state.saveAll()
 
                     if (isNewAppointment) {
-                        val newVisibleCount = AppointmentSyncUtils.visibleAppointmentsCount(
-                            state.appointments
+                        val isTrialActive = state.accessState.isTrialActive
+
+                        val newActiveCount = getUpcomingAppointmentsCount(
+                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                            today = state.today,
+                            nowTime = getCurrentTimeHm()
                         )
-                        val threshold = AccessManager.getFreeLimitPopupThreshold(newVisibleCount)
-                        if (threshold != null) {
-                            val isTrialActive = state.accessState.isTrialActive
-                            state.freeLimitPopupMessage = when (threshold) {
-                                1 -> if (isTrialActive)
-                                    Locales.t("free_limit_popup_after_first_trial")
-                                else
-                                    Locales.t("free_limit_popup_after_first_free")
 
-                                AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT ->
-                                    if (isTrialActive)
+                        if (!isTrialActive) {
+                            val remaining =
+                                (AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newActiveCount).coerceAtLeast(0)
+
+                            state.freeLimitPopupMessage =
+                                if (newActiveCount >= AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT) {
+                                    Locales.t("free_limit_popup_limit_reached_free")
+                                } else {
+                                    Locales.t("free_limit_popup_slots_remaining_free")
+                                        .replace("{count}", remaining.toString())
+                                }
+                        } else {
+                            val threshold = AccessManager.getFreeLimitPopupThreshold(newActiveCount)
+                            if (threshold != null) {
+                                state.freeLimitPopupMessage = when (threshold) {
+                                    1 -> Locales.t("free_limit_popup_after_first_trial")
+
+                                    AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT ->
                                         Locales.t("free_limit_popup_limit_reached_trial")
-                                    else
-                                        Locales.t("free_limit_popup_limit_reached_free")
 
-                                else -> {
-                                    val remaining =
-                                        AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newVisibleCount
-                                    if (isTrialActive)
+                                    else -> {
+                                        val remaining =
+                                            AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newActiveCount
                                         Locales.t("free_limit_popup_slots_remaining_trial")
                                             .replace("{count}", remaining.toString())
-                                    else
-                                        Locales.t("free_limit_popup_slots_remaining_free")
-                                            .replace("{count}", remaining.toString())
+                                    }
                                 }
                             }
                         }
@@ -1026,6 +1062,8 @@ fun AppRootContent(
 
         val popupMessage = state.freeLimitPopupMessage
         if (popupMessage != null) {
+            val popupScrollState = rememberScrollState()
+
             androidx.compose.material.AlertDialog(
                 onDismissRequest = { state.freeLimitPopupMessage = null },
                 title = {
@@ -1036,11 +1074,43 @@ fun AppRootContent(
                     )
                 },
                 text = {
-                    Text(
-                        text = popupMessage,
-                        fontSize = (14 * state.fontScale).sp,
-                        lineHeight = (20 * state.fontScale).sp
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 220.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(popupScrollState)
+                                .padding(end = 4.dp)
+                        ) {
+                            Text(
+                                text = popupMessage,
+                                fontSize = (14 * state.fontScale).sp,
+                                lineHeight = (20 * state.fontScale).sp
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                        if (popupScrollState.maxValue > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .fillMaxWidth()
+                                    .height(28.dp)
+                                    .background(
+                                        brush = Brush.verticalGradient(
+                                            colors = listOf(
+                                                MaterialTheme.colors.surface.copy(alpha = 0f),
+                                                MaterialTheme.colors.surface.copy(alpha = 0.92f)
+                                            )
+                                        )
+                                    )
+                            )
+                        }
+                    }
                 },
                 confirmButton = {
                     androidx.compose.material.TextButton(

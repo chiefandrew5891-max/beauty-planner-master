@@ -34,6 +34,19 @@ import androidx.compose.material.Divider
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 
 private const val TERMS_OF_USE_URL = "https://sites.google.com/view/beautyplanner/terms-of-use"
 
@@ -70,6 +83,10 @@ fun PremiumAccessScreen(
         accessState.isTrialActive -> Locales.t("premium_trial_active_subtitle")
         else -> Locales.t("premium_trial_expired_subtitle")
     }
+
+    val resolvedMessage = message.takeIf {
+        it.isNotBlank() && it != Locales.t("premium_required_default")
+    }.orEmpty()
 
     val buyButtonText = when {
         isPremiumActive ->
@@ -121,25 +138,21 @@ fun PremiumAccessScreen(
                     .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colors.primary.copy(alpha = 0.08f),
-                            shape = RoundedCornerShape(14.dp)
-                        )
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                ) {
-                    Text(
-                        text = subtitle,
-                        fontSize = (15 * fontScale).sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colors.onBackground,
-                        lineHeight = (22 * fontScale).sp
-                    )
-                }
+                Text(
+                    text = subtitle,
+                    fontSize = (18 * fontScale).sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isPremiumActive) {
+                        MaterialTheme.colors.primary
+                    } else {
+                        MaterialTheme.colors.onBackground
+                    },
+                    lineHeight = (24 * fontScale).sp
+                )
 
-                if (message.isNotBlank()) {
+                Spacer(modifier = Modifier.padding(top = 14.dp))
+
+                if (resolvedMessage.isNotBlank()) {
                     Spacer(modifier = Modifier.padding(top = 18.dp))
 
                     Column(
@@ -152,7 +165,7 @@ fun PremiumAccessScreen(
                             .padding(horizontal = 14.dp, vertical = 12.dp)
                     ) {
                         Text(
-                            text = message,
+                            text = resolvedMessage,
                             fontSize = (15 * fontScale).sp,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colors.onBackground,
@@ -207,14 +220,7 @@ fun PremiumAccessScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(top = 20.dp))
-
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.10f)
-                )
-
-                Spacer(modifier = Modifier.padding(top = 20.dp))
+                Spacer(modifier = Modifier.padding(top = 24.dp))
 
                 Text(
                     text = Locales.t("premium_features_title"),
@@ -445,11 +451,50 @@ fun PremiumAccessScreen(
 
                 Spacer(modifier = Modifier.padding(top = 24.dp))
 
-                PrimaryActionButton(
-                    text = buyButtonText,
-                    onClick = onUnlockPremium,
-                    enabled = buyEnabled
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        onClick = onUnlockPremium,
+                        enabled = buyEnabled,
+                        modifier = Modifier
+                            .widthIn(max = 420.dp)
+                            .fillMaxWidth()
+                            .height(44.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = buyButtonText,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            if (isPremiumActive) {
+                                Spacer(modifier = Modifier.width(8.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .size(18.dp)
+                                        .background(
+                                            color = Color(0xFF2EAD62),
+                                            shape = CircleShape
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Check,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(12.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.padding(top = 10.dp))
 

@@ -81,6 +81,18 @@ fun getUpcomingAppointments(
         )
 }
 
+fun getUpcomingAppointmentsCount(
+    appointments: List<Appointment>,
+    today: LocalDate,
+    nowTime: String
+): Int {
+    return getUpcomingAppointments(
+        appointments = appointments,
+        today = today,
+        nowTime = nowTime
+    ).size
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UpcomingAppointmentItem(

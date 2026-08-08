@@ -3,13 +3,13 @@ package com.andrey.beautyplanner
 import com.andrey.beautyplanner.access.AccessRepository
 
 object AccessManager {
-    const val FREE_ACTIVE_APPOINTMENTS_LIMIT = 20
+    const val FREE_ACTIVE_APPOINTMENTS_LIMIT = 5
 
     // Thresholds for the persistent banner warning (based on remaining slots)
     private val FREE_LIMIT_BANNER_THRESHOLDS = setOf(5, 3, 1)
 
     // Thresholds for one-time popup (based on visible appointment count)
-    val FREE_LIMIT_POPUP_THRESHOLDS = setOf(1, 15, 17, 19, 20)
+    val FREE_LIMIT_POPUP_THRESHOLDS = setOf(1, 2, 3, 4, 5)
 
     fun getAccessState(nowMillis: Long): AccessState {
         if (AppSettings.developerPremiumOverrideEnabled) {

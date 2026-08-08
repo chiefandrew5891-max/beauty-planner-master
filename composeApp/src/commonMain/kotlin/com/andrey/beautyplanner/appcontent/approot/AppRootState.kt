@@ -29,6 +29,8 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import com.andrey.beautyplanner.remote.MasterScheduleSync
+import com.andrey.beautyplanner.AppointmentSyncUtils
+import com.andrey.beautyplanner.appcontent.getUpcomingAppointments
 
 @Stable
 class AppRootState(
@@ -109,6 +111,7 @@ class AppRootState(
     var premiumReturnScreen by mutableStateOf(Screen.SETTINGS)
 
     var freeLimitPopupMessage by mutableStateOf<String?>(null)
+    var hasShownTrialEndedFreeModePopup by mutableStateOf(false)
 
     var mustCreatePin by mutableStateOf(false)
     var locked by mutableStateOf(AppSettings.pinEnabled && AppSettings.isPinSet())
@@ -298,6 +301,30 @@ class AppRootState(
         billingUiState = billingUiState.copy(
             ownedPremium = accessState.hasPremium
         )
+    }
+
+    fun maybeShowTrialEndedFreeModePopup() {
+        val isFreeAfterTrial =
+            accessState.tier != AccessTier.PREMIUM &&
+                    !accessState.isTrialActive
+
+        if (!isFreeAfterTrial || hasShownTrialEndedFreeModePopup) {
+            return
+        }
+
+        val activeAppointmentsCount = getUpcomingAppointments(
+            appointments = AppointmentSyncUtils.visibleAppointments(appointments),
+            today = today,
+            nowTime = getCurrentTimeHm()
+        ).size
+
+        if (activeAppointmentsCount > AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT) {
+            freeLimitPopupMessage = Locales.t("free_limit_trial_ended_backlog_explanation")
+                .replace("{count}", activeAppointmentsCount.toString())
+                .replace("{limit}", AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT.toString())
+
+            hasShownTrialEndedFreeModePopup = true
+        }
     }
 
     suspend fun syncAccessStatusFromServerIfPossible() {
@@ -612,6 +639,8 @@ class AppRootState(
     suspend fun bootstrapAuthenticatedUser(
         providerOverride: SignInProvider? = null
     ) {
+        hasShownTrialEndedFreeModePopup = false
+
         val installId = IdentityManager.getOrCreateInstallId()
 
         val currentUser = AuthGateway.getCurrentUser()
@@ -658,6 +687,7 @@ class AppRootState(
 
         reloadAppointmentsForCurrentProfile()
         refreshAccessState(Clock.System.now().toEpochMilliseconds())
+        maybeShowTrialEndedFreeModePopup()
 
         runCatching {
             performCloudSyncIfEligible()
