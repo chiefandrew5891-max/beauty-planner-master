@@ -12,7 +12,16 @@ object AccessManager {
     val FREE_LIMIT_POPUP_THRESHOLDS = setOf(1, 2, 3)
 
     fun getAccessState(nowMillis: Long): AccessState {
-        if (AppSettings.developerPremiumOverrideEnabled) {
+        val currentUserId = AppSettings.localProfileUserId.trim()
+        val overrideOwnerUserId = AppSettings.developerPremiumOverrideOwnerUserId.trim()
+
+        val overrideApplies =
+            AppSettings.developerPremiumOverrideEnabled &&
+                    currentUserId.isNotBlank() &&
+                    overrideOwnerUserId.isNotBlank() &&
+                    currentUserId == overrideOwnerUserId
+
+        if (overrideApplies) {
             return AccessState(
                 tier = AccessTier.PREMIUM,
                 trialStartedAtMillis = AppSettings.trialStartedAtMillis,

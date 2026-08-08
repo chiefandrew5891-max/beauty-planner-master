@@ -800,15 +800,23 @@ fun AppRootContent(
                 state = state,
                 accessState = state.accessState,
                 onEnablePremium = {
+                    val currentUserId = state.currentAuthUser?.uid?.trim().orEmpty()
+                    if (currentUserId.isBlank() || state.currentAuthUser?.provider == SignInProvider.ANONYMOUS) {
+                        return@DeveloperAccessScreen
+                    }
+
                     AppSettings.developerPremiumOverrideEnabled = true
+                    AppSettings.developerPremiumOverrideOwnerUserId = currentUserId
                     AppSettings.persist()
                     state.refreshAccessState()
                 },
                 onDisablePremium = {
                     AppSettings.developerPremiumOverrideEnabled = false
+                    AppSettings.developerPremiumOverrideOwnerUserId = ""
                     com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
                         blockAutoFallback = true
                     )
+                    AppSettings.persist()
                     state.refreshAccessState()
                 },
                 onResetTrialToNow = {

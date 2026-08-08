@@ -2125,10 +2125,10 @@ class AppRootState(
         AppSettings.lastAuthEmail = ""
         AppSettings.lastAuthDisplayName = ""
         AppSettings.lastAuthenticatedAppOpenAtMillis = 0L
-        AppSettings.developerPremiumOverrideEnabled = false
         com.andrey.beautyplanner.access.AccessRepository.clearLocalPremiumState(
             blockAutoFallback = true
         )
+        AppSettings.persist()
     }
 
     private fun persistUpdateStatus(status: AppUpdateStatus) {

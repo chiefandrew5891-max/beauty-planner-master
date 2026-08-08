@@ -123,6 +123,7 @@ private data class SettingsSnapshot(
     val adminPinHash: String = "",
     val developerModeUnlocked: Boolean = false,
     val developerPremiumOverrideEnabled: Boolean = false,
+    val developerPremiumOverrideOwnerUserId: String = "",
 
     val cloudSettingsUpdatedAtMillis: Long = 0L,
 
@@ -225,6 +226,7 @@ object AppSettings {
     var developerModeUnlocked by mutableStateOf(false)
     var previewFontScaleOverride by mutableStateOf<Float?>(null)
     var developerPremiumOverrideEnabled by mutableStateOf(false)
+    var developerPremiumOverrideOwnerUserId by mutableStateOf("")
 
     val languageCodes = linkedMapOf(
         "العربية" to "ar",
@@ -682,6 +684,7 @@ object AppSettings {
         adminPinHash = snapshot.adminPinHash
         developerModeUnlocked = snapshot.developerModeUnlocked
         developerPremiumOverrideEnabled = snapshot.developerPremiumOverrideEnabled
+        developerPremiumOverrideOwnerUserId = snapshot.developerPremiumOverrideOwnerUserId
         cloudSettingsUpdatedAtMillis = snapshot.cloudSettingsUpdatedAtMillis
 
         lastUpdateCheckAtMillis = snapshot.lastUpdateCheckAtMillis
@@ -766,6 +769,7 @@ object AppSettings {
             adminPinHash = adminPinHash,
             developerModeUnlocked = developerModeUnlocked,
             developerPremiumOverrideEnabled = developerPremiumOverrideEnabled,
+            developerPremiumOverrideOwnerUserId = developerPremiumOverrideOwnerUserId,
             cloudSettingsUpdatedAtMillis = cloudSettingsUpdatedAtMillis,
             lastUpdateCheckAtMillis = lastUpdateCheckAtMillis,
             lastKnownUpdateAvailable = lastKnownUpdateAvailable,

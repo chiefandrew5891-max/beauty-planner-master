@@ -91,8 +91,8 @@ android {
         applicationId = "com.andrey.beautyplanner"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.3.2"
+        versionCode = 9
+        versionName = "1.3.5"
     }
 
     compileOptions {
