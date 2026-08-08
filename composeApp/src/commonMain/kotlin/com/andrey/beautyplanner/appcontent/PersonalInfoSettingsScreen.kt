@@ -99,6 +99,9 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
             specializationDraft = AppSettings.profileSpecialization
         }
 
+        val scope = rememberCoroutineScope()
+        val authProvider = appState.currentAuthUser?.provider
+
         fun refreshAvatarLibrary() {
             scope.launch {
                 runCatching {
@@ -110,9 +113,6 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                 }
             }
         }
-
-        val scope = rememberCoroutineScope()
-        val authProvider = appState.currentAuthUser?.provider
 
         val hasChanges =
             userNameDraft.trim() != AppSettings.ownerName.trim() ||

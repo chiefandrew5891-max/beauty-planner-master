@@ -5,6 +5,8 @@ import com.google.firebase.functions.functions
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
+import com.andrey.beautyplanner.CloudSyncJson
+import kotlinx.serialization.decodeFromString
 
 actual object BackendBridge {
     actual suspend fun ensureAuthenticated(): String {
@@ -152,17 +154,12 @@ actual object BackendBridge {
                 .call(emptyMap<String, Any>())
                 .addOnSuccessListener { result ->
                     try {
-                        val rawList = result.data as? List<*> ?: emptyList<Any?>()
+                        val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
+                        val rawJson = map["itemsJson"]?.toString().orEmpty()
 
-                        val mapped = rawList.mapNotNull { item ->
-                            val map = item as? Map<*, *> ?: return@mapNotNull null
-                            AvatarLibraryItemPayload(
-                                id = map["id"]?.toString().orEmpty(),
-                                storagePath = map["storagePath"]?.toString().orEmpty(),
-                                downloadUrl = map["downloadUrl"]?.toString().orEmpty(),
-                                createdAt = map["createdAt"]?.toString()?.toLongOrNull() ?: 0L
-                            )
-                        }
+                        val mapped = runCatching {
+                            CloudSyncJson.json.decodeFromString<List<AvatarLibraryItemPayload>>(rawJson)
+                        }.getOrDefault(emptyList())
 
                         cont.resume(mapped) {}
                     } catch (t: Throwable) {

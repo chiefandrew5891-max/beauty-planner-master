@@ -8,6 +8,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
+import com.andrey.beautyplanner.CloudSyncJson
+import kotlinx.serialization.decodeFromString
 
 actual object BackendBridge {
 
@@ -170,9 +172,9 @@ actual object BackendBridge {
             payload = emptyMap()
         )
 
-        val rawJson = result["items"].orEmpty()
-        return runCatching {
-            CloudSyncJson.json.decodeFromString<List<AvatarLibraryItemPayload>>(rawJson)
+        val rawJson = result["itemsJson"].orEmpty()
+        return runCatching<List<AvatarLibraryItemPayload>> {
+            CloudSyncJson.json.decodeFromString(rawJson)
         }.getOrDefault(emptyList())
     }
 
