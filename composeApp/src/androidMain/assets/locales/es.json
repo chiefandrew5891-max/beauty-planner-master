@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Cargando tu espacio de trabajo…",
     "session_loading_guest_subtitle": "Preparando inicio de sesión…",
-    "billing_account_binding_active_message": "Premium ya está vinculado a la cuenta actual de la aplicación:"
+    "billing_account_binding_active_message": "Premium ya está vinculado a la cuenta actual de la aplicación:",
+    "premium_feature_cloud_sync": "Sincronización en la nube y copia de seguridad segura",
+    "premium_feature_schedule": "Ajustes flexibles del horario de trabajo",
+    "premium_feature_services": "Servicios personalizados y lista de precios",
+    "premium_feature_payments": "Gestión avanzada de pagos y citas",
+    "premium_important_prefix": "IMPORTANTE:"
 }

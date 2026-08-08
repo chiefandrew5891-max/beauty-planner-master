@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Uw werkruimte laden…",
     "session_loading_guest_subtitle": "Inloggen voorbereiden…",
-    "billing_account_binding_active_message": "Premium is al gekoppeld aan het huidige app-account:"
+    "billing_account_binding_active_message": "Premium is al gekoppeld aan het huidige app-account:",
+    "premium_feature_cloud_sync": "Cloudsynchronisatie en veilige back-up",
+    "premium_feature_schedule": "Flexibele werkroosterinstellingen",
+    "premium_feature_services": "Aangepaste diensten en prijslijst",
+    "premium_feature_payments": "Geavanceerd beheer van betalingen en afspraken",
+    "premium_important_prefix": "BELANGRIJK:"
 }

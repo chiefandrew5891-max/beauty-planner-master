@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Tiek ielādēta jūsu darba vieta…",
     "session_loading_guest_subtitle": "Tiek gatavota pieteikšanās…",
-    "billing_account_binding_active_message": "Premium jau ir sasaistīts ar pašreizējo lietotnes kontu:"
+    "billing_account_binding_active_message": "Premium jau ir sasaistīts ar pašreizējo lietotnes kontu:",
+    "premium_feature_cloud_sync": "Mākoņa sinhronizācija un droša dublēšana",
+    "premium_feature_schedule": "Elastīgi darba grafika iestatījumi",
+    "premium_feature_services": "Pielāgoti pakalpojumi un cenrādis",
+    "premium_feature_payments": "Uzlabota maksājumu un pierakstu pārvaldība",
+    "premium_important_prefix": "SVARĪGI:"
 }

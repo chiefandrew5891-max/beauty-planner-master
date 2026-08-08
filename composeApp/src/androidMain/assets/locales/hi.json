@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "आपका वर्कस्पेस लोड हो रहा है…",
     "session_loading_guest_subtitle": "साइन-इन तैयार किया जा रहा है…",
-    "billing_account_binding_active_message": "प्रीमियम पहले से ही वर्तमान ऐप खाते से जुड़ा हुआ है:"
+    "billing_account_binding_active_message": "प्रीमियम पहले से ही वर्तमान ऐप खाते से जुड़ा हुआ है:",
+    "premium_feature_cloud_sync": "क्लाउड सिंक और सुरक्षित बैकअप",
+    "premium_feature_schedule": "लचीली कार्य अनुसूची सेटिंग्स",
+    "premium_feature_services": "कस्टम सेवाएं और मूल्य सूची",
+    "premium_feature_payments": "उन्नत भुगतान और अपॉइंटमेंट प्रबंधन",
+    "premium_important_prefix": "महत्वपूर्ण:"
 }

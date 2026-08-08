@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "작업 공간을 불러오는 중…",
     "session_loading_guest_subtitle": "로그인 준비 중…",
-    "billing_account_binding_active_message": "Premium이 이미 현재 앱 계정에 연결되어 있습니다:"
+    "billing_account_binding_active_message": "Premium이 이미 현재 앱 계정에 연결되어 있습니다:",
+    "premium_feature_cloud_sync": "클라우드 동기화 및 안전한 백업",
+    "premium_feature_schedule": "유연한 근무 일정 설정",
+    "premium_feature_services": "맞춤형 서비스 및 가격표",
+    "premium_feature_payments": "고급 결제 및 예약 관리",
+    "premium_important_prefix": "【중요】"
 }

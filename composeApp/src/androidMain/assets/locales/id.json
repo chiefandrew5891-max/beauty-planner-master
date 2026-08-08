@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Memuat ruang kerja Anda…",
     "session_loading_guest_subtitle": "Menyiapkan masuk…",
-    "billing_account_binding_active_message": "Premium sudah terhubung ke akun aplikasi saat ini:"
+    "billing_account_binding_active_message": "Premium sudah terhubung ke akun aplikasi saat ini:",
+    "premium_feature_cloud_sync": "Sinkronisasi cloud dan pencadangan aman",
+    "premium_feature_schedule": "Pengaturan jadwal kerja yang fleksibel",
+    "premium_feature_services": "Layanan dan daftar harga khusus",
+    "premium_feature_payments": "Manajemen pembayaran dan janji temu tingkat lanjut",
+    "premium_important_prefix": "PENTING:"
 }

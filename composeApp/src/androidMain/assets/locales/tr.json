@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Çalışma alanınız yükleniyor…",
     "session_loading_guest_subtitle": "Oturum açma hazırlanıyor…",
-    "billing_account_binding_active_message": "Premium zaten mevcut uygulama hesabına bağlı:"
+    "billing_account_binding_active_message": "Premium zaten mevcut uygulama hesabına bağlı:",
+    "premium_feature_cloud_sync": "Bulut senkronizasyonu ve güvenli yedekleme",
+    "premium_feature_schedule": "Esnek çalışma takvimi ayarları",
+    "premium_feature_services": "Özel hizmetler ve fiyat listesi",
+    "premium_feature_payments": "Gelişmiş ödeme ve randevu yönetimi",
+    "premium_important_prefix": "ÖNEMLİ:"
 }

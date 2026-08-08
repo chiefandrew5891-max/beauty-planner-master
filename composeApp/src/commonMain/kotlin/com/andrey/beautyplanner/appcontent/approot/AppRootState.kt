@@ -300,6 +300,33 @@ class AppRootState(
         )
     }
 
+    suspend fun syncAccessStatusFromServerIfPossible() {
+        val backendUserId = AppSettings.backendUserId.trim()
+        val authUserId = currentAuthUser?.uid?.trim().orEmpty()
+
+        if (backendUserId.isBlank() || authUserId.isBlank()) {
+            return
+        }
+
+        runCatching {
+            val remote = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
+                backendUserId
+            )
+            com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                remote = remote,
+                currentAuthUserId = currentAuthUser?.uid
+            )
+            refreshAccessState()
+            CloudSyncLogger.log(
+                "syncAccessStatusFromServerIfPossible: tier=${remote.tier}, hasPremium=${remote.hasPremium}, state=${remote.subscriptionState}"
+            )
+        }.onFailure {
+            CloudSyncLogger.log(
+                "syncAccessStatusFromServerIfPossible: failed: ${it.message}"
+            )
+        }
+    }
+
     fun mapAuthErrorMessage(raw: String?): String {
         val text = raw?.trim().orEmpty()
         if (text.isBlank()) return Locales.t("auth_error_generic")
@@ -621,6 +648,8 @@ class AppRootState(
             currentAuthUserId = currentAuthUser?.uid
         )
 
+        syncAccessStatusFromServerIfPossible()
+
         runCatching {
             com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
         }.onFailure {
@@ -676,6 +705,8 @@ class AppRootState(
                                 remote = remote,
                                 currentAuthUserId = result.user.uid
                             )
+
+                            syncAccessStatusFromServerIfPossible()
 
                             com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
                                 firebaseUid = result.user.uid,
@@ -737,6 +768,8 @@ class AppRootState(
                                 remote = remote,
                                 currentAuthUserId = result.user.uid
                             )
+
+                            syncAccessStatusFromServerIfPossible()
 
                             com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
                                 firebaseUid = result.user.uid,
@@ -1269,6 +1302,8 @@ class AppRootState(
                                     remote = remote,
                                     currentAuthUserId = result.user.uid
                                 )
+
+                                syncAccessStatusFromServerIfPossible()
 
                                 try {
                                     com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(

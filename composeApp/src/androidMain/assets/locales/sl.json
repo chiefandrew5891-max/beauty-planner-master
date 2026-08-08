@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Nalaganje vašega delovnega prostora…",
     "session_loading_guest_subtitle": "Priprava na prijavo…",
-    "billing_account_binding_active_message": "Premium je že povezan s trenutnim računom aplikacije:"
+    "billing_account_binding_active_message": "Premium je že povezan s trenutnim računom aplikacije:",
+    "premium_feature_cloud_sync": "Sinhronizacija v oblaku in varno varnostno kopiranje",
+    "premium_feature_schedule": "Prilagodljive nastavitve delovnega urnika",
+    "premium_feature_services": "Storitve po meri in cenik",
+    "premium_feature_payments": "Napredno upravljanje plačil in naročil",
+    "premium_important_prefix": "POMEMBNO:"
 }

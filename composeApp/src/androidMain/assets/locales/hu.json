@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Munkaterület betöltése…",
     "session_loading_guest_subtitle": "Bejelentkezés előkészítése…",
-    "billing_account_binding_active_message": "A Premium már társítva van a jelenlegi alkalmazásfiókhoz:"
+    "billing_account_binding_active_message": "A Premium már társítva van a jelenlegi alkalmazásfiókhoz:",
+    "premium_feature_cloud_sync": "Felhőalapú szinkronizálás és biztonságos mentés",
+    "premium_feature_schedule": "Rugalmas munkarend-beállítások",
+    "premium_feature_services": "Egyedi szolgáltatások és árjegyzék",
+    "premium_feature_payments": "Fejlett fizetés- és időpont-kezelés",
+    "premium_important_prefix": "FONTOS:"
 }

@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Зареждане на вашето работно пространство…",
     "session_loading_guest_subtitle": "Подготовка за вход…",
-    "billing_account_binding_active_message": "Premium вече е обвързан с текущия профил в приложението:"
+    "billing_account_binding_active_message": "Premium вече е обвързан с текущия профил в приложението:",
+    "premium_feature_cloud_sync": "Облачна синхронизация и сигурен архив",
+    "premium_feature_schedule": "Гъвкави настройки на работния график",
+    "premium_feature_services": "Персонализирани услуги и ценоразпис",
+    "premium_feature_payments": "Разширено управление на плащанията и записите",
+    "premium_important_prefix": "ВАЖНО:"
 }

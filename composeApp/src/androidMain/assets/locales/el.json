@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Φόρτωση του χώρου εργασίας σας…",
     "session_loading_guest_subtitle": "Προετοιμασία σύνδεσης…",
-    "billing_account_binding_active_message": "Το Premium είναι уже συνδεδεμένο με τον τρέχοντα λογαριασμό της εφαρμογής:"
+    "billing_account_binding_active_message": "Το Premium είναι уже συνδεδεμένο με τον τρέχοντα λογαριασμό της εφαρμογής:",
+    "premium_feature_cloud_sync": "Συγχρονισμός στο cloud και ασφαλές αντίγραφο ασφαλείας",
+    "premium_feature_schedule": "Ευέλικτες ρυθμίσεις προγράμματος εργασίας",
+    "premium_feature_services": "Προσαρμοσμένες υπηρεσίες και τιμοκατάλογος",
+    "premium_feature_payments": "Προηγμένη διαχείριση πληρωμών και ραντεβού",
+    "premium_important_prefix": "ΣΗΜΑΝΤΙΚΟ:"
 }

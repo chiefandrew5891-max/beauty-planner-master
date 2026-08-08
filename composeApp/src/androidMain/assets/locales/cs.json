@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Načítání vašeho pracovního prostoru…",
     "session_loading_guest_subtitle": "Příprava přihlášení…",
-    "billing_account_binding_active_message": "Premium je již propojeno s aktuálním účtem aplikace:"
+    "billing_account_binding_active_message": "Premium je již propojeno s aktuálním účtem aplikace:",
+    "premium_feature_cloud_sync": "Cloudová synchronizace a bezpečné zálohování",
+    "premium_feature_schedule": "Flexibilní nastavení pracovního rozvrhu",
+    "premium_feature_services": "Vlastní služby a ceník",
+    "premium_feature_payments": "Pokročilá správa plateb a schůzek",
+    "premium_important_prefix": "DŮLEŽITÉ:"
 }

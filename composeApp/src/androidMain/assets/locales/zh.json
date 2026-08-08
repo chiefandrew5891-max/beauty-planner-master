@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "正在加载您的工作区…",
     "session_loading_guest_subtitle": "正在准备登录…",
-    "billing_account_binding_active_message": "Premium 已绑定到当前应用账号："
+    "billing_account_binding_active_message": "Premium 已绑定到当前应用账号：",
+    "premium_feature_cloud_sync": "云端同步与安全备份",
+    "premium_feature_schedule": "灵活的工作日程设置",
+    "premium_feature_services": "自定义服务与价格表",
+    "premium_feature_payments": "高级支付与预约管理",
+    "premium_important_prefix": "【重要】"
 }

@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Se încarcă spațiul dvs. de lucru…",
     "session_loading_guest_subtitle": "Se pregătește autentificarea…",
-    "billing_account_binding_active_message": "Premium este deja vinculat la contul actual din aplicație:"
+    "billing_account_binding_active_message": "Premium este deja vinculat la contul actual din aplicație:",
+    "premium_feature_cloud_sync": "Sincronizare în cloud și backup securizat",
+    "premium_feature_schedule": "Setări flexibile ale programului de lucru",
+    "premium_feature_services": "Servicii personalizate și listă de prețuri",
+    "premium_feature_payments": "Gestionare avansată a plăților și programărilor",
+    "premium_important_prefix": "IMPORTANT:"
 }

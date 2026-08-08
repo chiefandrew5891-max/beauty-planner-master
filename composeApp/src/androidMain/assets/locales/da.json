@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Indlæser dit arbejdsområde…",
     "session_loading_guest_subtitle": "Forbereder login…",
-    "billing_account_binding_active_message": "Premium er allerede knyttet til den aktuelle app-konto:"
+    "billing_account_binding_active_message": "Premium er allerede knyttet til den aktuelle app-konto:",
+    "premium_feature_cloud_sync": "Sky-synkronisering og sikker sikkerhedskopiering",
+    "premium_feature_schedule": "Fleksible indstillinger for arbejdsplan",
+    "premium_feature_services": "Tilpassede tjenester og prisliste",
+    "premium_feature_payments": "Avanceret administration af betalinger og aftaler",
+    "premium_important_prefix": "VIGTIGT:"
 }

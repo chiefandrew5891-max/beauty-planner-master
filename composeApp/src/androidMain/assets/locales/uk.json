@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Завантаження вашого робочого простору…",
     "session_loading_guest_subtitle": "Підготовка до входу…",
-    "billing_account_binding_active_message": "Premium вже прив'язаний до поточного акаунту додатка:"
+    "billing_account_binding_active_message": "Premium вже прив'язаний до поточного акаунту додатка:",
+    "premium_feature_cloud_sync": "Хмарна синхронізація та надійний бекап",
+    "premium_feature_schedule": "Гнучкі налаштування робочого графіка",
+    "premium_feature_services": "Кастомні послуги та прайс-лист",
+    "premium_feature_payments": "Розширене керування оплатою та записами",
+    "premium_important_prefix": "ВАЖЛИВО:"
 }

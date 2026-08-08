@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Ladataan työtilaasi…",
     "session_loading_guest_subtitle": "Valmistellaan kirjautumista…",
-    "billing_account_binding_active_message": "Premium on jo yhdistetty nykyiseen sovellustiliin:"
+    "billing_account_binding_active_message": "Premium on jo yhdistetty nykyiseen sovellustiliin:",
+    "premium_feature_cloud_sync": "Pilvisynchronointi ja turvallinen varmuuskopiointi",
+    "premium_feature_schedule": "Joustavat työaikataulun asetukset",
+    "premium_feature_services": "Räätälöidyt palvelut ja hinnasto",
+    "premium_feature_payments": "Edistynyt maksujen ja varausten hallinta",
+    "premium_important_prefix": "TÄRKEÄÄ:"
 }

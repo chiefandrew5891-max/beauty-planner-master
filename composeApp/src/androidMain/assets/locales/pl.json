@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Wczytywanie Twojej przestrzeni roboczej…",
     "session_loading_guest_subtitle": "Przygotowywanie logowania…",
-    "billing_account_binding_active_message": "Konto Premium jest już powiązane z bieżącym kontem w aplikacji:"
+    "billing_account_binding_active_message": "Konto Premium jest już powiązane z bieżącym kontem w aplikacji:",
+    "premium_feature_cloud_sync": "Synchronizacja w chmurze i bezpieczna kopia zapasowa",
+    "premium_feature_schedule": "Elastyczne ustawienia grafiku pracy",
+    "premium_feature_services": "Niestandardowe usługi i cennik",
+    "premium_feature_payments": "Zaawansowane zarządzanie płatnościami i wizytami",
+    "premium_important_prefix": "WAŻNE:"
 }

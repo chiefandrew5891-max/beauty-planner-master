@@ -30,6 +30,10 @@ import com.andrey.beautyplanner.billing.BillingUiState
 import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_ID
 import com.andrey.beautyplanner.getPlatform
 import kotlinx.datetime.Clock
+import androidx.compose.material.Divider
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 
 private const val TERMS_OF_USE_URL = "https://sites.google.com/view/beautyplanner/terms-of-use"
 
@@ -117,60 +121,100 @@ fun PremiumAccessScreen(
                     .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                Text(
-                    text = subtitle,
-                    fontSize = (15 * fontScale).sp,
-                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.80f),
-                    lineHeight = (22 * fontScale).sp
-                )
-
-                if (message.isNotBlank()) {
-                    Spacer(modifier = Modifier.padding(top = 18.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = MaterialTheme.colors.primary.copy(alpha = 0.08f),
+                            shape = RoundedCornerShape(14.dp)
+                        )
+                        .padding(horizontal = 14.dp, vertical = 12.dp)
+                ) {
                     Text(
-                        text = message,
+                        text = subtitle,
                         fontSize = (15 * fontScale).sp,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colors.onBackground,
                         lineHeight = (22 * fontScale).sp
                     )
                 }
 
+                if (message.isNotBlank()) {
+                    Spacer(modifier = Modifier.padding(top = 18.dp))
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colors.primary.copy(alpha = 0.08f),
+                                shape = RoundedCornerShape(14.dp)
+                            )
+                            .padding(horizontal = 14.dp, vertical = 12.dp)
+                    ) {
+                        Text(
+                            text = message,
+                            fontSize = (15 * fontScale).sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colors.onBackground,
+                            lineHeight = (22 * fontScale).sp
+                        )
+                    }
+                }
+
                 if (!isPremiumActive && !billingUiState.errorMessage.isNullOrBlank()) {
                     Spacer(modifier = Modifier.padding(top = 18.dp))
 
-                    val isStoreUnavailableMessage =
-                        billingUiState.errorMessage == Locales.t("premium_product_not_found") ||
-                                billingUiState.errorMessage == Locales.t("premium_store_unavailable")
+                    val rawMessage = billingUiState.errorMessage.orEmpty()
 
-                    if (isStoreUnavailableMessage) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = MaterialTheme.colors.primary.copy(alpha = 0.10f),
-                                    shape = RoundedCornerShape(14.dp)
-                                )
-                                .padding(horizontal = 14.dp, vertical = 12.dp)
-                        ) {
-                            Text(
-                                text = billingUiState.errorMessage.orEmpty(),
-                                fontSize = (14 * fontScale).sp,
-                                fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colors.primary.copy(alpha = 0.92f),
-                                lineHeight = (20 * fontScale).sp
-                            )
-                        }
+                    val isSoftInfoMessage =
+                        rawMessage == Locales.t("premium_product_not_found") ||
+                                rawMessage == Locales.t("premium_store_unavailable")
+
+                    val displayMessage = if (isSoftInfoMessage) {
+                        rawMessage
                     } else {
+                        "${Locales.t("premium_important_prefix")} $rawMessage"
+                    }
+
+                    val messageTextColor = if (isSoftInfoMessage) {
+                        MaterialTheme.colors.primary.copy(alpha = 0.92f)
+                    } else {
+                        MaterialTheme.colors.onBackground
+                    }
+
+                    val messageFontWeight = if (isSoftInfoMessage) {
+                        FontWeight.Medium
+                    } else {
+                        FontWeight.SemiBold
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colors.primary.copy(alpha = 0.10f),
+                                shape = RoundedCornerShape(14.dp)
+                            )
+                            .padding(horizontal = 14.dp, vertical = 12.dp)
+                    ) {
                         Text(
-                            text = billingUiState.errorMessage.orEmpty(),
+                            text = displayMessage,
                             fontSize = (14 * fontScale).sp,
-                            color = MaterialTheme.colors.error,
+                            fontWeight = messageFontWeight,
+                            color = messageTextColor,
                             lineHeight = (20 * fontScale).sp
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.padding(top = 24.dp))
+                Spacer(modifier = Modifier.padding(top = 20.dp))
+
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.10f)
+                )
+
+                Spacer(modifier = Modifier.padding(top = 20.dp))
 
                 Text(
                     text = Locales.t("premium_features_title"),
@@ -183,7 +227,10 @@ fun PremiumAccessScreen(
 
                 PremiumBullet(Locales.t("premium_feature_unlimited"), fontScale)
                 PremiumBullet(Locales.t("premium_feature_stats"), fontScale)
-                PremiumBullet(Locales.t("premium_feature_backup"), fontScale)
+                PremiumBullet(Locales.t("premium_feature_cloud_sync"), fontScale)
+                PremiumBullet(Locales.t("premium_feature_services"), fontScale)
+                PremiumBullet(Locales.t("premium_feature_schedule"), fontScale)
+                PremiumBullet(Locales.t("premium_feature_payments"), fontScale)
                 PremiumBullet(Locales.t("premium_feature_future"), fontScale)
 
                 Spacer(modifier = Modifier.padding(top = 24.dp))
@@ -198,9 +245,14 @@ fun PremiumAccessScreen(
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 Text(
-                    text = "${Locales.t("premium_status_label")}: ${
-                        subscriptionStateLabel(AppSettings.premiumSubscriptionState)
-                    }",
+                    text = buildAnnotatedString {
+                        append("${Locales.t("premium_status_label")}: ")
+                        withStyle(
+                            SpanStyle(fontWeight = FontWeight.SemiBold)
+                        ) {
+                            append(subscriptionStateLabel(AppSettings.premiumSubscriptionState))
+                        }
+                    },
                     fontSize = (14 * fontScale).sp,
                     color = MaterialTheme.colors.onBackground.copy(alpha = 0.88f)
                 )
@@ -214,8 +266,29 @@ fun PremiumAccessScreen(
                     )
 
                     Spacer(modifier = Modifier.padding(top = 6.dp))
+
                     Text(
-                        text = "${Locales.t("premium_subscription_days_left")}: ${Locales.daysCount(daysLeft)}",
+                        text = buildAnnotatedString {
+                            append("${Locales.t("premium_subscription_days_left")}: ")
+
+                            val daysText = Locales.daysCount(daysLeft)
+                            val firstSpaceIndex = daysText.indexOf(' ')
+
+                            if (firstSpaceIndex > 0) {
+                                withStyle(
+                                    SpanStyle(fontWeight = FontWeight.SemiBold)
+                                ) {
+                                    append(daysText.substring(0, firstSpaceIndex))
+                                }
+                                append(daysText.substring(firstSpaceIndex))
+                            } else {
+                                withStyle(
+                                    SpanStyle(fontWeight = FontWeight.SemiBold)
+                                ) {
+                                    append(daysText)
+                                }
+                            }
+                        },
                         fontSize = (14 * fontScale).sp,
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.88f)
                     )

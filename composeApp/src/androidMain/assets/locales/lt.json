@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Įkeliama jūsų darbo erdvė…",
     "session_loading_guest_subtitle": "Ruošiamasi prisijungti…",
-    "billing_account_binding_active_message": "„Premium“ jau susieta su dabartine programėlės paskyra:"
+    "billing_account_binding_active_message": "„Premium“ jau susieta su dabartine programėlės paskyra:",
+    "premium_feature_cloud_sync": "Debesų sinhronizavimas ir saugi atsarginė kopija",
+    "premium_feature_schedule": "Lanksčios darbo grafiko nuostatos",
+    "premium_feature_services": "Individualios paslaugos ir kainoraštis",
+    "premium_feature_payments": "Išplėstinis mokėjimų ir vizitų valdymas",
+    "premium_important_prefix": "SVARBU:"
 }

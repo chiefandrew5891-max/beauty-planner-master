@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "Teie tööala laadimine…",
     "session_loading_guest_subtitle": "Sisselogimise ettevalmistamine…",
-    "billing_account_binding_active_message": "Premium on juba seotud praeguse rakenduse kontoga:"
+    "billing_account_binding_active_message": "Premium on juba seotud praeguse rakenduse kontoga:",
+    "premium_feature_cloud_sync": "Pilvesünkroonimine ja turvaline varundus",
+    "premium_feature_schedule": "Paindlikud töögraafiku seaded",
+    "premium_feature_services": "Kohandatud teenused ja hinnakiri",
+    "premium_feature_payments": "Täpsem maksete ja broneeringute haldamine",
+    "premium_important_prefix": "TÄHTIS:"
 }

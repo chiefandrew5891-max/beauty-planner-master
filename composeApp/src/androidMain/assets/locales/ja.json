@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "ワークスペースを読み込んでいます…",
     "session_loading_guest_subtitle": "サインインの準備中…",
-    "billing_account_binding_active_message": "Premiumはすでに現在のアプリアカウントに連携されています:"
+    "billing_account_binding_active_message": "Premiumはすでに現在のアプリアカウントに連携されています:",
+    "premium_feature_cloud_sync": "クラウド同期と安全なバックアップ",
+    "premium_feature_schedule": "柔軟な勤務スケジュール設定",
+    "premium_feature_services": "カスタムサービスと価格表",
+    "premium_feature_payments": "高度な決済・予約管理",
+    "premium_important_prefix": "【重要】"
 }

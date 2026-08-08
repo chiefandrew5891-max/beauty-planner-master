@@ -608,5 +608,10 @@
     "session_loading_title": "Beauty Planner",
     "session_loading_subtitle": "جاري تحميل مساحة العمل الخاصة بك…",
     "session_loading_guest_subtitle": "جاري تحضير تسجيل الدخول…",
-    "billing_account_binding_active_message": "اشتراك Premium مرتبط بالفعل بحساب التطبيق الحالي:"
+    "billing_account_binding_active_message": "اشتراك Premium مرتبط بالفعل بحساب التطبيق الحالي:",
+    "premium_feature_cloud_sync": "مزامنة سحابية ونسخ احتياطي آمن",
+    "premium_feature_schedule": "إعدادات جدول عمل مرنة",
+    "premium_feature_services": "خدمات مخصصة وقائمة أسعار",
+    "premium_feature_payments": "إدارة متقدمة للمدفوعات والمواعيد",
+    "premium_important_prefix": "هام جداً:"
 }
