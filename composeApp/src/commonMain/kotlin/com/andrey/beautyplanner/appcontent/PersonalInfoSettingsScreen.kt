@@ -664,28 +664,19 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                     }
 
                     SecondaryActionButton(
-                        text = Locales.t("profile_pick_photo"),
+                        text = if (isUploadingAvatar) Locales.t("loading") else Locales.t("profile_pick_photo"),
                         onClick = {
+                            if (isUploadingAvatar) return@SecondaryActionButton
                             avatarUrlErrorMessage = null
                             ProfileImagePicker.pickImage { rawBase64 ->
                                 if (!rawBase64.isNullOrBlank()) {
                                     pendingRawBase64 = rawBase64
                                 }
                             }
-                        }
+                        },
+                        enabled = !isUploadingAvatar
                     )
 
-                    SecondaryActionButton(
-                        text = Locales.t("profile_pick_photo"),
-                        onClick = {
-                            avatarUrlErrorMessage = null
-                            ProfileImagePicker.pickImage { rawBase64 ->
-                                if (!rawBase64.isNullOrBlank()) {
-                                    pendingRawBase64 = rawBase64
-                                }
-                            }
-                        }
-                    )
                     if (avatarLibrary.isNotEmpty()) {
                         SecondaryActionButton(
                             text = "Библиотека",
