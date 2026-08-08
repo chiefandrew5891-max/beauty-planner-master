@@ -47,6 +47,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import com.andrey.beautyplanner.AccessManager
 
 private const val TERMS_OF_USE_URL = "https://sites.google.com/view/beautyplanner/terms-of-use"
 
@@ -70,13 +71,9 @@ fun PremiumAccessScreen(
         it.productId == PREMIUM_SUBS_PRODUCT_ID
     }
 
-    val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
-
-    val isPremiumActive =
-        billingUiState.ownedPremium ||
-                accessState.tier == AccessTier.PREMIUM ||
-                accessState.hasPremium ||
-                hasActiveSubscriptionState
+    val isPremiumActive = AccessManager.isPremiumAccessActive(
+        Clock.System.now().toEpochMilliseconds()
+    )
 
     val subtitle = when {
         isPremiumActive -> Locales.t("premium_active_subtitle")

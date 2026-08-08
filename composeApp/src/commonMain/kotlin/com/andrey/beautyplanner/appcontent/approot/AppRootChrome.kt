@@ -253,14 +253,22 @@ fun AppRootChrome(
     @Composable
     fun DrawerSubscriptionInfo() {
         val nowMillis = Clock.System.now().toEpochMilliseconds()
-        val isPremiumActive = AppSettings.cachedHasPremium
+        val isPremiumActive = AccessManager.isPremiumAccessActive(nowMillis)
         val expiryMillis = AppSettings.premiumSubscriptionExpiryMillis
         val rawState = AppSettings.premiumSubscriptionState.trim().uppercase()
 
         val stateLabel = when {
-            isPremiumActive -> subscriptionStateLabel(rawState)
-            rawState.isNotBlank() && rawState != "NONE" -> subscriptionStateLabel(rawState)
-            else -> Locales.t("premium_subscription_inactive")
+            AppSettings.developerPremiumOverrideEnabled ->
+                Locales.t("premium_status_premium")
+
+            rawState.isNotBlank() && rawState != "NONE" ->
+                subscriptionStateLabel(rawState)
+
+            isPremiumActive ->
+                Locales.t("premium_status_premium")
+
+            else ->
+                Locales.t("premium_subscription_inactive")
         }
 
         val shouldShowDaysLine = isPremiumActive && expiryMillis > 0L

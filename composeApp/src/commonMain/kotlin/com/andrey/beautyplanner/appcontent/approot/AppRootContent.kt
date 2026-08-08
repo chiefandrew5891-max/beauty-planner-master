@@ -937,6 +937,8 @@ fun AppRootContent(
                     state.saveAll()
 
                     if (isNewAppointment) {
+                        val nowForAccess = Clock.System.now().toEpochMilliseconds()
+                        val isPremiumActive = AccessManager.isPremiumAccessActive(nowForAccess)
                         val isTrialActive = state.accessState.isTrialActive
 
                         val newActiveCount = getUpcomingAppointmentsCount(
@@ -945,7 +947,9 @@ fun AppRootContent(
                             nowTime = getCurrentTimeHm()
                         )
 
-                        if (!isTrialActive) {
+                        if (isPremiumActive) {
+                            state.freeLimitPopupMessage = null
+                        } else if (!isTrialActive) {
                             val remaining =
                                 (AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newActiveCount).coerceAtLeast(0)
 

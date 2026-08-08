@@ -35,7 +35,10 @@ object AccessManager {
         val state = getAccessState(nowMillis)
         return state.tier == AccessTier.PREMIUM || state.isTrialActive
     }
-
+    fun isPremiumAccessActive(nowMillis: Long): Boolean {
+        val state = getAccessState(nowMillis)
+        return state.tier == AccessTier.PREMIUM || state.hasPremium
+    }
     fun hasFeature(feature: PremiumFeature, nowMillis: Long): Boolean {
         val state = getAccessState(nowMillis)
         if (state.tier == AccessTier.PREMIUM || state.isTrialActive) {

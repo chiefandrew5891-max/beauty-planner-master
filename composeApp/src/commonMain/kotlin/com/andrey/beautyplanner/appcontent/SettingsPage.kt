@@ -46,6 +46,8 @@ import com.andrey.beautyplanner.AccessState
 import com.andrey.beautyplanner.AccessTier
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.AccessManager
+import kotlinx.datetime.Clock
 
 @Composable
 fun SettingsPage(
@@ -272,12 +274,9 @@ fun SettingsPage(
                     color = onSurface.copy(alpha = 0.10f)
                 )
 
-                val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
-
-                val isPremiumActive =
-                    accessState.tier == AccessTier.PREMIUM ||
-                            accessState.hasPremium ||
-                            hasActiveSubscriptionState
+                val isPremiumActive = AccessManager.isPremiumAccessActive(
+                    Clock.System.now().toEpochMilliseconds()
+                )
 
                 val premiumStatusText = when {
                     isPremiumActive -> Locales.t("premium_status_premium")
