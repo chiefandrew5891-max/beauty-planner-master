@@ -609,10 +609,15 @@ fun AppRootContent(
                 onDateChange = { state.selectedDate = it },
                 onTimeClick = { time ->
                     val nowMillis = Clock.System.now().toEpochMilliseconds()
+
+                    val currentActiveAppointmentsCount = getUpcomingAppointmentsCount(
+                        appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                        today = state.today,
+                        nowTime = getCurrentTimeHm()
+                    )
+
                     val canCreate = AccessManager.canCreateAppointment(
-                        currentAppointmentsCount = AppointmentSyncUtils.visibleAppointmentsCount(
-                            state.appointments
-                        ),
+                        currentAppointmentsCount = currentActiveAppointmentsCount,
                         nowMillis = nowMillis
                     )
 

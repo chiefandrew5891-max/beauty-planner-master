@@ -1395,8 +1395,10 @@ class AppRootState(
         val nowMillis = Clock.System.now().toEpochMilliseconds()
 
         val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
-        if (!premiumEligible) {
-            CloudSyncLogger.log("performCloudSyncIfEligible: skipped, no premium access")
+        val authenticatedEligible = currentAuthUser?.provider != SignInProvider.ANONYMOUS
+
+        if (!authenticatedEligible) {
+            CloudSyncLogger.log("performCloudSyncIfEligible: skipped, anonymous user")
             return
         }
 
@@ -1415,20 +1417,24 @@ class AppRootState(
         appointments.clear()
         appointments.addAll(mergedAppointments)
 
-        if (
-            CloudSyncCoordinator.shouldApplyRemoteSettings(
-                localSettingsUpdatedAtMillis = AppSettings.cloudSettingsUpdatedAtMillis,
-                remoteSettings = remote.settings
-            )
-        ) {
-            remote.settings?.let {
-                CloudSyncLogger.log("performCloudSyncIfEligible: applying remote settings")
-                AppSettings.applyCloudSettingsSnapshot(it)
+        if (premiumEligible) {
+            if (
+                CloudSyncCoordinator.shouldApplyRemoteSettings(
+                    localSettingsUpdatedAtMillis = AppSettings.cloudSettingsUpdatedAtMillis,
+                    remoteSettings = remote.settings
+                )
+            ) {
+                remote.settings?.let {
+                    CloudSyncLogger.log("performCloudSyncIfEligible: applying remote settings")
+                    AppSettings.applyCloudSettingsSnapshot(it)
+                }
+                currentLiveDarkMode = AppSettings.isDarkMode
+                fontScale = AppSettings.getFontScale()
+            } else {
+                CloudSyncLogger.log("performCloudSyncIfEligible: keeping local settings")
             }
-            currentLiveDarkMode = AppSettings.isDarkMode
-            fontScale = AppSettings.getFontScale()
         } else {
-            CloudSyncLogger.log("performCloudSyncIfEligible: keeping local settings")
+            CloudSyncLogger.log("performCloudSyncIfEligible: skipping cloud settings sync for free user")
         }
 
         DataManager.saveToDatabase(
@@ -1439,7 +1445,11 @@ class AppRootState(
         repository.pushAll(
             userId = userId,
             appointments = appointments.toList(),
-            settings = AppSettings.exportCloudSettingsSnapshot(nowMillis)
+            settings = if (premiumEligible) {
+                AppSettings.exportCloudSettingsSnapshot(nowMillis)
+            } else {
+                null
+            }
         )
 
         val visibleAppointments = AppointmentSyncUtils.visibleAppointments(appointments.toList())

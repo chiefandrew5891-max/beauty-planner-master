@@ -9,7 +9,7 @@ object AccessManager {
     private val FREE_LIMIT_BANNER_THRESHOLDS = setOf(5, 3, 1)
 
     // Thresholds for one-time popup (based on visible appointment count)
-    val FREE_LIMIT_POPUP_THRESHOLDS = setOf(1, 2, 3, 4, 5)
+    val FREE_LIMIT_POPUP_THRESHOLDS = setOf(1, 2, 3)
 
     fun getAccessState(nowMillis: Long): AccessState {
         if (AppSettings.developerPremiumOverrideEnabled) {
