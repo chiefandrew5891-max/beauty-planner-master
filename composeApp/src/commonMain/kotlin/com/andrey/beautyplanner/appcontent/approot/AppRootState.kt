@@ -67,6 +67,7 @@ class AppRootState(
     var authErrorMessage by mutableStateOf<String?>(null)
     var authEmailRegisterMode by mutableStateOf(false)
     var authInfoDialogMessage by mutableStateOf<String?>(null)
+    var hasCompletedInitialSplash by mutableStateOf(false)
 
     var backupEncryptEnabled by mutableStateOf(true)
     var backupPassword by mutableStateOf("")
@@ -465,11 +466,15 @@ class AppRootState(
             displayName = savedDisplayName
         )
 
+        hasShownTrialEndedFreeModePopup = false
+
         AppSettings.lastAuthenticatedAppOpenAtMillis = Clock.System.now().toEpochMilliseconds()
         AppSettings.persist()
 
         reloadAppointmentsForCurrentProfile()
         refreshAccessState()
+        maybeShowTrialEndedFreeModePopup()
+
         authResolved = true
         authErrorMessage = null
         currentScreen = Screen.MONTH
@@ -523,15 +528,10 @@ class AppRootState(
                 reloadAppointmentsForCurrentProfile()
                 refreshAccessState()
 
-                val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
-                if (premiumEligible) {
-                    runCatching {
-                        performCloudSyncIfEligible()
-                    }.onFailure {
-                        CloudSyncLogger.log("manualRefresh: sync failed: ${it.message}")
-                    }
-                } else {
-                    CloudSyncLogger.log("manualRefresh: local reload only, no premium access")
+                runCatching {
+                    performCloudSyncIfEligible()
+                }.onFailure {
+                    CloudSyncLogger.log("manualRefresh: sync failed: ${it.message}")
                 }
 
                 CloudSyncLogger.log("manualRefresh: finished")
@@ -1386,21 +1386,26 @@ class AppRootState(
     }
 
     suspend fun performCloudSyncIfEligible() {
-        val userId = currentAuthUser?.uid?.trim().orEmpty()
+        val authUser = currentAuthUser
+        val userId = authUser?.uid?.trim().orEmpty()
         if (userId.isBlank()) {
             CloudSyncLogger.log("performCloudSyncIfEligible: skipped, blank auth uid")
             return
         }
 
-        val nowMillis = Clock.System.now().toEpochMilliseconds()
-
-        val premiumEligible = accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
-        val authenticatedEligible = currentAuthUser?.provider != SignInProvider.ANONYMOUS
+        val authenticatedEligible =
+            authUser?.provider != null &&
+                    authUser.provider != SignInProvider.ANONYMOUS
 
         if (!authenticatedEligible) {
             CloudSyncLogger.log("performCloudSyncIfEligible: skipped, anonymous user")
             return
         }
+
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+
+        val premiumEligible =
+            accessState.hasPremium || accessState.tier == AccessTier.PREMIUM
 
         CloudSyncLogger.log(
             "performCloudSyncIfEligible: start userId=$userId localAppointments=${appointments.size}"
@@ -1442,15 +1447,18 @@ class AppRootState(
             profileKey = LocalProfileManager.currentProfileKey()
         )
 
-        repository.pushAll(
-            userId = userId,
-            appointments = appointments.toList(),
-            settings = if (premiumEligible) {
-                AppSettings.exportCloudSettingsSnapshot(nowMillis)
-            } else {
-                null
-            }
-        )
+        if (premiumEligible) {
+            repository.pushAll(
+                userId = userId,
+                appointments = appointments.toList(),
+                settings = AppSettings.exportCloudSettingsSnapshot(nowMillis)
+            )
+        } else {
+            repository.pushAppointments(
+                userId = userId,
+                appointments = appointments.toList()
+            )
+        }
 
         val visibleAppointments = AppointmentSyncUtils.visibleAppointments(appointments.toList())
         val mins = AppSettings.reminderMinutesComputed()

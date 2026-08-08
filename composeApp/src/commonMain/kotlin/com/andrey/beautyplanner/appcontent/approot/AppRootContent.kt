@@ -80,7 +80,6 @@ fun AppRootContent(
     state: AppRootState,
     padding: PaddingValues
 ) {
-    var showSplash by rememberSaveable { mutableStateOf(true) }
     var pendingPinAfterSplash by rememberSaveable { mutableStateOf(false) }
     var showPostSplashLoader by rememberSaveable { mutableStateOf(false) }
     val ownerName = AppSettings.ownerName.trim()
@@ -90,11 +89,11 @@ fun AppRootContent(
     var viewingEndHm by remember { mutableStateOf("") }
     var viewingStatus by remember { mutableStateOf<LiveStatusKey?>(null) }
 
-    if (showSplash) {
+    if (!state.hasCompletedInitialSplash) {
         AnimatedSplashScreen(
             ownerName = ownerName,
             onAnimationFinished = {
-                showSplash = false
+                state.hasCompletedInitialSplash = true
                 showPostSplashLoader = true
                 if (state.mustCreatePin || (state.locked && !state.mustCreatePin)) {
                     pendingPinAfterSplash = true
