@@ -340,7 +340,9 @@ fun AppRootContent(
 
                 val appointmentLimitNotice = run {
                     val nowMs = Clock.System.now().toEpochMilliseconds()
-                    val isEffectivelyFreeLimited = !AccessManager.hasPremiumScreenAccess(nowMs)
+                    val isPremiumActive = AccessManager.isPremiumAccessActive(nowMs)
+                    val isEffectivelyFreeLimited = !isPremiumActive && !state.accessState.isTrialActive
+
                     if (!isEffectivelyFreeLimited) {
                         null
                     } else {
@@ -364,6 +366,7 @@ fun AppRootContent(
                     state.today,
                     state.appointments.size,
                     state.accessState.tier,
+                    state.accessState.hasPremium,
                     state.accessState.isTrialActive
                 ) {
                     derivedStateOf {
@@ -373,9 +376,12 @@ fun AppRootContent(
                             nowTime = nowTimeHm
                         )
 
+                        val isPremiumActive = AccessManager.isPremiumAccessActive(
+                            Clock.System.now().toEpochMilliseconds()
+                        )
+
                         val shouldLimitUpcomingOnHome =
-                            state.accessState.tier != AccessTier.PREMIUM &&
-                                    !state.accessState.isTrialActive
+                            !isPremiumActive && !state.accessState.isTrialActive
 
                         if (shouldLimitUpcomingOnHome) {
                             upcomingAll.take(AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT)
