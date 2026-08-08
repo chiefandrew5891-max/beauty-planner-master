@@ -55,6 +55,8 @@ import com.andrey.beautyplanner.auth.SignInProvider
 import com.andrey.beautyplanner.remote.MasterProfileSync
 import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import kotlinx.coroutines.launch
+import com.andrey.beautyplanner.remote.AvatarLibraryItemPayload
+import com.andrey.beautyplanner.remote.BackendBridge
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -77,6 +79,9 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
         var isSaving by remember { mutableStateOf(false) }
         var pendingRawBase64 by remember { mutableStateOf<String?>(null) }
         var isRefreshingProfile by remember { mutableStateOf(false) }
+        var isUploadingAvatar by remember { mutableStateOf(false) }
+        var avatarLibrary by remember { mutableStateOf<List<AvatarLibraryItemPayload>>(emptyList()) }
+        var showAvatarLibraryDialog by remember { mutableStateOf(false) }
 
         var showDeleteAccountWarningDialog by remember { mutableStateOf(false) }
         var showDeleteAccountPasswordDialog by remember { mutableStateOf(false) }
@@ -92,6 +97,18 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
             phoneVisibleDraft = AppSettings.profilePhoneVisible
             displayCustomNameDraft = AppSettings.profileDisplayCustomName
             specializationDraft = AppSettings.profileSpecialization
+        }
+
+        fun refreshAvatarLibrary() {
+            scope.launch {
+                runCatching {
+                    BackendBridge.listMyProfileAvatars()
+                }.onSuccess {
+                    avatarLibrary = it
+                }.onFailure {
+                    CloudSyncLogger.log("listMyProfileAvatars: failed: ${it.message}")
+                }
+            }
         }
 
         val scope = rememberCoroutineScope()
@@ -130,14 +147,31 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
         LaunchedEffect(Unit) {
             applySettingsToDrafts()
             refreshMasterProfile(force = true)
+            refreshAvatarLibrary()
         }
 
         pendingRawBase64?.let { rawBase64 ->
             AvatarCropEditorDialog(
                 rawBase64 = rawBase64,
                 onConfirm = { cropped ->
-                    avatarBase64Draft = cropped
                     pendingRawBase64 = null
+                    isUploadingAvatar = true
+                    avatarUrlErrorMessage = null
+
+                    scope.launch {
+                        runCatching {
+                            BackendBridge.uploadMyProfileAvatar(cropped)
+                        }.onSuccess { result ->
+                            avatarBase64Draft = cropped
+                            avatarUrlDraft = result["downloadUrl"].orEmpty()
+                            AppSettings.profileAvatarStoragePath = result["storagePath"].orEmpty()
+                            refreshAvatarLibrary()
+                        }.onFailure {
+                            avatarUrlErrorMessage = Locales.t("profile_avatar_url_error")
+                            CloudSyncLogger.log("uploadMyProfileAvatar: failed: ${it.message}")
+                        }
+                        isUploadingAvatar = false
+                    }
                 },
                 onDismiss = {
                     pendingRawBase64 = null
@@ -381,6 +415,83 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
             )
         }
 
+        if (showAvatarLibraryDialog) {
+            androidx.compose.material.AlertDialog(
+                onDismissRequest = { showAvatarLibraryDialog = false },
+                title = {
+                    Text("Библиотека аватаров")
+                },
+                text = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    ) {
+                        avatarLibrary.forEach { item ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = item.downloadUrl,
+                                    fontSize = (12 * fontScale).sp,
+                                    color = onSurface.copy(alpha = 0.75f)
+                                )
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    TextButton(
+                                        onClick = {
+                                            avatarUrlDraft = item.downloadUrl
+                                            AppSettings.profileAvatarStoragePath = item.storagePath
+                                            showAvatarLibraryDialog = false
+                                        }
+                                    ) {
+                                        Text("Выбрать")
+                                    }
+
+                                    TextButton(
+                                        onClick = {
+                                            scope.launch {
+                                                runCatching {
+                                                    BackendBridge.deleteMyProfileAvatar(item.id)
+                                                }.onSuccess { result ->
+                                                    val deletedWasCurrent =
+                                                        item.storagePath == AppSettings.profileAvatarStoragePath
+
+                                                    if (deletedWasCurrent) {
+                                                        avatarUrlDraft = result["currentAvatarUrl"].orEmpty()
+                                                        AppSettings.profileAvatarStoragePath =
+                                                            result["currentAvatarStoragePath"].orEmpty()
+                                                        if (avatarUrlDraft.isBlank()) {
+                                                            avatarBase64Draft = ""
+                                                        }
+                                                    }
+
+                                                    refreshAvatarLibrary()
+                                                }.onFailure {
+                                                    CloudSyncLogger.log("deleteMyProfileAvatar: failed: ${it.message}")
+                                                }
+                                            }
+                                        }
+                                    ) {
+                                        Text("Удалить")
+                                    }
+                                }
+
+                                Divider()
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showAvatarLibraryDialog = false }) {
+                        Text(Locales.t("confirm"))
+                    }
+                }
+            )
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -565,12 +676,34 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                     )
 
                     SecondaryActionButton(
+                        text = Locales.t("profile_pick_photo"),
+                        onClick = {
+                            avatarUrlErrorMessage = null
+                            ProfileImagePicker.pickImage { rawBase64 ->
+                                if (!rawBase64.isNullOrBlank()) {
+                                    pendingRawBase64 = rawBase64
+                                }
+                            }
+                        }
+                    )
+                    if (avatarLibrary.isNotEmpty()) {
+                        SecondaryActionButton(
+                            text = "Библиотека",
+                            onClick = {
+                                showAvatarLibraryDialog = true
+                            }
+                        )
+                    }
+
+                    SecondaryActionButton(
                         text = Locales.t("profile_remove_photo"),
                         onClick = {
                             avatarUrlErrorMessage = null
                             avatarBase64Draft = ""
+                            avatarUrlDraft = ""
+                            AppSettings.profileAvatarStoragePath = ""
                         },
-                        enabled = avatarBase64Draft.isNotBlank()
+                        enabled = avatarBase64Draft.isNotBlank() || avatarUrlDraft.isNotBlank()
                     )
 
                     Spacer(Modifier.height(6.dp))

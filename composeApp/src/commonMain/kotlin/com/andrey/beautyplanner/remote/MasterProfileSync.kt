@@ -34,6 +34,7 @@ object MasterProfileSync {
                 profileRating = AppSettings.profileRating,
                 profileAvatarUrl = AppSettings.profileAvatarUrl,
                 profileAvatarBase64 = AppSettings.profileAvatarBase64,
+                profileAvatarStoragePath = AppSettings.profileAvatarStoragePath,
                 clientInteractionsEnabled = AppSettings.clientInteractionsEnabled,
                 serviceTemplatesJson = serviceTemplatesJson,
                 weeklyBlockedIntervalsJson = weeklyBlockedIntervalsJson,
@@ -68,6 +69,7 @@ object MasterProfileSync {
             AppSettings.profileRating = payload.profileRating
             AppSettings.profileAvatarUrl = payload.profileAvatarUrl
             AppSettings.profileAvatarBase64 = payload.profileAvatarBase64
+            AppSettings.profileAvatarStoragePath = payload.profileAvatarStoragePath
             AppSettings.clientInteractionsEnabled = payload.clientInteractionsEnabled
 
             AppSettings.serviceTemplates = payload.serviceTemplates.map { template ->

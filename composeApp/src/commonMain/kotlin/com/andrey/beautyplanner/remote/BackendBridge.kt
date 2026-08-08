@@ -7,6 +7,13 @@ data class MasterServiceTemplatePayload(
     val isActive: Boolean
 )
 
+data class AvatarLibraryItemPayload(
+    val id: String,
+    val storagePath: String,
+    val downloadUrl: String,
+    val createdAt: Long
+)
+
 data class MasterProfilePayload(
     val found: Boolean,
     val firebaseUid: String,
@@ -18,6 +25,8 @@ data class MasterProfilePayload(
     val profileRating: Float,
     val profileAvatarUrl: String,
     val profileAvatarBase64: String,
+    val profileAvatarStoragePath: String,
+    val avatarLibrary: List<AvatarLibraryItemPayload>,
     val clientInteractionsEnabled: Boolean,
     val serviceTemplates: List<MasterServiceTemplatePayload>,
     val weeklyBlockedIntervalsJson: String,
@@ -70,6 +79,7 @@ expect object BackendBridge {
         profileRating: Float,
         profileAvatarUrl: String,
         profileAvatarBase64: String,
+        profileAvatarStoragePath: String,
         clientInteractionsEnabled: Boolean,
         serviceTemplatesJson: String,
         weeklyBlockedIntervalsJson: String,
@@ -81,6 +91,16 @@ expect object BackendBridge {
     suspend fun syncMyPublicSchedule(
         autoPublishBusySlots: Boolean,
         busySlotsJson: String
+    ): Map<String, String>
+
+    suspend fun uploadMyProfileAvatar(
+        avatarBase64: String
+    ): Map<String, String>
+
+    suspend fun listMyProfileAvatars(): List<AvatarLibraryItemPayload>
+
+    suspend fun deleteMyProfileAvatar(
+        avatarId: String
     ): Map<String, String>
 
     suspend fun validateCurrentSession(): Map<String, String>

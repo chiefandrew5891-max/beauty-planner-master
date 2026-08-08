@@ -68,9 +68,12 @@ private data class SettingsSnapshot(
     val profilePhone: String = "",
     val profilePhoneVisible: Boolean = true,
     val profileRating: Float = DEFAULT_PROFILE_RATING,
+
     val profileAvatarUrl: String = "",
     val profileAvatarBase64: String = "",
+    val profileAvatarStoragePath: String = "",
     val profileDisplayCustomName: Boolean = false,
+
     val profileSpecialization: String = "",
     val clientInteractionsEnabled: Boolean = false,
     val autoPublishBusySlots: Boolean = false,
@@ -197,6 +200,7 @@ object AppSettings {
     var profileRating by mutableStateOf(DEFAULT_PROFILE_RATING)
     var profileAvatarUrl by mutableStateOf("")
     var profileAvatarBase64 by mutableStateOf("")
+    var profileAvatarStoragePath by mutableStateOf("")
     var profileDisplayCustomName by mutableStateOf(false)
     var profileSpecialization by mutableStateOf("")
     var clientInteractionsEnabled by mutableStateOf(false)
@@ -223,6 +227,7 @@ object AppSettings {
 
     var pinEnabled by mutableStateOf(false)
     private var adminPinHash by mutableStateOf("")
+
     var developerModeUnlocked by mutableStateOf(false)
     var previewFontScaleOverride by mutableStateOf<Float?>(null)
     var developerPremiumOverrideEnabled by mutableStateOf(false)
@@ -451,6 +456,7 @@ object AppSettings {
             profileRating = profileRating,
             profileAvatarUrl = profileAvatarUrl,
             profileAvatarBase64 = profileAvatarBase64,
+            profileAvatarStoragePath = profileAvatarStoragePath,
             profileDisplayCustomName = profileDisplayCustomName,
             profileSpecialization = profileSpecialization,
             clientInteractionsEnabled = clientInteractionsEnabled,
@@ -481,6 +487,7 @@ object AppSettings {
         profileRating = snapshot.profileRating
         profileAvatarUrl = snapshot.profileAvatarUrl
         profileAvatarBase64 = snapshot.profileAvatarBase64
+        profileAvatarStoragePath = snapshot.profileAvatarStoragePath
         profileDisplayCustomName = snapshot.profileDisplayCustomName
         profileSpecialization = snapshot.profileSpecialization
         clientInteractionsEnabled = snapshot.clientInteractionsEnabled
@@ -520,6 +527,7 @@ object AppSettings {
         profileRating = DEFAULT_PROFILE_RATING
         profileAvatarUrl = ""
         profileAvatarBase64 = ""
+        profileAvatarStoragePath = ""
         profileDisplayCustomName = false
         profileSpecialization = ""
         clientInteractionsEnabled = false
@@ -642,6 +650,7 @@ object AppSettings {
         clientInteractionsEnabled = snapshot.clientInteractionsEnabled
         autoPublishBusySlots = snapshot.autoPublishBusySlots
         profileAvatarBase64 = snapshot.profileAvatarBase64
+        profileAvatarStoragePath = snapshot.profileAvatarStoragePath
         profileDisplayCustomName = snapshot.profileDisplayCustomName
         profileSpecialization = snapshot.profileSpecialization
 
@@ -716,6 +725,7 @@ object AppSettings {
             profileRating = profileRating,
             profileAvatarUrl = profileAvatarUrl,
             profileAvatarBase64 = profileAvatarBase64,
+            profileAvatarStoragePath = profileAvatarStoragePath,
             profileDisplayCustomName = profileDisplayCustomName,
             profileSpecialization = profileSpecialization,
             clientInteractionsEnabled = clientInteractionsEnabled,

@@ -104,6 +104,7 @@ actual object BackendBridge {
         profileRating: Float,
         profileAvatarUrl: String,
         profileAvatarBase64: String,
+        profileAvatarStoragePath: String,
         clientInteractionsEnabled: Boolean,
         serviceTemplatesJson: String,
         weeklyBlockedIntervalsJson: String,
@@ -121,11 +122,64 @@ actual object BackendBridge {
                 "profileRating" to profileRating,
                 "profileAvatarUrl" to profileAvatarUrl,
                 "profileAvatarBase64" to profileAvatarBase64,
+                "profileAvatarStoragePath" to profileAvatarStoragePath,
                 "clientInteractionsEnabled" to clientInteractionsEnabled,
                 "serviceTemplatesJson" to serviceTemplatesJson,
                 "weeklyBlockedIntervalsJson" to weeklyBlockedIntervalsJson,
                 "scheduleDateOverridesJson" to scheduleDateOverridesJson
             )
+        )
+    }
+
+    actual suspend fun uploadMyProfileAvatar(
+        avatarBase64: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+        return callRawFunction(
+            "uploadMyProfileAvatar",
+            mapOf("avatarBase64" to avatarBase64)
+        )
+    }
+
+    actual suspend fun listMyProfileAvatars(): List<AvatarLibraryItemPayload> {
+        ensureAuthenticated()
+
+        val functions = Firebase.functions
+
+        return suspendCancellableCoroutine { cont ->
+            functions
+                .getHttpsCallable("listMyProfileAvatars")
+                .call(emptyMap<String, Any>())
+                .addOnSuccessListener { result ->
+                    try {
+                        val rawList = result.data as? List<*> ?: emptyList<Any?>()
+
+                        val mapped = rawList.mapNotNull { item ->
+                            val map = item as? Map<*, *> ?: return@mapNotNull null
+                            AvatarLibraryItemPayload(
+                                id = map["id"]?.toString().orEmpty(),
+                                storagePath = map["storagePath"]?.toString().orEmpty(),
+                                downloadUrl = map["downloadUrl"]?.toString().orEmpty(),
+                                createdAt = map["createdAt"]?.toString()?.toLongOrNull() ?: 0L
+                            )
+                        }
+
+                        cont.resume(mapped) {}
+                    } catch (t: Throwable) {
+                        cont.resumeWithException(t)
+                    }
+                }
+                .addOnFailureListener { cont.resumeWithException(it) }
+        }
+    }
+
+    actual suspend fun deleteMyProfileAvatar(
+        avatarId: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+        return callRawFunction(
+            "deleteMyProfileAvatar",
+            mapOf("avatarId" to avatarId)
         )
     }
 
@@ -176,6 +230,16 @@ actual object BackendBridge {
                             profileRating = map["profileRating"]?.toString()?.toFloatOrNull() ?: 0f,
                             profileAvatarUrl = map["profileAvatarUrl"]?.toString().orEmpty(),
                             profileAvatarBase64 = map["profileAvatarBase64"]?.toString().orEmpty(),
+                            profileAvatarStoragePath = map["profileAvatarStoragePath"]?.toString().orEmpty(),
+                            avatarLibrary = (map["avatarLibrary"] as? List<*>)?.mapNotNull { item ->
+                                val entry = item as? Map<*, *> ?: return@mapNotNull null
+                                AvatarLibraryItemPayload(
+                                    id = entry["id"]?.toString().orEmpty(),
+                                    storagePath = entry["storagePath"]?.toString().orEmpty(),
+                                    downloadUrl = entry["downloadUrl"]?.toString().orEmpty(),
+                                    createdAt = entry["createdAt"]?.toString()?.toLongOrNull() ?: 0L
+                                )
+                            } ?: emptyList(),
                             clientInteractionsEnabled = map["clientInteractionsEnabled"]?.toString() == "true",
                             serviceTemplates = templates,
                             weeklyBlockedIntervalsJson = map["weeklyBlockedIntervalsJson"]?.toString().orEmpty(),

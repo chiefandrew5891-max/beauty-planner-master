@@ -123,6 +123,7 @@ actual object BackendBridge {
         profileRating: Float,
         profileAvatarUrl: String,
         profileAvatarBase64: String,
+        profileAvatarStoragePath: String,
         clientInteractionsEnabled: Boolean,
         serviceTemplatesJson: String,
         weeklyBlockedIntervalsJson: String,
@@ -141,6 +142,7 @@ actual object BackendBridge {
                 "profileRating" to profileRating.toString(),
                 "profileAvatarUrl" to profileAvatarUrl,
                 "profileAvatarBase64" to profileAvatarBase64,
+                "profileAvatarStoragePath" to profileAvatarStoragePath,
                 "clientInteractionsEnabled" to clientInteractionsEnabled.toString(),
                 "serviceTemplatesJson" to serviceTemplatesJson,
                 "weeklyBlockedIntervalsJson" to weeklyBlockedIntervalsJson,
@@ -149,6 +151,41 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun uploadMyProfileAvatar(
+        avatarBase64: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+
+        return callBackendFunction(
+            name = "uploadMyProfileAvatar",
+            payload = mapOf("avatarBase64" to avatarBase64)
+        )
+    }
+
+    actual suspend fun listMyProfileAvatars(): List<AvatarLibraryItemPayload> {
+        ensureAuthenticated()
+
+        val result = callBackendFunction(
+            name = "listMyProfileAvatars",
+            payload = emptyMap()
+        )
+
+        val rawJson = result["items"].orEmpty()
+        return runCatching {
+            CloudSyncJson.json.decodeFromString<List<AvatarLibraryItemPayload>>(rawJson)
+        }.getOrDefault(emptyList())
+    }
+
+    actual suspend fun deleteMyProfileAvatar(
+        avatarId: String
+    ): Map<String, String> {
+        ensureAuthenticated()
+
+        return callBackendFunction(
+            name = "deleteMyProfileAvatar",
+            payload = mapOf("avatarId" to avatarId)
+        )
+    }
     actual suspend fun getMyMasterProfile(): MasterProfilePayload {
         ensureAuthenticated()
 
@@ -170,6 +207,12 @@ actual object BackendBridge {
             profileRating = result["profileRating"]?.toString()?.toFloatOrNull() ?: 0f,
             profileAvatarUrl = result["profileAvatarUrl"]?.toString().orEmpty(),
             profileAvatarBase64 = result["profileAvatarBase64"]?.toString().orEmpty(),
+            profileAvatarStoragePath = result["profileAvatarStoragePath"]?.toString().orEmpty(),
+            avatarLibrary = runCatching {
+                CloudSyncJson.json.decodeFromString<List<AvatarLibraryItemPayload>>(
+                    result["avatarLibraryJson"]?.toString().orEmpty()
+                )
+            }.getOrDefault(emptyList()),
             clientInteractionsEnabled = result["clientInteractionsEnabled"]?.toString() == "true",
             serviceTemplates = templates,
             weeklyBlockedIntervalsJson = result["weeklyBlockedIntervalsJson"]?.toString().orEmpty(),

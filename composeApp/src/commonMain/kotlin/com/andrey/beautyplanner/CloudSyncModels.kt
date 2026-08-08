@@ -10,6 +10,7 @@ data class CloudSettingsSnapshot(
     val profileRating: Float = DEFAULT_PROFILE_RATING,
     val profileAvatarUrl: String = "",
     val profileAvatarBase64: String = "",
+    val profileAvatarStoragePath: String = "",
     val profileDisplayCustomName: Boolean = false,
     val profileSpecialization: String = "",
     val clientInteractionsEnabled: Boolean = false,
