@@ -27,6 +27,7 @@ import com.andrey.beautyplanner.auth.isAppleSignInSupported
 @Composable
 fun AuthWelcomeScreen(
     errorMessage: String?,
+    infoMessage: String?,
     onContinueWithGoogle: () -> Unit,
     onContinueWithApple: () -> Unit,
     onContinueWithEmail: () -> Unit,
@@ -136,12 +137,22 @@ fun AuthWelcomeScreen(
                     )
 
                     if (!errorMessage.isNullOrBlank()) {
-                        Spacer(Modifier.height(4.dp))
+                        Spacer(Modifier.height(6.dp))
                         Text(
                             text = errorMessage,
-                            fontSize = (13 * fontScale).sp,
                             color = MaterialTheme.colors.error,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            fontSize = (13 * fontScale).sp
+                        )
+                    }
+
+                    if (!infoMessage.isNullOrBlank()) {
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            text = infoMessage,
+                            color = MaterialTheme.colors.onSurface,
+                            textAlign = TextAlign.Center,
+                            fontSize = (13 * fontScale).sp
                         )
                     }
                 }

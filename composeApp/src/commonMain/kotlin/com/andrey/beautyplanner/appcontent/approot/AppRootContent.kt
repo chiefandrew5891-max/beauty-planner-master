@@ -220,6 +220,7 @@ fun AppRootContent(
 
             Screen.AUTH_WELCOME -> AuthWelcomeScreen(
                 errorMessage = state.authErrorMessage,
+                infoMessage = state.authInfoMessage,
                 onContinueWithGoogle = {
                     state.continueWithGoogle()
                 },
@@ -240,9 +241,11 @@ fun AppRootContent(
             Screen.AUTH_EMAIL -> AuthEmailScreen(
                 isRegisterMode = state.authEmailRegisterMode,
                 errorMessage = state.authErrorMessage,
+                infoMessage = state.authInfoMessage,
                 onModeChange = { isRegister ->
                     state.authEmailRegisterMode = isRegister
                     state.authErrorMessage = null
+                    state.authInfoMessage = null
                 },
                 onSubmit = { email, password, confirmPassword ->
                     state.submitEmailAuth(email, password, confirmPassword)
@@ -408,6 +411,7 @@ fun AppRootContent(
                                 3 -> "month_mar"
                                 4 -> "month_apr"
                                 5 -> "month_may"
+                                6 -> "month_jun"
                                 6 -> "month_jun"
                                 7 -> "month_jul"
                                 8 -> "month_aug"

@@ -65,6 +65,7 @@ class AppRootState(
     )
     var authResolved by mutableStateOf(false)
     var authErrorMessage by mutableStateOf<String?>(null)
+    var authInfoMessage by mutableStateOf<String?>(null)
     var authEmailRegisterMode by mutableStateOf(false)
     var authInfoDialogMessage by mutableStateOf<String?>(null)
     var hasCompletedInitialSplash by mutableStateOf(false)
@@ -749,20 +750,26 @@ class AppRootState(
 
                             authResolved = true
                             authErrorMessage = null
+                            authInfoMessage = null
                             currentScreen = Screen.MONTH
                         }.onFailure { throwable ->
                             runCatching { AuthGateway.signOut() }
                             runCatching { AuthGateway.clearCredentialState() }
 
+                            authInfoMessage = null
                             resetToSignedOutState(
                                 keepAuthErrorMessage = mapAuthErrorMessage(throwable.message)
                             )
                         }
                     }
+
                     is SignInResult.Cancelled -> {
-                        authErrorMessage = Locales.t("auth_google_cancelled")
+                        authErrorMessage = null
+                        authInfoMessage = Locales.t("auth_sign_in_cancelled")
                     }
+
                     is SignInResult.Error -> {
+                        authInfoMessage = null
                         authErrorMessage = mapAuthErrorMessage(result.message)
                     }
                 }
@@ -810,11 +817,13 @@ class AppRootState(
 
                             authResolved = true
                             authErrorMessage = null
+                            authInfoMessage = null
                             currentScreen = Screen.MONTH
                         }.onFailure { error ->
                             runCatching { AuthGateway.signOut() }
                             runCatching { AuthGateway.clearCredentialState() }
 
+                            authInfoMessage = null
                             resetToSignedOutState(
                                 keepAuthErrorMessage = mapAuthErrorMessage(error.message)
                             )
@@ -822,10 +831,12 @@ class AppRootState(
                     }
 
                     is SignInResult.Cancelled -> {
-                        authErrorMessage = Locales.t("auth_error_generic")
+                        authErrorMessage = null
+                        authInfoMessage = Locales.t("auth_sign_in_cancelled")
                     }
 
                     is SignInResult.Error -> {
+                        authInfoMessage = null
                         authErrorMessage = mapAuthErrorMessage(result.message)
                     }
                 }
@@ -884,6 +895,7 @@ class AppRootState(
 
     fun openSignInScreen() {
         authErrorMessage = null
+        authInfoMessage = null
         clearSessionLocalState()
         reloadAppointmentsForGuestProfile()
         screenHistory = emptyList()
@@ -1246,6 +1258,7 @@ class AppRootState(
 
     fun openEmailSignInScreen() {
         authErrorMessage = null
+        authInfoMessage = null
         authEmailRegisterMode = false
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_EMAIL

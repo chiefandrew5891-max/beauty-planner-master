@@ -614,5 +614,6 @@
     "premium_feature_services": "Servizi personalizzati e listino prezzi",
     "premium_feature_payments": "Gestione avanzata di pagamenti e appuntamenti",
     "premium_important_prefix": "IMPORTANTE:",
-    "free_limit_trial_ended_backlog_explanation": "Il tuo periodo di prova è terminato. I tuoi appuntamenti non sono stati eliminati. Attualmente hai {count} appuntamenti attivi in agenda. Nella versione gratuita, nella schermata principale vengono mostrati solo i prossimi {limit} appuntamenti attivi e potrai crearne di nuovi solo quando l'elenco attivo scenderà sotto {limit}. Passa a Premium per ripristinare l'accesso completo al tuo flusso di lavoro."
+    "free_limit_trial_ended_backlog_explanation": "Il tuo periodo di prova è terminato. I tuoi appuntamenti non sono stati eliminati. Attualmente hai {count} appuntamenti attivi in agenda. Nella versione gratuita, nella schermata principale vengono mostrati solo i prossimi {limit} appuntamenti attivi e potrai crearne di nuovi solo quando l'elenco attivo scenderà sotto {limit}. Passa a Premium per ripristinare l'accesso completo al tuo flusso di lavoro.",
+    "auth_sign_in_cancelled": "L'accesso è stato annullato."
 }

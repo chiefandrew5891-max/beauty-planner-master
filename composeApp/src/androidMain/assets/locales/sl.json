@@ -614,5 +614,6 @@
     "premium_feature_services": "Storitve po meri in cenik",
     "premium_feature_payments": "Napredno upravljanje plačil in naročil",
     "premium_important_prefix": "POMEMBNO:",
-    "free_limit_trial_ended_backlog_explanation": "Vaše preizkusno obdobje se je izteklo. Vaša naročila niso bila izbrisana. Trenutno imate na seznamu {count} aktivnih naročil. V brezplačni različici so na glavnem zaslonu prikazana le naslednja {limit} aktivna naročila, nova pa lahko ustvarite le, ko število aktivnih naročil pade pod {limit}. Preklopite na Premium za ponoven polni dostop do poteka dela."
+    "free_limit_trial_ended_backlog_explanation": "Vaše preizkusno obdobje se je izteklo. Vaša naročila niso bila izbrisana. Trenutno imate na seznamu {count} aktivnih naročil. V brezplačni različici so na glavnem zaslonu prikazana le naslednja {limit} aktivna naročila, nova pa lahko ustvarite le, ko število aktivnih naročil pade pod {limit}. Preklopite na Premium za ponoven polni dostop do poteka dela.",
+    "auth_sign_in_cancelled": "Prijava je bila preklicana."
 }

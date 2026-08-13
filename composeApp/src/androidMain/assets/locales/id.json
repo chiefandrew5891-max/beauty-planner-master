@@ -614,5 +614,6 @@
     "premium_feature_services": "Layanan dan daftar harga khusus",
     "premium_feature_payments": "Manajemen pembayaran dan janji temu tingkat lanjut",
     "premium_important_prefix": "PENTING:",
-    "free_limit_trial_ended_backlog_explanation": "Masa uji coba Anda telah berakhir. Janji temu Anda tidak dihapus. Saat ini Anda memiliki {count} janji temu aktif dalam daftar. Pada versi gratis, hanya {limit} janji temu aktif berikutnya yang ditampilkan di layar utama, dan Anda hanya dapat membuat janji temu baru jika daftar aktif Anda kurang dari {limit}. Tingkatkan ke Premium untuk memulihkan akses penuh ke alur kerja Anda."
+    "free_limit_trial_ended_backlog_explanation": "Masa uji coba Anda telah berakhir. Janji temu Anda tidak dihapus. Saat ini Anda memiliki {count} janji temu aktif dalam daftar. Pada versi gratis, hanya {limit} janji temu aktif berikutnya yang ditampilkan di layar utama, dan Anda hanya dapat membuat janji temu baru jika daftar aktif Anda kurang dari {limit}. Tingkatkan ke Premium untuk memulihkan akses penuh ke alur kerja Anda.",
+    "auth_sign_in_cancelled": "Masuk dibatalkan."
 }

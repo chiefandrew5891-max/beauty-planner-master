@@ -614,5 +614,6 @@
     "premium_feature_services": "맞춤형 서비스 및 가격표",
     "premium_feature_payments": "고급 결제 및 예약 관리",
     "premium_important_prefix": "【중요】",
-    "free_limit_trial_ended_backlog_explanation": "무료 체험 기간이 종료되었습니다. 기존 예약은 삭제되지 않았으며 현재 대기열에 {count}개의 활성 예약이 있습니다. 무료 버전의 홈 화면에는 다음 {limit}개의 활성 예약만 표시되며, 활성 예약 수가 {limit}개 미만으로 줄어들어야 새 예약을 생성할 수 있습니다. Premium으로 업그레이드하여 업무 흐름에 대한 전체 액세스를 복원하세요."
+    "free_limit_trial_ended_backlog_explanation": "무료 체험 기간이 종료되었습니다. 기존 예약은 삭제되지 않았으며 현재 대기열에 {count}개의 활성 예약이 있습니다. 무료 버전의 홈 화면에는 다음 {limit}개의 활성 예약만 표시되며, 활성 예약 수가 {limit}개 미만으로 줄어들어야 새 예약을 생성할 수 있습니다. Premium으로 업그레이드하여 업무 흐름에 대한 전체 액세스를 복원하세요.",
+    "auth_sign_in_cancelled": "로그인이 취소되었습니다."
 }

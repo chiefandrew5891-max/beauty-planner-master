@@ -614,5 +614,6 @@
     "premium_feature_services": "Räätälöidyt palvelut ja hinnasto",
     "premium_feature_payments": "Edistynyt maksujen ja varausten hallinta",
     "premium_important_prefix": "TÄRKEÄÄ:",
-    "free_limit_trial_ended_backlog_explanation": "Kokeilujaksosi on päättynyt. Varauksiasi ei ole poistettu. Sinulla on tällä hetkellä {count} aktiivista varausta. Ilmaisversiossa kotinäytön tulevien varausten listassa näytetään vain seuraavat {limit} aktiivista varausta, ja voit luoda uusia varauksia vasta kun aktiivisten varausten määrä laskee alle {limit}. Päivitä Premiumiin palauttaaksesi täyden käyttöoikeuden työvuoosi."
+    "free_limit_trial_ended_backlog_explanation": "Kokeilujaksosi on päättynyt. Varauksiasi ei ole poistettu. Sinulla on tällä hetkellä {count} aktiivista varausta. Ilmaisversiossa kotinäytön tulevien varausten listassa näytetään vain seuraavat {limit} aktiivista varausta, ja voit luoda uusia varauksia vasta kun aktiivisten varausten määrä laskee alle {limit}. Päivitä Premiumiin palauttaaksesi täyden käyttöoikeuden työvuoosi.",
+    "auth_sign_in_cancelled": "Kirjautuminen peruutettiin."
 }

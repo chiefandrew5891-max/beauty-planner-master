@@ -614,5 +614,6 @@
     "premium_feature_services": "Özel hizmetler ve fiyat listesi",
     "premium_feature_payments": "Gelişmiş ödeme ve randevu yönetimi",
     "premium_important_prefix": "ÖNEMLİ:",
-    "free_limit_trial_ended_backlog_explanation": "Deneme süreniz sona erdi. Randevularınız silinmedi. Şu anda listenizde {count} aktif randevu bulunuyor. Ücretsiz sürümde ana ekranda yalnızca sıradaki {limit} aktif randevu gösterilir ve yalnızca aktif randevu sayınız {limit} sınırının altına düştüğünde yeni randevu oluşturabilirsiniz. İş akışınıza tam erişim sağlamak için Premium'a geçin."
+    "free_limit_trial_ended_backlog_explanation": "Deneme süreniz sona erdi. Randevularınız silinmedi. Şu anda listenizde {count} aktif randevu bulunuyor. Ücretsiz sürümde ana ekranda yalnızca sıradaki {limit} aktif randevu gösterilir ve yalnızca aktif randevu sayınız {limit} sınırının altına düştüğünde yeni randevu oluşturabilirsiniz. İş akışınıza tam erişim sağlamak için Premium'a geçin.",
+    "auth_sign_in_cancelled": "Giriş işlemi iptal edildi."
 }

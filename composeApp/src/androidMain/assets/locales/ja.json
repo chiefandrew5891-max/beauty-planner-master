@@ -614,5 +614,6 @@
     "premium_feature_services": "カスタムサービスと価格表",
     "premium_feature_payments": "高度な決済・予約管理",
     "premium_important_prefix": "【重要】",
-    "free_limit_trial_ended_backlog_explanation": "無料体験期間が終了しました。これまでに作成された予約が削除されることはありません。現在{count}件のアクティブな予約があります。無料版のホーム画面では、今後予定されている上位{limit}件のアクティブな予約のみが表示され、アクティブ数が{limit}件未満になるまで新規予約の作成はできません。Premiumにアップグレードして、すべての機能の制限を解除しましょう。"
+    "free_limit_trial_ended_backlog_explanation": "無料体験期間が終了しました。これまでに作成された予約が削除されることはありません。現在{count}件のアクティブな予約があります。無料版のホーム画面では、今後予定されている上位{limit}件のアクティブな予約のみが表示され、アクティブ数が{limit}件未満になるまで新規予約の作成はできません。Premiumにアップグレードして、すべての機能の制限を解除しましょう。",
+    "auth_sign_in_cancelled": "サインインがキャンセルされました。"
 }

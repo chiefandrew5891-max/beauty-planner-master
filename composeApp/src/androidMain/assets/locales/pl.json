@@ -614,5 +614,6 @@
     "premium_feature_services": "Niestandardowe usługi i cennik",
     "premium_feature_payments": "Zaawansowane zarządzanie płatnościami i wizytami",
     "premium_important_prefix": "WAŻNE:",
-    "free_limit_trial_ended_backlog_explanation": "Twój okres próbny dobiegł końca. Twoje wizyty nie zostały usunięte. Masz obecnie {count} aktywnych wizyt w harmonogramie. W wersji darmowej na ekranie głównym wyświetlane jest tylko {limit} najbliższych aktywnych wizyt, a nowe można tworzyć dopiero wtedy, gdy liczba aktywnych wpisów spadnie poniżej {limit}. Przejdź na Premium, aby przywrócić pełny dostęp do organizacji pracy."
+    "free_limit_trial_ended_backlog_explanation": "Twój okres próbny dobiegł końca. Twoje wizyty nie zostały usunięte. Masz obecnie {count} aktywnych wizyt w harmonogramie. W wersji darmowej na ekranie głównym wyświetlane jest tylko {limit} najbliższych aktywnych wizyt, a nowe można tworzyć dopiero wtedy, gdy liczba aktywnych wpisów spadnie poniżej {limit}. Przejdź na Premium, aby przywrócić pełny dostęp do organizacji pracy.",
+    "auth_sign_in_cancelled": "Logowanie zostało anulowane."
 }

@@ -614,5 +614,6 @@
     "premium_feature_services": "Individualios paslaugos ir kainoraštis",
     "premium_feature_payments": "Išplėstinis mokėjimų ir vizitų valdymas",
     "premium_important_prefix": "SVARBU:",
-    "free_limit_trial_ended_backlog_explanation": "Jūsų bandomasis laikotarpis baigėsi. Jūsų vizitai nebuvo ištrinti. Šiuo metu sąraše turite {count} aktyvius vizitus. Nemokamoje versijoje pagrindiniame ekrane rodomi tik ateinantys {limit} aktyvūs vizitai, o naujus galėsite kurti tik tada, kai aktyvių vizitų skaičius nukris žemiau {limit}. Pereikite prie Premium, kad atkurtumėte pilną prieigą prie savo darbo eigos."
+    "free_limit_trial_ended_backlog_explanation": "Jūsų bandomasis laikotarpis baigėsi. Jūsų vizitai nebuvo ištrinti. Šiuo metu sąraše turite {count} aktyvius vizitus. Nemokamoje versijoje pagrindiniame ekrane rodomi tik ateinantys {limit} aktyvūs vizitai, o naujus galėsite kurti tik tada, kai aktyvių vizitų skaičius nukris žemiau {limit}. Pereikite prie Premium, kad atkurtumėte pilną prieigą prie savo darbo eigos.",
+    "auth_sign_in_cancelled": "Prisijungimas atšauktas."
 }

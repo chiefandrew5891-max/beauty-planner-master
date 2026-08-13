@@ -614,5 +614,6 @@
     "premium_feature_services": "Kohandatud teenused ja hinnakiri",
     "premium_feature_payments": "Täpsem maksete ja broneeringute haldamine",
     "premium_important_prefix": "TÄHTIS:",
-    "free_limit_trial_ended_backlog_explanation": "Teie prooviperiood on lõppenud. Teie broneeringuid ei ole kustutatud. Teil on hetkel nimekirjas {count} aktiivset broneeringut. Tasuta versioonis kuvatakse avaekraani tulevaste sündmuste loendis ainult järgmised {limit} aktiivset broneeringut ning uusi broneeringuid saate luua alles siis, kui aktiivne nimekiri langeb alla {limit}. Võtke kasutusele Premium, et taastada täielik juurdepääs oma töövoole."
+    "free_limit_trial_ended_backlog_explanation": "Teie prooviperiood on lõppenud. Teie broneeringuid ei ole kustutatud. Teil on hetkel nimekirjas {count} aktiivset broneeringut. Tasuta versioonis kuvatakse avaekraani tulevaste sündmuste loendis ainult järgmised {limit} aktiivset broneeringut ning uusi broneeringuid saate luua alles siis, kui aktiivne nimekiri langeb alla {limit}. Võtke kasutusele Premium, et taastada täielik juurdepääs oma töövoole.",
+    "auth_sign_in_cancelled": "Sisselogimine tühistati."
 }

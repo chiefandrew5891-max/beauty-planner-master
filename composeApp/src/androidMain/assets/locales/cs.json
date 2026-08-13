@@ -614,5 +614,6 @@
     "premium_feature_services": "Vlastní služby a ceník",
     "premium_feature_payments": "Pokročilá správa plateb a schůzek",
     "premium_important_prefix": "DŮLEŽITÉ:",
-    "free_limit_trial_ended_backlog_explanation": "Vaše zkušební období skončilo. Vaše schůzky nebyly smazány. V seznamu máte aktuálně {count} aktivních schůzek. V bezplatné verzi se na hlavní obrazovce zobrazuje pouze následujících {limit} aktivních schůzek a nové můžete vytvářet až ve chvíli, kdy počet aktivních schůzek klesne pod {limit}. Přejděte na Premium a obnovte plný přístup k organizaci práce."
+    "free_limit_trial_ended_backlog_explanation": "Vaše zkušební období skončilo. Vaše schůzky nebyly smazány. V seznamu máte aktuálně {count} aktivních schůzek. V bezplatné verzi se na hlavní obrazovce zobrazuje pouze následujících {limit} aktivních schůzek a nové můžete vytvářet až ve chvíli, kdy počet aktivních schůzek klesne pod {limit}. Přejděte na Premium a obnovte plný přístup k organizaci práce.",
+    "auth_sign_in_cancelled": "Přihlášení было zrušeno."
 }

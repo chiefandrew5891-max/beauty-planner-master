@@ -37,6 +37,7 @@ import com.andrey.beautyplanner.Locales
 fun AuthEmailScreen(
     isRegisterMode: Boolean,
     errorMessage: String?,
+    infoMessage: String?,
     onModeChange: (Boolean) -> Unit,
     onSubmit: (email: String, password: String, confirmPassword: String) -> Unit,
     onForgotPassword: (email: String) -> Unit
@@ -217,8 +218,16 @@ fun AuthEmailScreen(
             if (!errorMessage.isNullOrBlank()) {
                 Text(
                     text = errorMessage,
+                    color = MaterialTheme.colors.error,
                     fontSize = (13 * fontScale).sp,
-                    color = MaterialTheme.colors.error
+                )
+            }
+
+            if (!infoMessage.isNullOrBlank()) {
+                Text(
+                    text = infoMessage,
+                    color = MaterialTheme.colors.onSurface,
+                    fontSize = (13 * fontScale).sp,
                 )
             }
         }

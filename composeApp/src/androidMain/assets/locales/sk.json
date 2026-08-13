@@ -614,5 +614,6 @@
     "premium_feature_services": "Vlastné služby a cenník",
     "premium_feature_payments": "Pokročilá správa platieb a termínov",
     "premium_important_prefix": "DÔLEŽITÉ:",
-    "free_limit_trial_ended_backlog_explanation": "Vaše skúšobné obdobie sa skončilo. Vaše termíny neboli vymazané. V zozname máte momentálne {count} aktívnych termínov. V bezplatnej verzii sa na hlavnej obrazovke zobrazuje iba nasledujúcich {limit} aktívnych termínov a nové môžete vytvárať až vtedy, keď počet aktívnych termínov klesne pod {limit}. Prejdite na Premium a obnovte plný prístup k organizácii práce."
+    "free_limit_trial_ended_backlog_explanation": "Vaše skúšobné obdobie sa skončilo. Vaše termíny neboli vymazané. V zozname máte momentálne {count} aktívnych termínov. V bezplatnej verzii sa na hlavnej obrazovke zobrazuje iba nasledujúcich {limit} aktívnych termínov a nové môžete vytvárať až vtedy, keď počet aktívnych termínov klesne pod {limit}. Prejdite na Premium a obnovte plný prístup k organizácii práce.",
+    "auth_sign_in_cancelled": "Prihlásenie bolo zrušené."
 }

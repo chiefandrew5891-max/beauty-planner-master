@@ -614,5 +614,6 @@
     "premium_feature_services": "自定义服务与价格表",
     "premium_feature_payments": "高级支付与预约管理",
     "premium_important_prefix": "【重要】",
-    "free_limit_trial_ended_backlog_explanation": "您的试用期已结束。您的预约并未被删除，目前列表共有 {count} 个有效预约。在免费版本中，主页仅显示接下来的 {limit} 个有效预约，只有当有效预约少于 {limit} 个时才能创建新预约。升级至 Premium 即可恢复完整的管理权限。"
+    "free_limit_trial_ended_backlog_explanation": "您的试用期已结束。您的预约并未被删除，目前列表共有 {count} 个有效预约。在免费版本中，主页仅显示接下来的 {limit} 个有效预约，只有当有效预约少于 {limit} 个时才能创建新预约。升级至 Premium 即可恢复完整的管理权限。",
+    "auth_sign_in_cancelled": "登录已取消。"
 }
