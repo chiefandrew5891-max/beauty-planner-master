@@ -615,5 +615,6 @@
     "premium_feature_payments": "Gerenciamento avançado de pagamentos e agendamentos",
     "premium_important_prefix": "IMPORTANTE:",
     "free_limit_trial_ended_backlog_explanation": "Seu período de teste terminou. Seus agendamentos não foram excluídos. Atualmente, você tem {count} agendamentos ativos na sua lista. Na versão gratuita, apenas os próximos {limit} agendamentos ativos são exibidos na tela inicial, e você só poderá criar novos agendamentos quando sua lista ativa for inferior a {limit}. Assine o Premium para restaurar o acesso completo ao seu fluxo de trabalho.",
-    "auth_sign_in_cancelled": "O login foi cancelado."
+    "auth_sign_in_cancelled": "O login foi cancelado.",
+    "auth_sign_in_not_completed": "O login não foi concluído. Por favor, tente novamente."
 }

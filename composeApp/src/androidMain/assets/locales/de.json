@@ -615,5 +615,6 @@
     "premium_feature_payments": "Erweiterte Zahlungs- und Terminverwaltung",
     "premium_important_prefix": "WICHTIG:",
     "free_limit_trial_ended_backlog_explanation": "Ihre Testphase ist abgelaufen. Ihre Termine wurden nicht gelöscht. Sie haben derzeit {count} aktive Termine in Ihrer Übersicht. In der kostenlosen Version werden auf dem Startbildschirm nur die nächsten {limit} aktiven Termine angezeigt. Neue Termine können Sie erst wieder erstellen, wenn Ihre aktiven Buchungen unter {limit} fallen. Wechseln Sie zu Premium, um Ihren Arbeitsablauf uneingeschränkt fortzusetzen.",
-    "auth_sign_in_cancelled": "Anmeldung wurde abgebrochen."
+    "auth_sign_in_cancelled": "Anmeldung wurde abgebrochen.",
+    "auth_sign_in_not_completed": "Anmeldung wurde nicht abgeschlossen. Bitte versuchen Sie es erneut."
 }

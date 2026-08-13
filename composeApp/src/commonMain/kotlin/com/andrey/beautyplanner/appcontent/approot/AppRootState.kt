@@ -372,6 +372,12 @@ class AppRootState(
         val lower = text.lowercase()
 
         return when {
+            lower.contains("user_cancelled") ->
+                null
+
+            lower.contains("user_not_completed") ->
+                Locales.t("auth_sign_in_not_completed")
+
             lower == "internal" || lower.contains("internal") ->
                 Locales.t("auth_error_generic")
 

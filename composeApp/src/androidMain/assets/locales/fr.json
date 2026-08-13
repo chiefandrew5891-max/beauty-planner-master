@@ -615,5 +615,6 @@
     "premium_feature_payments": "Gestion avancée des paiements et des rendez-vous",
     "premium_important_prefix": "IMPORTANT :",
     "free_limit_trial_ended_backlog_explanation": "Votre période d'essai est terminée. Vos rendez-vous n'ont pas été supprimés. Vous avez actuellement {count} rendez-vous actifs dans votre planning. Dans la version gratuite, seuls les {limit} prochains rendez-vous actifs sont affichés sur l'écran d'accueil, et vous ne pouvez en créer de nouveaux que si votre liste descend en dessous de {limit}. Passez à Premium pour retrouver un accès complet à votre outil de travail.",
-    "auth_sign_in_cancelled": "La connexion a été annulée."
+    "auth_sign_in_cancelled": "La connexion a été annulée.",
+    "auth_sign_in_not_completed": "La connexion n'a pas été terminèe. Veuillez réessayer."
 }

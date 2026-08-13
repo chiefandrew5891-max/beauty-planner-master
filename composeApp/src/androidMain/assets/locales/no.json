@@ -615,5 +615,6 @@
     "premium_feature_payments": "Avansert håndtering av betalinger og avtaler",
     "premium_important_prefix": "VIKTIG:",
     "free_limit_trial_ended_backlog_explanation": "Prøveperioden din er utløpt. Avtalene dine har ikke blitt slettet. Du har for øyeblikket {count} aktive avtaler i oversikten din. I gratisversjonen vises bare de neste {limit} aktive avtalene i listen på startskjermen, og du kan bare opprette nye avtaler når den aktive listen faller under {limit}. Oppgrader til Premium for å gjenopprette full tilgang til arbeidsflyten din.",
-    "auth_sign_in_cancelled": "Innlogging ble avbrutt."
+    "auth_sign_in_cancelled": "Innlogging ble avbrutt.",
+    "auth_sign_in_not_completed": "Innlogging ble ikke fullført. Vennligst prøv igjen."
 }

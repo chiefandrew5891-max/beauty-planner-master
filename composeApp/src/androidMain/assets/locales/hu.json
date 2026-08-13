@@ -615,5 +615,6 @@
     "premium_feature_payments": "Fejlett fizetés- és időpont-kezelés",
     "premium_important_prefix": "FONTOS:",
     "free_limit_trial_ended_backlog_explanation": "A próbaidőszak lejárt. Az időpontjai nem törlődtek. Jelenleg {count} aktív időpontja van a naptárában. Az ingyenes verzióban a kezdőképernyőn csak a következő {limit} aktív időpont jelenik meg, és csak akkor hozhat létre új időpontot, ha az aktív időpontok száma {limit} alá csökken. Váltson Premiumra a teljes munkafolyamat-hozzáférés visszaállításához.",
-    "auth_sign_in_cancelled": "A bejelentkezés megszakítva."
+    "auth_sign_in_cancelled": "A bejelentkezés megszakítva.",
+    "auth_sign_in_not_completed": "A bejelentkezés nem fejeződött be. Kérjük, próbálja újra."
 }

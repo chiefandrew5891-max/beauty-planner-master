@@ -615,5 +615,6 @@
     "premium_feature_payments": "Gestionare avansată a plăților și programărilor",
     "premium_important_prefix": "IMPORTANT:",
     "free_limit_trial_ended_backlog_explanation": "Perioada dvs. de probă s-a încheiat. Programările dvs. nu au fost șterse. În prezent aveți {count} programări active în agendă. În versiunea gratuită, pe ecranul principal sunt afișate doar următoarele {limit} programări active, iar altele noi puteți crea doar când lista active scade sub {limit}. Treceți la Premium pentru a restabili accesul complet la fluxul dvs. de lucru.",
-    "auth_sign_in_cancelled": "Autentificarea a fost anulată."
+    "auth_sign_in_cancelled": "Autentificarea a fost anulată.",
+    "auth_sign_in_not_completed": "Autentificarea nu a fost finalizată. Vă rugăm să încercați din nou."
 }

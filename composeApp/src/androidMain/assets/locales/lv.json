@@ -615,5 +615,6 @@
     "premium_feature_payments": "Uzlabota maksājumu un pierakstu pārvaldība",
     "premium_important_prefix": "SVARĪGI:",
     "free_limit_trial_ended_backlog_explanation": "Jūsu izmēģinājuma periods ir beidzies. Jūsu pieraksti netika izdzēsti. Šobrīd sarakstā ir {count} aktīvi pieraksti. Bezmaksas versijā sākuma ekrānā tiek rādīti tikai nākamie {limit} aktīvie pieraksti, un jaunus varēsiet izveidot tikai tad, kad aktīvo ierakstu skaits būs mazāks par {limit}. Pārejiet uz Premium, lai atjaunotu pilnu piekļuvi savai darba plūsmai.",
-    "auth_sign_in_cancelled": "Pieteikšanās tika atcelta."
+    "auth_sign_in_cancelled": "Pieteikšanās tika atcelta.",
+    "auth_sign_in_not_completed": "Pieteikšanās netika pabeigta. Lūdzu, mēģiniet vēlreiz."
 }

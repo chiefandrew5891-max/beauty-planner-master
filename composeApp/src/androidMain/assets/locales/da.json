@@ -615,5 +615,6 @@
     "premium_feature_payments": "Avanceret administration af betalinger og aftaler",
     "premium_important_prefix": "VIGTIGT:",
     "free_limit_trial_ended_backlog_explanation": "Din prøveperiode er udløbet. Dine aftaler er ikke blevet slettet. Du har i øjeblikket {count} aktive aftaler i din oversigt. I den gratis version vises kun de næste {limit} aktive aftaler i listen på startskærmen, og du kan kun oprette nye aftaler, når din aktive kø falder til under {limit}. Opgrader til Premium for at genoprette fuld adgang til dit arbejdsflow.",
-    "auth_sign_in_cancelled": "Log ind blev annulleret."
+    "auth_sign_in_cancelled": "Log ind blev annulleret.",
+    "auth_sign_in_not_completed": "Log ind blev ikke gennemført. Prøv venligst igen."
 }

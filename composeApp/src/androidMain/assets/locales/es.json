@@ -615,5 +615,6 @@
     "premium_feature_payments": "Gestión avanzada de pagos y citas",
     "premium_important_prefix": "IMPORTANTE:",
     "free_limit_trial_ended_backlog_explanation": "Su período de prueba ha finalizado. Sus citas no se han eliminado. Actualmente tiene {count} citas activas en su agenda. En la versión gratuita, solo se muestran las próximas {limit} citas activas en la pantalla principal y solo podrá crear nuevas citas cuando su lista activa baje de {limit}. Suscríbase a Premium para restaurar el acceso completo a su flujo de trabajo.",
-    "auth_sign_in_cancelled": "Se canceló el inicio de sesión."
+    "auth_sign_in_cancelled": "Se canceló el inicio de sesión.",
+    "auth_sign_in_not_completed": "El inicio de sesión no se completó. Por favor, inténtelo de nuevo."
 }

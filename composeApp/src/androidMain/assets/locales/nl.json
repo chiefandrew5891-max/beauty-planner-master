@@ -615,5 +615,6 @@
     "premium_feature_payments": "Geavanceerd beheer van betalingen en afspraken",
     "premium_important_prefix": "BELANGRIJK:",
     "free_limit_trial_ended_backlog_explanation": "Uw proefperiode is afgelopen. Uw afspraken zijn niet verwijderd. U hebt momenteel {count} actieve afspraken in uw planning. In de gratis versie worden op het startscherm alleen de volgende {limit} actieve afspraken getoond, en u kunt pas nieuwe afspraken aanmaken als uw actieve lijst onder de {limit} zakt. Upgrade naar Premium om weer volledige toegang tot uw werkproces te krijgen.",
-    "auth_sign_in_cancelled": "Inloggen is geannuleerd."
+    "auth_sign_in_cancelled": "Inloggen is geannuleerd.",
+    "auth_sign_in_not_completed": "Inloggen is niet voltooid. Probeer het opnieuw."
 }

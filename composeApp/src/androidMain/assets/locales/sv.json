@@ -615,5 +615,6 @@
     "premium_feature_payments": "Avancerad hantering av betalningar och bokningar",
     "premium_important_prefix": "VIKTIGT:",
     "free_limit_trial_ended_backlog_explanation": "Din provperiod har gått ut. Dina bokningar har inte raderats. Du har för närvarande {count} aktiva bokningar i din lista. I gratisversionen visas endast de kommande {limit} aktiva bokningarna på startskärmen, och du kan skapa nya bokningar först när din aktiva lista sjunker under {limit}. Uppgradera till Premium för att återställa full åtkomst till ditt arbetsflöde.",
-    "auth_sign_in_cancelled": "Inloggen avbröts."
+    "auth_sign_in_cancelled": "Inloggen avbröts.",
+    "auth_sign_in_not_completed": "Inloggningen slutfördes inte. Försök igen."
 }
