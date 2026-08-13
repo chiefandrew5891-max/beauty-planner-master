@@ -775,8 +775,6 @@ class AppRootState(
     fun continueWithApple() {
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
-            runCatching { AuthGateway.clearCredentialState() }
-            runCatching { AuthGateway.prepareForNewSignIn() }
             try {
                 when (val result = AuthGateway.signInWithApple()) {
                     is SignInResult.Success -> {

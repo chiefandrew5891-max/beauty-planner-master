@@ -73,7 +73,6 @@ actual object AuthGateway {
     }
 
     actual suspend fun signInWithApple(): SignInResult {
-        runCatching { prepareForNewSignIn() }
 
         val deferred = CompletableDeferred<SignInResult>()
         val launcher = AppleSignInBridge.startAppleSignIn
