@@ -73,7 +73,6 @@ actual object AuthGateway {
     }
 
     actual suspend fun signInWithApple(): SignInResult {
-
         val deferred = CompletableDeferred<SignInResult>()
         val launcher = AppleSignInBridge.startAppleSignIn
             ?: return SignInResult.Error("Apple Sign-In bridge is not connected.")
