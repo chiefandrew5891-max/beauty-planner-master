@@ -67,9 +67,12 @@ actual object AuthGateway {
         val launcher = GoogleSignInBridge.startGoogleSignIn
             ?: return SignInResult.Error("Google Sign-In bridge is not connected.")
 
-        launcher.invoke(deferred)
-
-        return deferred.await()
+        return try {
+            launcher.invoke(deferred)
+            deferred.await()
+        } catch (t: Throwable) {
+            SignInResult.Error(t.message ?: "Google sign-in failed on iOS.")
+        }
     }
 
     actual suspend fun signInWithApple(): SignInResult {
@@ -77,9 +80,12 @@ actual object AuthGateway {
         val launcher = AppleSignInBridge.startAppleSignIn
             ?: return SignInResult.Error("Apple Sign-In bridge is not connected.")
 
-        launcher.invoke(deferred)
-
-        return deferred.await()
+        return try {
+            launcher.invoke(deferred)
+            deferred.await()
+        } catch (t: Throwable) {
+            SignInResult.Error(t.message ?: "Apple sign-in failed on iOS.")
+        }
     }
 
     actual suspend fun signInWithEmail(email: String, password: String): SignInResult {
