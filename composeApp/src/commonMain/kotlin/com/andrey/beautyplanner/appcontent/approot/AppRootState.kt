@@ -376,7 +376,7 @@ class AppRootState(
                 null
 
             lower.contains("user_not_completed") ->
-                Locales.t("auth_sign_in_not_completed")
+                null
 
             lower == "internal" || lower.contains("internal") ->
                 Locales.t("auth_error_generic")
@@ -784,10 +784,18 @@ class AppRootState(
                     }
 
                     is SignInResult.Error -> {
+                        val raw = result.message.orEmpty()
+                        val lower = raw.lowercase()
                         val mapped = mapAuthErrorMessage(result.message)
+
                         if (mapped.isNullOrBlank()) {
                             authErrorMessage = null
-                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                            authInfoMessage = when {
+                                lower.contains("user_not_completed") ->
+                                    Locales.t("auth_sign_in_not_completed")
+                                else ->
+                                    Locales.t("auth_sign_in_cancelled")
+                            }
                         } else {
                             authInfoMessage = null
                             authErrorMessage = mapped
@@ -857,10 +865,18 @@ class AppRootState(
                     }
 
                     is SignInResult.Error -> {
+                        val raw = result.message.orEmpty()
+                        val lower = raw.lowercase()
                         val mapped = mapAuthErrorMessage(result.message)
+
                         if (mapped.isNullOrBlank()) {
                             authErrorMessage = null
-                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                            authInfoMessage = when {
+                                lower.contains("user_not_completed") ->
+                                    Locales.t("auth_sign_in_not_completed")
+                                else ->
+                                    Locales.t("auth_sign_in_cancelled")
+                            }
                         } else {
                             authInfoMessage = null
                             authErrorMessage = mapped
