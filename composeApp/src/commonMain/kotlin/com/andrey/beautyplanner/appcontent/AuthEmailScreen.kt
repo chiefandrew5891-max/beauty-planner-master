@@ -9,19 +9,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,10 +53,25 @@ fun AuthEmailScreen(
     val primary = MaterialTheme.colors.primary
     val surface = MaterialTheme.colors.surface
 
-    val emailState = remember { mutableStateOf("") }
+    val emailState = remember { mutableStateOf(AppSettings.lastAuthEmail) }
     val passwordState = remember { mutableStateOf("") }
     val confirmPasswordState = remember { mutableStateOf("") }
     val showPasswordState = remember { mutableStateOf(false) }
+    var emailMenuExpanded by remember { mutableStateOf(false) }
+
+    val recentEmails = remember(emailState.value, AppSettings.recentAuthEmails) {
+        val query = emailState.value.trim()
+        AppSettings.recentAuthEmailSuggestions().filter {
+            query.isBlank() || it.contains(query, ignoreCase = true)
+        }
+    }
+
+    val shouldShowEmailMenu = remember(emailMenuExpanded, recentEmails, emailState.value) {
+        val trimmed = emailState.value.trim()
+        emailMenuExpanded &&
+                recentEmails.isNotEmpty() &&
+                !(recentEmails.size == 1 && recentEmails.first().equals(trimmed, ignoreCase = true))
+    }
 
     val passwordVisualTransformation =
         if (showPasswordState.value) VisualTransformation.None
@@ -94,44 +114,81 @@ fun AuthEmailScreen(
                 AuthModeTabButton(
                     text = Locales.t("auth_email_mode_sign_in"),
                     selected = !isRegisterMode,
-                    onClick = { onModeChange(false) },
+                    onClick = {
+                        emailMenuExpanded = false
+                        onModeChange(false)
+                    },
                     modifier = Modifier.weight(1f)
                 )
 
                 AuthModeTabButton(
                     text = Locales.t("auth_email_mode_register"),
                     selected = isRegisterMode,
-                    onClick = { onModeChange(true) },
+                    onClick = {
+                        emailMenuExpanded = false
+                        onModeChange(true)
+                    },
                     modifier = Modifier.weight(1f)
                 )
             }
 
             Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = emailState.value,
-                onValueChange = { emailState.value = it },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                label = { Text(Locales.t("auth_email_field")) },
-                textStyle = androidx.compose.ui.text.TextStyle(
-                    fontFamily = appFontFamily(),
-                    color = onSurface
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = onSurface,
-                    focusedBorderColor = primary,
-                    unfocusedBorderColor = onSurface.copy(alpha = 0.28f),
-                    focusedLabelColor = primary,
-                    unfocusedLabelColor = onSurface.copy(alpha = 0.68f),
-                    cursorColor = primary,
-                    backgroundColor = surface
+            Column(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = emailState.value,
+                    onValueChange = {
+                        emailState.value = it
+                        emailMenuExpanded = it.isNotBlank()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text(Locales.t("auth_email_field")) },
+                    textStyle = androidx.compose.ui.text.TextStyle(
+                        fontFamily = appFontFamily(),
+                        color = onSurface
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        textColor = onSurface,
+                        focusedBorderColor = primary,
+                        unfocusedBorderColor = onSurface.copy(alpha = 0.28f),
+                        focusedLabelColor = primary,
+                        unfocusedLabelColor = onSurface.copy(alpha = 0.68f),
+                        cursorColor = primary,
+                        backgroundColor = surface
+                    )
                 )
-            )
+
+                DropdownMenu(
+                    expanded = shouldShowEmailMenu,
+                    onDismissRequest = { emailMenuExpanded = false },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 280.dp)
+                ) {
+                    recentEmails.forEach { savedEmail ->
+                        DropdownMenuItem(
+                            onClick = {
+                                emailState.value = savedEmail
+                                emailMenuExpanded = false
+                            }
+                        ) {
+                            Text(
+                                text = savedEmail,
+                                color = onSurface,
+                                fontSize = (14 * fontScale).sp
+                            )
+                        }
+                    }
+                }
+            }
 
             OutlinedTextField(
                 value = passwordState.value,
-                onValueChange = { passwordState.value = it },
+                onValueChange = {
+                    passwordState.value = it
+                    emailMenuExpanded = false
+                },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 label = { Text(Locales.t("auth_password_field")) },
@@ -154,7 +211,10 @@ fun AuthEmailScreen(
             if (isRegisterMode) {
                 OutlinedTextField(
                     value = confirmPasswordState.value,
-                    onValueChange = { confirmPasswordState.value = it },
+                    onValueChange = {
+                        confirmPasswordState.value = it
+                        emailMenuExpanded = false
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     label = { Text(Locales.t("auth_password_confirm_field")) },
@@ -193,6 +253,7 @@ fun AuthEmailScreen(
             if (!isRegisterMode) {
                 TextButton(
                     onClick = {
+                        emailMenuExpanded = false
                         onForgotPassword(emailState.value)
                     }
                 ) {
@@ -207,6 +268,7 @@ fun AuthEmailScreen(
                     Locales.t("auth_email_submit_sign_in")
                 },
                 onClick = {
+                    emailMenuExpanded = false
                     onSubmit(
                         emailState.value,
                         passwordState.value,

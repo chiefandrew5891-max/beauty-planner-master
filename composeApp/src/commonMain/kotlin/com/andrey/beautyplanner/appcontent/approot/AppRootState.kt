@@ -2168,6 +2168,7 @@ class AppRootState(
 
         currentAuthUser = user
         persistAuthenticatedSession(user)
+        AppSettings.rememberRecentAuthEmail(user.email)
     }
 
     private fun clearPersistedAuthenticatedSession() {

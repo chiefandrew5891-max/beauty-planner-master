@@ -111,6 +111,7 @@ private data class SettingsSnapshot(
     val localProfileUserId: String = "",
     val lastAuthProvider: String = "",
     val lastAuthEmail: String = "",
+    val recentAuthEmails: List<String> = emptyList(),
     val lastAuthDisplayName: String = "",
     val lastAuthenticatedAppOpenAtMillis: Long = 0L,
     val cachedAccessTier: String = "FREE_LIMITED",
@@ -282,6 +283,7 @@ object AppSettings {
     var localProfileUserId by mutableStateOf("")
     var lastAuthProvider by mutableStateOf("")
     var lastAuthEmail by mutableStateOf("")
+    var recentAuthEmails by mutableStateOf<List<String>>(emptyList())
     var lastAuthDisplayName by mutableStateOf("")
     var lastAuthenticatedAppOpenAtMillis by mutableStateOf(0L)
     var cachedAccessTier by mutableStateOf("FREE_LIMITED")
@@ -301,6 +303,26 @@ object AppSettings {
 
     var aboutDescription: String = ""
     var aboutUpcoming: String = ""
+
+    fun recentAuthEmailSuggestions(): List<String> {
+        return recentAuthEmails
+            .map { it.trim() }
+            .filter { it.isNotBlank() && it.contains("@") }
+            .distinct()
+    }
+
+    fun rememberRecentAuthEmail(email: String) {
+        val clean = email.trim()
+        if (clean.isBlank() || !clean.contains("@")) return
+
+        recentAuthEmails = listOf(clean) +
+                recentAuthEmails.filterNot { it.equals(clean, ignoreCase = true) }
+                    .map { it.trim() }
+                    .filter { it.isNotBlank() && it.contains("@") }
+
+        recentAuthEmails = recentAuthEmails.take(8)
+        persist()
+    }
 
     fun currencySymbol(): String {
         return currencySymbolFor(selectedCurrency, useShortTextCurrency)
@@ -673,6 +695,11 @@ object AppSettings {
         localProfileUserId = snapshot.localProfileUserId
         lastAuthProvider = snapshot.lastAuthProvider
         lastAuthEmail = snapshot.lastAuthEmail
+        recentAuthEmails = snapshot.recentAuthEmails
+            .map { it.trim() }
+            .filter { it.isNotBlank() && it.contains("@") }
+            .distinct()
+            .take(8)
         lastAuthDisplayName = snapshot.lastAuthDisplayName
         lastAuthenticatedAppOpenAtMillis = snapshot.lastAuthenticatedAppOpenAtMillis
         cachedAccessTier = snapshot.cachedAccessTier
@@ -764,6 +791,7 @@ object AppSettings {
             localProfileUserId = localProfileUserId,
             lastAuthProvider = lastAuthProvider,
             lastAuthEmail = lastAuthEmail,
+            recentAuthEmails = recentAuthEmails,
             lastAuthDisplayName = lastAuthDisplayName,
             lastAuthenticatedAppOpenAtMillis = lastAuthenticatedAppOpenAtMillis,
             cachedAccessTier = cachedAccessTier,

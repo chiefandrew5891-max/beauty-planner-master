@@ -169,7 +169,16 @@ import UIKit
         }
 
     fileprivate static func handleError(_ error: Error) {
-        completionHandler?(nil, error.localizedDescription as NSString)
+        let nsError = error as NSError
+
+        if nsError.domain == ASAuthorizationError.errorDomain &&
+               nsError.code == ASAuthorizationError.canceled.rawValue {
+            completionHandler?(nil, "USER_CANCELLED")
+            clearState()
+            return
+        }
+
+        completionHandler?(nil, nsError.localizedDescription as NSString)
         clearState()
     }
 
