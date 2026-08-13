@@ -283,13 +283,22 @@ class AppRootState(
             try {
                 when (val result = AuthGateway.sendPasswordReset(cleanEmail)) {
                     is SignInResult.Success -> {
-                        authErrorMessage = Locales.t("auth_password_reset_sent")
+                        authErrorMessage = null
+                        authInfoMessage = Locales.t("auth_password_reset_sent")
                     }
                     is SignInResult.Cancelled -> {
-                        authErrorMessage = Locales.t("auth_password_reset_failed")
+                        authErrorMessage = null
+                        authInfoMessage = Locales.t("auth_sign_in_cancelled")
                     }
                     is SignInResult.Error -> {
-                        authErrorMessage = mapAuthErrorMessage(result.message)
+                        val mapped = mapAuthErrorMessage(result.message)
+                        if (mapped.isNullOrBlank()) {
+                            authErrorMessage = null
+                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                        } else {
+                            authInfoMessage = null
+                            authErrorMessage = mapped
+                        }
                     }
                 }
             } finally {
@@ -356,7 +365,7 @@ class AppRootState(
         }
     }
 
-    fun mapAuthErrorMessage(raw: String?): String {
+    fun mapAuthErrorMessage(raw: String?): String? {
         val text = raw?.trim().orEmpty()
         if (text.isBlank()) return Locales.t("auth_error_generic")
 
@@ -382,7 +391,7 @@ class AppRootState(
                 Locales.t("auth_google_no_credentials")
 
             lower.contains("cancel") ->
-                Locales.t("auth_google_cancelled")
+                null
 
             lower.contains("auth_email_not_verified") ->
                 Locales.t("auth_email_not_verified")
@@ -769,8 +778,14 @@ class AppRootState(
                     }
 
                     is SignInResult.Error -> {
-                        authInfoMessage = null
-                        authErrorMessage = mapAuthErrorMessage(result.message)
+                        val mapped = mapAuthErrorMessage(result.message)
+                        if (mapped.isNullOrBlank()) {
+                            authErrorMessage = null
+                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                        } else {
+                            authInfoMessage = null
+                            authErrorMessage = mapped
+                        }
                     }
                 }
             } finally {
@@ -836,8 +851,14 @@ class AppRootState(
                     }
 
                     is SignInResult.Error -> {
-                        authInfoMessage = null
-                        authErrorMessage = mapAuthErrorMessage(result.message)
+                        val mapped = mapAuthErrorMessage(result.message)
+                        if (mapped.isNullOrBlank()) {
+                            authErrorMessage = null
+                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                        } else {
+                            authInfoMessage = null
+                            authErrorMessage = mapped
+                        }
                     }
                 }
             } finally {
@@ -885,7 +906,14 @@ class AppRootState(
                     authErrorMessage = null
                     currentScreen = Screen.MONTH
                 }.onFailure { error ->
-                    authErrorMessage = mapAuthErrorMessage(error.message)
+                    val mapped = mapAuthErrorMessage(error.message)
+                    if (mapped.isNullOrBlank()) {
+                        authErrorMessage = null
+                        authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                    } else {
+                        authInfoMessage = null
+                        authErrorMessage = mapped
+                    }
                 }
             } finally {
                 hideGlobalLoading()
@@ -1271,13 +1299,13 @@ class AppRootState(
         currentScreen = Screen.AUTH_EMAIL
     }
 
-    fun submitEmailAuth(
-        email: String,
-        password: String,
-        confirmPassword: String
-    ) {
+    fun submitEmailAuth(email: String, password: String, confirmPassword: String) {
         val cleanEmail = email.trim()
-        val cleanPassword = password
+        val cleanPassword = password.trim()
+        val cleanConfirmPassword = confirmPassword.trim()
+
+        authErrorMessage = null
+        authInfoMessage = null
 
         if (!cleanEmail.contains("@") || !cleanEmail.contains(".")) {
             authErrorMessage = Locales.t("auth_email_invalid")
@@ -1289,7 +1317,7 @@ class AppRootState(
             return
         }
 
-        if (authEmailRegisterMode && cleanPassword != confirmPassword) {
+        if (authEmailRegisterMode && cleanPassword != cleanConfirmPassword) {
             authErrorMessage = Locales.t("auth_passwords_mismatch")
             return
         }
@@ -1305,16 +1333,25 @@ class AppRootState(
                         is SignInResult.Success -> {
                             authEmailRegisterMode = false
                             authErrorMessage = null
+                            authInfoMessage = null
                             authInfoDialogMessage =
                                 Locales.t("auth_email_verification_sent") + " " + cleanEmail
                         }
 
                         is SignInResult.Cancelled -> {
-                            authErrorMessage = Locales.t("auth_error_generic")
+                            authErrorMessage = null
+                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
                         }
 
                         is SignInResult.Error -> {
-                            authErrorMessage = mapAuthErrorMessage(result.message)
+                            val mapped = mapAuthErrorMessage(result.message)
+                            if (mapped.isNullOrBlank()) {
+                                authErrorMessage = null
+                                authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                            } else {
+                                authInfoMessage = null
+                                authErrorMessage = mapped
+                            }
                         }
                     }
                 } else {
@@ -1335,8 +1372,9 @@ class AppRootState(
                                         displayName = result.user.displayName
                                     )
                                 } catch (e: Throwable) {
-                                    authErrorMessage = e.message ?: Locales.t("auth_email_sign_in_failed")
-                                    return@launch
+                                    runCatching { AuthGateway.signOut() }
+                                    runCatching { AuthGateway.clearCredentialState() }
+                                    throw e
                                 }
 
                                 com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
@@ -1346,47 +1384,50 @@ class AppRootState(
 
                                 syncAccessStatusFromServerIfPossible()
 
-                                try {
-                                    com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
-                                        firebaseUid = result.user.uid,
-                                        email = result.user.email,
-                                        displayName = result.user.displayName,
-                                        authProvider = "password"
-                                    )
-                                } catch (e: Throwable) {
-                                    authErrorMessage = e.message ?: Locales.t("auth_email_sign_in_failed")
-                                    return@launch
-                                }
+                                com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
+                                    firebaseUid = result.user.uid,
+                                    email = result.user.email,
+                                    displayName = result.user.displayName,
+                                    authProvider = "password"
+                                )
 
-                                runCatching {
-                                    com.andrey.beautyplanner.remote.MasterProfileSync.pullIfAuthenticated(force = true)
-                                }.onFailure {
-                                    CloudSyncLogger.log("emailSignIn: profile pull failed: ${it.message}")
-                                }
-
-                                reloadAppointmentsForCurrentProfile()
-                                refreshAccessState()
-
-                                runCatching {
-                                    performCloudSyncIfEligible()
-                                }.onFailure {
-                                    CloudSyncLogger.log("emailSignIn: cloud sync failed: ${it.message}")
-                                }
+                                runPostLoginFullSync()
 
                                 authResolved = true
                                 authErrorMessage = null
+                                authInfoMessage = null
                                 currentScreen = Screen.MONTH
-                            } catch (e: Throwable) {
-                                authErrorMessage = e.message ?: Locales.t("auth_email_sign_in_failed")
+                            } catch (error: Throwable) {
+                                runCatching { AuthGateway.signOut() }
+                                runCatching { AuthGateway.clearCredentialState() }
+
+                                val mapped = mapAuthErrorMessage(error.message)
+                                if (mapped.isNullOrBlank()) {
+                                    authErrorMessage = null
+                                    authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                                } else {
+                                    authInfoMessage = null
+                                    resetToSignedOutState(
+                                        keepAuthErrorMessage = mapped
+                                    )
+                                }
                             }
                         }
 
                         is SignInResult.Cancelled -> {
-                            authErrorMessage = Locales.t("auth_error_generic")
+                            authErrorMessage = null
+                            authInfoMessage = Locales.t("auth_sign_in_cancelled")
                         }
 
                         is SignInResult.Error -> {
-                            authErrorMessage = mapAuthErrorMessage(result.message)
+                            val mapped = mapAuthErrorMessage(result.message)
+                            if (mapped.isNullOrBlank()) {
+                                authErrorMessage = null
+                                authInfoMessage = Locales.t("auth_sign_in_cancelled")
+                            } else {
+                                authInfoMessage = null
+                                authErrorMessage = mapped
+                            }
                         }
                     }
                 }
