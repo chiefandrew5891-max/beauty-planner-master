@@ -391,10 +391,11 @@ fun AppRootContent(
                     }
                 }
 
-                val isCollapsed by remember {
+                val calendarCollapseThresholdPx = 40
+
+                val isCollapsed by remember(listState) {
                     derivedStateOf {
-                        listState.firstVisibleItemIndex > 0 ||
-                                listState.firstVisibleItemScrollOffset > 40
+                        listState.firstVisibleItemScrollOffset >= calendarCollapseThresholdPx
                     }
                 }
 
