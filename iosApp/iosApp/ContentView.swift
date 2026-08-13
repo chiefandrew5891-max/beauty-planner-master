@@ -54,18 +54,9 @@ struct ComposeView: UIViewControllerRepresentable {
         appleBridge.startAppleSignIn = { deferred in
             AppleAuthBridge.signInWithApple { result, error in
                 if let error = error {
-                    let raw = error as String
-                    let lower = raw.lowercased()
-
-                    if raw == "USER_CANCELLED" ||
-                           lower.contains("canceled") ||
-                           lower.contains("cancelled") {
-                        deferred.complete(value: SignInResultCancelled())
-                        return
-                    }
-
-                    let errorResult = SignInResult.Error(message: raw)
-                    deferred.complete(value: errorResult)
+                    deferred.completeExceptionally(
+                        exception: KotlinIllegalStateException(message: error as String)
+                    )
                     return
                 }
 
