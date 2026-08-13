@@ -156,10 +156,25 @@ import UIKit
                     return
                 }
 
+                let fallbackEmail = credential.email?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                let resolvedEmail = (firebaseUser.email ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    ? fallbackEmail
+                    : (firebaseUser.email ?? "")
+
+                let fullNameParts = [
+                    credential.fullName?.givenName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
+                    credential.fullName?.familyName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                ].filter { !$0.isEmpty }
+
+                let fallbackDisplayName = fullNameParts.joined(separator: " ")
+                let resolvedDisplayName = (firebaseUser.displayName ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    ? fallbackDisplayName
+                    : (firebaseUser.displayName ?? "")
+
                 let dict: NSDictionary = [
                     "uid": firebaseUser.uid,
-                    "email": firebaseUser.email ?? "",
-                    "displayName": firebaseUser.displayName ?? "",
+                    "email": resolvedEmail,
+                    "displayName": resolvedDisplayName,
                     "provider": "APPLE"
                 ]
 
