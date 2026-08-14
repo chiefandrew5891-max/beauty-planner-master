@@ -239,16 +239,14 @@ private fun ServiceTemplateEditorDialog(
             },
             text = {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
+                    Spacer(Modifier.height(10.dp))
+
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 56.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         label = { Text(Locales.t("service_name")) },
                         singleLine = true,
                         isError = triedSave && !titleValid,
@@ -291,9 +289,7 @@ private fun ServiceTemplateEditorDialog(
                                 }
                             }
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 56.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         label = { Text(Locales.t("service_default_price")) },
                         singleLine = true,
                         shape = RoundedCornerShape(14.dp),

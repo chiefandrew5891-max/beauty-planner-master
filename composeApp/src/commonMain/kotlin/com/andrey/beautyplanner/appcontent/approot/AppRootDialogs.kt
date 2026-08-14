@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -463,7 +464,7 @@ fun AppRootDialogs(state: AppRootState) {
                     )
                 }
             },
-            confirmButton = {
+            buttons = {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -471,6 +472,22 @@ fun AppRootDialogs(state: AppRootState) {
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    TextButton(
+                        onClick = {
+                            state.showExportNameDialog = false
+                            state.backupPassword = ""
+                            state.backupPasswordConfirm = ""
+                            state.backupPasswordError = null
+                        },
+                        colors = androidx.compose.material.ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
+                        )
+                    ) {
+                        Text(Locales.t("cancel"))
+                    }
+
+                    Spacer(Modifier.width(15.dp))
+
                     Button(
                         onClick = {
                             if (state.backupEncryptEnabled) {
@@ -534,26 +551,6 @@ fun AppRootDialogs(state: AppRootState) {
                         elevation = androidx.compose.material.ButtonDefaults.elevation(0.dp, 0.dp)
                     ) {
                         Text(Locales.t("save"))
-                    }
-                }
-            },
-            dismissButton = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextButton(
-                        onClick = {
-                            state.showExportNameDialog = false
-                            state.backupPassword = ""
-                            state.backupPasswordConfirm = ""
-                            state.backupPasswordError = null
-                        }
-                    ) {
-                        Text(Locales.t("cancel"))
                     }
                 }
             },
