@@ -113,6 +113,7 @@ fun PinDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                         modifier = Modifier.fillMaxWidth(),
                         isError = tried && !validFormat,
+                        shape = RoundedCornerShape(14.dp),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
                             color = MaterialTheme.colors.onSurface
@@ -223,6 +224,7 @@ fun SetPinDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                         modifier = Modifier.fillMaxWidth(),
                         isError = tried && !pinValid,
+                        shape = RoundedCornerShape(14.dp),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
                             color = MaterialTheme.colors.onSurface
@@ -240,6 +242,7 @@ fun SetPinDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                         modifier = Modifier.fillMaxWidth(),
                         isError = tried && (!confirmValid || !pinsMatch),
+                        shape = RoundedCornerShape(14.dp),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
                             color = MaterialTheme.colors.onSurface

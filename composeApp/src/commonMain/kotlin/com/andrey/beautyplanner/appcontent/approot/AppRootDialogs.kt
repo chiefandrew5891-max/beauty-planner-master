@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.BackupCodec
 import com.andrey.beautyplanner.BackupFilePicker
@@ -42,6 +43,7 @@ import com.andrey.beautyplanner.appcontent.PinDialog
 import com.andrey.beautyplanner.appcontent.SetPinDialog
 import com.andrey.beautyplanner.appcontent.RescheduleClientBDialog
 import com.andrey.beautyplanner.appcontent.formatBackupCreatedAt
+import com.andrey.beautyplanner.appcontent.AppSwitch
 import kotlinx.datetime.LocalDate
 
 
@@ -333,7 +335,13 @@ fun AppRootDialogs(state: AppRootState) {
                 state.backupPasswordConfirm = ""
                 state.backupPasswordError = null
             },
-            title = { Text(Locales.t("export_db")) },
+            title = {
+                Text(
+                    text = Locales.t("export_db"),
+                    color = MaterialTheme.colors.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+            },
             text = {
                 Column(Modifier.fillMaxWidth()) {
                     Text(
@@ -348,7 +356,8 @@ fun AppRootDialogs(state: AppRootState) {
                         onValueChange = { state.exportFileName = it },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        label = { Text(Locales.t("backup_file_name")) }
+                        label = { Text(Locales.t("backup_file_name")) },
+                        shape = RoundedCornerShape(14.dp)
                     )
 
                     Spacer(Modifier.height(10.dp))
@@ -359,7 +368,7 @@ fun AppRootDialogs(state: AppRootState) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(Locales.t("backup_encrypt_toggle"))
-                        Switch(
+                        AppSwitch(
                             checked = state.backupEncryptEnabled,
                             onCheckedChange = { state.backupEncryptEnabled = it }
                         )
@@ -377,6 +386,7 @@ fun AppRootDialogs(state: AppRootState) {
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
                             label = { Text(Locales.t("backup_password")) },
+                            shape = RoundedCornerShape(14.dp),
                             visualTransformation = if (exportPasswordVisible) {
                                 VisualTransformation.None
                             } else {
@@ -411,6 +421,7 @@ fun AppRootDialogs(state: AppRootState) {
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
                             label = { Text(Locales.t("backup_password_confirm")) },
+                            shape = RoundedCornerShape(14.dp),
                             visualTransformation = if (exportPasswordConfirmVisible) {
                                 VisualTransformation.None
                             } else {
@@ -453,74 +464,97 @@ fun AppRootDialogs(state: AppRootState) {
                 }
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        if (state.backupEncryptEnabled) {
-                            if (state.backupPassword.length < 6) {
-                                state.backupPasswordError =
-                                    Locales.t("backup_password_too_short")
-                                return@Button
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            if (state.backupEncryptEnabled) {
+                                if (state.backupPassword.length < 6) {
+                                    state.backupPasswordError =
+                                        Locales.t("backup_password_too_short")
+                                    return@Button
+                                }
+                                if (state.backupPassword != state.backupPasswordConfirm) {
+                                    state.backupPasswordError =
+                                        Locales.t("backup_password_mismatch")
+                                    return@Button
+                                }
                             }
-                            if (state.backupPassword != state.backupPasswordConfirm) {
-                                state.backupPasswordError =
-                                    Locales.t("backup_password_mismatch")
-                                return@Button
-                            }
-                        }
 
-                        state.showGlobalLoading(Locales.t("loading"))
-                        try {
-                            val payload = DataManager.exportBackupPayload(state.appointments)
-                            val safeName = state.exportFileName.trim()
-                                .ifBlank { "beautyplanner-backup" }
+                            state.showGlobalLoading(Locales.t("loading"))
+                            try {
+                                val payload = DataManager.exportBackupPayload(state.appointments)
+                                val safeName = state.exportFileName.trim()
+                                    .ifBlank { "beautyplanner-backup" }
 
-                            val fileText = if (state.backupEncryptEnabled) {
-                                BackupCodec.createEncryptedBackupFile(
-                                    payloadJson = payload,
-                                    password = state.backupPassword,
-                                    appointmentsCount = state.appointments.size
+                                val fileText = if (state.backupEncryptEnabled) {
+                                    BackupCodec.createEncryptedBackupFile(
+                                        payloadJson = payload,
+                                        password = state.backupPassword,
+                                        appointmentsCount = state.appointments.size
+                                    )
+                                } else {
+                                    BackupCodec.createPlainBackupFile(
+                                        payloadJson = payload,
+                                        appointmentsCount = state.appointments.size
+                                    )
+                                }
+
+                                state.showExportNameDialog = false
+                                state.backupPassword = ""
+                                state.backupPasswordConfirm = ""
+                                state.backupPasswordError = null
+
+                                BackupFilePicker.exportJson(
+                                    suggestedFileName = safeName,
+                                    json = fileText
                                 )
-                            } else {
-                                BackupCodec.createPlainBackupFile(
-                                    payloadJson = payload,
-                                    appointmentsCount = state.appointments.size
-                                )
-                            }
 
+                                state.backupSuccessMessage = Locales.t("backup_export_success")
+
+                                if (state.pendingImportAfterBackup) {
+                                    state.pendingImportAfterBackup = false
+                                    state.showImportConfirm = true
+                                }
+                            } finally {
+                                state.hideGlobalLoading()
+                            }
+                        },
+                        modifier = Modifier.height(44.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                            horizontal = 18.dp,
+                            vertical = 10.dp
+                        ),
+                        elevation = androidx.compose.material.ButtonDefaults.elevation(0.dp, 0.dp)
+                    ) {
+                        Text(Locales.t("save"))
+                    }
+                }
+            },
+            dismissButton = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(
+                        onClick = {
                             state.showExportNameDialog = false
                             state.backupPassword = ""
                             state.backupPasswordConfirm = ""
                             state.backupPasswordError = null
-
-                            BackupFilePicker.exportJson(
-                                suggestedFileName = safeName,
-                                json = fileText
-                            )
-
-                            state.backupSuccessMessage = Locales.t("backup_export_success")
-
-                            if (state.pendingImportAfterBackup) {
-                                state.pendingImportAfterBackup = false
-                                state.showImportConfirm = true
-                            }
-                        } finally {
-                            state.hideGlobalLoading()
                         }
+                    ) {
+                        Text(Locales.t("cancel"))
                     }
-                ) {
-                    Text(Locales.t("save"))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        state.showExportNameDialog = false
-                        state.backupPassword = ""
-                        state.backupPasswordConfirm = ""
-                        state.backupPasswordError = null
-                    }
-                ) {
-                    Text(Locales.t("cancel"))
                 }
             },
             shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)

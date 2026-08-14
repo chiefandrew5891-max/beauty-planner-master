@@ -218,6 +218,7 @@ private fun ServiceTemplateEditorDialog(
     var price by remember(initial) { mutableStateOf(initial?.defaultPrice ?: "") }
     var triedSave by remember { mutableStateOf(false) }
     val titleValid = title.trim().isNotBlank()
+    val fontScale = AppSettings.getFontScale()
 
     AppDialogTheme {
         AlertDialog(
@@ -229,21 +230,21 @@ private fun ServiceTemplateEditorDialog(
                     } else {
                         Locales.t("service_edit")
                     },
-                    color = MaterialTheme.colors.onSurface
+                    color = MaterialTheme.colors.onSurface,
+                    fontSize = (18 * fontScale).sp,
+                    fontWeight = FontWeight.Bold
                 )
             },
             text = {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                Column(Modifier.fillMaxWidth()) {
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text(Locales.t("service_name")) },
                         singleLine = true,
-                        isError = triedSave && !titleValid,
+                        label = { Text(Locales.t("service_name")) },
                         shape = RoundedCornerShape(14.dp),
+                        isError = triedSave && !titleValid,
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
                             color = MaterialTheme.colors.onSurface
@@ -262,14 +263,29 @@ private fun ServiceTemplateEditorDialog(
                         )
                     )
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(10.dp))
 
                     OutlinedTextField(
                         value = price,
-                        onValueChange = { price = it },
+                        onValueChange = { newValue ->
+                            val filtered = newValue.filter { it.isDigit() || it == '.' || it == ',' }
+                            val firstSeparatorIndex = filtered.indexOfFirst { it == '.' || it == ',' }
+
+                            price = if (firstSeparatorIndex == -1) {
+                                filtered
+                            } else {
+                                buildString {
+                                    filtered.forEachIndexed { index, ch ->
+                                        if (ch.isDigit() || index == firstSeparatorIndex) {
+                                            append(ch)
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text(Locales.t("service_default_price")) },
                         singleLine = true,
+                        label = { Text(Locales.t("service_default_price")) },
                         shape = RoundedCornerShape(14.dp),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),

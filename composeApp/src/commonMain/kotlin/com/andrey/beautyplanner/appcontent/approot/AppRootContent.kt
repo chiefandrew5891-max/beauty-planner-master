@@ -81,7 +81,8 @@ fun AppRootContent(
     padding: PaddingValues
 ) {
     var pendingPinAfterSplash by rememberSaveable { mutableStateOf(false) }
-    var showPostSplashLoader by rememberSaveable { mutableStateOf(false) }
+    var showStartupLoader by rememberSaveable { mutableStateOf(false) }
+    var loaderStartedAtMillis by rememberSaveable { mutableStateOf(0L) }
     val ownerName = AppSettings.ownerName.trim()
 
     var viewingAppt by remember { mutableStateOf<Appointment?>(null) }
@@ -94,7 +95,9 @@ fun AppRootContent(
             ownerName = ownerName,
             onAnimationFinished = {
                 state.hasCompletedInitialSplash = true
-                showPostSplashLoader = true
+                showStartupLoader = true
+                loaderStartedAtMillis = Clock.System.now().toEpochMilliseconds()
+
                 if (state.mustCreatePin || (state.locked && !state.mustCreatePin)) {
                     pendingPinAfterSplash = true
                 }
@@ -103,14 +106,22 @@ fun AppRootContent(
         return
     }
 
-    LaunchedEffect(showPostSplashLoader, state.authResolved) {
-        if (showPostSplashLoader && state.authResolved) {
-            delay(900)
-            showPostSplashLoader = false
+    LaunchedEffect(state.hasCompletedInitialSplash, state.authResolved, showStartupLoader) {
+        if (state.hasCompletedInitialSplash && showStartupLoader && state.authResolved) {
+            val now = Clock.System.now().toEpochMilliseconds()
+            val elapsed = now - loaderStartedAtMillis
+            val minLoaderDurationMillis = 2_000L
+            val remaining = (minLoaderDurationMillis - elapsed).coerceAtLeast(0L)
+
+            if (remaining > 0L) {
+                delay(remaining)
+            }
+
+            showStartupLoader = false
         }
     }
 
-    if (showPostSplashLoader || !state.authResolved) {
+    if (showStartupLoader || !state.authResolved) {
         val hasSavedAuthenticatedSession =
             AppSettings.localProfileUserId.isNotBlank() &&
                     AppSettings.lastAuthProvider.isNotBlank()

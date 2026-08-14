@@ -42,6 +42,7 @@ import com.andrey.beautyplanner.WeeklyBlockedInterval
 import kotlinx.datetime.Clock
 import androidx.compose.foundation.border
 import com.andrey.beautyplanner.appcontent.appFontFamily
+import androidx.compose.foundation.layout.heightIn
 
 @OptIn(
     androidx.compose.material.ExperimentalMaterialApi::class,
@@ -329,7 +330,8 @@ private fun TimeDropdown(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.heightIn(max = 320.dp)
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
