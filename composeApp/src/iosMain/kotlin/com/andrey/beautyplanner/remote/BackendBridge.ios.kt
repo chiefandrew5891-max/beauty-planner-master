@@ -224,6 +224,14 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun clearMyDatabase(): Map<String, String> {
+        ensureAuthenticated()
+
+        return callBackendFunction(
+            name = "clearMyDatabase",
+            payload = emptyMap()
+        )
+    }
     actual suspend fun syncMyPublicSchedule(
         autoPublishBusySlots: Boolean,
         busySlotsJson: String

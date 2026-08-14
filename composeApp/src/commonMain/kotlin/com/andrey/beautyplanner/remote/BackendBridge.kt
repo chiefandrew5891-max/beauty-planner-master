@@ -93,6 +93,8 @@ expect object BackendBridge {
         busySlotsJson: String
     ): Map<String, String>
 
+    suspend fun clearMyDatabase(): Map<String, String>
+
     suspend fun uploadMyProfileAvatar(
         avatarBase64: String
     ): Map<String, String>

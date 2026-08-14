@@ -40,6 +40,8 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.appcontent.appFontFamily
 
 @Composable
@@ -197,12 +199,15 @@ fun SetPinDialog(
         val confirmValid = AppSettings.isPinValidFormat(confirmPin)
         val pinsMatch = pin == confirmPin
         val formValid = pinValid && confirmValid && pinsMatch
+        val fontScale = AppSettings.getFontScale()
 
         AlertDialog(
             onDismissRequest = onDismiss,
             title = {
                 Text(
                     text = Locales.t("pin_set"),
+                    fontSize = (18 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onSurface
                 )
             },

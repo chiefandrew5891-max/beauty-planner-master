@@ -47,12 +47,16 @@ import com.andrey.beautyplanner.appcontent.RescheduleClientBDialog
 import com.andrey.beautyplanner.appcontent.formatBackupCreatedAt
 import com.andrey.beautyplanner.appcontent.AppSwitch
 import kotlinx.datetime.LocalDate
+import androidx.compose.runtime.rememberCoroutineScope
+import com.andrey.beautyplanner.CloudSyncLogger
+import com.andrey.beautyplanner.remote.BackendBridge
+import kotlinx.coroutines.launch
 
 
 
 @Composable
 fun AppRootDialogs(state: AppRootState) {
-
+    val scope = rememberCoroutineScope()
     if (state.showSaveError != null) {
         AlertDialog(
             onDismissRequest = { state.showSaveError = null },
@@ -226,9 +230,28 @@ fun AppRootDialogs(state: AppRootState) {
                 confirmButton = {
                     Button(
                         onClick = {
-                            state.appointments.clear()
-                            state.saveAll()
-                            state.showClearDbFinalConfirm = false
+                            scope.launch {
+                                state.showGlobalLoading(Locales.t("loading"))
+                                try {
+                                    BackendBridge.clearMyDatabase()
+
+                                    state.appointments.clear()
+
+                                    // Если локальные клиенты / история / контакты
+                                    // очищаются отдельно, добавь очистку здесь.
+                                    // Например:
+                                    // state.clients.clear()
+                                    // state.clientHistory.clear()
+
+                                    state.saveAll()
+                                    state.showClearDbFinalConfirm = false
+                                } catch (t: Throwable) {
+                                    CloudSyncLogger.log("clearMyDatabase: failed: ${t.message}")
+                                    state.showSaveError = t.message ?: "Failed to clear database"
+                                } finally {
+                                    state.hideGlobalLoading()
+                                }
+                            }
                         }
                     ) {
                         Text(Locales.t("yes"))

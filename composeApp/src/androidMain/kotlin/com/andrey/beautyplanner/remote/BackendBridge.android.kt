@@ -270,6 +270,14 @@ actual object BackendBridge {
         )
     }
 
+    actual suspend fun clearMyDatabase(): Map<String, String> {
+        ensureAuthenticated()
+        return callRawFunction(
+            "clearMyDatabase",
+            emptyMap()
+        )
+    }
+
     actual suspend fun validateCurrentSession(): Map<String, String> {
         ensureAuthenticated()
         return callRawFunction(
