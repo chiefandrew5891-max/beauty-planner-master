@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,6 +45,7 @@ import com.andrey.beautyplanner.ServiceTemplate
 import com.andrey.beautyplanner.remote.MasterProfileSync
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+
 
 @Composable
 fun ServiceTemplatesScreen() {
@@ -236,15 +238,21 @@ private fun ServiceTemplateEditorDialog(
                 )
             },
             text = {
-                Column(Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp)
+                ) {
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 56.dp),
                         label = { Text(Locales.t("service_name")) },
-                        shape = RoundedCornerShape(14.dp),
+                        singleLine = true,
                         isError = triedSave && !titleValid,
+                        shape = RoundedCornerShape(14.dp),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
                             color = MaterialTheme.colors.onSurface
@@ -263,7 +271,7 @@ private fun ServiceTemplateEditorDialog(
                         )
                     )
 
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(12.dp))
 
                     OutlinedTextField(
                         value = price,
@@ -283,9 +291,11 @@ private fun ServiceTemplateEditorDialog(
                                 }
                             }
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 56.dp),
                         label = { Text(Locales.t("service_default_price")) },
+                        singleLine = true,
                         shape = RoundedCornerShape(14.dp),
                         textStyle = TextStyle(
                             fontFamily = appFontFamily(),
