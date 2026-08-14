@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.ui.unit.sp
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -340,6 +341,7 @@ fun AppRootDialogs(state: AppRootState) {
                 Text(
                     text = Locales.t("export_db"),
                     color = MaterialTheme.colors.onSurface,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             },
@@ -564,7 +566,7 @@ fun AppRootDialogs(state: AppRootState) {
                 state.pendingImportText = null
                 state.pendingImportPreview = null
             },
-            title = { Text(Locales.t("backup_import_preview_title")) },
+            title = { Text(Locales.t("backup_import_preview_title"), color = MaterialTheme.colors.onSurface, fontSize = 18.sp, fontWeight = FontWeight.Bold) },
             text = {
                 Column {
                     val preview = state.pendingImportPreview
@@ -632,7 +634,7 @@ fun AppRootDialogs(state: AppRootState) {
                 state.showImportConfirm = false
                 state.pendingImportText = null
             },
-            title = { Text(Locales.t("import_db")) },
+            title = { Text(Locales.t("import_db"), color = MaterialTheme.colors.onSurface, fontSize = 18.sp, fontWeight = FontWeight.Bold) },
             text = { Text(Locales.t("backup_import_confirm_text")) },
             confirmButton = {
                 Button(
@@ -734,7 +736,7 @@ fun AppRootDialogs(state: AppRootState) {
                 state.importPassword = ""
                 state.importPasswordError = null
             },
-            title = { Text(Locales.t("backup_import_password_title")) },
+            title = { Text(Locales.t("backup_import_password_title"), color = MaterialTheme.colors.onSurface, fontSize = 18.sp, fontWeight = FontWeight.Bold) },
             text = {
                 Column(Modifier.fillMaxWidth()) {
                     OutlinedTextField(

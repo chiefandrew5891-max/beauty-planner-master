@@ -225,23 +225,22 @@ private fun ServiceTemplateEditorDialog(
     AppDialogTheme {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = {
-                Text(
-                    text = if (initial == null) {
-                        Locales.t("service_add")
-                    } else {
-                        Locales.t("service_edit")
-                    },
-                    color = MaterialTheme.colors.onSurface,
-                    fontSize = (18 * fontScale).sp,
-                    fontWeight = FontWeight.Bold
-                )
-            },
             text = {
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = if (initial == null) {
+                            Locales.t("service_add")
+                        } else {
+                            Locales.t("service_edit")
+                        },
+                        color = MaterialTheme.colors.onSurface,
+                        fontSize = (18 * fontScale).sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(30.dp))
 
                     OutlinedTextField(
                         value = title,
@@ -269,7 +268,7 @@ private fun ServiceTemplateEditorDialog(
                         )
                     )
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedTextField(
                         value = price,
@@ -310,7 +309,7 @@ private fun ServiceTemplateEditorDialog(
                     )
 
                     if (triedSave && !titleValid) {
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = Locales.t("booking_fill_required_fields"),
                             color = MaterialTheme.colors.error
@@ -318,45 +317,36 @@ private fun ServiceTemplateEditorDialog(
                     }
                 }
             },
-            buttons = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+            confirmButton = {
+                Button(
+                    onClick = {
+                        triedSave = true
+                        if (!titleValid) return@Button
+                        onSave(title.trim(), price.trim())
+                    },
+                    modifier = Modifier.height(44.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                        horizontal = 18.dp,
+                        vertical = 10.dp
+                    ),
+                    elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = MaterialTheme.colors.onPrimary
+                    )
                 ) {
-                    TextButton(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
-                        )
-                    ) {
-                        Text(Locales.t("cancel"))
-                    }
-
-                    Spacer(Modifier.width(15.dp))
-
-                    Button(
-                        onClick = {
-                            triedSave = true
-                            if (!titleValid) return@Button
-                            onSave(title.trim(), price.trim())
-                        },
-                        modifier = Modifier.height(44.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                            horizontal = 18.dp,
-                            vertical = 10.dp
-                        ),
-                        elevation = ButtonDefaults.elevation(0.dp, 0.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            contentColor = MaterialTheme.colors.onPrimary
-                        )
-                    ) {
-                        Text(Locales.t("save"))
-                    }
+                    Text(Locales.t("save"))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = onDismiss,
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
+                    )
+                ) {
+                    Text(Locales.t("cancel"))
                 }
             },
             shape = AppDialogShape
