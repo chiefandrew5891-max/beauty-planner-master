@@ -28,7 +28,8 @@ fun FeedbackPage(
     aboutUpcomingRaw: String,
     updateStatus: AppUpdateStatus,
     isCheckingUpdates: Boolean,
-    onCheckUpdatesClick: () -> Unit
+    onCheckUpdatesClick: () -> Unit,
+    onOpenUserGuide: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
     val appInfo = AppInfoProvider.get()
@@ -110,6 +111,11 @@ fun FeedbackPage(
                 text = aboutDescriptionText,
                 fontSize = (14 * fontScale).sp,
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+            )
+
+            PrimaryActionButton(
+                text = Locales.t("about_user_manual_button"),
+                onClick = onOpenUserGuide
             )
 
             Spacer(modifier = Modifier.padding(top = 4.dp))

@@ -29,6 +29,8 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import kotlin.math.abs
+import kotlinx.coroutines.launch
 import androidx.compose.material.Button
 import com.andrey.beautyplanner.appcontent.ServiceTemplatesScreen
 import com.andrey.beautyplanner.appcontent.WorkScheduleScreen
@@ -38,7 +40,6 @@ import com.andrey.beautyplanner.appcontent.BackupSettingsScreen
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
 import com.andrey.beautyplanner.appcontent.AuthEmailScreen
-import kotlinx.coroutines.launch
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -50,6 +51,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.ui.platform.LocalDensity
 
 private const val APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS = 24L * 60L * 60L * 1000L
 
@@ -291,8 +295,13 @@ fun AppRootContent(
                 isCheckingUpdates = state.isCheckingAppUpdates,
                 onCheckUpdatesClick = {
                     state.checkForAppUpdates()
+                },
+                onOpenUserGuide = {
+                    state.navigateTo(Screen.USER_GUIDE)
                 }
             )
+
+            Screen.USER_GUIDE -> UserGuideScreen()
 
             Screen.UNPAID_APPOINTMENTS -> {
                 val premiumEnabled =

@@ -516,6 +516,17 @@ class AppRootState(
         }
     }
 
+    fun performHeaderBackAction() {
+        if (currentScreen == Screen.AUTH_EMAIL) {
+            currentScreen = Screen.AUTH_WELCOME
+            return
+        }
+
+        if (currentScreen != Screen.MONTH) {
+            navigateBack()
+        }
+    }
+
     fun navigateHome() {
         screenHistory = emptyList()
         currentScreen = Screen.MONTH

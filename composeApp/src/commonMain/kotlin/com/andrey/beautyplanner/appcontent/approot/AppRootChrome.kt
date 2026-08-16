@@ -50,14 +50,23 @@ import com.andrey.beautyplanner.Screen
 import com.andrey.beautyplanner.auth.SignInProvider
 import com.andrey.beautyplanner.appcontent.calculateSubscriptionDaysLeft
 import com.andrey.beautyplanner.appcontent.formatSubscriptionExpiry
+import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import com.andrey.beautyplanner.appcontent.subscriptionStateLabel
-import kotlinx.datetime.Clock
 import com.andrey.beautyplanner.AccessManager
 import com.andrey.beautyplanner.PremiumFeature
+import kotlinx.datetime.Clock
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
-import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalDensity
+import kotlin.math.abs
 
 
 @Composable
@@ -530,11 +539,63 @@ fun AppRootChrome(
                         state.currentScreen == Screen.CLIENT_INTERACTIONS ||
                         state.currentScreen == Screen.DEVELOPER_ACCESS ||
                         state.currentScreen == Screen.BACKUP_SETTINGS ||
+                        state.currentScreen == Screen.USER_GUIDE ||
                         state.currentScreen == Screen.PRIVACY_POLICY ||
                         state.currentScreen == Screen.NOTIFICATION_SETTINGS ||
                         state.currentScreen == Screen.PREMIUM_ACCESS
 
-            Box(modifier = Modifier.fillMaxSize()) {
+            val density = LocalDensity.current
+            val edgeWidthPx = with(density) { 64.dp.toPx() }
+            val backSwipeThresholdPx = with(density) { 72.dp.toPx() }
+
+            var gestureStartedFromEdge by remember(state.currentScreen) { mutableStateOf(false) }
+            var accumulatedHorizontalDrag by remember(state.currentScreen) { mutableFloatStateOf(0f) }
+            var swipeBackTriggered by remember(state.currentScreen) { mutableStateOf(false) }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(state.currentScreen, state.screenHistory) {
+                        detectHorizontalDragGestures(
+                            onDragStart = { offset: Offset ->
+                                val width = size.width.toFloat()
+                                val fromLeftEdge = offset.x <= edgeWidthPx
+                                val fromRightEdge = offset.x >= (width - edgeWidthPx)
+
+                                gestureStartedFromEdge =
+                                    !isAuthWelcomeScreen &&
+                                            !state.isGlobalLoading &&
+                                            state.currentScreen != Screen.MONTH &&
+                                            (fromLeftEdge || fromRightEdge)
+
+                                accumulatedHorizontalDrag = 0f
+                                swipeBackTriggered = false
+                            },
+                            onHorizontalDrag = { change, dragAmount ->
+                                if (!gestureStartedFromEdge) return@detectHorizontalDragGestures
+                                if (swipeBackTriggered) return@detectHorizontalDragGestures
+
+                                accumulatedHorizontalDrag += dragAmount
+
+                                if (abs(accumulatedHorizontalDrag) >= backSwipeThresholdPx) {
+                                    swipeBackTriggered = true
+                                    change.consume()
+                                    state.performHeaderBackAction()
+                                }
+                            },
+                            onDragEnd = {
+                                gestureStartedFromEdge = false
+                                accumulatedHorizontalDrag = 0f
+                                swipeBackTriggered = false
+                            },
+                            onDragCancel = {
+                                gestureStartedFromEdge = false
+                                accumulatedHorizontalDrag = 0f
+                                swipeBackTriggered = false
+                            }
+                        )
+                    }
+            ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Scaffold(
                         modifier = Modifier.statusBarsPadding(),
@@ -553,7 +614,7 @@ fun AppRootChrome(
                                         Box(Modifier.fillMaxSize()) {
                                             IconButton(
                                                 onClick = {
-                                                    state.currentScreen = Screen.AUTH_WELCOME
+                                                    state.performHeaderBackAction()
                                                 },
                                                 modifier = Modifier.align(Alignment.CenterStart)
                                             ) {
@@ -579,7 +640,7 @@ fun AppRootChrome(
                                             IconButton(
                                                 onClick = {
                                                     if (showBackButton) {
-                                                        state.navigateBack()
+                                                        state.performHeaderBackAction()
                                                     } else {
                                                         state.openDrawer()
                                                     }
