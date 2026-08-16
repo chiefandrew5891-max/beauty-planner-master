@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,9 +43,13 @@ import com.andrey.beautyplanner.generated.resources.guide_delete_account_button_
 import com.andrey.beautyplanner.generated.resources.guide_delete_account_confirm_image
 import com.andrey.beautyplanner.generated.resources.guide_main_screen_image
 import com.andrey.beautyplanner.generated.resources.guide_profile_image
+import com.andrey.beautyplanner.generated.resources.guide_profile_image2
 import com.andrey.beautyplanner.generated.resources.guide_settings_image
+import com.andrey.beautyplanner.generated.resources.guide_settings_image2
+import com.andrey.beautyplanner.generated.resources.guide_settings_image3
 import com.andrey.beautyplanner.generated.resources.guide_statistics_image
 import com.andrey.beautyplanner.generated.resources.guide_subscription_image
+import com.andrey.beautyplanner.generated.resources.guide_subscription_image2
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -223,6 +228,14 @@ fun UserGuideScreen() {
                 // File name: guide_settings_image.png
                 // Put here: composeApp/src/commonMain/composeResources/drawable/guide_settings_image.png
                 GuideImage(Res.drawable.guide_settings_image)
+
+                Spacer(modifier = Modifier.padding(top = 15.dp))
+
+                GuideImage(Res.drawable.guide_settings_image2)
+
+                Spacer(modifier = Modifier.padding(top = 15.dp))
+
+                GuideImage(Res.drawable.guide_settings_image3)
             }
 
             Divider()
@@ -249,6 +262,10 @@ fun UserGuideScreen() {
                 // File name: guide_profile_image.png
                 // Put here: composeApp/src/commonMain/composeResources/drawable/guide_profile_image.png
                 GuideImage(Res.drawable.guide_profile_image)
+
+                Spacer(modifier = Modifier.padding(top = 15.dp))
+
+                GuideImage(Res.drawable.guide_profile_image2)
             }
 
             Divider()
@@ -294,6 +311,10 @@ fun UserGuideScreen() {
                 // File name: guide_subscription_image.png
                 // Put here: composeApp/src/commonMain/composeResources/drawable/guide_subscription_image.png
                 GuideImage(Res.drawable.guide_subscription_image)
+
+                Spacer(modifier = Modifier.padding(top = 15.dp))
+
+                GuideImage(Res.drawable.guide_subscription_image2)
             }
 
             Divider()
