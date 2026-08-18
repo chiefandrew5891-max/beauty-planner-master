@@ -4,9 +4,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,28 +32,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
-import com.andrey.beautyplanner.generated.resources.Res
-import com.andrey.beautyplanner.generated.resources.guide_auth_image
-import com.andrey.beautyplanner.generated.resources.guide_create_appointment_form_image
-import com.andrey.beautyplanner.generated.resources.guide_delete_account_button_image
-import com.andrey.beautyplanner.generated.resources.guide_delete_account_confirm_image
-import com.andrey.beautyplanner.generated.resources.guide_main_screen_image
-import com.andrey.beautyplanner.generated.resources.guide_profile_image
-import com.andrey.beautyplanner.generated.resources.guide_profile_image2
-import com.andrey.beautyplanner.generated.resources.guide_settings_image
-import com.andrey.beautyplanner.generated.resources.guide_settings_image2
-import com.andrey.beautyplanner.generated.resources.guide_settings_image3
-import com.andrey.beautyplanner.generated.resources.guide_statistics_image
-import com.andrey.beautyplanner.generated.resources.guide_subscription_image
-import com.andrey.beautyplanner.generated.resources.guide_subscription_image2
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
+
+@Composable
+expect fun guidePainterOrNull(
+    imageName: String
+): Painter?
 
 @Composable
 fun UserGuideScreen() {
@@ -81,37 +73,6 @@ fun UserGuideScreen() {
 
             Divider()
 
-            GuideSectionTitle(Locales.t("guide_contents"))
-            GuideBulletList(
-                items = listOf(
-                    Locales.t("guide_section_app_overview"),
-                    Locales.t("guide_section_access_model"),
-                    Locales.t("guide_section_first_launch_sign_in"),
-                    Locales.t("guide_section_main_screen"),
-                    Locales.t("guide_section_settings_screen"),
-                    Locales.t("guide_section_professional_profile"),
-                    Locales.t("guide_section_appearance_theme"),
-                    Locales.t("guide_section_subscription_access"),
-                    Locales.t("guide_section_my_services"),
-                    Locales.t("guide_section_unavailable_time_schedule"),
-                    Locales.t("guide_section_notifications"),
-                    Locales.t("guide_section_security"),
-                    Locales.t("guide_section_backup"),
-                    Locales.t("guide_section_side_menu"),
-                    Locales.t("guide_section_statistics"),
-                    Locales.t("guide_section_unpaid_appointments"),
-                    Locales.t("guide_section_archive"),
-                    Locales.t("guide_section_creating_new_appointment"),
-                    Locales.t("guide_section_client_data_autofill"),
-                    Locales.t("guide_section_editing_appointment"),
-                    Locales.t("guide_section_rescheduling_appointment"),
-                    Locales.t("guide_section_deleting_appointment"),
-                    Locales.t("guide_section_account_deletion")
-                )
-            )
-
-            Divider()
-
             GuideExpandableSection(
                 title = Locales.t("guide_section_app_overview"),
                 initiallyExpanded = true
@@ -135,6 +96,7 @@ fun UserGuideScreen() {
                         Locales.t("guide_app_overview_feature_11")
                     )
                 )
+                GuideImage("guide_app_overview_image")
             }
 
             Divider()
@@ -159,6 +121,7 @@ fun UserGuideScreen() {
                         Locales.t("guide_access_model_premium_feature_5")
                     )
                 )
+                GuideImage("guide_access_model_image")
             }
 
             Divider()
@@ -178,11 +141,7 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_first_launch_sign_in_p2"))
                 GuideParagraph(Locales.t("guide_first_launch_sign_in_p3"))
-
-                // IMAGE RESOURCE:
-                // File name: guide_auth_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_auth_image.png
-                GuideImage(Res.drawable.guide_auth_image)
+                GuideImage("guide_first_launch_sign_in_image")
             }
 
             Divider()
@@ -196,11 +155,7 @@ fun UserGuideScreen() {
                 GuideMiniSectionTitle(Locales.t("guide_main_screen_upcoming_title"))
                 GuideParagraph(Locales.t("guide_main_screen_upcoming_body"))
                 GuideParagraph(Locales.t("guide_main_screen_p2"))
-
-                // IMAGE RESOURCE:
-                // File name: guide_main_screen_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_main_screen_image.png
-                GuideImage(Res.drawable.guide_main_screen_image)
+                GuideImage("guide_main_screen_image")
             }
 
             Divider()
@@ -223,19 +178,12 @@ fun UserGuideScreen() {
                         Locales.t("guide_settings_screen_section_8")
                     )
                 )
+                GuideImage("guide_settings_screen_image")
 
-                // IMAGE RESOURCE:
-                // File name: guide_settings_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_settings_image.png
-                GuideImage(Res.drawable.guide_settings_image)
+                Spacer(modifier = Modifier.height(30.dp))
+                
+                GuideImage("guide_settings_screen_image2")
 
-                Spacer(modifier = Modifier.padding(top = 15.dp))
-
-                GuideImage(Res.drawable.guide_settings_image2)
-
-                Spacer(modifier = Modifier.padding(top = 15.dp))
-
-                GuideImage(Res.drawable.guide_settings_image3)
             }
 
             Divider()
@@ -257,15 +205,11 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_professional_profile_p3"))
+                GuideImage("guide_professional_profile_image")
 
-                // IMAGE RESOURCE:
-                // File name: guide_profile_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_profile_image.png
-                GuideImage(Res.drawable.guide_profile_image)
+                Spacer(modifier = Modifier.height(30.dp))
 
-                Spacer(modifier = Modifier.padding(top = 15.dp))
-
-                GuideImage(Res.drawable.guide_profile_image2)
+                GuideImage("guide_professional_profile_image2")
             }
 
             Divider()
@@ -286,6 +230,7 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_appearance_theme_p2"))
                 GuideParagraph(Locales.t("guide_appearance_theme_p3"))
+                GuideImage("guide_appearance_theme_image")
             }
 
             Divider()
@@ -306,15 +251,7 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_subscription_access_p2"))
                 GuideParagraph(Locales.t("guide_subscription_access_p3"))
-
-                // IMAGE RESOURCE:
-                // File name: guide_subscription_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_subscription_image.png
-                GuideImage(Res.drawable.guide_subscription_image)
-
-                Spacer(modifier = Modifier.padding(top = 15.dp))
-
-                GuideImage(Res.drawable.guide_subscription_image2)
+                GuideImage("guide_subscription_access_image")
             }
 
             Divider()
@@ -334,6 +271,11 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_my_services_p2"))
+                GuideImage("guide_my_services_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_my_services_image2")
             }
 
             Divider()
@@ -352,6 +294,11 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_unavailable_time_schedule_p2"))
                 GuideParagraph(Locales.t("guide_unavailable_time_schedule_p3"))
+                GuideImage("guide_unavailable_time_schedule_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_unavailable_time_schedule_image2")
             }
 
             Divider()
@@ -377,6 +324,7 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_notifications_p2"))
+                GuideImage("guide_notifications_image")
             }
 
             Divider()
@@ -396,6 +344,11 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_security_p2"))
                 GuideParagraph(Locales.t("guide_security_p3"))
+                GuideImage("guide_security_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_security_image2")
             }
 
             Divider()
@@ -415,6 +368,12 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_backup_p2"))
                 GuideParagraph(Locales.t("guide_backup_p3"))
+                GuideImage("guide_backup_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_backup_image2")
+
             }
 
             Divider()
@@ -444,6 +403,7 @@ fun UserGuideScreen() {
                         Locales.t("guide_side_menu_nav_6")
                     )
                 )
+                GuideImage("guide_side_menu_image")
             }
 
             Divider()
@@ -464,11 +424,7 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_statistics_p2"))
-
-                // IMAGE RESOURCE:
-                // File name: guide_statistics_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_statistics_image.png
-                GuideImage(Res.drawable.guide_statistics_image)
+                GuideImage("guide_statistics_image")
             }
 
             Divider()
@@ -487,6 +443,7 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_unpaid_appointments_p3"))
+                GuideImage("guide_unpaid_appointments_image")
             }
 
             Divider()
@@ -506,6 +463,12 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_archive_p2"))
+                GuideImage("guide_archive_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_archive_image2")
+
             }
 
             Divider()
@@ -529,11 +492,7 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_creating_new_appointment_p2"))
-
-                // IMAGE RESOURCE:
-                // File name: guide_create_appointment_form_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_create_appointment_form_image.png
-                GuideImage(Res.drawable.guide_create_appointment_form_image)
+                GuideImage("guide_creating_new_appointment_image")
             }
 
             Divider()
@@ -545,6 +504,7 @@ fun UserGuideScreen() {
                 GuideParagraph(Locales.t("guide_client_data_autofill_p2"))
                 GuideParagraph(Locales.t("guide_client_data_autofill_p3"))
                 GuideParagraph(Locales.t("guide_client_data_autofill_p4"))
+                GuideImage("guide_client_data_autofill_image")
             }
 
             Divider()
@@ -565,6 +525,11 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_editing_appointment_p2"))
+                GuideImage("guide_editing_appointment_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_editing_appointment_image2")
             }
 
             Divider()
@@ -584,6 +549,11 @@ fun UserGuideScreen() {
                     )
                 )
                 GuideParagraph(Locales.t("guide_rescheduling_appointment_p2"))
+                GuideImage("guide_rescheduling_appointment_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_rescheduling_appointment_image2")
             }
 
             Divider()
@@ -593,6 +563,12 @@ fun UserGuideScreen() {
             ) {
                 GuideParagraph(Locales.t("guide_deleting_appointment_p1"))
                 GuideParagraph(Locales.t("guide_deleting_appointment_p2"))
+
+                GuideImage("guide_deleting_appointment_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_deleting_appointment_image2")
             }
 
             Divider()
@@ -624,15 +600,11 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_account_deletion_p2"))
 
-                // IMAGE RESOURCE:
-                // File name: guide_delete_account_button_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_delete_account_button_image.png
-                GuideImage(Res.drawable.guide_delete_account_button_image)
+                GuideImage("guide_account_deletion_image")
 
-                // IMAGE RESOURCE:
-                // File name: guide_delete_account_confirm_image.png
-                // Put here: composeApp/src/commonMain/composeResources/drawable/guide_delete_account_confirm_image.png
-                GuideImage(Res.drawable.guide_delete_account_confirm_image)
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_account_deletion_image2")
             }
         }
     }
@@ -686,22 +658,55 @@ private fun GuideExpandableSection(
 }
 
 @Composable
-private fun GuideImage(drawable: DrawableResource) {
+private fun GuideImage(imageName: String) {
+    val painter = guidePainterOrNull(imageName)
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
-        Image(
-            painter = painterResource(drawable),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .clip(RoundedCornerShape(14.dp)),
-            contentScale = ContentScale.Crop
-        )
+        if (painter != null) {
+            val intrinsicSize = painter.intrinsicSize
+            val imageAspectRatio =
+                if (intrinsicSize.width > 0f && intrinsicSize.height > 0f) {
+                    intrinsicSize.width / intrinsicSize.height
+                } else {
+                    null
+                }
+
+            val imageModifier = if (imageAspectRatio != null) {
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(imageAspectRatio)
+                    .clip(RoundedCornerShape(14.dp))
+            } else {
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+            }
+
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = imageModifier,
+                contentScale = ContentScale.Fit
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp, horizontal = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Image temporarily unavailable",
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                    fontSize = 14.sp
+                )
+            }
+        }
     }
 }
 
