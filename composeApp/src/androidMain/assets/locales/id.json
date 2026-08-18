@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "jika pengguna masuk dengan Apple, aplikasi akan membuka konfirmasi Apple",
     "guide_account_deletion_reauth_3": "jika pengguna menggunakan Email, aplikasi akan meminta kata sandi lagi",
     "guide_account_deletion_p2": "Setelah konfirmasi berhasil, akun akan dihapus secara permanen dan pengguna dikembalikan ke layar autentikasi.",
-    "guide_contents": "Daftar Isi"
+    "guide_contents": "Daftar Isi",
+    "guest_register_current_account": "Daftarkan akun saat ini",
+    "guest_upgrade_title": "Registrasi akun",
+    "guest_upgrade_p1": "Anda dapat mendaftarkan akun tamu saat ini tanpa kehilangan data yang sudah dibuat.",
+    "guest_upgrade_p2": "Semua entri, pengaturan profil, layanan, dan data lokal lainnya akan disimpan dan ditautkan ke akun baru.",
+    "guest_upgrade_p3": "Setelah registrasi, data akan tersedia untuk disinkronkan dan disimpan di server.",
+    "guest_data_loss_title": "Hapus data tamu lokal?",
+    "guest_data_loss_message": "Jika Anda keluar atau mengganti akun sekarang, semua data yang dibuat dalam mode tamu akan dihapus dari perangkat ini. Jika Anda ingin menyimpannya, daftarkan akun saat ini terlebih dahulu.",
+    "guest_data_loss_continue": "Lanjutkan",
+    "guest_data_loss_cancel": "Batal"
 }

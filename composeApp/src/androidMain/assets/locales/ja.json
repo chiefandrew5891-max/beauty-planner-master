@@ -847,5 +847,14 @@
     "guide_account_deletion_reauth_2": "ユーザーがAppleでログインしている場合、アプリはAppleの確認を開きます",
     "guide_account_deletion_reauth_3": "ユーザーがメールアドレスを使用している場合、アプリはパスワードの再入力を求めます",
     "guide_account_deletion_p2": "正常に確認されると、アカウントは完全に削除され、ユーザーはログイン画面に戻ります。",
-    "guide_contents": "目次"
+    "guide_contents": "目次",
+    "guest_register_current_account": "現在のアカウントを登録",
+    "guest_upgrade_title": "アカウント登録",
+    "guest_upgrade_p1": "作成済みのデータを失うことなく、現在のゲストアカウントを登録できます。",
+    "guest_upgrade_p2": "すべての予約、プロフィール設定、サービス、その他のローカルデータが保持され、新しいアカウントに紐付けられます。",
+    "guest_upgrade_p3": "登録後、データはサーバーでの同期および保存に利用できるようになります。",
+    "guest_data_loss_title": "ローカルのゲストデータを削除しますか？",
+    "guest_data_loss_message": "今すぐログアウトまたはアカウントを切り替えると、ゲストモードで作成されたすべてのデータがこのデバイスから削除されます。保持したい場合は、最初に現在のアカウントを登録してください。",
+    "guest_data_loss_continue": "続行",
+    "guest_data_loss_cancel": "キャンセル"
 }

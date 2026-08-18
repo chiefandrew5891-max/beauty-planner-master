@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "si l'utilisateur s'est connecté avec Apple, l'application ouvre la confirmation Apple",
     "guide_account_deletion_reauth_3": "si l'utilisateur utilise un e-mail, l'application demande à nouveau le mot de passe",
     "guide_account_deletion_p2": "Après une confirmation réussie, le compte est définitivement supprimé et l'utilisateur est renvoyé à l'écran d'authentification.",
-    "guide_contents": "Sommaire"
+    "guide_contents": "Sommaire",
+    "guest_register_current_account": "Enregistrer le compte actuel",
+    "guest_upgrade_title": "Enregistrement du compte",
+    "guest_upgrade_p1": "Vous pouvez enregistrer votre compte invité actuel sans perdre les données déjà créées.",
+    "guest_upgrade_p2": "Tous vos rendez-vous, paramètres de profil, services et autres données locales seront conservés et liés au nouveau compte.",
+    "guest_upgrade_p3": "Après l'enregistrement, les données seront disponibles pour la synchronisation et le stockage sur le serveur.",
+    "guest_data_loss_title": "Supprimer les données locales de l'invité ?",
+    "guest_data_loss_message": "Si vous vous déconnectez ou changez de compte maintenant, toutes les données créées en mode invité seront supprimées de cet appareil. Si vous souhaitez les conserver, enregistrez d'abord le compte actuel.",
+    "guest_data_loss_continue": "Continuer",
+    "guest_data_loss_cancel": "Annuler"
 }

@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "ak sa používateľ prihlásil cez Apple, aplikácia otvorí potvrdenie Apple",
     "guide_account_deletion_reauth_3": "ak používateľ používa e-mail, aplikácia opätovne požiada o heslo",
     "guide_account_deletion_p2": "Po úspešnom potvrdení sa účet trvalo vymaže a používateľ sa vráti na prihlasovaciu obrazovku.",
-    "guide_contents": "Obsah"
+    "guide_contents": "Obsah",
+    "guest_register_current_account": "Registrovať aktuálny účet",
+    "guest_upgrade_title": "Registrácia účtu",
+    "guest_upgrade_p1": "Svoj aktuálny účet hosťa môžete zaregistrovať bez straty už vytvorených údajov.",
+    "guest_upgrade_p2": "Všetky vaše záznamy, nastavenia profilu, služby a ďalšie lokálne údaje budú zachované a prepojené s novým účtom.",
+    "guest_upgrade_p3": "Po registrácii budú údaje k dispozícii na synchronizáciu a uloženie na serveri.",
+    "guest_data_loss_title": "Vymazať lokálne údaje hosťa?",
+    "guest_data_loss_message": "Ak sa teraz odhlásite alebo prepnete účet, všetky údaje vytvorené v režime hosťa budú z tohto zariadenia vymazané. Ak si ich chcete ponechať, najprv zaregistrujte aktuálny účet.",
+    "guest_data_loss_continue": "Pokračovať",
+    "guest_data_loss_cancel": "Zrušiť"
 }

@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "jeśli użytkownik zalogował się przez Apple, aplikacja otwiera potwierdzenie Apple",
     "guide_account_deletion_reauth_3": "jeśli użytkownik korzysta z adresu e-mail, aplikacja ponownie poprosi o podanie hasła",
     "guide_account_deletion_p2": "Po pomyślnym potwierdzeniu konto zostaje trwale usunięte, a użytkownik wraca do ekranu logowania.",
-    "guide_contents": "Spis treści"
+    "guide_contents": "Spis treści",
+    "guest_register_current_account": "Zarejestruj bieżące konto",
+    "guest_upgrade_title": "Rejestracja konta",
+    "guest_upgrade_p1": "Możesz zarejestrować swoje obecne konto gościa bez utraty już utworzonych danych.",
+    "guest_upgrade_p2": "Wszystkie Twoje wpisy, ustawienia profilu, usługi i inne dane lokalne zostaną zachowane i połączone z nowym kontem.",
+    "guest_upgrade_p3": "Po rejestracji dane będą dostępne do synchronizacji i przechowywania na serwerze.",
+    "guest_data_loss_title": "Usunąć lokalne dane gościa?",
+    "guest_data_loss_message": "Jeśli wylogujesz się lub zmienisz konto teraz, wszystkie dane utworzone w trybie gościa zostaną usunięte z tego urządzenia. Jeśli chcesz je zachować, najpierw zarejestruj bieżące konto.",
+    "guest_data_loss_continue": "Kontynuuj",
+    "guest_data_loss_cancel": "Anuluj"
 }

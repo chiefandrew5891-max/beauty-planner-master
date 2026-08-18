@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "ha a felhasználó Apple-lel jelentkezett be, az alkalmazás megnyitja az Apple megerősítést",
     "guide_account_deletion_reauth_3": "ha a felhasználó e-mailt használ, az alkalmazás újra bekéri a jelszót",
     "guide_account_deletion_p2": "A sikeres megerősítést követően a fiók véglegesen törlődik, és a felhasználó visszakerül a hitelesítési képernyőre.",
-    "guide_contents": "Tartalom"
+    "guide_contents": "Tartalom",
+    "guest_register_current_account": "Jelenlegi fiók regisztrálása",
+    "guest_upgrade_title": "Fiók regisztráció",
+    "guest_upgrade_p1": "Regisztrálhatja jelenlegi vendégfiókját anélkül, hogy elveszítené a már létrehozott adatokat.",
+    "guest_upgrade_p2": "Minden bejegyzése, profilbeállítása, szolgáltatása és egyéb helyi adata megmarad, és az új fiókhoz lesz kapcsolva.",
+    "guest_upgrade_p3": "A regisztráció után az adatok elérhetővé válnak a szinkronizáláshoz és a szerveren való tároláshoz.",
+    "guest_data_loss_title": "Törli a helyi vendégadatokat?",
+    "guest_data_loss_message": "Ha most kijelentkezik vagy fiókot vált, a vendég módban létrehozott összes adat törlődik erről az eszközről. Ha meg akarja tartani őket, először regisztrálja a jelenlegi fiókot.",
+    "guest_data_loss_continue": "Folytatás",
+    "guest_data_loss_cancel": "Mégsem"
 }

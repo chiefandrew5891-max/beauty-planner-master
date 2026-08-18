@@ -846,5 +846,14 @@
     "guide_account_deletion_reauth_2": "如果用户通过 Apple 登录，应用会打开 Apple 确认",
     "guide_account_deletion_reauth_3": "如果用户使用电子邮件，应用会再次要求输入密码",
     "guide_account_deletion_p2": "成功确认后，账户将永久删除，并将用户返回到登录屏幕。",
-    "guide_contents": "目录"
+    "guide_contents": "目录",
+    "guest_register_current_account": "注册当前账号",
+    "guest_upgrade_title": "账号注册",
+    "guest_upgrade_p1": "您可以注册当前的访客账号，而不会丢失已创建的数据。",
+    "guest_upgrade_p2": "您所有的预约记录、个人资料设置、服务及其他本地数据都将被保留并关联到新账号。",
+    "guest_upgrade_p3": "注册完成后，数据即可在服务器上进行同步和存储。",
+    "guest_data_loss_title": "删除本地访客数据？",
+    "guest_data_loss_message": "如果您现在退出登录或切换账号，访客模式下创建的所有数据将从本设备中删除。如果您想保留这些数据，请先注册当前账号。",
+    "guest_data_loss_continue": "继续",
+    "guest_data_loss_cancel": "取消"
 }

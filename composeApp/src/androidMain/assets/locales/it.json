@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "se l'utente ha effettuato l'accesso con Apple, l'app apre la conferma di Apple",
     "guide_account_deletion_reauth_3": "se l'utente utilizza l'email, l'app richiede nuovamente la password",
     "guide_account_deletion_p2": "Dopo una conferma riuscita, l'account viene eliminato definitivamente e l'utente viene reindirizzato alla schermata di autenticazione.",
-    "guide_contents": "Indice"
+    "guide_contents": "Indice",
+    "guest_register_current_account": "Registra account corrente",
+    "guest_upgrade_title": "Registrazione account",
+    "guest_upgrade_p1": "Puoi registrare il tuo account ospite attuale senza perdere i dati già creati.",
+    "guest_upgrade_p2": "Tutti i tuoi appuntamenti, le impostazioni del profilo, i servizi e altri dati locali verranno conservati e collegati al nuovo account.",
+    "guest_upgrade_p3": "Dopo la registrazione, i dati saranno disponibili per la sincronizzazione e l'archiviazione sul server.",
+    "guest_data_loss_title": "Eliminare i dati locali dell'ospite?",
+    "guest_data_loss_message": "Se esci o cambi account ora, tutti i dati creati in modalità ospite verranno eliminati da questo dispositivo. Se desideri conservarli, registra prima l'account corrente.",
+    "guest_data_loss_continue": "Continua",
+    "guest_data_loss_cancel": "Annulla"
 }

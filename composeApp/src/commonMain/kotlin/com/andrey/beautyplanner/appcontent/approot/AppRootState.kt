@@ -164,6 +164,33 @@ class AppRootState(
         )
     )
 
+    enum class GuestDiscardAction {
+        SIGN_OUT,
+        SWITCH_ACCOUNT
+    }
+
+    data class GuestMigrationSnapshot(
+        val appointments: List<Appointment>,
+        val ownerName: String,
+        val profilePhone: String,
+        val profilePhoneVisible: Boolean,
+        val profileRating: Float,
+        val profileAvatarUrl: String,
+        val profileAvatarBase64: String,
+        val profileAvatarStoragePath: String,
+        val profileDisplayCustomName: Boolean,
+        val profileSpecialization: String,
+        val clientInteractionsEnabled: Boolean,
+        val autoPublishBusySlots: Boolean,
+        val serviceTemplates: List<ServiceTemplate>,
+        val weeklyBlockedIntervals: List<WeeklyBlockedInterval>,
+        val scheduleDateOverrides: List<ScheduleDateOverride>
+    )
+
+    var guestUpgradeMode by mutableStateOf(false)
+    var showGuestDataLossDialog by mutableStateOf(false)
+    var pendingGuestDiscardAction by mutableStateOf<GuestDiscardAction?>(null)
+
     val colors: Colors
         get() = if (currentLiveDarkMode) {
             darkColors(
@@ -260,6 +287,155 @@ class AppRootState(
 
     fun reloadAppointmentsForGuestProfile() {
         reloadAppointmentsForProfile(LocalProfileManager.guestProfileKey())
+    }
+
+    fun hasGuestDataToPreserve(): Boolean {
+        val guestAppointments = runCatching {
+            DataManager.loadFromDatabase(LocalProfileManager.guestProfileKey())
+        }.getOrDefault(emptyList())
+
+        val hasAppointments = guestAppointments.isNotEmpty()
+
+        val hasProfileDraft =
+            AppSettings.ownerName.isNotBlank() ||
+                    AppSettings.profilePhone.isNotBlank() ||
+                    AppSettings.profileSpecialization.isNotBlank() ||
+                    AppSettings.profileDisplayCustomName ||
+                    AppSettings.profileAvatarUrl.isNotBlank() ||
+                    AppSettings.profileAvatarBase64.isNotBlank() ||
+                    AppSettings.profileAvatarStoragePath.isNotBlank()
+
+        val hasCustomServices = AppSettings.serviceTemplates.isNotEmpty()
+        val hasScheduleData =
+            AppSettings.weeklyBlockedIntervals.isNotEmpty() ||
+                    AppSettings.scheduleDateOverrides.isNotEmpty()
+
+        return hasAppointments || hasProfileDraft || hasCustomServices || hasScheduleData
+    }
+
+    fun openGuestAccountRegistrationScreen() {
+        guestUpgradeMode = true
+        authErrorMessage = null
+        authInfoMessage = null
+        screenHistory = emptyList()
+        currentScreen = Screen.GUEST_ACCOUNT_REGISTRATION
+    }
+
+    fun requestGuestSignOut() {
+        if (hasGuestDataToPreserve()) {
+            pendingGuestDiscardAction = GuestDiscardAction.SIGN_OUT
+            showGuestDataLossDialog = true
+        } else {
+            discardGuestDataAndOpenAuth()
+        }
+    }
+
+    fun requestGuestSwitchAccount() {
+        if (hasGuestDataToPreserve()) {
+            pendingGuestDiscardAction = GuestDiscardAction.SWITCH_ACCOUNT
+            showGuestDataLossDialog = true
+        } else {
+            discardGuestDataAndOpenAuth()
+        }
+    }
+
+    fun cancelGuestDataLossDialog() {
+        showGuestDataLossDialog = false
+        pendingGuestDiscardAction = null
+    }
+
+    fun confirmGuestDataDiscard() {
+        showGuestDataLossDialog = false
+        pendingGuestDiscardAction = null
+        discardGuestDataAndOpenAuth()
+    }
+
+    private fun discardGuestDataAndOpenAuth() {
+        clearSessionLocalState()
+
+        runCatching {
+            DataManager.saveToDatabase(
+                data = emptyList(),
+                profileKey = LocalProfileManager.guestProfileKey()
+            )
+        }
+
+        AppSettings.clearMasterProfileLocalState(clearMasterData = true)
+        AppSettings.trialStartedAtMillis = 0L
+        AppSettings.persist()
+
+        reloadAppointmentsForGuestProfile()
+        authErrorMessage = null
+        authInfoMessage = null
+        screenHistory = emptyList()
+        currentScreen = Screen.AUTH_WELCOME
+    }
+
+    private fun captureGuestMigrationSnapshot(): GuestMigrationSnapshot {
+        val guestAppointments = runCatching {
+            DataManager.loadFromDatabase(LocalProfileManager.guestProfileKey())
+        }.getOrDefault(emptyList())
+
+        return GuestMigrationSnapshot(
+            appointments = guestAppointments,
+            ownerName = AppSettings.ownerName,
+            profilePhone = AppSettings.profilePhone,
+            profilePhoneVisible = AppSettings.profilePhoneVisible,
+            profileRating = AppSettings.profileRating,
+            profileAvatarUrl = AppSettings.profileAvatarUrl,
+            profileAvatarBase64 = AppSettings.profileAvatarBase64,
+            profileAvatarStoragePath = AppSettings.profileAvatarStoragePath,
+            profileDisplayCustomName = AppSettings.profileDisplayCustomName,
+            profileSpecialization = AppSettings.profileSpecialization,
+            clientInteractionsEnabled = AppSettings.clientInteractionsEnabled,
+            autoPublishBusySlots = AppSettings.autoPublishBusySlots,
+            serviceTemplates = AppSettings.serviceTemplates,
+            weeklyBlockedIntervals = AppSettings.weeklyBlockedIntervals,
+            scheduleDateOverrides = AppSettings.scheduleDateOverrides
+        )
+    }
+
+    private fun applyGuestSnapshotToCurrentAuthenticatedProfile(
+        snapshot: GuestMigrationSnapshot,
+        userId: String
+    ) {
+        AppSettings.localProfileUserId = userId
+        AppSettings.ownerName = snapshot.ownerName
+        AppSettings.profilePhone = snapshot.profilePhone
+        AppSettings.profilePhoneVisible = snapshot.profilePhoneVisible
+        AppSettings.profileRating = snapshot.profileRating
+        AppSettings.profileAvatarUrl = snapshot.profileAvatarUrl
+        AppSettings.profileAvatarBase64 = snapshot.profileAvatarBase64
+        AppSettings.profileAvatarStoragePath = snapshot.profileAvatarStoragePath
+        AppSettings.profileDisplayCustomName = snapshot.profileDisplayCustomName
+        AppSettings.profileSpecialization = snapshot.profileSpecialization
+        AppSettings.clientInteractionsEnabled = snapshot.clientInteractionsEnabled
+        AppSettings.autoPublishBusySlots = snapshot.autoPublishBusySlots
+        AppSettings.serviceTemplates = snapshot.serviceTemplates
+        AppSettings.weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals
+        AppSettings.scheduleDateOverrides = snapshot.scheduleDateOverrides
+        AppSettings.persist()
+
+        val userProfileKey = LocalProfileManager.profileKeyForUser(userId)
+
+        runCatching {
+            DataManager.saveToDatabase(
+                data = snapshot.appointments,
+                profileKey = userProfileKey
+            )
+        }
+
+        appointments.clear()
+        appointments.addAll(snapshot.appointments)
+    }
+
+    private fun clearGuestStorageAfterMigration() {
+        runCatching {
+            DataManager.saveToDatabase(
+                data = emptyList(),
+                profileKey = LocalProfileManager.guestProfileKey()
+            )
+        }
     }
 
     fun showGlobalLoading(message: String? = null) {
@@ -745,9 +921,15 @@ class AppRootState(
                 when (val result = AuthGateway.signInWithGoogle()) {
                     is SignInResult.Success -> {
                         runCatching {
+                            val guestSnapshot =
+                                if (guestUpgradeMode) captureGuestMigrationSnapshot() else null
+
                             handleAuthenticatedUserChange(result.user)
-                            clearSessionLocalState()
-                            AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+
+                            if (!guestUpgradeMode) {
+                                clearSessionLocalState()
+                                AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+                            }
 
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                 installId = IdentityManager.getOrCreateInstallId(),
@@ -772,13 +954,26 @@ class AppRootState(
                                 authProvider = result.user.provider.name.lowercase()
                             )
 
+                            if (guestUpgradeMode && guestSnapshot != null) {
+                                applyGuestSnapshotToCurrentAuthenticatedProfile(
+                                    snapshot = guestSnapshot,
+                                    userId = result.user.uid
+                                )
+                            }
+
                             runPostLoginFullSync()
 
+                            if (guestUpgradeMode) {
+                                clearGuestStorageAfterMigration()
+                            }
+
+                            guestUpgradeMode = false
                             authResolved = true
                             authErrorMessage = null
                             authInfoMessage = null
                             currentScreen = Screen.MONTH
                         }.onFailure { throwable ->
+                            guestUpgradeMode = false
                             runCatching { AuthGateway.signOut() }
                             runCatching { AuthGateway.clearCredentialState() }
 
@@ -826,9 +1021,15 @@ class AppRootState(
                 when (val result = AuthGateway.signInWithApple()) {
                     is SignInResult.Success -> {
                         runCatching {
+                            val guestSnapshot =
+                                if (guestUpgradeMode) captureGuestMigrationSnapshot() else null
+
                             handleAuthenticatedUserChange(result.user)
-                            clearSessionLocalState()
-                            AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+
+                            if (!guestUpgradeMode) {
+                                clearSessionLocalState()
+                                AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+                            }
 
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                 installId = IdentityManager.getOrCreateInstallId(),
@@ -853,13 +1054,26 @@ class AppRootState(
                                 authProvider = result.user.provider.name.lowercase()
                             )
 
+                            if (guestUpgradeMode && guestSnapshot != null) {
+                                applyGuestSnapshotToCurrentAuthenticatedProfile(
+                                    snapshot = guestSnapshot,
+                                    userId = result.user.uid
+                                )
+                            }
+
                             runPostLoginFullSync()
 
+                            if (guestUpgradeMode) {
+                                clearGuestStorageAfterMigration()
+                            }
+
+                            guestUpgradeMode = false
                             authResolved = true
                             authErrorMessage = null
                             authInfoMessage = null
                             currentScreen = Screen.MONTH
                         }.onFailure { error ->
+                            guestUpgradeMode = false
                             runCatching { AuthGateway.signOut() }
                             runCatching { AuthGateway.clearCredentialState() }
 
@@ -955,10 +1169,9 @@ class AppRootState(
     }
 
     fun openSignInScreen() {
+        guestUpgradeMode = false
         authErrorMessage = null
         authInfoMessage = null
-        clearSessionLocalState()
-        reloadAppointmentsForGuestProfile()
         screenHistory = emptyList()
         currentScreen = Screen.AUTH_WELCOME
     }
@@ -1391,9 +1604,15 @@ class AppRootState(
                     when (val result = AuthGateway.signInWithEmail(cleanEmail, cleanPassword)) {
                         is SignInResult.Success -> {
                             try {
+                                val guestSnapshot =
+                                    if (guestUpgradeMode) captureGuestMigrationSnapshot() else null
+
                                 handleAuthenticatedUserChange(result.user)
-                                clearSessionLocalState()
-                                AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+
+                                if (!guestUpgradeMode) {
+                                    clearSessionLocalState()
+                                    AppSettings.clearMasterProfileLocalState(clearMasterData = false)
+                                }
 
                                 val remote = try {
                                     com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
@@ -1424,26 +1643,33 @@ class AppRootState(
                                     authProvider = "password"
                                 )
 
+                                if (guestUpgradeMode && guestSnapshot != null) {
+                                    applyGuestSnapshotToCurrentAuthenticatedProfile(
+                                        snapshot = guestSnapshot,
+                                        userId = result.user.uid
+                                    )
+                                }
+
                                 runPostLoginFullSync()
 
+                                if (guestUpgradeMode) {
+                                    clearGuestStorageAfterMigration()
+                                }
+
+                                guestUpgradeMode = false
                                 authResolved = true
                                 authErrorMessage = null
                                 authInfoMessage = null
                                 currentScreen = Screen.MONTH
-                            } catch (error: Throwable) {
+                            } catch (e: Throwable) {
+                                guestUpgradeMode = false
                                 runCatching { AuthGateway.signOut() }
                                 runCatching { AuthGateway.clearCredentialState() }
 
-                                val mapped = mapAuthErrorMessage(error.message)
-                                if (mapped.isNullOrBlank()) {
-                                    authErrorMessage = null
-                                    authInfoMessage = Locales.t("auth_sign_in_cancelled")
-                                } else {
-                                    authInfoMessage = null
-                                    resetToSignedOutState(
-                                        keepAuthErrorMessage = mapped
-                                    )
-                                }
+                                authInfoMessage = null
+                                resetToSignedOutState(
+                                    keepAuthErrorMessage = mapAuthErrorMessage(e.message)
+                                )
                             }
                         }
 

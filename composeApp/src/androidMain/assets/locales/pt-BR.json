@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "se o usuário fez login pela Apple, o aplicativo abre a confirmação da Apple",
     "guide_account_deletion_reauth_3": "se o usuário usa e-mail, o aplicativo solicita a senha novamente",
     "guide_account_deletion_p2": "Após a confirmação bem-sucedida, a conta é excluída permanentemente e o usuário é redirecionado para a tela de login.",
-    "guide_contents": "Sumário"
+    "guide_contents": "Sumário",
+    "guest_register_current_account": "Registrar conta atual",
+    "guest_upgrade_title": "Registro de conta",
+    "guest_upgrade_p1": "Você pode registrar sua conta de convidado atual sem perder nenhum dado já criado.",
+    "guest_upgrade_p2": "Todos os seus agendamentos, configurações de perfil, serviços e outros dados locais serão preservados e vinculados à nova conta.",
+    "guest_upgrade_p3": "Após o registro, os dados ficarão disponíveis para sincronização e armazenamento no servidor.",
+    "guest_data_loss_title": "Excluir dados locais do convidado?",
+    "guest_data_loss_message": "Se você sair ou trocar de conta agora, todos os dados criados no modo de convidado serão excluídos deste dispositivo. Se quiser mantê-los, registre a conta atual primeiro.",
+    "guest_data_loss_continue": "Continuar",
+    "guest_data_loss_cancel": "Cancelar"
 }

@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "ja lietotājs pieteicies ar Apple, lietotne atver Apple apstiprinājumu",
     "guide_account_deletion_reauth_3": "ja lietotājs izmanto e-pastu, lietotne atkārtoti pieprasa paroli",
     "guide_account_deletion_p2": "Pēc veiksmīgas apstiprināšanas konts tiek neatgriezeniski dzēsts, un lietotājs tiek novirzīts atpakaļ uz autentifikācijas ekrānu.",
-    "guide_contents": "Saturs"
+    "guide_contents": "Saturs",
+    "guest_register_current_account": "Reģistrēt pašreizējo kontu",
+    "guest_upgrade_title": "Konta reģistrācija",
+    "guest_upgrade_p1": "Jūs varat reģistrēt savu pašreizējo viesa kontu, nezaudējot jau izveidotos datus.",
+    "guest_upgrade_p2": "Visi jūsu ieraksti, profila iestatījumi, pakalpojumi un citi vietējie dati tiks saglabāti un saistīti ar jauno kontu.",
+    "guest_upgrade_p3": "Pēc reģistrācijas dati kļūs pieejami sinhronizācijai un glabāšanai serverī.",
+    "guest_data_loss_title": "Dzēst vietējos viesa datus?",
+    "guest_data_loss_message": "Ja jūs tagad izrakstīsities vai mainīsiet kontu, visi viesa režīmā izveidotie dati tiks dzēsti no šīs ierīces. Ja vēlaties tos saglabāt, vispirms reģistrējiet pašreizējo kontu.",
+    "guest_data_loss_continue": "Turpināt",
+    "guest_data_loss_cancel": "Atcelt"
 }

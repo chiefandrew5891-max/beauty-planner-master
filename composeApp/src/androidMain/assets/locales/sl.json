@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "če se je uporabnik prijavil prek Apple, aplikacija odpre Apple potrditev",
     "guide_account_deletion_reauth_3": "če uporabnik uporablja e-pošto, aplikacija ponovno zahteva geslo",
     "guide_account_deletion_p2": "Po uspešni potrditvi se račun trajno izbriše, uporabnik pa se vrne na zaslon za prijavo.",
-    "guide_contents": "Vsebina"
+    "guide_contents": "Vsebina",
+    "guest_register_current_account": "Registriraj trenutni račun",
+    "guest_upgrade_title": "Registracija računa",
+    "guest_upgrade_p1": "Svoj trenutni račun gostujočega uporabnika lahko registrirate brez izgube že ustvarjenih podatkov.",
+    "guest_upgrade_p2": "Vsi vaši vnosi, nastavitve profila, storitve in drugi lokalni podatki bodo ohranjeni ter povezani z novim računom.",
+    "guest_upgrade_p3": "Po registraciji bodo podatki na voljo za sinhronizacijo in shranjevanje v strežniku.",
+    "guest_data_loss_title": "Izbrišem lokalne podatke gostujočega načina?",
+    "guest_data_loss_message": "Če se zdaj odjavite ali zamenjate račun, bodo vsi podatki, ustvarjeni v gostujočem načinu, izbrisani s te naprave. Če jih želite ohraniti, najprej registrirajte trenutni račun.",
+    "guest_data_loss_continue": "Nadaljuj",
+    "guest_data_loss_cancel": "Prekliči"
 }

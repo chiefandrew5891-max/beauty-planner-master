@@ -40,6 +40,7 @@ import com.andrey.beautyplanner.appcontent.BackupSettingsScreen
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
 import com.andrey.beautyplanner.appcontent.AuthEmailScreen
+import com.andrey.beautyplanner.appcontent.GuestAccountRegistrationScreen
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -267,6 +268,20 @@ fun AppRootContent(
                 },
                 onForgotPassword = { email ->
                     state.sendPasswordReset(email)
+                }
+            )
+
+            Screen.GUEST_ACCOUNT_REGISTRATION -> GuestAccountRegistrationScreen(
+                onContinueWithGoogle = { state.continueWithGoogle() },
+                onContinueWithApple = { state.continueWithApple() },
+                onRegisterWithEmail = {
+                    state.authEmailRegisterMode = true
+                    state.screenHistory = emptyList()
+                    state.currentScreen = Screen.AUTH_EMAIL
+                },
+                onBack = {
+                    state.screenHistory = emptyList()
+                    state.currentScreen = Screen.MONTH
                 }
             )
 

@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "kui kasutaja logis sisse Apple'iga, avab rakendus Apple'i kinnituse",
     "guide_account_deletion_reauth_3": "kui kasutaja kasutab e-posti, küsib rakendus parooli uuesti",
     "guide_account_deletion_p2": "Pärast edukat kinnitamist kustutatakse konto jäädavalt ja kasutaja suunatakse tagasi autentimise kuvale.",
-    "guide_contents": "Sisukord"
+    "guide_contents": "Sisukord",
+    "guest_register_current_account": "Registreeri praegune konto",
+    "guest_upgrade_title": "Konto registreerimine",
+    "guest_upgrade_p1": "Saate oma praeguse külaliskonto registreerimine ilma juba loodud andmeid kaotamata.",
+    "guest_upgrade_p2": "Kõik teie kirjed, profiiliseaded, teenused ja muud kohalikud andmed säilitatakse ja seotakse uue kontoga.",
+    "guest_upgrade_p3": "Pärast registreerimist muutuvad andmed serveris sünkroonimiseks ja salvestamiseks kättesaadavaks.",
+    "guest_data_loss_title": "Kas kustutada kohalikud külalisandmed?",
+    "guest_data_loss_message": "Kui logite praegu välja või vahetate kontot, kustutatakse kõik külalisrežiimis loodud andmed sellest seadmest. Kui soovite neid säilitada, registreerige esmalt praegune konto.",
+    "guest_data_loss_continue": "Jätka",
+    "guest_data_loss_cancel": "Tühista"
 }

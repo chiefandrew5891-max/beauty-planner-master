@@ -850,5 +850,14 @@
     "guide_account_deletion_reauth_2": "if the user signed in with Apple, the app opens Apple confirmation",
     "guide_account_deletion_reauth_3": "if the user uses Email, the app requests the password again",
     "guide_account_deletion_p2": "After successful confirmation, the account is permanently deleted and the user is returned to the authentication screen.",
-    "guide_contents": "Contents"
+    "guide_contents": "Contents",
+    "guest_register_current_account": "Register current account",
+    "guest_upgrade_title": "Register current account",
+    "guest_upgrade_p1": "You can register your current guest account without losing the data you have already created.",
+    "guest_upgrade_p2": "All your appointments, profile settings, services, and other local data will be preserved and linked to your new account.",
+    "guest_upgrade_p3": "After registration, your data will be available for synchronization and server storage.",
+    "guest_data_loss_title": "Delete guest local data?",
+    "guest_data_loss_message": "If you sign out or switch accounts now, all data created in guest mode will be deleted from this device. If you want to keep it, register the current account first.",
+    "guest_data_loss_continue": "Continue",
+    "guest_data_loss_cancel": "Cancel"
 }

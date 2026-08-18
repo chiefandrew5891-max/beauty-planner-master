@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "als de gebruiker is ingelogd met Apple, opent de app de Apple-bevestiging",
     "guide_account_deletion_reauth_3": "als de gebruiker E-mail gebruikt, vraagt de app opnieuw om het wachtwoord",
     "guide_account_deletion_p2": "Na een succesvolle bevestiging wordt het account permanent verwijderd en wordt de gebruiker teruggeleid naar het inlogscherm.",
-    "guide_contents": "Inhoud"
+    "guide_contents": "Inhoud",
+    "guest_register_current_account": "Huidig account registreren",
+    "guest_upgrade_title": "Accountregistratie",
+    "guest_upgrade_p1": "U kunt uw huidige gastaccount registreren zonder reeds aangemaakte gegevens te verliezen.",
+    "guest_upgrade_p2": "Al uw afspraken, profielinstellingen, diensten en andere lokale gegevens worden bewaard en gekoppeld aan het nieuwe account.",
+    "guest_upgrade_p3": "Na registratie zijn de gegevens beschikbaar voor synchronisatie en opslag op de server.",
+    "guest_data_loss_title": "Lokale gastgegevens verwijderen?",
+    "guest_data_loss_message": "Als u nu uitlogt of van account wisselt, worden alle in de gastmodus aangemaakte gegevens van dit apparaat verwijderd. Als u deze wilt behouden, registreer dan eerst het huidige account.",
+    "guest_data_loss_continue": "Doorgaan",
+    "guest_data_loss_cancel": "Annuleren"
 }

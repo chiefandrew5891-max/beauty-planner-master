@@ -67,6 +67,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import kotlin.math.abs
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 
 
 @Composable
@@ -353,7 +355,10 @@ fun AppRootChrome(
 
                     if (!isSignedInUser) {
                         val guestInitials = AppSettings.ownerName.trim().take(1).ifBlank { "G" }.uppercase()
-                        val guestTitle = if (AppSettings.profileDisplayCustomName && AppSettings.ownerName.trim().isNotBlank()) {
+                        val guestTitle = if (
+                            AppSettings.profileDisplayCustomName &&
+                            AppSettings.ownerName.trim().isNotBlank()
+                        ) {
                             AppSettings.ownerName.trim()
                         } else {
                             Locales.t("account_anonymous")
@@ -373,10 +378,24 @@ fun AppRootChrome(
                         DrawerSubscriptionInfo()
 
                         DrawerActionItem(
-                            title = Locales.t("account_sign_in")
+                            title = Locales.t("guest_register_current_account")
                         ) {
                             state.closeDrawer()
-                            state.openSignInScreen()
+                            state.openGuestAccountRegistrationScreen()
+                        }
+
+                        DrawerActionItem(
+                            title = Locales.t("account_switch")
+                        ) {
+                            state.closeDrawer()
+                            state.requestGuestSwitchAccount()
+                        }
+
+                        DrawerActionItem(
+                            title = Locales.t("account_sign_out")
+                        ) {
+                            state.closeDrawer()
+                            state.requestGuestSignOut()
                         }
                     } else {
                         val authDisplayName = authUser?.displayName?.takeIf { it.isNotBlank() }
@@ -505,7 +524,6 @@ fun AppRootChrome(
                     // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS NAV ENTRY
                     // =========================================================
 
-
                     DrawerItem(
                         title = Locales.t("nav_settings"),
                         selected = state.currentScreen == Screen.SETTINGS
@@ -542,7 +560,8 @@ fun AppRootChrome(
                         state.currentScreen == Screen.USER_GUIDE ||
                         state.currentScreen == Screen.PRIVACY_POLICY ||
                         state.currentScreen == Screen.NOTIFICATION_SETTINGS ||
-                        state.currentScreen == Screen.PREMIUM_ACCESS
+                        state.currentScreen == Screen.PREMIUM_ACCESS ||
+                        state.currentScreen == Screen.GUEST_ACCOUNT_REGISTRATION
 
             val density = LocalDensity.current
             val edgeWidthPx = with(density) { 64.dp.toPx() }
@@ -744,6 +763,32 @@ fun AppRootChrome(
                     }
                 }
             }
+        }
+
+        if (state.showGuestDataLossDialog) {
+            AlertDialog(
+                onDismissRequest = { state.cancelGuestDataLossDialog() },
+                title = {
+                    Text(Locales.t("guest_data_loss_title"))
+                },
+                text = {
+                    Text(Locales.t("guest_data_loss_message"))
+                },
+                confirmButton = {
+                    Button(
+                        onClick = { state.confirmGuestDataDiscard() }
+                    ) {
+                        Text(Locales.t("guest_data_loss_continue"))
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { state.cancelGuestDataLossDialog() }
+                    ) {
+                        Text(Locales.t("guest_data_loss_cancel"))
+                    }
+                }
+            )
         }
     }
 }

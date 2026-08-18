@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "jei vartotojas prisijungė per „Apple“, programa atidaro „Apple“ patvirtinimą",
     "guide_account_deletion_reauth_3": "jei vartotojas naudoja el. paštą, programa iš naujo paprašo slaptažodžio",
     "guide_account_deletion_p2": "Sėkmingai patvirtinus, paskyra visiškai ištrinama, o vartotojas grąžinamas į prisijungimo ekraną.",
-    "guide_contents": "Turinys"
+    "guide_contents": "Turinys",
+    "guest_register_current_account": "Registruoti dabartinę paskyrą",
+    "guest_upgrade_title": "Paskyros registracija",
+    "guest_upgrade_p1": "Galite užregistruoti savo dabartinę svečio paskyrą neprarasdami jau sukurtų duomenų.",
+    "guest_upgrade_p2": "Visi jūsų įrašai, profilio nustatymai, paslaugos ir kiti vietiniai duomenys bus išsaugoti ir susieti su nauja paskyra.",
+    "guest_upgrade_p3": "Po registracijos duomenys taps prieinami sinchronizavimui ir saugojimui serveryje.",
+    "guest_data_loss_title": "Ištrinti vietinius svečio duomenis?",
+    "guest_data_loss_message": "Jei dabar atsijungsite arba pakeisite paskyrą, visi svečio režimu sukurti duomenys bus ištrinti iš šio įrenginio. Jei norite juos išsaugoti, iš pradžių užregistruokite dabartinę paskyrą.",
+    "guest_data_loss_continue": "Tęsti",
+    "guest_data_loss_cancel": "Atšaukti"
 }

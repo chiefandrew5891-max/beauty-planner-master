@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "Wenn sich der Nutzer mit Apple angemeldet hat, öffnet die App die Apple-Bestätigung",
     "guide_account_deletion_reauth_3": "Wenn der Nutzer E-Mail verwendet, fordert die App das Passwort erneut an",
     "guide_account_deletion_p2": "Nach erfolgreicher Bestätigung wird das Konto dauerhaft gelöscht und der Nutzer wird zum Anmeldebildschirm zurückgeleitet.",
-    "guide_contents": "Inhalt"
+    "guide_contents": "Inhalt",
+    "guest_register_current_account": "Aktuelles Konto registrieren",
+    "guest_upgrade_title": "Konto-Registrierung",
+    "guest_upgrade_p1": "Sie können Ihr aktuelles Gastkonto registrieren, ohne bereits erstellte Daten zu verlieren.",
+    "guest_upgrade_p2": "Alle Ihre Einträge, Profileinstellungen, Dienste und sonstigen lokalen Daten werden beibehalten und mit dem neuen Konto verknüpft.",
+    "guest_upgrade_p3": "Nach der Registrierung stehen die Daten zur Synchronisierung und Speicherung auf dem Server zur Verfügung.",
+    "guest_data_loss_title": "Lokale Gastdaten löschen?",
+    "guest_data_loss_message": "Wenn Sie sich jetzt abmelden oder das Konto wechseln, werden alle im Gastmodus erstellten Daten von diesem Gerät gelöscht. Wenn Sie diese behalten möchten, registrieren Sie bitte zuerst das aktuelle Konto.",
+    "guest_data_loss_continue": "Fortfahren",
+    "guest_data_loss_cancel": "Abbrechen"
 }

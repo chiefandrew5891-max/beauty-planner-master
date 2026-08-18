@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "dacă utilizatorul s-a conectat cu Apple, aplicația deschide confirmarea Apple",
     "guide_account_deletion_reauth_3": "dacă utilizatorul folosește e-mailul, aplicația solicită din nou parola",
     "guide_account_deletion_p2": "După confirmarea cu succes, contul este șters definitiv, iar utilizatorul este redirecționat către ecranul de autentificare.",
-    "guide_contents": "Cuprins"
+    "guide_contents": "Cuprins",
+    "guest_register_current_account": "Înregistrează contul curent",
+    "guest_upgrade_title": "Înregistrare cont",
+    "guest_upgrade_p1": "Vă puteți înregistra contul de oaspete curent fără a pierde datele deja create.",
+    "guest_upgrade_p2": "Toate înregistrările, setările de profil, serviciile și alte date locale vor fi păstrate și conectate la noul cont.",
+    "guest_upgrade_p3": "După înregistrare, datele vor deveni disponibile pentru sincronizare și stocare pe server.",
+    "guest_data_loss_title": "Ștergeți datele locale de oaspete?",
+    "guest_data_loss_message": "Dacă vă deconectați sau schimbați contul acum, toate datele create în modul oaspete vor fi șterse de pe acest dispozitiv. Dacă doriți să le păstrați, înregistrați mai întâi contul curent.",
+    "guest_data_loss_continue": "Continuă",
+    "guest_data_loss_cancel": "Anulare"
 }

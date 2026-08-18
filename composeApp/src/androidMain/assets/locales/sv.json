@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "om användaren loggade in med Apple öppnar appen Apple-bekräftelse",
     "guide_account_deletion_reauth_3": "om användaren använder e-post ber appen om lösenordet igen",
     "guide_account_deletion_p2": "Efter lyckad bekräftelse raderas kontot permanent och användaren skickas tillbaka till inloggningsskärmen.",
-    "guide_contents": "Innehåll"
+    "guide_contents": "Innehåll",
+    "guest_register_current_account": "Registrera nuvarande konto",
+    "guest_upgrade_title": "Kontoregistrering",
+    "guest_upgrade_p1": "Du kan registrera ditt nuvarande gästkonto utan att förlora redan skapade data.",
+    "guest_upgrade_p2": "Alla dina bokningar, profilinställningar, tjänster och annan lokal data kommer att sparas och kopplas till det nya kontot.",
+    "guest_upgrade_p3": "Efter registrering blir datan tillgänglig för synkronisering och lagring på servern.",
+    "guest_data_loss_title": "Ta bort lokal gästdata?",
+    "guest_data_loss_message": "Om du loggar ut eller byter konto nu kommer all data som skapats i gästläge att raderas från den här enheten. Om du vill behålla dem, registrera det nuvarande kontot först.",
+    "guest_data_loss_continue": "Fortsätt",
+    "guest_data_loss_cancel": "Avbryt"
 }

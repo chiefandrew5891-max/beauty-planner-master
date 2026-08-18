@@ -848,5 +848,14 @@
     "guide_account_deletion_reauth_2": "hvis brukeren logget på med Apple, åpner appen Apple-bekreftelse",
     "guide_account_deletion_reauth_3": "hvis brukeren bruker E-post, ber appen om passordet på nytt",
     "guide_account_deletion_p2": "Etter vellykket bekreftelse slettes kontoen permanent, og brukeren returneres til påloggingsskjermen.",
-    "guide_contents": "Innhold"
+    "guide_contents": "Innhold",
+    "guest_register_current_account": "Registrer nåværende konto",
+    "guest_upgrade_title": "Kontoregistrering",
+    "guest_upgrade_p1": "Du kan registrere din nåværende gjestekonto uten å miste allerede opprettede data.",
+    "guest_upgrade_p2": "Alle dine bookinger, profilinnstillinger, tjenester og andre lokale data vil bli bevart og knyttet til den nye kontoen.",
+    "guest_upgrade_p3": "Etter registrering vil dataene være tilgjengelige for synkronisering og lagring på serveren.",
+    "guest_data_loss_title": "Slette lokale gjestedata?",
+    "guest_data_loss_message": "Hvis du logger ut eller bytter konto nå, vil alle data opprettet i gjestemodus bli slettet fra denne enheten. Hvis du vil beholde dem, må du registrere den nåværende kontoen først.",
+    "guest_data_loss_continue": "Fortsett",
+    "guest_data_loss_cancel": "Avbryt"
 }
