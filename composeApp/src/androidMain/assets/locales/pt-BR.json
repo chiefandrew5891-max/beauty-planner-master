@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Excluir dados locais do convidado?",
     "guest_data_loss_message": "Se você sair ou trocar de conta agora, todos os dados criados no modo de convidado serão excluídos deste dispositivo. Se quiser mantê-los, registre a conta atual primeiro.",
     "guest_data_loss_continue": "Continuar",
-    "guest_data_loss_cancel": "Cancelar"
+    "guest_data_loss_cancel": "Cancelar",
+    "guest_upgrade_existing_account_conflict": "Esta conta já contém dados salvos. Uma nova conta de convidado não pode ser vinculada a ela novamente, para evitar sobrescrever as informações existentes.",
+    "guest_upgrade_existing_account_conflict_title": "Esta conta já contém dados",
+    "ok": "OK"
 }

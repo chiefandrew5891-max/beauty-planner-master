@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Kas kustutada kohalikud külalisandmed?",
     "guest_data_loss_message": "Kui logite praegu välja või vahetate kontot, kustutatakse kõik külalisrežiimis loodud andmed sellest seadmest. Kui soovite neid säilitada, registreerige esmalt praegune konto.",
     "guest_data_loss_continue": "Jätka",
-    "guest_data_loss_cancel": "Tühista"
+    "guest_data_loss_cancel": "Tühista",
+    "guest_upgrade_existing_account_conflict": "See konto sisaldab juba salvestatud andmeid. Uut külaliskontot ei saa sellega uuesti siduda, et vältida olemasolevate andmete ülekirjutamist.",
+    "guest_upgrade_existing_account_conflict_title": "See konto sisaldab juba andmeid",
+    "ok": "OK"
 }

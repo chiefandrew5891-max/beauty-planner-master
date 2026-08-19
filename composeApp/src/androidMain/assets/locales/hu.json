@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Törli a helyi vendégadatokat?",
     "guest_data_loss_message": "Ha most kijelentkezik vagy fiókot vált, a vendég módban létrehozott összes adat törlődik erről az eszközről. Ha meg akarja tartani őket, először regisztrálja a jelenlegi fiókot.",
     "guest_data_loss_continue": "Folytatás",
-    "guest_data_loss_cancel": "Mégsem"
+    "guest_data_loss_cancel": "Mégsem",
+    "guest_upgrade_existing_account_conflict": "Ez a fiók már tartalmaz mentett adatokat. Új vendégfiók nem kapcsolható hozzá újra, a meglévő információk felülírásának elkerülése érdekében.",
+    "guest_upgrade_existing_account_conflict_title": "Ez a fiók már tartalmaz adatokat",
+    "ok": "OK"
 }

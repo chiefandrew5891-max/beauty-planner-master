@@ -857,5 +857,8 @@
     "guest_data_loss_title": "¿Eliminar datos locales de invitado?",
     "guest_data_loss_message": "Si cierras sesión o cambias de cuenta ahora, todos los datos creados en el modo de invitado se eliminarán de este dispositivo. Si deseas conservarlos, registra la cuenta actual primero.",
     "guest_data_loss_continue": "Continuar",
-    "guest_data_loss_cancel": "Cancelar"
+    "guest_data_loss_cancel": "Cancelar",
+    "guest_upgrade_existing_account_conflict": "Esta cuenta ya contiene datos guardados. No se puede volver a vincular una nueva cuenta de invitado a ella, para evitar sobrescribir la información existente.",
+    "guest_upgrade_existing_account_conflict_title": "Esta cuenta ya contiene datos",
+    "ok": "OK"
 }

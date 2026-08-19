@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Ta bort lokal gästdata?",
     "guest_data_loss_message": "Om du loggar ut eller byter konto nu kommer all data som skapats i gästläge att raderas från den här enheten. Om du vill behålla dem, registrera det nuvarande kontot först.",
     "guest_data_loss_continue": "Fortsätt",
-    "guest_data_loss_cancel": "Avbryt"
+    "guest_data_loss_cancel": "Avbryt",
+    "guest_upgrade_existing_account_conflict": "Detta konto innehåller redan sparad data. Ett nytt gästkonto kan inte länkas till det igen för att undvika att skriva över befintlig information.",
+    "guest_upgrade_existing_account_conflict_title": "Detta konto innehåller redan data",
+    "ok": "OK"
 }

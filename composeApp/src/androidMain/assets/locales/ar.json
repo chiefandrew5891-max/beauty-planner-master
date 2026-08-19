@@ -857,5 +857,8 @@
     "guest_data_loss_title": "حذف بيانات الضيف المحلية؟",
     "guest_data_loss_message": "إذا قمت بتسجيل الخروج أو تبديل الحساب الآن، سيتم حذف جميع البيانات التي تم إنشاؤها في وضع الضيف من هذا الجهاز. إذا كنت تريد الاحتفاظ بها، قم بتسجيل الحساب الحالي أولاً.",
     "guest_data_loss_continue": "متابعة",
-    "guest_data_loss_cancel": "إلغاء"
+    "guest_data_loss_cancel": "إلغاء",
+    "guest_upgrade_existing_account_conflict": "يحتوي هذا الحساب بالفعل على بيانات محفوظة. لا يمكن ربط حساب ضيف جديد به مرة أخرى لتجنب الكتابة فوق المعلومات الموجودة.",
+    "guest_upgrade_existing_account_conflict_title": "هذا الحساب يحتوي بالفعل على بيانات",
+    "ok": "موافق"
 }

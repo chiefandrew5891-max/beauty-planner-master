@@ -856,5 +856,8 @@
     "guest_data_loss_title": "ローカルのゲストデータを削除しますか？",
     "guest_data_loss_message": "今すぐログアウトまたはアカウントを切り替えると、ゲストモードで作成されたすべてのデータがこのデバイスから削除されます。保持したい場合は、最初に現在のアカウントを登録してください。",
     "guest_data_loss_continue": "続行",
-    "guest_data_loss_cancel": "キャンセル"
+    "guest_data_loss_cancel": "キャンセル",
+    "guest_upgrade_existing_account_conflict": "このアカウントには既に保存されたデータが含まれています。既存の情報を上書きしないよう、新しいゲストアカウントを再度リンクすることはできません。",
+    "guest_upgrade_existing_account_conflict_title": "このアカウントには既にデータが含まれています",
+    "ok": "OK"
 }

@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Eliminare i dati locali dell'ospite?",
     "guest_data_loss_message": "Se esci o cambi account ora, tutti i dati creati in modalità ospite verranno eliminati da questo dispositivo. Se desideri conservarli, registra prima l'account corrente.",
     "guest_data_loss_continue": "Continua",
-    "guest_data_loss_cancel": "Annulla"
+    "guest_data_loss_cancel": "Annulla",
+    "guest_upgrade_existing_account_conflict": "Questo account contiene già dati salvati. Non è possibile collegare nuovamente un nuovo account ospite per evitare di sovrascrivere le informazioni esistenti.",
+    "guest_upgrade_existing_account_conflict_title": "Questo account contiene già dei dati",
+    "ok": "OK"
 }

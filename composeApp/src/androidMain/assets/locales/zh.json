@@ -855,5 +855,8 @@
     "guest_data_loss_title": "删除本地访客数据？",
     "guest_data_loss_message": "如果您现在退出登录或切换账号，访客模式下创建的所有数据将从本设备中删除。如果您想保留这些数据，请先注册当前账号。",
     "guest_data_loss_continue": "继续",
-    "guest_data_loss_cancel": "取消"
+    "guest_data_loss_cancel": "取消",
+    "guest_upgrade_existing_account_conflict": "该账号已包含已保存的数据。无法再次将新的访客账号绑定到该账号，以免覆盖现有信息。",
+    "guest_upgrade_existing_account_conflict_title": "该账号已包含数据",
+    "ok": "确定"
 }

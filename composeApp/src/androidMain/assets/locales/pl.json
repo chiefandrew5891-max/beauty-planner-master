@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Usunąć lokalne dane gościa?",
     "guest_data_loss_message": "Jeśli wylogujesz się lub zmienisz konto teraz, wszystkie dane utworzone w trybie gościa zostaną usunięte z tego urządzenia. Jeśli chcesz je zachować, najpierw zarejestruj bieżące konto.",
     "guest_data_loss_continue": "Kontynuuj",
-    "guest_data_loss_cancel": "Anuluj"
+    "guest_data_loss_cancel": "Anuluj",
+    "guest_upgrade_existing_account_conflict": "To konto zawiera już zapisane dane. Nie można ponownie powiązać z nim nowego konta gościa, aby uniknąć nadpisania istniejących informacji.",
+    "guest_upgrade_existing_account_conflict_title": "To konto zawiera już dane",
+    "ok": "OK"
 }

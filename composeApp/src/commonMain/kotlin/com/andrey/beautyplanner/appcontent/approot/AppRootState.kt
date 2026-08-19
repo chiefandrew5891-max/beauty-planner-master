@@ -190,6 +190,7 @@ class AppRootState(
     var guestUpgradeMode by mutableStateOf(false)
     var showGuestDataLossDialog by mutableStateOf(false)
     var pendingGuestDiscardAction by mutableStateOf<GuestDiscardAction?>(null)
+    var showGuestUpgradeConflictDialog by mutableStateOf(false)
 
     val colors: Colors
         get() = if (currentLiveDarkMode) {
@@ -438,6 +439,44 @@ class AppRootState(
         }
     }
 
+    private fun accountHasExistingLocalData(userId: String): Boolean {
+        val existingAppointments = runCatching {
+            DataManager.loadFromDatabase(LocalProfileManager.profileKeyForUser(userId))
+        }.getOrDefault(emptyList())
+
+        return existingAppointments.isNotEmpty()
+    }
+
+    private suspend fun canApplyGuestSnapshotToAccount(userId: String): Boolean {
+        runCatching {
+            runPostLoginFullSync()
+        }.onFailure {
+            CloudSyncLogger.log("canApplyGuestSnapshotToAccount: pre-check sync failed: ${it.message}")
+        }
+
+        val existingAppointments = runCatching {
+            DataManager.loadFromDatabase(LocalProfileManager.profileKeyForUser(userId))
+        }.getOrDefault(emptyList())
+
+        if (existingAppointments.isNotEmpty()) {
+            return false
+        }
+
+        val hasExistingProfileData =
+            AppSettings.ownerName.isNotBlank() ||
+                    AppSettings.profilePhone.isNotBlank() ||
+                    AppSettings.profileSpecialization.isNotBlank() ||
+                    AppSettings.profileDisplayCustomName ||
+                    AppSettings.profileAvatarUrl.isNotBlank() ||
+                    AppSettings.profileAvatarBase64.isNotBlank() ||
+                    AppSettings.profileAvatarStoragePath.isNotBlank() ||
+                    AppSettings.serviceTemplates.isNotEmpty() ||
+                    AppSettings.weeklyBlockedIntervals.isNotEmpty() ||
+                    AppSettings.scheduleDateOverrides.isNotEmpty()
+
+        return !hasExistingProfileData
+    }
+
     fun showGlobalLoading(message: String? = null) {
         globalLoadingMessage = message
         isGlobalLoading = true
@@ -610,6 +649,14 @@ class AppRootState(
 
             else -> Locales.t("auth_error_sign_in_failed")
         }
+    }
+
+    private fun openGuestUpgradeConflictDialog() {
+        showGuestUpgradeConflictDialog = true
+    }
+
+    fun dismissGuestUpgradeConflictDialog() {
+        showGuestUpgradeConflictDialog = false
     }
 
     fun checkForAppUpdates() {
@@ -955,16 +1002,26 @@ class AppRootState(
                             )
 
                             if (guestUpgradeMode && guestSnapshot != null) {
+                                val canApply = canApplyGuestSnapshotToAccount(result.user.uid)
+                                if (!canApply) {
+                                    guestUpgradeMode = false
+                                    authResolved = true
+                                    authErrorMessage = null
+                                    authInfoMessage = null
+                                    currentScreen = Screen.MONTH
+                                    openGuestUpgradeConflictDialog()
+                                    return@runCatching
+                                }
+
                                 applyGuestSnapshotToCurrentAuthenticatedProfile(
                                     snapshot = guestSnapshot,
                                     userId = result.user.uid
                                 )
-                            }
 
-                            runPostLoginFullSync()
-
-                            if (guestUpgradeMode) {
+                                runPostLoginFullSync()
                                 clearGuestStorageAfterMigration()
+                            } else {
+                                runPostLoginFullSync()
                             }
 
                             guestUpgradeMode = false
@@ -1055,16 +1112,26 @@ class AppRootState(
                             )
 
                             if (guestUpgradeMode && guestSnapshot != null) {
+                                val canApply = canApplyGuestSnapshotToAccount(result.user.uid)
+                                if (!canApply) {
+                                    guestUpgradeMode = false
+                                    authResolved = true
+                                    authErrorMessage = null
+                                    authInfoMessage = null
+                                    currentScreen = Screen.MONTH
+                                    openGuestUpgradeConflictDialog()
+                                    return@runCatching
+                                }
+
                                 applyGuestSnapshotToCurrentAuthenticatedProfile(
                                     snapshot = guestSnapshot,
                                     userId = result.user.uid
                                 )
-                            }
 
-                            runPostLoginFullSync()
-
-                            if (guestUpgradeMode) {
+                                runPostLoginFullSync()
                                 clearGuestStorageAfterMigration()
+                            } else {
+                                runPostLoginFullSync()
                             }
 
                             guestUpgradeMode = false
@@ -1644,16 +1711,25 @@ class AppRootState(
                                 )
 
                                 if (guestUpgradeMode && guestSnapshot != null) {
-                                    applyGuestSnapshotToCurrentAuthenticatedProfile(
-                                        snapshot = guestSnapshot,
-                                        userId = result.user.uid
-                                    )
-                                }
+                                    val canApply = canApplyGuestSnapshotToAccount(result.user.uid)
+                                    if (!canApply) {
+                                        guestUpgradeMode = false
+                                        authResolved = true
+                                        authErrorMessage = null
+                                        authInfoMessage = null
+                                        currentScreen = Screen.MONTH
+                                        openGuestUpgradeConflictDialog()
+                                    } else {
+                                        applyGuestSnapshotToCurrentAuthenticatedProfile(
+                                            snapshot = guestSnapshot,
+                                            userId = result.user.uid
+                                        )
 
-                                runPostLoginFullSync()
-
-                                if (guestUpgradeMode) {
-                                    clearGuestStorageAfterMigration()
+                                        runPostLoginFullSync()
+                                        clearGuestStorageAfterMigration()
+                                    }
+                                } else {
+                                    runPostLoginFullSync()
                                 }
 
                                 guestUpgradeMode = false

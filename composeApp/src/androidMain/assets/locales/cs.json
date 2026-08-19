@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Smazat místní data hosta?",
     "guest_data_loss_message": "Pokud se nyní odhlásíte nebo přepnete účet, všechna data vytvořená v režimu hosta budou z tohoto zařízení smazána. Pokud si je chcete ponechat, nejprve zaregistrujte aktuální účet.",
     "guest_data_loss_continue": "Pokračovat",
-    "guest_data_loss_cancel": "Zrušit"
+    "guest_data_loss_cancel": "Zrušit",
+    "guest_upgrade_existing_account_conflict": "Tento účet již obsahuje uložená data. K novému účtu nelze znovu propojit účet hosta, aby nedošlo k přepsání stávajících informací.",
+    "guest_upgrade_existing_account_conflict_title": "Tento účet již obsahuje data",
+    "ok": "OK"
 }

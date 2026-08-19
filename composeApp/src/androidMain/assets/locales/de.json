@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Lokale Gastdaten löschen?",
     "guest_data_loss_message": "Wenn Sie sich jetzt abmelden oder das Konto wechseln, werden alle im Gastmodus erstellten Daten von diesem Gerät gelöscht. Wenn Sie diese behalten möchten, registrieren Sie bitte zuerst das aktuelle Konto.",
     "guest_data_loss_continue": "Fortfahren",
-    "guest_data_loss_cancel": "Abbrechen"
+    "guest_data_loss_cancel": "Abbrechen",
+    "guest_upgrade_existing_account_conflict": "Dieses Konto enthält bereits gespeicherte Daten. Ein neues Gastkonto kann nicht erneut damit verknüpft werden, um ein Überschreiben vorhandener Informationen zu vermeiden.",
+    "guest_upgrade_existing_account_conflict_title": "Dieses Konto enthält bereits Daten",
+    "ok": "OK"
 }

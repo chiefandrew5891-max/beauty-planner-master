@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Dzēst vietējos viesa datus?",
     "guest_data_loss_message": "Ja jūs tagad izrakstīsities vai mainīsiet kontu, visi viesa režīmā izveidotie dati tiks dzēsti no šīs ierīces. Ja vēlaties tos saglabāt, vispirms reģistrējiet pašreizējo kontu.",
     "guest_data_loss_continue": "Turpināt",
-    "guest_data_loss_cancel": "Atcelt"
+    "guest_data_loss_cancel": "Atcelt",
+    "guest_upgrade_existing_account_conflict": "Šis konts jau satur saglabātus datus. Jaunu viesa kontu tam vairs nevar piesaistīt, lai izvairītos no esošās informācijas pārrakstīšanas.",
+    "guest_upgrade_existing_account_conflict_title": "Šis konts jau satur datus",
+    "ok": "OK"
 }

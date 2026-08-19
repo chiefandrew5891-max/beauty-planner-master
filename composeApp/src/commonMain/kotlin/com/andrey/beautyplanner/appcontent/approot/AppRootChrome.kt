@@ -790,5 +790,23 @@ fun AppRootChrome(
                 }
             )
         }
+        if (state.showGuestUpgradeConflictDialog) {
+            AlertDialog(
+                onDismissRequest = { state.dismissGuestUpgradeConflictDialog() },
+                title = {
+                    Text(Locales.t("guest_upgrade_existing_account_conflict_title"))
+                },
+                text = {
+                    Text(Locales.t("guest_upgrade_existing_account_conflict"))
+                },
+                confirmButton = {
+                    Button(
+                        onClick = { state.dismissGuestUpgradeConflictDialog() }
+                    ) {
+                        Text(Locales.t("ok"))
+                    }
+                }
+            )
+        }
     }
 }

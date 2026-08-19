@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Ștergeți datele locale de oaspete?",
     "guest_data_loss_message": "Dacă vă deconectați sau schimbați contul acum, toate datele create în modul oaspete vor fi șterse de pe acest dispozitiv. Dacă doriți să le păstrați, înregistrați mai întâi contul curent.",
     "guest_data_loss_continue": "Continuă",
-    "guest_data_loss_cancel": "Anulare"
+    "guest_data_loss_cancel": "Anulare",
+    "guest_upgrade_existing_account_conflict": "Acest cont conține deja date salvate. Un cont de oaspete nou nu poate fi conectat din nou la acesta, pentru a evita suprascrierea informațiilor existente.",
+    "guest_upgrade_existing_account_conflict_title": "Acest cont conține deja date",
+    "ok": "OK"
 }

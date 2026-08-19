@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Hapus data tamu lokal?",
     "guest_data_loss_message": "Jika Anda keluar atau mengganti akun sekarang, semua data yang dibuat dalam mode tamu akan dihapus dari perangkat ini. Jika Anda ingin menyimpannya, daftarkan akun saat ini terlebih dahulu.",
     "guest_data_loss_continue": "Lanjutkan",
-    "guest_data_loss_cancel": "Batal"
+    "guest_data_loss_cancel": "Batal",
+    "guest_upgrade_existing_account_conflict": "Akun ini sudah berisi data tersimpan. Akun tamu baru tidak dapat ditautkan kembali ke akun ini untuk menghindari penimpaan informasi yang ada.",
+    "guest_upgrade_existing_account_conflict_title": "Akun ini sudah berisi data",
+    "ok": "OK"
 }

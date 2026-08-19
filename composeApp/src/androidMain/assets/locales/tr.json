@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Yerel misafir verileri silinsin mi?",
     "guest_data_loss_message": "Şimdi çıkış yaparsanız veya hesap değiştirirseniz, misafir modunda oluşturulan tüm veriler bu cihazdan silinecektir. Bunları saklamak istiyorsanız, önce mevcut hesabı kaydedin.",
     "guest_data_loss_continue": "Devam et",
-    "guest_data_loss_cancel": "İptal"
+    "guest_data_loss_cancel": "İptal",
+    "guest_upgrade_existing_account_conflict": "Bu hesap zaten kaydedilmiş veriler içeriyor. Mevcut bilgilerin üzerine yazılmasını önlemek için yeni bir misafir hesabı tekrar buna bağlanamaz.",
+    "guest_upgrade_existing_account_conflict_title": "Bu hesap zaten veri içeriyor",
+    "ok": "Tamam"
 }

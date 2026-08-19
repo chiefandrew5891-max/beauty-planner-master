@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Izbrišem lokalne podatke gostujočega načina?",
     "guest_data_loss_message": "Če se zdaj odjavite ali zamenjate račun, bodo vsi podatki, ustvarjeni v gostujočem načinu, izbrisani s te naprave. Če jih želite ohraniti, najprej registrirajte trenutni račun.",
     "guest_data_loss_continue": "Nadaljuj",
-    "guest_data_loss_cancel": "Prekliči"
+    "guest_data_loss_cancel": "Prekliči",
+    "guest_upgrade_existing_account_conflict": "Ta račun že vsebuje shranjene podatke. Novega gostujočega računa ni mogoče ponovno povezati z njim, da ne bi prepisali obstoječih podatkov.",
+    "guest_upgrade_existing_account_conflict_title": "Ta račun že vsebuje podatke",
+    "ok": "OK"
 }

@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Ištrinti vietinius svečio duomenis?",
     "guest_data_loss_message": "Jei dabar atsijungsite arba pakeisite paskyrą, visi svečio režimu sukurti duomenys bus ištrinti iš šio įrenginio. Jei norite juos išsaugoti, iš pradžių užregistruokite dabartinę paskyrą.",
     "guest_data_loss_continue": "Tęsti",
-    "guest_data_loss_cancel": "Atšaukti"
+    "guest_data_loss_cancel": "Atšaukti",
+    "guest_upgrade_existing_account_conflict": "Šioje paskyroje jau yra išsaugotų duomenų. Naujos svečio paskyros nebegalima susieti su ja, kad nebūtų perrašyta esama informacija.",
+    "guest_upgrade_existing_account_conflict_title": "Šioje paskyroje jau yra duomenų",
+    "ok": "OK"
 }

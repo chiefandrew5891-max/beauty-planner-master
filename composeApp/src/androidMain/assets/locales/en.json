@@ -859,5 +859,8 @@
     "guest_data_loss_title": "Delete guest local data?",
     "guest_data_loss_message": "If you sign out or switch accounts now, all data created in guest mode will be deleted from this device. If you want to keep it, register the current account first.",
     "guest_data_loss_continue": "Continue",
-    "guest_data_loss_cancel": "Cancel"
+    "guest_data_loss_cancel": "Cancel",
+    "guest_upgrade_existing_account_conflict": "This account already contains saved data. A new guest account cannot be linked to it again, to avoid overwriting existing information.",
+    "guest_upgrade_existing_account_conflict_title": "This account already contains data",
+    "ok": "OK"
 }

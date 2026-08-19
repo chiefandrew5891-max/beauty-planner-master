@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Poistetaanko paikalliset vierastiedot?",
     "guest_data_loss_message": "Jos kirjaudut ulos tai vaihdat tiliä nyt, kaikki vierastilassa luodut tiedot poistetaan tältä laitteelta. Jos haluat säilyttää ne, rekisteröi nykyinen tili ensin.",
     "guest_data_loss_continue": "Jatka",
-    "guest_data_loss_cancel": "Peruuta"
+    "guest_data_loss_cancel": "Peruuta",
+    "guest_upgrade_existing_account_conflict": "Tämä tili sisältää jo tallennettuja tietoja. Uutta vierastiliä ei voi linkittää siihen uudelleen olemassa olevien tietojen ylikirjoittamisen välttämiseksi.",
+    "guest_upgrade_existing_account_conflict_title": "Tämä tili sisältää jo tietoja",
+    "ok": "OK"
 }

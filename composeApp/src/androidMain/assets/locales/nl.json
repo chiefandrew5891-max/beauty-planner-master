@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Lokale gastgegevens verwijderen?",
     "guest_data_loss_message": "Als u nu uitlogt of van account wisselt, worden alle in de gastmodus aangemaakte gegevens van dit apparaat verwijderd. Als u deze wilt behouden, registreer dan eerst het huidige account.",
     "guest_data_loss_continue": "Doorgaan",
-    "guest_data_loss_cancel": "Annuleren"
+    "guest_data_loss_cancel": "Annuleren",
+    "guest_upgrade_existing_account_conflict": "Dit account bevat al opgeslagen gegevens. Er kan niet opnieuw een nieuw gastaccount aan worden gekoppeld om te voorkomen dat bestaande informatie wordt overschreven.",
+    "guest_upgrade_existing_account_conflict_title": "Dit account bevat al gegevens",
+    "ok": "OK"
 }

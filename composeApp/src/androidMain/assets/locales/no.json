@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Slette lokale gjestedata?",
     "guest_data_loss_message": "Hvis du logger ut eller bytter konto nå, vil alle data opprettet i gjestemodus bli slettet fra denne enheten. Hvis du vil beholde dem, må du registrere den nåværende kontoen først.",
     "guest_data_loss_continue": "Fortsett",
-    "guest_data_loss_cancel": "Avbryt"
+    "guest_data_loss_cancel": "Avbryt",
+    "guest_upgrade_existing_account_conflict": "Denne kontoen inneholder allerede lagrede data. En ny gjestekonto kan ikke knyttes til den igjen for å unngå å overskrive eksisterende informasjon.",
+    "guest_upgrade_existing_account_conflict_title": "Denne kontoen inneholder allerede data",
+    "ok": "OK"
 }

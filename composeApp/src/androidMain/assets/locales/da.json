@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Slet lokale gæstedata?",
     "guest_data_loss_message": "Hvis du logger ud eller skifter konto nu, vil alle data oprettet i gæstetilstand blive slettet fra denne enhed. Hvis du vil beholde dem, skal du registrere den nuværende konto først.",
     "guest_data_loss_continue": "Fortsæt",
-    "guest_data_loss_cancel": "Annuller"
+    "guest_data_loss_cancel": "Annuller",
+    "guest_upgrade_existing_account_conflict": "Denne konto indeholder allerede gemte data. En ny gæstekonto kan ikke linkes til den igen for at undgå at overskrive eksisterende oplysninger.",
+    "guest_upgrade_existing_account_conflict_title": "Denne konto indeholder allerede data",
+    "ok": "OK"
 }

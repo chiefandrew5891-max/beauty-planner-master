@@ -857,5 +857,8 @@
     "guest_data_loss_title": "Vymazať lokálne údaje hosťa?",
     "guest_data_loss_message": "Ak sa teraz odhlásite alebo prepnete účet, všetky údaje vytvorené v režime hosťa budú z tohto zariadenia vymazané. Ak si ich chcete ponechať, najprv zaregistrujte aktuálny účet.",
     "guest_data_loss_continue": "Pokračovať",
-    "guest_data_loss_cancel": "Zrušiť"
+    "guest_data_loss_cancel": "Zrušiť",
+    "guest_upgrade_existing_account_conflict": "Tento účet už obsahuje uložené údaje. K novému účtu nie je možné opätovne prepojiť účet hosťa, aby sa predišlo prepísaniu existujúcich informácií.",
+    "guest_upgrade_existing_account_conflict_title": "Tento účet už obsahuje údaje",
+    "ok": "OK"
 }
