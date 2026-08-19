@@ -352,6 +352,9 @@ class AppRootState(
     }
 
     private fun discardGuestDataAndOpenAuth() {
+        guestUpgradeMode = false
+        showGuestUpgradeConflictDialog = false
+
         clearSessionLocalState()
 
         runCatching {

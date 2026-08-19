@@ -382,10 +382,7 @@ fun AppRootChrome(
                             title = guestTitle,
                             subtitle = null,
                             provider = SignInProvider.ANONYMOUS,
-                            onProfileClick = {
-                                state.navigateTo(Screen.PERSONAL_INFO_SETTINGS)
-                                state.closeDrawer()
-                            }
+                            onProfileClick = null
                         )
 
                         DrawerSubscriptionInfo(state)

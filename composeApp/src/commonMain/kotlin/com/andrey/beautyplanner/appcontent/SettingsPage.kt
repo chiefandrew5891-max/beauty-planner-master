@@ -52,6 +52,7 @@ import kotlinx.datetime.Clock
 @Composable
 fun SettingsPage(
     accessState: AccessState,
+    isGuestMode: Boolean,
     onSetOrChangePin: () -> Unit,
     onRemovePin: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit,
@@ -240,22 +241,24 @@ fun SettingsPage(
                     color = onBg
                 )
 
-                SettingsSectionBlock(
-                    title = Locales.t("profile_settings_title"),
-                    description = Locales.t("profile_settings_description"),
-                    actionButton = {
-                        PrimaryActionButton(
-                            text = Locales.t("profile_settings_open"),
-                            alignStart = isTabletLayout,
-                            onClick = onOpenPersonalInfoSettings
-                        )
-                    }
-                )
+                if (!isGuestMode) {
+                    SettingsSectionBlock(
+                        title = Locales.t("profile_settings_title"),
+                        description = Locales.t("profile_settings_description"),
+                        actionButton = {
+                            PrimaryActionButton(
+                                text = Locales.t("profile_settings_open"),
+                                alignStart = isTabletLayout,
+                                onClick = onOpenPersonalInfoSettings
+                            )
+                        }
+                    )
 
-                Divider(
-                    modifier = Modifier.padding(vertical = 2.dp),
-                    color = onSurface.copy(alpha = 0.10f)
-                )
+                    Divider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = onSurface.copy(alpha = 0.10f)
+                    )
+                }
 
                 SettingsSectionBlock(
                     title = Locales.t("appearance_settings"),

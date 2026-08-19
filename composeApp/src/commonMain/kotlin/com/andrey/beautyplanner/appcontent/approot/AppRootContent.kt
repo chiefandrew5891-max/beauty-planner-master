@@ -151,6 +151,7 @@ fun AppRootContent(
         when (state.currentScreen) {
             Screen.SETTINGS -> SettingsPage(
                 accessState = state.accessState,
+                isGuestMode = state.currentAuthUser?.provider == SignInProvider.ANONYMOUS,
                 onSetOrChangePin = {
                     state.showSetPinDialog = true
                 },

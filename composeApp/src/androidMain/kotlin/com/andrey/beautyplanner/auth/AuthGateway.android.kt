@@ -241,6 +241,14 @@ actual object AuthGateway {
             return credentialManagerResult
         }
 
+        if (
+            credentialManagerResult is SignInResult.Error &&
+            credentialManagerResult.message.orEmpty()
+                .contains("guest_upgrade_account_already_exists", ignoreCase = true)
+        ) {
+            return credentialManagerResult
+        }
+
         Log.w(
             "AuthGateway",
             "Credential Manager Google link failed, retry after clearing state"
@@ -253,6 +261,18 @@ actual object AuthGateway {
             serverClientId = serverClientId
         )
         if (retryResult is SignInResult.Success) {
+            return retryResult
+        }
+
+        if (retryResult is SignInResult.Cancelled) {
+            return retryResult
+        }
+
+        if (
+            retryResult is SignInResult.Error &&
+            retryResult.message.orEmpty()
+                .contains("guest_upgrade_account_already_exists", ignoreCase = true)
+        ) {
             return retryResult
         }
 
@@ -548,7 +568,10 @@ actual object AuthGateway {
             val lower = message.lowercase()
 
             when {
-                lower.contains("guest_upgrade_account_already_exists") ->
+                lower.contains("guest_upgrade_account_already_exists") ||
+                        lower.contains("credential-already-in-use") ||
+                        lower.contains("email-already-in-use") ||
+                        lower.contains("account-exists-with-different-credential") ->
                     SignInResult.Error("guest_upgrade_account_already_exists")
 
                 message.contains("No credentials available", ignoreCase = true) ->
@@ -598,7 +621,12 @@ actual object AuthGateway {
             Log.e("AuthGateway", "Legacy Google link failed", e)
 
             val lower = e.message.orEmpty().lowercase()
-            if (lower.contains("guest_upgrade_account_already_exists")) {
+            if (
+                lower.contains("guest_upgrade_account_already_exists") ||
+                lower.contains("credential-already-in-use") ||
+                lower.contains("email-already-in-use") ||
+                lower.contains("account-exists-with-different-credential")
+            ) {
                 return SignInResult.Error("guest_upgrade_account_already_exists")
             }
 
