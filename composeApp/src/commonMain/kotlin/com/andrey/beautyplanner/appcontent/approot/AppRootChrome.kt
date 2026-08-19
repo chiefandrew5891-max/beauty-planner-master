@@ -268,6 +268,7 @@ fun AppRootChrome(
     ) {
         val onSurface = MaterialTheme.colors.onSurface
         val accessState = state.accessState
+        val fontScale = state.fontScale
 
         val stateLabel = when {
             accessState.tier == AccessTier.PREMIUM ->
@@ -278,9 +279,10 @@ fun AppRootChrome(
                 Locales.t("premium_status_free")
         }
 
-        val shouldShowDaysLine = accessState.isTrialActive
-        val daysLeft = if (accessState.isTrialActive) {
-            val nowMillis = Clock.System.now().toEpochMilliseconds()
+        val nowMillis = Clock.System.now().toEpochMilliseconds()
+        val shouldShowDaysLine = accessState.isTrialActive && accessState.trialEndsAtMillis > nowMillis
+
+        val daysLeft = if (shouldShowDaysLine) {
             val millisLeft = (accessState.trialEndsAtMillis - nowMillis).coerceAtLeast(0L)
             kotlin.math.ceil(
                 millisLeft / (24.0 * 60.0 * 60.0 * 1000.0)
@@ -292,21 +294,12 @@ fun AppRootChrome(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 2.dp, bottom = 4.dp)
+                .padding(horizontal = 12.dp, vertical = 4.dp)
         ) {
             Text(
-                text = Locales.t("premium_subscription_status"),
+                text = "${Locales.t("premium_subscription_status_compact")}: $stateLabel",
                 color = onSurface.copy(alpha = 0.72f),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
-            )
-
-            Spacer(Modifier.height(2.dp))
-
-            Text(
-                text = stateLabel,
-                color = onSurface.copy(alpha = 0.92f),
-                fontSize = 14.sp,
+                fontSize = (11 * fontScale).sp,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -318,7 +311,7 @@ fun AppRootChrome(
                 Text(
                     text = "${Locales.t("premium_subscription_days_left")}: ${Locales.daysCount(daysLeft)}",
                     color = onSurface.copy(alpha = 0.54f),
-                    fontSize = 11.sp,
+                    fontSize = (11 * fontScale).sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

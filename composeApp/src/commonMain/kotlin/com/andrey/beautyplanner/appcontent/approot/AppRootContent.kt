@@ -236,6 +236,8 @@ fun AppRootContent(
             Screen.AUTH_WELCOME -> AuthWelcomeScreen(
                 errorMessage = state.authErrorMessage,
                 infoMessage = state.authInfoMessage,
+                showRegisterWithEmailButton = false,
+                showContinueWithEmailButton = true,
                 onContinueWithGoogle = {
                     state.continueWithGoogle()
                 },
@@ -246,7 +248,7 @@ fun AppRootContent(
                     state.openEmailSignInScreen()
                 },
                 onRegisterWithEmail = {
-                    state.openEmailSignInScreen()
+                    state.openEmailRegisterScreen()
                 },
                 onContinueAnonymously = {
                     state.continueAnonymously()
