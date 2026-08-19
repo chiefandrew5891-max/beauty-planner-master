@@ -1,6 +1,7 @@
 package com.andrey.beautyplanner
 
 import com.andrey.beautyplanner.access.AccessRepository
+import com.andrey.beautyplanner.Locales
 
 object AccessManager {
     const val FREE_ACTIVE_APPOINTMENTS_LIMIT = 5
@@ -104,5 +105,18 @@ object AccessManager {
      */
     fun getFreeLimitPopupThreshold(visibleCount: Int): Int? {
         return if (visibleCount in FREE_LIMIT_POPUP_THRESHOLDS) visibleCount else null
+    }
+
+    fun getUnifiedAccessStatusLabel(accessState: AccessState): String {
+        return when {
+            accessState.tier == AccessTier.PREMIUM || accessState.hasPremium ->
+                Locales.t("premium_status_premium")
+
+            accessState.isTrialActive || accessState.tier == AccessTier.TRIAL ->
+                Locales.t("premium_status_trial")
+
+            else ->
+                Locales.t("premium_status_free")
+        }
     }
 }

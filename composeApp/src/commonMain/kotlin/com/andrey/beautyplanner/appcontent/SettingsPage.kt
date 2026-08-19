@@ -278,16 +278,17 @@ fun SettingsPage(
                     Clock.System.now().toEpochMilliseconds()
                 )
 
-                val premiumStatusText = when {
-                    isPremiumActive -> Locales.t("premium_status_premium")
-                    accessState.tier == AccessTier.TRIAL -> Locales.t("premium_status_trial")
-                    else -> Locales.t("premium_status_free")
-                }
+                val premiumStatusText = AccessManager.getUnifiedAccessStatusLabel(accessState)
 
                 val premiumHintText = when {
-                    isPremiumActive -> Locales.t("premium_active_hint")
-                    accessState.tier == AccessTier.TRIAL -> Locales.t("premium_trial_active_hint")
-                    else -> Locales.t("premium_free_limited_hint")
+                    accessState.tier == AccessTier.PREMIUM || accessState.hasPremium ->
+                        Locales.t("premium_active_hint")
+
+                    accessState.isTrialActive || accessState.tier == AccessTier.TRIAL ->
+                        Locales.t("premium_trial_active_hint")
+
+                    else ->
+                        Locales.t("premium_free_limited_hint")
                 }
 
                 SettingsSectionBlock(

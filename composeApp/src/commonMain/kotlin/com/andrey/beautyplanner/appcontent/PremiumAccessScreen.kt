@@ -75,10 +75,17 @@ fun PremiumAccessScreen(
         Clock.System.now().toEpochMilliseconds()
     )
 
+    val unifiedStatusLabel = AccessManager.getUnifiedAccessStatusLabel(accessState)
+
     val subtitle = when {
-        isPremiumActive -> Locales.t("premium_active_subtitle")
-        accessState.isTrialActive -> Locales.t("premium_trial_active_subtitle")
-        else -> Locales.t("premium_trial_expired_subtitle")
+        accessState.tier == AccessTier.PREMIUM || accessState.hasPremium ->
+            Locales.t("premium_active_subtitle")
+
+        accessState.isTrialActive || accessState.tier == AccessTier.TRIAL ->
+            Locales.t("premium_trial_active_subtitle")
+
+        else ->
+            Locales.t("premium_trial_expired_subtitle")
     }
 
     val resolvedMessage = message.takeIf {
@@ -253,7 +260,7 @@ fun PremiumAccessScreen(
                         withStyle(
                             SpanStyle(fontWeight = FontWeight.SemiBold)
                         ) {
-                            append(subscriptionStateLabel(AppSettings.premiumSubscriptionState))
+                            append(unifiedStatusLabel)
                         }
                     },
                     fontSize = (14 * fontScale).sp,

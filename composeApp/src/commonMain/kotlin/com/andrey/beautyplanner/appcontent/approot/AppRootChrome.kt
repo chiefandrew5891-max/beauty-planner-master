@@ -70,6 +70,9 @@ import androidx.compose.ui.platform.LocalDensity
 import kotlin.math.abs
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 
 
 @Composable
@@ -270,17 +273,11 @@ fun AppRootChrome(
         val accessState = state.accessState
         val fontScale = state.fontScale
 
-        val stateLabel = when {
-            accessState.tier == AccessTier.PREMIUM ->
-                Locales.t("premium_status_premium")
-            accessState.isTrialActive ->
-                Locales.t("premium_status_trial")
-            else ->
-                Locales.t("premium_status_free")
-        }
+        val stateLabel = AccessManager.getUnifiedAccessStatusLabel(accessState)
 
         val nowMillis = Clock.System.now().toEpochMilliseconds()
-        val shouldShowDaysLine = accessState.isTrialActive && accessState.trialEndsAtMillis > nowMillis
+        val shouldShowDaysLine =
+            accessState.isTrialActive && accessState.trialEndsAtMillis > nowMillis
 
         val daysLeft = if (shouldShowDaysLine) {
             val millisLeft = (accessState.trialEndsAtMillis - nowMillis).coerceAtLeast(0L)
@@ -296,13 +293,31 @@ fun AppRootChrome(
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 4.dp)
         ) {
-            Text(
-                text = "${Locales.t("premium_subscription_status_compact")}: $stateLabel",
-                color = onSurface.copy(alpha = 0.72f),
-                fontSize = (11 * fontScale).sp,
-                fontWeight = FontWeight.Medium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            androidx.compose.foundation.text.BasicText(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            color = onSurface.copy(alpha = 0.72f),
+                            fontWeight = FontWeight.Normal
+                        )
+                    ) {
+                        append(Locales.t("premium_subscription_status_compact"))
+                        append(": ")
+                    }
+
+                    withStyle(
+                        style = SpanStyle(
+                            color = onSurface.copy(alpha = 0.92f),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    ) {
+                        append(stateLabel)
+                    }
+                },
+                style = androidx.compose.ui.text.TextStyle(
+                    fontSize = (14 * fontScale).sp
+                ),
+                maxLines = 1
             )
 
             if (shouldShowDaysLine) {
