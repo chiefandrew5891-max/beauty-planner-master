@@ -51,8 +51,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.andrey.beautyplanner.CloudSyncLogger
 import com.andrey.beautyplanner.remote.BackendBridge
 import kotlinx.coroutines.launch
-
-
+import androidx.compose.material.ButtonDefaults
 
 @Composable
 fun AppRootDialogs(state: AppRootState) {
@@ -153,29 +152,56 @@ fun AppRootDialogs(state: AppRootState) {
     }
 
     if (state.showRemovePinConfirm) {
-        AlertDialog(
-            onDismissRequest = { state.showRemovePinConfirm = false },
-            title = { Text(Locales.t("pin_remove")) },
-            text = { Text(Locales.t("clear_db_confirm")) },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        AppSettings.clearPin()
-                        state.showRemovePinConfirm = false
-                        state.locked = false
-                        state.mustCreatePin = false
+        AppDialogTheme {
+            AlertDialog(
+                onDismissRequest = { state.showRemovePinConfirm = false },
+                title = { Text(Locales.t("pin_remove")) },
+                text = { Text(Locales.t("clear_db_confirm")) },
+                buttons = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextButton(
+                            onClick = { state.showRemovePinConfirm = false },
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
+                            )
+                        ) {
+                            Text(Locales.t("cancel"))
+                        }
+
+                        Spacer(Modifier.width(15.dp))
+
+                        Button(
+                            onClick = {
+                                AppSettings.clearPin()
+                                state.showRemovePinConfirm = false
+                                state.locked = false
+                                state.mustCreatePin = false
+                            },
+                            modifier = Modifier.height(44.dp),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                                horizontal = 18.dp,
+                                vertical = 10.dp
+                            ),
+                            elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
+                            Text(Locales.t("yes"))
+                        }
                     }
-                ) {
-                    Text(Locales.t("yes"))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { state.showRemovePinConfirm = false }) {
-                    Text(Locales.t("cancel"))
-                }
-            },
-            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
-        )
+                },
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+            )
+        }
     }
 
     if (state.showClearDbBackupPrompt) {
@@ -217,6 +243,65 @@ fun AppRootDialogs(state: AppRootState) {
                     }
                 },
                 shape = AppDialogShape
+            )
+        }
+    }
+    if (state.showGuestDataLossDialog) {
+        AppDialogTheme {
+            AlertDialog(
+                onDismissRequest = { state.cancelGuestDataLossDialog() },
+                title = {
+                    Text(Locales.t("guest_data_loss_title"))
+                },
+                text = {
+                    Text(Locales.t("guest_data_loss_message"))
+                },
+                confirmButton = {
+                    Button(
+                        onClick = { state.confirmGuestDataDiscard() },
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .height(48.dp)
+                            .padding(end = 8.dp, bottom = 8.dp)
+                    ) {
+                        Text(Locales.t("guest_data_loss_continue"))
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { state.cancelGuestDataLossDialog() },
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
+                        Text(Locales.t("guest_data_loss_cancel"))
+                    }
+                },
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+            )
+        }
+    }
+
+    if (state.showGuestUpgradeConflictDialog) {
+        AppDialogTheme {
+            AlertDialog(
+                onDismissRequest = { state.dismissGuestUpgradeConflictDialog() },
+                title = {
+                    Text(Locales.t("guest_upgrade_existing_account_conflict_title"))
+                },
+                text = {
+                    Text(Locales.t("guest_upgrade_existing_account_conflict"))
+                },
+                confirmButton = {
+                    Button(
+                        onClick = { state.dismissGuestUpgradeConflictDialog() },
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .height(48.dp)
+                            .padding(end = 8.dp, bottom = 8.dp)
+                    ) {
+                        Text(Locales.t("ok"))
+                    }
+                },
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
             )
         }
     }

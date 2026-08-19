@@ -281,23 +281,47 @@ fun SetPinDialog(
                     }
                 }
             },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        tried = true
-                        if (!formValid) return@Button
-                        if (AppSettings.setPin(pin)) {
-                            onPinSet()
-                        }
-                    },
-                    shape = RoundedCornerShape(12.dp)
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(Locales.t("save"))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(Locales.t("cancel"))
+                    TextButton(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
+                        )
+                    ) {
+                        Text(Locales.t("cancel"))
+                    }
+
+                    Spacer(Modifier.width(15.dp))
+
+                    Button(
+                        onClick = {
+                            tried = true
+                            if (!formValid) return@Button
+                            if (AppSettings.setPin(pin)) {
+                                onPinSet()
+                            }
+                        },
+                        modifier = Modifier.height(44.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                            horizontal = 18.dp,
+                            vertical = 10.dp
+                        ),
+                        elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = MaterialTheme.colors.onPrimary
+                        )
+                    ) {
+                        Text(Locales.t("save"))
+                    }
                 }
             },
             shape = AppDialogShape
