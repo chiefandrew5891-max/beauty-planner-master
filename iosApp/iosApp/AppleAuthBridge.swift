@@ -6,29 +6,63 @@ import UIKit
 
 @objc final class AppleAuthBridge: NSObject {
 
+    private enum FlowMode {
+        case signIn
+        case linkAnonymous
+        case deleteReauth
+    }
+
     private static var currentNonce: String?
     private static var completionHandler: ((NSDictionary?, NSString?) -> Void)?
     private static var revokeCompletionHandler: ((NSDictionary?, NSString?) -> Void)?
-    private static var deleteFlowMode: Bool = false
+    private static var flowMode: FlowMode = .signIn
 
     @objc static func signInWithApple(
         completion: @escaping (NSDictionary?, NSString?) -> Void
     ) {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first(where: { $0.isKeyWindow }),
-              let rootViewController = window.rootViewController else {
+        startAppleFlow(
+            scopes: [.fullName, .email],
+            mode: .signIn,
+            completion: completion
+        )
+    }
+
+    @objc static func linkAnonymousWithApple(
+        completion: @escaping (NSDictionary?, NSString?) -> Void
+    ) {
+        guard let currentUser = Auth.auth().currentUser else {
+            completion(nil, "guest_link_requires_anonymous_user")
+            return
+        }
+
+        guard currentUser.isAnonymous else {
+            completion(nil, "guest_link_requires_anonymous_user")
+            return
+        }
+
+        startAppleFlow(
+            scopes: [.fullName, .email],
+            mode: .linkAnonymous,
+            completion: completion
+        )
+    }
+
+    @objc static func reauthenticateAndRevokeForDeletion(
+        completion: @escaping (NSDictionary?, NSString?) -> Void
+    ) {
+        guard let rootViewController = rootViewController() else {
             completion(nil, "Root view controller not found")
             return
         }
 
         let nonce = randomNonceString()
         currentNonce = nonce
-        completionHandler = completion
-        revokeCompletionHandler = nil
-        deleteFlowMode = false
+        revokeCompletionHandler = completion
+        completionHandler = nil
+        flowMode = .deleteReauth
 
         let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName, .email]
+        request.requestedScopes = []
         request.nonce = sha256(nonce)
 
         let controller = ASAuthorizationController(authorizationRequests: [request])
@@ -38,114 +72,114 @@ import UIKit
         delegateHolder = delegate
         controller.performRequests()
     }
-        @objc static func reauthenticateAndRevokeForDeletion(
-            completion: @escaping (NSDictionary?, NSString?) -> Void
-        ) {
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let window = windowScene.windows.first(where: { $0.isKeyWindow }),
-                  let rootViewController = window.rootViewController else {
-                completion(nil, "Root view controller not found")
-                return
-            }
-
-            let nonce = randomNonceString()
-            currentNonce = nonce
-            revokeCompletionHandler = completion
-            completionHandler = nil
-            deleteFlowMode = true
-
-            let request = ASAuthorizationAppleIDProvider().createRequest()
-            request.requestedScopes = []
-            request.nonce = sha256(nonce)
-
-            let controller = ASAuthorizationController(authorizationRequests: [request])
-            let delegate = AppleSignInDelegate(rootViewController: rootViewController)
-            controller.delegate = delegate
-            controller.presentationContextProvider = delegate
-            delegateHolder = delegate
-            controller.performRequests()
-        }
 
     private static var delegateHolder: AppleSignInDelegate?
 
-        fileprivate static func handleAuthorization(
-            credential: ASAuthorizationAppleIDCredential
-        ) {
-            guard let nonce = currentNonce else {
-                completionHandler?(nil, "Missing login state")
-                revokeCompletionHandler?(nil, "Missing login state")
+    private static func startAppleFlow(
+        scopes: [ASAuthorization.Scope],
+        mode: FlowMode,
+        completion: @escaping (NSDictionary?, NSString?) -> Void
+    ) {
+        guard let rootViewController = rootViewController() else {
+            completion(nil, "Root view controller not found")
+            return
+        }
+
+        let nonce = randomNonceString()
+        currentNonce = nonce
+        completionHandler = completion
+        revokeCompletionHandler = nil
+        flowMode = mode
+
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = scopes
+        request.nonce = sha256(nonce)
+
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        let delegate = AppleSignInDelegate(rootViewController: rootViewController)
+        controller.delegate = delegate
+        controller.presentationContextProvider = delegate
+        delegateHolder = delegate
+        controller.performRequests()
+    }
+
+    fileprivate static func handleAuthorization(
+        credential: ASAuthorizationAppleIDCredential
+    ) {
+        guard let nonce = currentNonce else {
+            completionHandler?(nil, "Missing login state")
+            revokeCompletionHandler?(nil, "Missing login state")
+            clearState()
+            return
+        }
+
+        guard let appleIDToken = credential.identityToken else {
+            completionHandler?(nil, "Unable to fetch identity token")
+            revokeCompletionHandler?(nil, "Unable to fetch identity token")
+            clearState()
+            return
+        }
+
+        guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+            completionHandler?(nil, "Unable to serialize token string")
+            revokeCompletionHandler?(nil, "Unable to serialize token string")
+            clearState()
+            return
+        }
+
+        let firebaseCredential = OAuthProvider.appleCredential(
+            withIDToken: idTokenString,
+            rawNonce: nonce,
+            fullName: credential.fullName
+        )
+
+        switch flowMode {
+        case .deleteReauth:
+            guard let currentUser = Auth.auth().currentUser else {
+                revokeCompletionHandler?(nil, "No authenticated user")
                 clearState()
                 return
             }
 
-            guard let appleIDToken = credential.identityToken else {
-                completionHandler?(nil, "Unable to fetch identity token")
-                revokeCompletionHandler?(nil, "Unable to fetch identity token")
+            guard let authCodeData = credential.authorizationCode,
+                  let authCodeString = String(data: authCodeData, encoding: .utf8),
+                  !authCodeString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                revokeCompletionHandler?(nil, "Unable to fetch authorization code")
                 clearState()
                 return
             }
 
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                completionHandler?(nil, "Unable to serialize token string")
-                revokeCompletionHandler?(nil, "Unable to serialize token string")
-                clearState()
-                return
-            }
-
-            let firebaseCredential = OAuthProvider.appleCredential(
-                withIDToken: idTokenString,
-                rawNonce: nonce,
-                fullName: credential.fullName
-            )
-
-            if deleteFlowMode {
-                guard let currentUser = Auth.auth().currentUser else {
-                    revokeCompletionHandler?(nil, "No authenticated user")
+            currentUser.reauthenticate(with: firebaseCredential) { _, reauthError in
+                if let reauthError = reauthError {
+                    revokeCompletionHandler?(nil, reauthError.localizedDescription as NSString)
                     clearState()
                     return
                 }
 
-                guard let authCodeData = credential.authorizationCode,
-                      let authCodeString = String(data: authCodeData, encoding: .utf8),
-                      !authCodeString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                    revokeCompletionHandler?(nil, "Unable to fetch authorization code")
-                    clearState()
-                    return
-                }
-
-                currentUser.reauthenticate(with: firebaseCredential) { _, reauthError in
-                    if let reauthError = reauthError {
-                        revokeCompletionHandler?(nil, reauthError.localizedDescription as NSString)
+                Auth.auth().revokeToken(withAuthorizationCode: authCodeString) { revokeError in
+                    if let revokeError = revokeError {
+                        revokeCompletionHandler?(nil, revokeError.localizedDescription as NSString)
                         clearState()
                         return
                     }
 
-                    Auth.auth().revokeToken(withAuthorizationCode: authCodeString) { revokeError in
-                        if let revokeError = revokeError {
-                            revokeCompletionHandler?(nil, revokeError.localizedDescription as NSString)
-                            clearState()
-                            return
-                        }
+                    let dict: NSDictionary = [
+                        "uid": currentUser.uid,
+                        "email": currentUser.email ?? "",
+                        "displayName": currentUser.displayName ?? "",
+                        "provider": "APPLE",
+                        "revoked": "true"
+                    ]
 
-                        let dict: NSDictionary = [
-                            "uid": currentUser.uid,
-                            "email": currentUser.email ?? "",
-                            "displayName": currentUser.displayName ?? "",
-                            "provider": "APPLE",
-                            "revoked": "true"
-                        ]
-
-                        revokeCompletionHandler?(dict, nil)
-                        clearState()
-                    }
+                    revokeCompletionHandler?(dict, nil)
+                    clearState()
                 }
-
-                return
             }
 
+        case .signIn:
             Auth.auth().signIn(with: firebaseCredential) { authResult, error in
                 if let error = error {
-                    completionHandler?(nil, error.localizedDescription as NSString)
+                    completionHandler?(nil, normalizedAppleFirebaseError(error))
                     clearState()
                     return
                 }
@@ -156,32 +190,48 @@ import UIKit
                     return
                 }
 
-                let fallbackEmail = credential.email?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                let resolvedEmail = (firebaseUser.email ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                    ? fallbackEmail
-                    : (firebaseUser.email ?? "")
+                completionHandler?(resolvedUserDict(firebaseUser, credential: credential), nil)
+                clearState()
+            }
 
-                let fullNameParts = [
-                    credential.fullName?.givenName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
-                    credential.fullName?.familyName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                ].filter { !$0.isEmpty }
+        case .linkAnonymous:
+            guard let currentUser = Auth.auth().currentUser else {
+                completionHandler?(nil, "guest_link_requires_anonymous_user")
+                clearState()
+                return
+            }
 
-                let fallbackDisplayName = fullNameParts.joined(separator: " ")
-                let resolvedDisplayName = (firebaseUser.displayName ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                    ? fallbackDisplayName
-                    : (firebaseUser.displayName ?? "")
+            guard currentUser.isAnonymous else {
+                completionHandler?(nil, "guest_link_requires_anonymous_user")
+                clearState()
+                return
+            }
 
-                let dict: NSDictionary = [
-                    "uid": firebaseUser.uid,
-                    "email": resolvedEmail,
-                    "displayName": resolvedDisplayName,
-                    "provider": "APPLE"
-                ]
+            currentUser.link(with: firebaseCredential) { authResult, error in
+                if let error = error as NSError? {
+                    if error.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
+                           error.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                        completionHandler?(nil, "guest_upgrade_account_already_exists")
+                        clearState()
+                        return
+                    }
 
-                completionHandler?(dict, nil)
+                    completionHandler?(nil, normalizedAppleFirebaseError(error))
+                    clearState()
+                    return
+                }
+
+                guard let firebaseUser = authResult?.user else {
+                    completionHandler?(nil, "Firebase user is null")
+                    clearState()
+                    return
+                }
+
+                completionHandler?(resolvedUserDict(firebaseUser, credential: credential), nil)
                 clearState()
             }
         }
+    }
 
     fileprivate static func handleError(_ error: Error) {
         let nsError = error as NSError
@@ -204,12 +254,61 @@ import UIKit
         clearState()
     }
 
+    private static func resolvedUserDict(
+        _ firebaseUser: User,
+        credential: ASAuthorizationAppleIDCredential
+    ) -> NSDictionary {
+        let fallbackEmail = credential.email?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let resolvedEmail = (firebaseUser.email ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? fallbackEmail
+            : (firebaseUser.email ?? "")
+
+        let fullNameParts = [
+            credential.fullName?.givenName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
+            credential.fullName?.familyName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        ].filter { !$0.isEmpty }
+
+        let fallbackDisplayName = fullNameParts.joined(separator: " ")
+        let resolvedDisplayName = (firebaseUser.displayName ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? fallbackDisplayName
+            : (firebaseUser.displayName ?? "")
+
+        return [
+            "uid": firebaseUser.uid,
+            "email": resolvedEmail,
+            "displayName": resolvedDisplayName,
+            "provider": "APPLE"
+        ]
+    }
+
+    private static func normalizedAppleFirebaseError(_ error: Error) -> NSString {
+        let nsError = error as NSError
+
+        if nsError.domain == AuthErrorDomain {
+            if nsError.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
+                   nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                return "guest_upgrade_account_already_exists"
+            }
+        }
+
+        return nsError.localizedDescription as NSString
+    }
+
     private static func clearState() {
         currentNonce = nil
         completionHandler = nil
         revokeCompletionHandler = nil
-        deleteFlowMode = false
+        flowMode = .signIn
         delegateHolder = nil
+    }
+
+    private static func rootViewController() -> UIViewController? {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+              let rootViewController = window.rootViewController else {
+            return nil
+        }
+        return rootViewController
     }
 
     private static func sha256(_ input: String) -> String {

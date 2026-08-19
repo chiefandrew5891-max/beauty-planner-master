@@ -51,6 +51,49 @@ struct ComposeView: UIViewControllerRepresentable {
             }
         }
 
+        signInBridge.linkAnonymousWithGoogle = { deferred in
+            GoogleAuthBridge.linkAnonymousWithGoogle { result, error in
+                if let error = error {
+                    let errorResult = SignInResult.Error(message: error as String)
+                    deferred.complete(value: errorResult)
+                    return
+                }
+
+                guard let result = result else {
+                    let errorResult = SignInResult.Error(message: "Google anonymous link returned empty result")
+                    deferred.complete(value: errorResult)
+                    return
+                }
+
+                let uid = result["uid"] as? String ?? ""
+                let email = result["email"] as? String ?? ""
+                let displayName = result["displayName"] as? String ?? ""
+                let providerRaw = result["provider"] as? String ?? "GOOGLE"
+
+                let provider: SignInProvider
+                switch providerRaw {
+                case "ANONYMOUS":
+                    provider = .anonymous
+                case "EMAIL":
+                    provider = .email
+                case "APPLE":
+                    provider = .apple
+                default:
+                    provider = .google
+                }
+
+                let user = AuthUser(
+                    uid: uid,
+                    provider: provider,
+                    email: email,
+                    displayName: displayName
+                )
+
+                let successResult = SignInResult.Success(user: user)
+                deferred.complete(value: successResult)
+            }
+        }
+
         appleBridge.startAppleSignIn = { deferred in
             AppleAuthBridge.signInWithApple { result, error in
                 if let error = error {
@@ -81,6 +124,37 @@ struct ComposeView: UIViewControllerRepresentable {
                 deferred.complete(value: successResult)
             }
         }
+
+        appleBridge.linkAnonymousWithApple = { deferred in
+            AppleAuthBridge.linkAnonymousWithApple { result, error in
+                if let error = error {
+                    let errorResult = SignInResult.Error(message: error as String)
+                    deferred.complete(value: errorResult)
+                    return
+                }
+
+                guard let result = result else {
+                    let errorResult = SignInResult.Error(message: "Apple anonymous link returned empty result")
+                    deferred.complete(value: errorResult)
+                    return
+                }
+
+                let uid = result["uid"] as? String ?? ""
+                let email = result["email"] as? String ?? ""
+                let displayName = result["displayName"] as? String ?? ""
+
+                let user = AuthUser(
+                    uid: uid,
+                    provider: .apple,
+                    email: email,
+                    displayName: displayName
+                )
+
+                let successResult = SignInResult.Success(user: user)
+                deferred.complete(value: successResult)
+            }
+        }
+
         AppleDeletionBridgeConnector().reauthenticateAndRevoke = { deferred in
             AppleAuthBridge.reauthenticateAndRevokeForDeletion { result, error in
                 DispatchQueue.main.async {
@@ -167,6 +241,43 @@ struct ComposeView: UIViewControllerRepresentable {
                     guard let result = result else {
                         deferred.completeExceptionally(
                             exception: KotlinIllegalStateException(message: "Email registration returned null result")
+                        )
+                        return
+                    }
+
+                    var mapped: [String: String] = [:]
+                    for (keyAny, valueAny) in result {
+                        guard let key = keyAny as? String else { continue }
+
+                        if let value = valueAny as? String {
+                            mapped[key] = value
+                        } else if let value = valueAny as? NSString {
+                            mapped[key] = value as String
+                        } else if let value = valueAny as? NSNumber {
+                            mapped[key] = value.stringValue
+                        } else {
+                            mapped[key] = "\(valueAny)"
+                        }
+                    }
+
+                    deferred.complete(value: mapped)
+                }
+            }
+        }
+
+        EmailAuthBridgeConnector().linkAnonymousWithEmail = { email, password, deferred in
+            GoogleAuthBridge.linkAnonymousWithEmail(email, password: password) { result, error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        deferred.completeExceptionally(
+                            exception: KotlinIllegalStateException(message: error as String)
+                        )
+                        return
+                    }
+
+                    guard let result = result else {
+                        deferred.completeExceptionally(
+                            exception: KotlinIllegalStateException(message: "Anonymous email link returned null result")
                         )
                         return
                     }
@@ -565,7 +676,7 @@ struct ComposeView: UIViewControllerRepresentable {
 
         ProfileImagePicker.shared.pickImageImpl = { callback in
             ProfileImagePickerBridge.pickImage { base64 in
-                callback(base64)
+                callback.invoke(p1: base64)
             }
         }
 

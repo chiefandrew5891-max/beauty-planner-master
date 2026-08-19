@@ -9,6 +9,9 @@ object EmailAuthBridgeConnector {
     var registerUser:
             ((String, String, CompletableDeferred<Map<String, String>>) -> Unit)? = null
 
+    var linkAnonymousWithEmail:
+            ((String, String, CompletableDeferred<Map<String, String>>) -> Unit)? = null
+
     var sendPasswordReset:
             ((String, CompletableDeferred<Map<String, String>>) -> Unit)? = null
 

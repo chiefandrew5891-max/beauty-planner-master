@@ -30,7 +30,7 @@ import GoogleSignIn
 
         GIDSignIn.sharedInstance.signIn(withPresenting: rootVC) { result, error in
             if let error = error {
-                completion(nil, error.localizedDescription as NSString)
+                completion(nil, normalizedAuthError(error))
                 return
             }
 
@@ -49,7 +49,79 @@ import GoogleSignIn
 
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let error = error {
-                    completion(nil, error.localizedDescription as NSString)
+                    completion(nil, normalizedAuthError(error))
+                    return
+                }
+
+                guard let firebaseUser = authResult?.user else {
+                    completion(nil, "Firebase user is null")
+                    return
+                }
+
+                completion(userDict(firebaseUser, fallbackProvider: "GOOGLE"), nil)
+            }
+        }
+    }
+
+    @objc static func linkAnonymousWithGoogle(
+        completion: @escaping (NSDictionary?, NSString?) -> Void
+    ) {
+        guard let currentUser = Auth.auth().currentUser else {
+            completion(nil, "guest_link_requires_anonymous_user")
+            return
+        }
+
+        guard currentUser.isAnonymous else {
+            completion(nil, "guest_link_requires_anonymous_user")
+            return
+        }
+
+        guard let rootVC = topViewController() else {
+            completion(nil, "Root view controller not found")
+            return
+        }
+
+        guard let app = FirebaseApp.app() else {
+            completion(nil, "Firebase default app is not configured")
+            return
+        }
+
+        guard let clientID = app.options.clientID else {
+            completion(nil, "Firebase clientID is missing")
+            return
+        }
+
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
+        GIDSignIn.sharedInstance.signIn(withPresenting: rootVC) { result, error in
+            if let error = error {
+                completion(nil, normalizedAuthError(error))
+                return
+            }
+
+            guard let user = result?.user else {
+                completion(nil, "Google user is null")
+                return
+            }
+
+            guard let idToken = user.idToken?.tokenString else {
+                completion(nil, "Google ID token is missing")
+                return
+            }
+
+            let accessToken = user.accessToken.tokenString
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+
+            currentUser.link(with: credential) { authResult, error in
+                if let error = error as NSError? {
+                    if error.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
+                           error.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                        completion(nil, "guest_upgrade_account_already_exists")
+                        return
+                    }
+
+                    completion(nil, normalizedAuthError(error))
                     return
                 }
 
@@ -81,7 +153,7 @@ import GoogleSignIn
 
         Auth.auth().signInAnonymously { authResult, error in
             if let error = error {
-                completion(nil, error.localizedDescription as NSString)
+                completion(nil, normalizedAuthError(error))
                 return
             }
 
@@ -103,7 +175,7 @@ import GoogleSignIn
 
         Auth.auth().signIn(withEmail: cleanEmail, password: password) { authResult, error in
             if let error = error {
-                completion(nil, error.localizedDescription as NSString)
+                completion(nil, normalizedAuthError(error))
                 return
             }
 
@@ -125,12 +197,52 @@ import GoogleSignIn
 
         Auth.auth().createUser(withEmail: cleanEmail, password: password) { authResult, error in
             if let error = error {
-                completion(nil, error.localizedDescription as NSString)
+                completion(nil, normalizedAuthError(error))
                 return
             }
 
             guard let user = authResult?.user else {
                 completion(nil, "Email registration returned null user")
+                return
+            }
+
+            completion(userDict(user, fallbackProvider: "EMAIL"), nil)
+        }
+    }
+
+    @objc static func linkAnonymousWithEmail(
+        _ email: String,
+        password: String,
+        completion: @escaping (NSDictionary?, NSString?) -> Void
+    ) {
+        let cleanEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let currentUser = Auth.auth().currentUser else {
+            completion(nil, "guest_link_requires_anonymous_user")
+            return
+        }
+
+        guard currentUser.isAnonymous else {
+            completion(nil, "guest_link_requires_anonymous_user")
+            return
+        }
+
+        let credential = EmailAuthProvider.credential(withEmail: cleanEmail, password: password)
+
+        currentUser.link(with: credential) { authResult, error in
+            if let error = error as NSError? {
+                if error.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
+                       error.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                    completion(nil, "guest_upgrade_account_already_exists")
+                    return
+                }
+
+                completion(nil, normalizedAuthError(error))
+                return
+            }
+
+            guard let user = authResult?.user else {
+                completion(nil, "Anonymous email link returned null user")
                 return
             }
 
@@ -148,7 +260,7 @@ import GoogleSignIn
 
         user.sendEmailVerification { error in
             if let error = error {
-                completion(error.localizedDescription as NSString)
+                completion(normalizedAuthError(error))
             } else {
                 completion(nil)
             }
@@ -165,7 +277,7 @@ import GoogleSignIn
 
         user.reload { error in
             if let error = error {
-                completion(nil, error.localizedDescription as NSString)
+                completion(nil, normalizedAuthError(error))
                 return
             }
 
@@ -181,7 +293,7 @@ import GoogleSignIn
 
         Auth.auth().sendPasswordReset(withEmail: cleanEmail) { error in
             if let error = error {
-                completion(error.localizedDescription as NSString)
+                completion(normalizedAuthError(error))
             } else {
                 completion(nil)
             }
@@ -210,8 +322,7 @@ import GoogleSignIn
             }
 
             GIDSignIn.sharedInstance.signOut()
-            GIDSignIn.sharedInstance.disconnect { error in
-                // intentionally ignored, best-effort cleanup
+            GIDSignIn.sharedInstance.disconnect { _ in
             }
 
             return nil
@@ -229,7 +340,7 @@ import GoogleSignIn
 
         functions.httpsCallable(name).call(payload as? [String: Any]) { result, error in
             if let error = error {
-                completion(nil, error.localizedDescription as NSString)
+                completion(nil, normalizedAuthError(error))
                 return
             }
 
@@ -260,6 +371,25 @@ import GoogleSignIn
             if info.providerID == "apple.com" { return "APPLE" }
         }
         return "ANONYMOUS"
+    }
+
+    private static func normalizedAuthError(_ error: Error) -> NSString {
+        let nsError = error as NSError
+
+        if nsError.domain == GIDSignInErrorDomain {
+            if nsError.code == GIDSignInError.canceled.rawValue {
+                return "USER_CANCELLED"
+            }
+        }
+
+        if nsError.domain == AuthErrorDomain {
+            if nsError.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
+                   nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                return "guest_upgrade_account_already_exists"
+            }
+        }
+
+        return nsError.localizedDescription as NSString
     }
 
     private static func topViewController() -> UIViewController? {

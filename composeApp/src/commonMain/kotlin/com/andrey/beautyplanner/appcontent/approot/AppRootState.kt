@@ -439,44 +439,6 @@ class AppRootState(
         }
     }
 
-    private fun accountHasExistingLocalData(userId: String): Boolean {
-        val existingAppointments = runCatching {
-            DataManager.loadFromDatabase(LocalProfileManager.profileKeyForUser(userId))
-        }.getOrDefault(emptyList())
-
-        return existingAppointments.isNotEmpty()
-    }
-
-    private suspend fun canApplyGuestSnapshotToAccount(userId: String): Boolean {
-        runCatching {
-            runPostLoginFullSync()
-        }.onFailure {
-            CloudSyncLogger.log("canApplyGuestSnapshotToAccount: pre-check sync failed: ${it.message}")
-        }
-
-        val existingAppointments = runCatching {
-            DataManager.loadFromDatabase(LocalProfileManager.profileKeyForUser(userId))
-        }.getOrDefault(emptyList())
-
-        if (existingAppointments.isNotEmpty()) {
-            return false
-        }
-
-        val hasExistingProfileData =
-            AppSettings.ownerName.isNotBlank() ||
-                    AppSettings.profilePhone.isNotBlank() ||
-                    AppSettings.profileSpecialization.isNotBlank() ||
-                    AppSettings.profileDisplayCustomName ||
-                    AppSettings.profileAvatarUrl.isNotBlank() ||
-                    AppSettings.profileAvatarBase64.isNotBlank() ||
-                    AppSettings.profileAvatarStoragePath.isNotBlank() ||
-                    AppSettings.serviceTemplates.isNotEmpty() ||
-                    AppSettings.weeklyBlockedIntervals.isNotEmpty() ||
-                    AppSettings.scheduleDateOverrides.isNotEmpty()
-
-        return !hasExistingProfileData
-    }
-
     fun showGlobalLoading(message: String? = null) {
         globalLoadingMessage = message
         isGlobalLoading = true
@@ -616,6 +578,9 @@ class AppRootState(
 
             lower.contains("auth_email_not_verified") ->
                 Locales.t("auth_email_not_verified")
+
+            lower.contains("guest_upgrade_account_already_exists") ->
+                Locales.t("guest_upgrade_existing_account_conflict")
 
             lower.contains("password is invalid") ||
                     lower.contains("wrong-password") ||
@@ -962,10 +927,16 @@ class AppRootState(
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
             try {
-                runCatching { AuthGateway.clearCredentialState() }
-                runCatching { AuthGateway.prepareForNewSignIn() }
+                if (!guestUpgradeMode) {
+                    runCatching { AuthGateway.clearCredentialState() }
+                    runCatching { AuthGateway.prepareForNewSignIn() }
+                }
 
-                when (val result = AuthGateway.signInWithGoogle()) {
+                when (val result = if (guestUpgradeMode) {
+                    AuthGateway.linkAnonymousWithGoogle()
+                } else {
+                    AuthGateway.signInWithGoogle()
+                }) {
                     is SignInResult.Success -> {
                         runCatching {
                             val guestSnapshot =
@@ -1002,17 +973,6 @@ class AppRootState(
                             )
 
                             if (guestUpgradeMode && guestSnapshot != null) {
-                                val canApply = canApplyGuestSnapshotToAccount(result.user.uid)
-                                if (!canApply) {
-                                    guestUpgradeMode = false
-                                    authResolved = true
-                                    authErrorMessage = null
-                                    authInfoMessage = null
-                                    currentScreen = Screen.MONTH
-                                    openGuestUpgradeConflictDialog()
-                                    return@runCatching
-                                }
-
                                 applyGuestSnapshotToCurrentAuthenticatedProfile(
                                     snapshot = guestSnapshot,
                                     userId = result.user.uid
@@ -1049,6 +1009,14 @@ class AppRootState(
                     is SignInResult.Error -> {
                         val raw = result.message.orEmpty()
                         val lower = raw.lowercase()
+
+                        if (guestUpgradeMode && lower.contains("guest_upgrade_account_already_exists")) {
+                            authErrorMessage = null
+                            authInfoMessage = null
+                            openGuestUpgradeConflictDialog()
+                            return@launch
+                        }
+
                         val mapped = mapAuthErrorMessage(result.message)
 
                         if (mapped.isNullOrBlank()) {
@@ -1075,7 +1043,11 @@ class AppRootState(
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
             try {
-                when (val result = AuthGateway.signInWithApple()) {
+                when (val result = if (guestUpgradeMode) {
+                    AuthGateway.linkAnonymousWithApple()
+                } else {
+                    AuthGateway.signInWithApple()
+                }) {
                     is SignInResult.Success -> {
                         runCatching {
                             val guestSnapshot =
@@ -1112,17 +1084,6 @@ class AppRootState(
                             )
 
                             if (guestUpgradeMode && guestSnapshot != null) {
-                                val canApply = canApplyGuestSnapshotToAccount(result.user.uid)
-                                if (!canApply) {
-                                    guestUpgradeMode = false
-                                    authResolved = true
-                                    authErrorMessage = null
-                                    authInfoMessage = null
-                                    currentScreen = Screen.MONTH
-                                    openGuestUpgradeConflictDialog()
-                                    return@runCatching
-                                }
-
                                 applyGuestSnapshotToCurrentAuthenticatedProfile(
                                     snapshot = guestSnapshot,
                                     userId = result.user.uid
@@ -1159,6 +1120,14 @@ class AppRootState(
                     is SignInResult.Error -> {
                         val raw = result.message.orEmpty()
                         val lower = raw.lowercase()
+
+                        if (guestUpgradeMode && lower.contains("guest_upgrade_account_already_exists")) {
+                            authErrorMessage = null
+                            authInfoMessage = null
+                            openGuestUpgradeConflictDialog()
+                            return@launch
+                        }
+
                         val mapped = mapAuthErrorMessage(result.message)
 
                         if (mapped.isNullOrBlank()) {
@@ -1638,17 +1607,78 @@ class AppRootState(
         scope.launch {
             showGlobalLoading(Locales.t("loading"))
             try {
-                runCatching { AuthGateway.clearCredentialState() }
-                runCatching { AuthGateway.prepareForNewSignIn() }
+                if (!guestUpgradeMode) {
+                    runCatching { AuthGateway.clearCredentialState() }
+                    runCatching { AuthGateway.prepareForNewSignIn() }
+                }
 
                 if (authEmailRegisterMode) {
-                    when (val result = AuthGateway.registerWithEmail(cleanEmail, cleanPassword)) {
+                    when (val result = if (guestUpgradeMode) {
+                        AuthGateway.linkAnonymousWithEmail(cleanEmail, cleanPassword)
+                    } else {
+                        AuthGateway.registerWithEmail(cleanEmail, cleanPassword)
+                    }) {
                         is SignInResult.Success -> {
-                            authEmailRegisterMode = false
-                            authErrorMessage = null
-                            authInfoMessage = null
-                            authInfoDialogMessage =
-                                Locales.t("auth_email_verification_sent") + " " + cleanEmail
+                            if (guestUpgradeMode) {
+                                try {
+                                    val guestSnapshot = captureGuestMigrationSnapshot()
+
+                                    handleAuthenticatedUserChange(result.user)
+
+                                    val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
+                                        installId = IdentityManager.getOrCreateInstallId(),
+                                        firebaseUid = result.user.uid,
+                                        platform = getPlatform().backendPlatform,
+                                        authProvider = "password",
+                                        email = result.user.email,
+                                        displayName = result.user.displayName
+                                    )
+
+                                    com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
+                                        remote = remote,
+                                        currentAuthUserId = result.user.uid
+                                    )
+
+                                    syncAccessStatusFromServerIfPossible()
+
+                                    com.andrey.beautyplanner.remote.BackendBridge.syncIdentity(
+                                        firebaseUid = result.user.uid,
+                                        email = result.user.email,
+                                        displayName = result.user.displayName,
+                                        authProvider = "password"
+                                    )
+
+                                    applyGuestSnapshotToCurrentAuthenticatedProfile(
+                                        snapshot = guestSnapshot,
+                                        userId = result.user.uid
+                                    )
+
+                                    runPostLoginFullSync()
+                                    clearGuestStorageAfterMigration()
+
+                                    guestUpgradeMode = false
+                                    authEmailRegisterMode = false
+                                    authResolved = true
+                                    authErrorMessage = null
+                                    authInfoMessage = null
+                                    currentScreen = Screen.MONTH
+                                } catch (e: Throwable) {
+                                    guestUpgradeMode = false
+                                    runCatching { AuthGateway.signOut() }
+                                    runCatching { AuthGateway.clearCredentialState() }
+
+                                    authInfoMessage = null
+                                    resetToSignedOutState(
+                                        keepAuthErrorMessage = mapAuthErrorMessage(e.message)
+                                    )
+                                }
+                            } else {
+                                authEmailRegisterMode = false
+                                authErrorMessage = null
+                                authInfoMessage = null
+                                authInfoDialogMessage =
+                                    Locales.t("auth_email_verification_sent") + " " + cleanEmail
+                            }
                         }
 
                         is SignInResult.Cancelled -> {
@@ -1657,6 +1687,15 @@ class AppRootState(
                         }
 
                         is SignInResult.Error -> {
+                            val lower = result.message.orEmpty().lowercase()
+
+                            if (guestUpgradeMode && lower.contains("guest_upgrade_account_already_exists")) {
+                                authErrorMessage = null
+                                authInfoMessage = null
+                                openGuestUpgradeConflictDialog()
+                                return@launch
+                            }
+
                             val mapped = mapAuthErrorMessage(result.message)
                             if (mapped.isNullOrBlank()) {
                                 authErrorMessage = null
@@ -1668,7 +1707,11 @@ class AppRootState(
                         }
                     }
                 } else {
-                    when (val result = AuthGateway.signInWithEmail(cleanEmail, cleanPassword)) {
+                    when (val result = if (guestUpgradeMode) {
+                        SignInResult.Error("guest_upgrade_email_requires_registration_mode")
+                    } else {
+                        AuthGateway.signInWithEmail(cleanEmail, cleanPassword)
+                    }) {
                         is SignInResult.Success -> {
                             try {
                                 val guestSnapshot =
@@ -1711,23 +1754,13 @@ class AppRootState(
                                 )
 
                                 if (guestUpgradeMode && guestSnapshot != null) {
-                                    val canApply = canApplyGuestSnapshotToAccount(result.user.uid)
-                                    if (!canApply) {
-                                        guestUpgradeMode = false
-                                        authResolved = true
-                                        authErrorMessage = null
-                                        authInfoMessage = null
-                                        currentScreen = Screen.MONTH
-                                        openGuestUpgradeConflictDialog()
-                                    } else {
-                                        applyGuestSnapshotToCurrentAuthenticatedProfile(
-                                            snapshot = guestSnapshot,
-                                            userId = result.user.uid
-                                        )
+                                    applyGuestSnapshotToCurrentAuthenticatedProfile(
+                                        snapshot = guestSnapshot,
+                                        userId = result.user.uid
+                                    )
 
-                                        runPostLoginFullSync()
-                                        clearGuestStorageAfterMigration()
-                                    }
+                                    runPostLoginFullSync()
+                                    clearGuestStorageAfterMigration()
                                 } else {
                                     runPostLoginFullSync()
                                 }

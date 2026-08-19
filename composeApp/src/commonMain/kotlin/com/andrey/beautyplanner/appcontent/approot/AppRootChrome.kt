@@ -54,6 +54,7 @@ import com.andrey.beautyplanner.rememberProfileAvatarBitmap
 import com.andrey.beautyplanner.appcontent.subscriptionStateLabel
 import com.andrey.beautyplanner.AccessManager
 import com.andrey.beautyplanner.PremiumFeature
+import com.andrey.beautyplanner.AccessTier
 import kotlinx.datetime.Clock
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
