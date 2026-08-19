@@ -314,6 +314,16 @@ actual object AuthGateway {
             SignInResult.Error("guest_upgrade_account_already_exists")
         } catch (e: Exception) {
             Log.e("AuthGateway", "Anonymous email link failed", e)
+
+            val lower = e.message.orEmpty().lowercase()
+            if (lower.contains("credential-already-in-use") ||
+                lower.contains("email-already-in-use") ||
+                lower.contains("account-exists-with-different-credential") ||
+                lower.contains("guest_upgrade_account_already_exists")
+            ) {
+                return SignInResult.Error("guest_upgrade_account_already_exists")
+            }
+
             SignInResult.Error(
                 e.message ?: Locales.t("auth_email_register_failed")
             )
@@ -535,8 +545,12 @@ actual object AuthGateway {
             Log.e("AuthGateway", "Credential Manager Google link failed", e)
 
             val message = e.message.orEmpty()
+            val lower = message.lowercase()
 
             when {
+                lower.contains("guest_upgrade_account_already_exists") ->
+                    SignInResult.Error("guest_upgrade_account_already_exists")
+
                 message.contains("No credentials available", ignoreCase = true) ->
                     SignInResult.Error(Locales.t("auth_google_no_credentials"))
 
@@ -582,6 +596,12 @@ actual object AuthGateway {
             }
         } catch (e: Exception) {
             Log.e("AuthGateway", "Legacy Google link failed", e)
+
+            val lower = e.message.orEmpty().lowercase()
+            if (lower.contains("guest_upgrade_account_already_exists")) {
+                return SignInResult.Error("guest_upgrade_account_already_exists")
+            }
+
             when (primaryFailure) {
                 is SignInResult.Error -> primaryFailure
                 else -> SignInResult.Error(Locales.t("auth_google_failed"))
@@ -623,6 +643,16 @@ actual object AuthGateway {
             SignInResult.Error("guest_upgrade_account_already_exists")
         } catch (e: Exception) {
             Log.e("AuthGateway", "Firebase Google credential link failed", e)
+
+            val lower = e.message.orEmpty().lowercase()
+            if (lower.contains("credential-already-in-use") ||
+                lower.contains("email-already-in-use") ||
+                lower.contains("account-exists-with-different-credential") ||
+                lower.contains("guest_upgrade_account_already_exists")
+            ) {
+                return SignInResult.Error("guest_upgrade_account_already_exists")
+            }
+
             SignInResult.Error(Locales.t("auth_google_failed"))
         }
     }

@@ -116,7 +116,8 @@ import GoogleSignIn
             currentUser.link(with: credential) { authResult, error in
                 if let error = error as NSError? {
                     if error.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
-                           error.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                           error.code == AuthErrorCode.emailAlreadyInUse.rawValue ||
+                           error.code == AuthErrorCode.accountExistsWithDifferentCredential.rawValue {
                         completion(nil, "guest_upgrade_account_already_exists")
                         return
                     }
@@ -232,7 +233,8 @@ import GoogleSignIn
         currentUser.link(with: credential) { authResult, error in
             if let error = error as NSError? {
                 if error.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
-                       error.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                       error.code == AuthErrorCode.emailAlreadyInUse.rawValue ||
+                       error.code == AuthErrorCode.accountExistsWithDifferentCredential.rawValue {
                     completion(nil, "guest_upgrade_account_already_exists")
                     return
                 }
@@ -376,15 +378,14 @@ import GoogleSignIn
     private static func normalizedAuthError(_ error: Error) -> NSString {
         let nsError = error as NSError
 
-        if nsError.domain == GIDSignInErrorDomain {
-            if nsError.code == GIDSignInError.canceled.rawValue {
-                return "USER_CANCELLED"
-            }
+        if nsError.code == GIDSignInError.canceled.rawValue {
+            return "USER_CANCELLED"
         }
 
         if nsError.domain == AuthErrorDomain {
             if nsError.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
-                   nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                   nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue ||
+                   nsError.code == AuthErrorCode.accountExistsWithDifferentCredential.rawValue {
                 return "guest_upgrade_account_already_exists"
             }
         }

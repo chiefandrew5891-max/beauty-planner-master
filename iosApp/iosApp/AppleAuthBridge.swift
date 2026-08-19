@@ -16,6 +16,7 @@ import UIKit
     private static var completionHandler: ((NSDictionary?, NSString?) -> Void)?
     private static var revokeCompletionHandler: ((NSDictionary?, NSString?) -> Void)?
     private static var flowMode: FlowMode = .signIn
+    private static var delegateHolder: AppleSignInDelegate?
 
     @objc static func signInWithApple(
         completion: @escaping (NSDictionary?, NSString?) -> Void
@@ -72,8 +73,6 @@ import UIKit
         delegateHolder = delegate
         controller.performRequests()
     }
-
-    private static var delegateHolder: AppleSignInDelegate?
 
     private static func startAppleFlow(
         scopes: [ASAuthorization.Scope],
@@ -210,7 +209,8 @@ import UIKit
             currentUser.link(with: firebaseCredential) { authResult, error in
                 if let error = error as NSError? {
                     if error.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
-                           error.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                           error.code == AuthErrorCode.emailAlreadyInUse.rawValue ||
+                           error.code == AuthErrorCode.accountExistsWithDifferentCredential.rawValue {
                         completionHandler?(nil, "guest_upgrade_account_already_exists")
                         clearState()
                         return
@@ -286,7 +286,8 @@ import UIKit
 
         if nsError.domain == AuthErrorDomain {
             if nsError.code == AuthErrorCode.credentialAlreadyInUse.rawValue ||
-                   nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                   nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue ||
+                   nsError.code == AuthErrorCode.accountExistsWithDifferentCredential.rawValue {
                 return "guest_upgrade_account_already_exists"
             }
         }
