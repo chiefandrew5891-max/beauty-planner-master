@@ -131,7 +131,7 @@ fun AuthWelcomeScreen(
 
                     if (showRegisterWithEmailButton) {
                         BrandedAuthButton(
-                            text = Locales.t("auth_register_email"),
+                            text = Locales.t("auth_email_register"),
                             onClick = onRegisterWithEmail,
                             backgroundColor = Color.White,
                             contentColor = Color(0xFF1F1F1F),
