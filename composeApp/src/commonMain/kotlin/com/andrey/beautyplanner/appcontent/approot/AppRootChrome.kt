@@ -262,33 +262,28 @@ fun AppRootChrome(
     }
 
     @Composable
-    fun DrawerSubscriptionInfo() {
-        val nowMillis = Clock.System.now().toEpochMilliseconds()
-        val isPremiumActive = AccessManager.isPremiumAccessActive(nowMillis)
-        val expiryMillis = AppSettings.premiumSubscriptionExpiryMillis
-        val rawState = AppSettings.premiumSubscriptionState.trim().uppercase()
+    fun DrawerSubscriptionInfo(
+        state: AppRootState
+    ) {
+        val onSurface = MaterialTheme.colors.onSurface
+        val accessState = state.accessState
 
         val stateLabel = when {
-            AppSettings.developerPremiumOverrideEnabled ->
+            accessState.tier == AccessTier.PREMIUM ->
                 Locales.t("premium_status_premium")
-
-            rawState.isNotBlank() && rawState != "NONE" ->
-                subscriptionStateLabel(rawState)
-
-            isPremiumActive ->
-                Locales.t("premium_status_premium")
-
+            accessState.isTrialActive ->
+                Locales.t("premium_status_trial")
             else ->
-                Locales.t("premium_subscription_inactive")
+                Locales.t("premium_status_free")
         }
 
-        val shouldShowDaysLine = isPremiumActive && expiryMillis > 0L
-
-        val daysLeft = if (shouldShowDaysLine) {
-            calculateSubscriptionDaysLeft(
-                expiryMillis = expiryMillis,
-                nowMillis = nowMillis
-            )
+        val shouldShowDaysLine = accessState.isTrialActive
+        val daysLeft = if (accessState.isTrialActive) {
+            val nowMillis = Clock.System.now().toEpochMilliseconds()
+            val millisLeft = (accessState.trialEndsAtMillis - nowMillis).coerceAtLeast(0L)
+            kotlin.math.ceil(
+                millisLeft / (24.0 * 60.0 * 60.0 * 1000.0)
+            ).toInt().coerceAtLeast(0)
         } else {
             0
         }
@@ -296,12 +291,21 @@ fun AppRootChrome(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .padding(top = 2.dp, bottom = 4.dp)
         ) {
             Text(
-                text = "${Locales.t("premium_subscription_status_compact")}: $stateLabel",
+                text = Locales.t("premium_subscription_status"),
                 color = onSurface.copy(alpha = 0.72f),
-                fontSize = 11.sp,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(Modifier.height(2.dp))
+
+            Text(
+                text = stateLabel,
+                color = onSurface.copy(alpha = 0.92f),
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -375,7 +379,7 @@ fun AppRootChrome(
                             }
                         )
 
-                        DrawerSubscriptionInfo()
+                        DrawerSubscriptionInfo(state)
 
                         DrawerActionItem(
                             title = Locales.t("guest_register_current_account")
@@ -440,7 +444,7 @@ fun AppRootChrome(
                             }
                         )
 
-                        DrawerSubscriptionInfo()
+                        DrawerSubscriptionInfo(state)
 
                         DrawerActionItem(
                             title = Locales.t("account_switch")

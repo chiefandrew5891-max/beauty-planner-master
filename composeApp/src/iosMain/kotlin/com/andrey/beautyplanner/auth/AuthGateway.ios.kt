@@ -149,6 +149,66 @@ actual object AuthGateway {
         }
     }
 
+    actual suspend fun linkAnonymousWithGoogle(): SignInResult {
+        val current = getCurrentUser()
+            ?: return SignInResult.Error("guest_link_requires_anonymous_user")
+
+        if (current.provider != SignInProvider.ANONYMOUS) {
+            return SignInResult.Error("guest_link_requires_anonymous_user")
+        }
+
+        val deferred = CompletableDeferred<SignInResult>()
+        val launcher = GoogleSignInBridge.linkAnonymousWithGoogle
+            ?: return SignInResult.Error("iOS anonymous Google link bridge is not connected.")
+
+        return try {
+            launcher.invoke(deferred)
+            deferred.await()
+        } catch (t: Throwable) {
+            SignInResult.Error(t.message ?: "Anonymous Google link failed on iOS.")
+        }
+    }
+
+    actual suspend fun linkAnonymousWithApple(): SignInResult {
+        val current = getCurrentUser()
+            ?: return SignInResult.Error("guest_link_requires_anonymous_user")
+
+        if (current.provider != SignInProvider.ANONYMOUS) {
+            return SignInResult.Error("guest_link_requires_anonymous_user")
+        }
+
+        val deferred = CompletableDeferred<SignInResult>()
+        val launcher = AppleSignInBridge.linkAnonymousWithApple
+            ?: return SignInResult.Error("iOS anonymous Apple link bridge is not connected.")
+
+        return try {
+            launcher.invoke(deferred)
+            deferred.await()
+        } catch (t: Throwable) {
+            SignInResult.Error(t.message ?: "Anonymous Apple link failed on iOS.")
+        }
+    }
+
+    actual suspend fun linkAnonymousWithEmail(email: String, password: String): SignInResult {
+        val current = getCurrentUser()
+            ?: return SignInResult.Error("guest_link_requires_anonymous_user")
+
+        if (current.provider != SignInProvider.ANONYMOUS) {
+            return SignInResult.Error("guest_link_requires_anonymous_user")
+        }
+
+        val bridge = EmailAuthBridgeConnector.linkAnonymousWithEmail
+            ?: return SignInResult.Error("iOS anonymous email link bridge is not connected.")
+
+        return try {
+            val deferred = CompletableDeferred<Map<String, String>>()
+            bridge.invoke(email.trim(), password, deferred)
+            val result = deferred.await()
+            SignInResult.Success(mapUser(result))
+        } catch (t: Throwable) {
+            SignInResult.Error(t.message ?: "Anonymous email link failed on iOS.")
+        }
+    }
     actual suspend fun sendPasswordReset(email: String): SignInResult {
         val bridge = EmailAuthBridgeConnector.sendPasswordReset
             ?: return SignInResult.Error("iOS password reset bridge is not connected.")
