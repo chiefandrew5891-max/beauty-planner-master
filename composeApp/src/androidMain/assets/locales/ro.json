@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "După confirmarea cu succes, contul este șters definitiv, iar utilizatorul este redirecționat către ecranul de autentificare.",
     "guide_contents": "Cuprins",
     "guest_register_current_account": "Înregistrează contul curent",
-    "guest_upgrade_title": "Înregistrare cont",
+    "guest_upgrade_title": "Înregistrează contul curent",
     "guest_upgrade_p1": "Vă puteți înregistra contul de oaspete curent fără a pierde datele deja create.",
     "guest_upgrade_p2": "Toate înregistrările, setările de profil, serviciile și alte date locale vor fi păstrate și conectate la noul cont.",
     "guest_upgrade_p3": "După înregistrare, datele vor deveni disponibile pentru sincronizare și stocare pe server.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Anulare",
     "guest_upgrade_existing_account_conflict": "Acest cont conține deja date salvate. Un cont de oaspete nou nu poate fi conectat din nou la acesta, pentru a evita suprascrierea informațiilor existente.",
     "guest_upgrade_existing_account_conflict_title": "Acest cont conține deja date",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Înregistrați-vă contul de oaspete actual pentru a păstra datele create deja, a le conecta la contul dvs. și a activa sincronizarea cu serverul."
 }

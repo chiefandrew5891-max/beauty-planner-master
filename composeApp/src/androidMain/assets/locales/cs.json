@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Po úspěšném potvrzení je účet trvale smazán a uživatel je vrácen na přihlašovací obrazovku.",
     "guide_contents": "Obsah",
     "guest_register_current_account": "Registrovat aktuální účet",
-    "guest_upgrade_title": "Registrace účtu",
+    "guest_upgrade_title": "Registrovat aktuální účet",
     "guest_upgrade_p1": "Svůj aktuální účet hosta můžete zaregistrovat bez ztráty již vytvořených dat.",
     "guest_upgrade_p2": "Všechny vaše záznamy, nastavení profilu, služby a další místní data budou zachována a propojena s novým účtem.",
     "guest_upgrade_p3": "Po registraci budou data k dispozici pro synchronizaci a uložení na serveru.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Zrušit",
     "guest_upgrade_existing_account_conflict": "Tento účet již obsahuje uložená data. K novému účtu nelze znovu propojit účet hosta, aby nedošlo k přepsání stávajících informací.",
     "guest_upgrade_existing_account_conflict_title": "Tento účet již obsahuje data",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Zaregistrujte svůj aktuální účet hosta, abyste zachovali již vytvořená data, propojili je se svým účtem a povolili synchronizaci se serverem."
 }

@@ -40,7 +40,6 @@ import com.andrey.beautyplanner.appcontent.BackupSettingsScreen
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
 import com.andrey.beautyplanner.appcontent.AuthEmailScreen
-import com.andrey.beautyplanner.appcontent.GuestAccountRegistrationScreen
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -271,18 +270,27 @@ fun AppRootContent(
                 }
             )
 
-            Screen.GUEST_ACCOUNT_REGISTRATION -> GuestAccountRegistrationScreen(
-                onContinueWithGoogle = { state.continueWithGoogle() },
-                onContinueWithApple = { state.continueWithApple() },
+            Screen.GUEST_ACCOUNT_REGISTRATION -> AuthWelcomeScreen(
+                errorMessage = state.authErrorMessage,
+                infoMessage = state.authInfoMessage,
+                titleOverride = Locales.t("guest_upgrade_title"),
+                subtitleOverride = Locales.t("guest_upgrade_subtitle"),
+                showAnonymousButton = false,
+                showRegisterWithEmailButton = true,
+                showContinueWithEmailButton = false,
+                onContinueWithGoogle = {
+                    state.continueWithGoogle()
+                },
+                onContinueWithApple = {
+                    state.continueWithApple()
+                },
+                onContinueWithEmail = {},
                 onRegisterWithEmail = {
                     state.authEmailRegisterMode = true
                     state.screenHistory = emptyList()
                     state.currentScreen = Screen.AUTH_EMAIL
                 },
-                onBack = {
-                    state.screenHistory = emptyList()
-                    state.currentScreen = Screen.MONTH
-                }
+                onContinueAnonymously = {}
             )
 
             Screen.STATS -> {

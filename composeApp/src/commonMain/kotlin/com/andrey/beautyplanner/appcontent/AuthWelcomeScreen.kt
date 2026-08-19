@@ -28,6 +28,11 @@ import com.andrey.beautyplanner.auth.isAppleSignInSupported
 fun AuthWelcomeScreen(
     errorMessage: String?,
     infoMessage: String?,
+    titleOverride: String? = null,
+    subtitleOverride: String? = null,
+    showAnonymousButton: Boolean = true,
+    showRegisterWithEmailButton: Boolean = true,
+    showContinueWithEmailButton: Boolean = true,
     onContinueWithGoogle: () -> Unit,
     onContinueWithApple: () -> Unit,
     onContinueWithEmail: () -> Unit,
@@ -38,14 +43,14 @@ fun AuthWelcomeScreen(
     val onBg = MaterialTheme.colors.onBackground
     val onSurface = MaterialTheme.colors.onSurface
 
+    val titleText = titleOverride ?: Locales.t("auth_title")
+    val subtitleText = subtitleOverride ?: Locales.t("auth_subtitle")
+
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {
         val isTablet = maxWidth >= 700.dp
 
-        // Смещение контента:
-        // phone -> чуть выше центра
-        // tablet -> почти по центру
         val topSpacerHeight = if (isTablet) {
             maxHeight * 0.18f
         } else {
@@ -68,7 +73,7 @@ fun AuthWelcomeScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = Locales.t("auth_title"),
+                        text = titleText,
                         fontSize = (24 * fontScale).sp,
                         fontWeight = FontWeight.Bold,
                         color = onBg,
@@ -76,10 +81,11 @@ fun AuthWelcomeScreen(
                     )
 
                     Text(
-                        text = Locales.t("auth_subtitle"),
+                        text = subtitleText,
                         fontSize = (14 * fontScale).sp,
                         color = onBg.copy(alpha = 0.72f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        lineHeight = (20 * fontScale).sp
                     )
 
                     Spacer(Modifier.height(6.dp))
@@ -110,31 +116,48 @@ fun AuthWelcomeScreen(
                         )
                     }
 
-                    BrandedAuthButton(
-                        text = Locales.t("auth_email_sign_in"),
-                        onClick = onContinueWithEmail,
-                        backgroundColor = Color.White,
-                        contentColor = Color(0xFF1F1F1F),
-                        borderColor = onSurface.copy(alpha = 0.14f),
-                        leadingContent = {
-                            MailIcon()
-                        }
-                    )
+                    if (showContinueWithEmailButton) {
+                        BrandedAuthButton(
+                            text = Locales.t("auth_email_sign_in"),
+                            onClick = onContinueWithEmail,
+                            backgroundColor = Color.White,
+                            contentColor = Color(0xFF1F1F1F),
+                            borderColor = onSurface.copy(alpha = 0.14f),
+                            leadingContent = {
+                                MailIcon()
+                            }
+                        )
+                    }
 
-                    BrandedAuthButton(
-                        text = Locales.t("auth_anonymous"),
-                        onClick = onContinueAnonymously,
-                        backgroundColor = Color.White,
-                        contentColor = Color(0xFF1F1F1F),
-                        borderColor = onSurface.copy(alpha = 0.14f),
-                        leadingContent = {
-                            Text(
-                                text = "👤",
-                                color = MaterialTheme.colors.primary,
-                                fontSize = 18.sp
-                            )
-                        }
-                    )
+                    if (showRegisterWithEmailButton) {
+                        BrandedAuthButton(
+                            text = Locales.t("auth_register_email"),
+                            onClick = onRegisterWithEmail,
+                            backgroundColor = Color.White,
+                            contentColor = Color(0xFF1F1F1F),
+                            borderColor = onSurface.copy(alpha = 0.14f),
+                            leadingContent = {
+                                MailIcon()
+                            }
+                        )
+                    }
+
+                    if (showAnonymousButton) {
+                        BrandedAuthButton(
+                            text = Locales.t("auth_anonymous"),
+                            onClick = onContinueAnonymously,
+                            backgroundColor = Color.White,
+                            contentColor = Color(0xFF1F1F1F),
+                            borderColor = onSurface.copy(alpha = 0.14f),
+                            leadingContent = {
+                                Text(
+                                    text = "👤",
+                                    color = MaterialTheme.colors.primary,
+                                    fontSize = 18.sp
+                                )
+                            }
+                        )
+                    }
 
                     if (!errorMessage.isNullOrBlank()) {
                         Spacer(Modifier.height(6.dp))

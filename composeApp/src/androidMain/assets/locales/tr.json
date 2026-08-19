@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Başarılı bir şekilde onaylandıktan sonra hesap kalıcı olarak silinir ve kullanıcı oturum açma ekranına geri döndürülür.",
     "guide_contents": "İçindekiler",
     "guest_register_current_account": "Mevcut hesabı kaydet",
-    "guest_upgrade_title": "Hesap kaydı",
+    "guest_upgrade_title": "Mevcut hesabı kaydet",
     "guest_upgrade_p1": "Mevcut misafir hesabınızı, önceden oluşturulmuş verileri kaybetmeden kaydedebilirsiniz.",
     "guest_upgrade_p2": "Tüm randevularınız, profil ayarlarınız, hizmetleriniz ve diğer yerel verileriniz korunacak ve yeni hesaba bağlanacaktır.",
     "guest_upgrade_p3": "Kayıt olduktan sonra veriler sunucuda senkronizasyon ve depolama için kullanılabilir hale gelecektir.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "İptal",
     "guest_upgrade_existing_account_conflict": "Bu hesap zaten kaydedilmiş veriler içeriyor. Mevcut bilgilerin üzerine yazılmasını önlemek için yeni bir misafir hesabı tekrar buna bağlanamaz.",
     "guest_upgrade_existing_account_conflict_title": "Bu hesap zaten veri içeriyor",
-    "ok": "Tamam"
+    "ok": "Tamam",
+    "guest_upgrade_subtitle": "Zaten oluşturduğunuz verileri saklamak, bunları hesabınıza bağlamak ve sunucu senkronizasyonunu etkinleştirmek için mevcut misafir hesabınızı kaydedin."
 }

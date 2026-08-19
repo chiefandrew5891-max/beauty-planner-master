@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Pärast edukat kinnitamist kustutatakse konto jäädavalt ja kasutaja suunatakse tagasi autentimise kuvale.",
     "guide_contents": "Sisukord",
     "guest_register_current_account": "Registreeri praegune konto",
-    "guest_upgrade_title": "Konto registreerimine",
+    "guest_upgrade_title": "Registreeri praegune konto",
     "guest_upgrade_p1": "Saate oma praeguse külaliskonto registreerimine ilma juba loodud andmeid kaotamata.",
     "guest_upgrade_p2": "Kõik teie kirjed, profiiliseaded, teenused ja muud kohalikud andmed säilitatakse ja seotakse uue kontoga.",
     "guest_upgrade_p3": "Pärast registreerimist muutuvad andmed serveris sünkroonimiseks ja salvestamiseks kättesaadavaks.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Tühista",
     "guest_upgrade_existing_account_conflict": "See konto sisaldab juba salvestatud andmeid. Uut külaliskontot ei saa sellega uuesti siduda, et vältida olemasolevate andmete ülekirjutamist.",
     "guest_upgrade_existing_account_conflict_title": "See konto sisaldab juba andmeid",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Registreerige oma praegune külaliskonto, et säilitada juba loodud andmeid, siduda need oma kontoga ja lubada sünkroonimine serveriga."
 }

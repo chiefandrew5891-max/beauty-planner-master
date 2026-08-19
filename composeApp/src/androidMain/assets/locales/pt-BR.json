@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Após a confirmação bem-sucedida, a conta é excluída permanentemente e o usuário é redirecionado para a tela de login.",
     "guide_contents": "Sumário",
     "guest_register_current_account": "Registrar conta atual",
-    "guest_upgrade_title": "Registro de conta",
+    "guest_upgrade_title": "Registrar conta atual",
     "guest_upgrade_p1": "Você pode registrar sua conta de convidado atual sem perder nenhum dado já criado.",
     "guest_upgrade_p2": "Todos os seus agendamentos, configurações de perfil, serviços e outros dados locais serão preservados e vinculados à nova conta.",
     "guest_upgrade_p3": "Após o registro, os dados ficarão disponíveis para sincronização e armazenamento no servidor.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Cancelar",
     "guest_upgrade_existing_account_conflict": "Esta conta já contém dados salvos. Uma nova conta de convidado não pode ser vinculada a ela novamente, para evitar sobrescrever as informações existentes.",
     "guest_upgrade_existing_account_conflict_title": "Esta conta já contém dados",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Registre sua conta de convidado atual para manter os dados que você já criou, vinculá-los à sua conta e ativar a sincronização com o servidor."
 }

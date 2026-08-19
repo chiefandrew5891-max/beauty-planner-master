@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Po pomyślnym potwierdzeniu konto zostaje trwale usunięte, a użytkownik wraca do ekranu logowania.",
     "guide_contents": "Spis treści",
     "guest_register_current_account": "Zarejestruj bieżące konto",
-    "guest_upgrade_title": "Rejestracja konta",
+    "guest_upgrade_title": "Zarejestruj bieżące konto",
     "guest_upgrade_p1": "Możesz zarejestrować swoje obecne konto gościa bez utraty już utworzonych danych.",
     "guest_upgrade_p2": "Wszystkie Twoje wpisy, ustawienia profilu, usługi i inne dane lokalne zostaną zachowane i połączone z nowym kontem.",
     "guest_upgrade_p3": "Po rejestracji dane będą dostępne do synchronizacji i przechowywania na serwerze.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Anuluj",
     "guest_upgrade_existing_account_conflict": "To konto zawiera już zapisane dane. Nie można ponownie powiązać z nim nowego konta gościa, aby uniknąć nadpisania istniejących informacji.",
     "guest_upgrade_existing_account_conflict_title": "To konto zawiera już dane",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Zarejestruj swoje obecne konto gościa, aby zachować już utworzone dane, powiązać je ze swoim kontem i włączyć synchronizację z serwerem."
 }

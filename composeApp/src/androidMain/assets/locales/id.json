@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Setelah konfirmasi berhasil, akun akan dihapus secara permanen dan pengguna dikembalikan ke layar autentikasi.",
     "guide_contents": "Daftar Isi",
     "guest_register_current_account": "Daftarkan akun saat ini",
-    "guest_upgrade_title": "Registrasi akun",
+    "guest_upgrade_title": "Daftarkan akun saat ini",
     "guest_upgrade_p1": "Anda dapat mendaftarkan akun tamu saat ini tanpa kehilangan data yang sudah dibuat.",
     "guest_upgrade_p2": "Semua entri, pengaturan profil, layanan, dan data lokal lainnya akan disimpan dan ditautkan ke akun baru.",
     "guest_upgrade_p3": "Setelah registrasi, data akan tersedia untuk disinkronkan dan disimpan di server.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Batal",
     "guest_upgrade_existing_account_conflict": "Akun ini sudah berisi data tersimpan. Akun tamu baru tidak dapat ditautkan kembali ke akun ini untuk menghindari penimpaan informasi yang ada.",
     "guest_upgrade_existing_account_conflict_title": "Akun ini sudah berisi data",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Daftarkan akun tamu Anda saat ini untuk menyimpan data yang sudah dibuat, menautkannya ke akun Anda, dan mengaktifkan sinkronisasi server."
 }

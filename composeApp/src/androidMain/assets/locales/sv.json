@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Efter lyckad bekräftelse raderas kontot permanent och användaren skickas tillbaka till inloggningsskärmen.",
     "guide_contents": "Innehåll",
     "guest_register_current_account": "Registrera nuvarande konto",
-    "guest_upgrade_title": "Kontoregistrering",
+    "guest_upgrade_title": "Registrera nuvarande konto",
     "guest_upgrade_p1": "Du kan registrera ditt nuvarande gästkonto utan att förlora redan skapade data.",
     "guest_upgrade_p2": "Alla dina bokningar, profilinställningar, tjänster och annan lokal data kommer att sparas och kopplas till det nya kontot.",
     "guest_upgrade_p3": "Efter registrering blir datan tillgänglig för synkronisering och lagring på servern.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Avbryt",
     "guest_upgrade_existing_account_conflict": "Detta konto innehåller redan sparad data. Ett nytt gästkonto kan inte länkas till det igen för att undvika att skriva över befintlig information.",
     "guest_upgrade_existing_account_conflict_title": "Detta konto innehåller redan data",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Registrera ditt nuvarande gästkonto för att behålla data du redan har skapat, länka det till ditt konto och aktivera synkronisering med servern."
 }

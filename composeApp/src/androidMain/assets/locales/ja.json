@@ -849,7 +849,7 @@
     "guide_account_deletion_p2": "正常に確認されると、アカウントは完全に削除され、ユーザーはログイン画面に戻ります。",
     "guide_contents": "目次",
     "guest_register_current_account": "現在のアカウントを登録",
-    "guest_upgrade_title": "アカウント登録",
+    "guest_upgrade_title": "現在のアカウントを登録",
     "guest_upgrade_p1": "作成済みのデータを失うことなく、現在のゲストアカウントを登録できます。",
     "guest_upgrade_p2": "すべての予約、プロフィール設定、サービス、その他のローカルデータが保持され、新しいアカウントに紐付けられます。",
     "guest_upgrade_p3": "登録後、データはサーバーでの同期および保存に利用できるようになります。",
@@ -859,5 +859,6 @@
     "guest_data_loss_cancel": "キャンセル",
     "guest_upgrade_existing_account_conflict": "このアカウントには既に保存されたデータが含まれています。既存の情報を上書きしないよう、新しいゲストアカウントを再度リンクすることはできません。",
     "guest_upgrade_existing_account_conflict_title": "このアカウントには既にデータが含まれています",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "現在のゲストアカウントを登録して、作成済みのデータを保持し、アカウントに紐付けて、サーバー同期を有効にします。"
 }

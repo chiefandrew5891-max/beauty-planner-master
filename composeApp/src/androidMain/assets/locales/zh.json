@@ -848,7 +848,7 @@
     "guide_account_deletion_p2": "成功确认后，账户将永久删除，并将用户返回到登录屏幕。",
     "guide_contents": "目录",
     "guest_register_current_account": "注册当前账号",
-    "guest_upgrade_title": "账号注册",
+    "guest_upgrade_title": "注册当前账号",
     "guest_upgrade_p1": "您可以注册当前的访客账号，而不会丢失已创建的数据。",
     "guest_upgrade_p2": "您所有的预约记录、个人资料设置、服务及其他本地数据都将被保留并关联到新账号。",
     "guest_upgrade_p3": "注册完成后，数据即可在服务器上进行同步和存储。",
@@ -858,5 +858,6 @@
     "guest_data_loss_cancel": "取消",
     "guest_upgrade_existing_account_conflict": "该账号已包含已保存的数据。无法再次将新的访客账号绑定到该账号，以免覆盖现有信息。",
     "guest_upgrade_existing_account_conflict_title": "该账号已包含数据",
-    "ok": "确定"
+    "ok": "确定",
+    "guest_upgrade_subtitle": "注册当前的访客账号以保留您已创建的数据，将其关联到您的账号，并启用服务器同步。"
 }

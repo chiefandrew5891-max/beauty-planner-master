@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Dopo una conferma riuscita, l'account viene eliminato definitivamente e l'utente viene reindirizzato alla schermata di autenticazione.",
     "guide_contents": "Indice",
     "guest_register_current_account": "Registra account corrente",
-    "guest_upgrade_title": "Registrazione account",
+    "guest_upgrade_title": "Registra account corrente",
     "guest_upgrade_p1": "Puoi registrare il tuo account ospite attuale senza perdere i dati già creati.",
     "guest_upgrade_p2": "Tutti i tuoi appuntamenti, le impostazioni del profilo, i servizi e altri dati locali verranno conservati e collegati al nuovo account.",
     "guest_upgrade_p3": "Dopo la registrazione, i dati saranno disponibili per la sincronizzazione e l'archiviazione sul server.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Annulla",
     "guest_upgrade_existing_account_conflict": "Questo account contiene già dati salvati. Non è possibile collegare nuovamente un nuovo account ospite per evitare di sovrascrivere le informazioni esistenti.",
     "guest_upgrade_existing_account_conflict_title": "Questo account contiene già dei dati",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Registra il tuo account ospite attuale per conservare i dati che hai già creato, collegarli al tuo account e abilitare la sincronizzazione con il server."
 }

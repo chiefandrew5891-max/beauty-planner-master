@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "성공적으로 확인되면 계정이 영구적으로 삭제되고 사용자는 로그인 화면으로 돌아갑니다.",
     "guide_contents": "목차",
     "guest_register_current_account": "현재 계정 등록",
-    "guest_upgrade_title": "계정 등록",
+    "guest_upgrade_title": "현재 계정 등록",
     "guest_upgrade_p1": "이미 생성된 데이터를 잃지 않고 현재 게스트 계정을 등록할 수 있습니다.",
     "guest_upgrade_p2": "모든 예약, 프로필 설정, 서비스 및 기타 로컬 데이터가 보존되며 새 계정에 연결됩니다.",
     "guest_upgrade_p3": "등록 후에는 데이터가 서버에 동기화 및 저장될 수 있습니다.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "취소",
     "guest_upgrade_existing_account_conflict": "이 계정에는 이미 저장된 데이터가 포함되어 있습니다. 기존 정보를 덮어쓰지 않도록 새 게스트 계정을 다시 연결할 수 없습니다.",
     "guest_upgrade_existing_account_conflict_title": "이 계정에는 이미 데이터가 포함되어 있습니다",
-    "ok": "확인"
+    "ok": "확인",
+    "guest_upgrade_subtitle": "현재 게스트 계정을 등록하여 이미 생성된 데이터를 보존하고 계정에 연결한 다음 서버 동기화를 활성화하세요."
 }

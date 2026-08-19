@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Nach erfolgreicher Bestätigung wird das Konto dauerhaft gelöscht und der Nutzer wird zum Anmeldebildschirm zurückgeleitet.",
     "guide_contents": "Inhalt",
     "guest_register_current_account": "Aktuelles Konto registrieren",
-    "guest_upgrade_title": "Konto-Registrierung",
+    "guest_upgrade_title": "Aktuelles Konto registrieren",
     "guest_upgrade_p1": "Sie können Ihr aktuelles Gastkonto registrieren, ohne bereits erstellte Daten zu verlieren.",
     "guest_upgrade_p2": "Alle Ihre Einträge, Profileinstellungen, Dienste und sonstigen lokalen Daten werden beibehalten und mit dem neuen Konto verknüpft.",
     "guest_upgrade_p3": "Nach der Registrierung stehen die Daten zur Synchronisierung und Speicherung auf dem Server zur Verfügung.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Abbrechen",
     "guest_upgrade_existing_account_conflict": "Dieses Konto enthält bereits gespeicherte Daten. Ein neues Gastkonto kann nicht erneut damit verknüpft werden, um ein Überschreiben vorhandener Informationen zu vermeiden.",
     "guest_upgrade_existing_account_conflict_title": "Dieses Konto enthält bereits Daten",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Registrieren Sie Ihr aktuelles Gastkonto, um bereits erstellte Daten zu behalten, diese mit Ihrem Konto zu verknüpfen und die Synchronisierung mit dem Server zu aktivieren."
 }

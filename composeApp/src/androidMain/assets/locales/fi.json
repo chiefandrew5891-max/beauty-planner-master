@@ -850,7 +850,7 @@
     "guide_account_deletion_p2": "Onnistuneen vahvistuksen jälkeen tili poistetaan pysyvästi ja käyttäjä siirretään takaisin tunnistautumisnäyttöön.",
     "guide_contents": "Sisältö",
     "guest_register_current_account": "Rekisteröi nykyinen tili",
-    "guest_upgrade_title": "Tilin rekisteröinti",
+    "guest_upgrade_title": "Rekisteröi nykyinen tili",
     "guest_upgrade_p1": "Voit rekisteröidä nykyisen vierastilisi menettämättä jo luotuja tietoja.",
     "guest_upgrade_p2": "Kaikki varauksesi, profiiliasetuksesi, palvelusi ja muut paikalliset tiedot säilytetään ja yhdistetään uuteen tiliin.",
     "guest_upgrade_p3": "Rekisteröinnin jälkeen tiedot ovat synkronoitavissa ja tallennettavissa palvelimelle.",
@@ -860,5 +860,6 @@
     "guest_data_loss_cancel": "Peruuta",
     "guest_upgrade_existing_account_conflict": "Tämä tili sisältää jo tallennettuja tietoja. Uutta vierastiliä ei voi linkittää siihen uudelleen olemassa olevien tietojen ylikirjoittamisen välttämiseksi.",
     "guest_upgrade_existing_account_conflict_title": "Tämä tili sisältää jo tietoja",
-    "ok": "OK"
+    "ok": "OK",
+    "guest_upgrade_subtitle": "Rekisteröi nykyinen vierastilisi säilyttääksesi jo luomasi tiedot, yhdistääksesi ne tiliisi ja ottaaksesi käyttöön palvelinsynkronoinnin."
 }
