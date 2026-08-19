@@ -137,16 +137,16 @@ object AccessRepository {
             0
         }
 
-        val tier = when {
-            hasEffectivePremium -> AccessTier.PREMIUM
-            AppSettings.cachedAccessTier == "TRIAL" -> AccessTier.TRIAL
-            else -> AccessTier.FREE_LIMITED
-        }
-
         val isTrialActive =
             !hasEffectivePremium &&
-                    tier == AccessTier.TRIAL &&
+                    AppSettings.cachedAccessTier == "TRIAL" &&
                     trialEndsAtMillis > nowMillis
+
+        val tier = when {
+            hasEffectivePremium -> AccessTier.PREMIUM
+            isTrialActive -> AccessTier.TRIAL
+            else -> AccessTier.FREE_LIMITED
+        }
 
         return AccessState(
             tier = tier,

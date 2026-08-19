@@ -81,7 +81,7 @@ fun PremiumAccessScreen(
         accessState.tier == AccessTier.PREMIUM || accessState.hasPremium ->
             Locales.t("premium_active_subtitle")
 
-        accessState.isTrialActive || accessState.tier == AccessTier.TRIAL ->
+        accessState.isTrialActive ->
             Locales.t("premium_trial_active_subtitle")
 
         else ->

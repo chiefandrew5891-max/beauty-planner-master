@@ -112,7 +112,7 @@ object AccessManager {
             accessState.tier == AccessTier.PREMIUM || accessState.hasPremium ->
                 Locales.t("premium_status_premium")
 
-            accessState.isTrialActive || accessState.tier == AccessTier.TRIAL ->
+            accessState.isTrialActive ->
                 Locales.t("premium_status_trial")
 
             else ->

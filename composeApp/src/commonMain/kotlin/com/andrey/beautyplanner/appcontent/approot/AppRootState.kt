@@ -616,6 +616,15 @@ class AppRootState(
         }
     }
 
+    private fun handleGuestUpgradeCollision() {
+        authErrorMessage = null
+        authInfoMessage = null
+        authResolved = true
+        guestUpgradeMode = true
+        currentScreen = Screen.GUEST_ACCOUNT_REGISTRATION
+        showGuestUpgradeConflictDialog = true
+    }
+
     private fun openGuestUpgradeConflictDialog() {
         showGuestUpgradeConflictDialog = true
     }
@@ -1011,9 +1020,7 @@ class AppRootState(
                         val lower = raw.lowercase()
 
                         if (guestUpgradeMode && lower.contains("guest_upgrade_account_already_exists")) {
-                            authErrorMessage = null
-                            authInfoMessage = null
-                            openGuestUpgradeConflictDialog()
+                            handleGuestUpgradeCollision()
                             return@launch
                         }
 
@@ -1122,9 +1129,7 @@ class AppRootState(
                         val lower = raw.lowercase()
 
                         if (guestUpgradeMode && lower.contains("guest_upgrade_account_already_exists")) {
-                            authErrorMessage = null
-                            authInfoMessage = null
-                            openGuestUpgradeConflictDialog()
+                            handleGuestUpgradeCollision()
                             return@launch
                         }
 
@@ -1690,9 +1695,7 @@ class AppRootState(
                             val lower = result.message.orEmpty().lowercase()
 
                             if (guestUpgradeMode && lower.contains("guest_upgrade_account_already_exists")) {
-                                authErrorMessage = null
-                                authInfoMessage = null
-                                openGuestUpgradeConflictDialog()
+                                handleGuestUpgradeCollision()
                                 return@launch
                             }
 
