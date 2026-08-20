@@ -403,9 +403,6 @@ object AppSettings {
         persist()
     }
 
-    fun getClientProfiles(): List<ClientProfile> =
-        clientProfiles
-
     fun upsertClientProfile(profile: ClientProfile) {
         val idx = clientProfiles.indexOfFirst { it.id == profile.id }
 
@@ -417,6 +414,21 @@ object AppSettings {
             }
 
         persist()
+    }
+
+    fun findClientProfile(
+        name: String,
+        phone: String
+    ): ClientProfile? {
+        val key = name.trim().lowercase() + "|" + phone.trim()
+        return clientProfiles.firstOrNull { it.id == key }
+    }
+
+    fun clientColorTag(
+        name: String,
+        phone: String
+    ): String {
+        return findClientProfile(name, phone)?.colorTag.orEmpty()
     }
 
     fun removeClientProfile(id: String) {

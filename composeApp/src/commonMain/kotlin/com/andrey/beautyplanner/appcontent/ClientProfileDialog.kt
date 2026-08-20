@@ -11,18 +11,26 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,10 +43,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.ClientProfile
 import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
+import kotlinx.datetime.Clock
 
 private data class ClientStatusOption(
     val value: String,
@@ -89,31 +99,55 @@ fun ClientProfileDialog(
         "gray" to Locales.t("client_color_gray")
     )
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = initialProfile.displayName,
-                    fontSize = (19 * fontScale).sp,
-                    fontWeight = FontWeight.Bold,
-                    color = onSurface
-                )
-
-                if (initialProfile.phone.isNotBlank()) {
-                    Text(
-                        text = initialProfile.phone,
-                        fontSize = (13 * fontScale).sp,
-                        color = onSurface.copy(alpha = 0.68f)
-                    )
-                }
-            }
-        },
-        text = {
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = RoundedCornerShape(28.dp),
+            elevation = 12.dp,
+            backgroundColor = MaterialTheme.colors.surface
+        ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 12.dp)
+                    ) {
+                        Text(
+                            text = initialProfile.displayName,
+                            fontSize = (20 * fontScale).sp,
+                            fontWeight = FontWeight.Bold,
+                            color = onSurface
+                        )
+
+                        if (initialProfile.phone.isNotBlank()) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = initialProfile.phone,
+                                fontSize = (13 * fontScale).sp,
+                                color = onSurface.copy(alpha = 0.68f)
+                            )
+                        }
+                    }
+
+                    IconButton(onClick = onDismiss) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = Locales.t("close"),
+                            tint = onSurface.copy(alpha = 0.82f)
+                        )
+                    }
+                }
+
                 Text(
                     text = "${Locales.t("client_database_visits")}: $visitCount",
                     fontSize = (14 * fontScale).sp,
@@ -211,7 +245,7 @@ fun ClientProfileDialog(
                         .fillMaxWidth()
                         .heightIn(min = 110.dp),
                     label = { Text(Locales.t("client_profile_notes")) },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(14.dp),
                     textStyle = TextStyle(
                         fontSize = (15 * fontScale).sp,
                         color = onSurface
@@ -226,31 +260,44 @@ fun ClientProfileDialog(
                         backgroundColor = MaterialTheme.colors.surface
                     )
                 )
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    onSave(
-                        initialProfile.copy(
-                            notes = notes.trim(),
-                            status = selectedStatus,
-                            colorTag = selectedColorTag,
-                            updatedAtMillis = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Button(
+                    onClick = {
+                        onSave(
+                            initialProfile.copy(
+                                notes = notes.trim(),
+                                status = selectedStatus,
+                                colorTag = selectedColorTag,
+                                updatedAtMillis = Clock.System.now().toEpochMilliseconds()
+                            )
                         )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary
+                    )
+                ) {
+                    Text(
+                        text = Locales.t("save").uppercase(),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-            ) {
-                Text(Locales.t("save"))
+
+                TextButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text(Locales.t("cancel"))
+                }
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(Locales.t("cancel"))
-            }
-        },
-        shape = RoundedCornerShape(16.dp)
-    )
+        }
+    }
 }
 
 @Composable
@@ -278,13 +325,12 @@ private fun StatusDropdownField(
                     expanded = true
                 },
             label = { Text(label) },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(14.dp)
         )
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.heightIn(max = 320.dp)
+            onDismissRequest = { expanded = false }
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -300,7 +346,7 @@ private fun StatusDropdownField(
     }
 }
 
-private fun colorTagToColor(tag: String): Color {
+internal fun colorTagToColor(tag: String): Color {
     return when (tag) {
         "red" -> Color(0xFFE57373)
         "orange" -> Color(0xFFFFB74D)
