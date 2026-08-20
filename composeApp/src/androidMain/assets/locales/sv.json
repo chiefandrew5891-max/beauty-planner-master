@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Detta konto innehåller redan data",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registrera ditt nuvarande gästkonto för att behålla data du redan har skapat, länka det till ditt konto och aktivera synkronisering med servern.",
-    "work_schedule_long_period": "Lång period"
+    "work_schedule_long_period": "Lång period",
+    "nav_client_database": "Kunddatabas",
+    "client_database_title": "Kunddatabas",
+    "client_database_hint": "Kunder genereras automatiskt från befintliga bokningar.",
+    "client_database_search": "Sök kund",
+    "client_database_empty": "Inga kunder än",
+    "client_database_visits": "Besök",
+    "client_database_last_visit": "Senaste besök",
+    "client_status_none": "Ingen status",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Kräver bekräftelse",
+    "client_status_risk_of_cancellation": "Avbokningsrisk",
+    "client_status_do_not_book": "Boka ej"
 }

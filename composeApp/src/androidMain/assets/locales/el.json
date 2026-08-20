@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Αυτός ο λογαριασμός περιέχει ήδη δεδομένα",
     "ok": "OK",
     "guest_upgrade_subtitle": "Εγγραφείτε στον τρέχοντα λογαριασμό επισκέπτη για να διατηρήσετε τα δεδομένα που έχετε ήδη δημιουργήσει, να τα συνδέσετε με τον λογαριασμό σας και να ενεργοποιήσετε τον συγχρονισμό με τον διακομιστή.",
-    "work_schedule_long_period": "Μεγάλη περίοδος"
+    "work_schedule_long_period": "Μεγάλη περίοδος",
+    "nav_client_database": "Βάση δεδομένων πελατών",
+    "client_database_title": "Βάση δεδομένων πελατών",
+    "client_database_hint": "Οι πελάτες δημιουργούνται αυτόματα από υπάρχοντα ραντεβού.",
+    "client_database_search": "Αναζήτηση πελάτη",
+    "client_database_empty": "Δεν υπάρχουν ακόμη πελάτες",
+    "client_database_visits": "Επισκέψεις",
+    "client_database_last_visit": "Τελευταία επίσκεψη",
+    "client_status_none": "Χωρίς κατάσταση",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Απαιτείται επιβεβαίωση",
+    "client_status_risk_of_cancellation": "Κίνδυνος ακύρωσης",
+    "client_status_do_not_book": "Να μην γίνει κράτηση"
 }

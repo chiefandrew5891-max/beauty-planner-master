@@ -861,5 +861,17 @@
     "guest_upgrade_existing_account_conflict_title": "このアカウントには既にデータが含まれています",
     "ok": "OK",
     "guest_upgrade_subtitle": "現在のゲストアカウントを登録して、作成済みのデータを保持し、アカウントに紐付けて、サーバー同期を有効にします。",
-    "work_schedule_long_period": "長期"
+    "work_schedule_long_period": "長期",
+    "nav_client_database": "クライアントデータベース",
+    "client_database_title": "クライアントデータベース",
+    "client_database_hint": "既存の予約から自動的にクライアントが生成されます。",
+    "client_database_search": "クライアントを検索",
+    "client_database_empty": "クライアントはまだいません",
+    "client_database_visits": "訪問回数",
+    "client_database_last_visit": "最終訪問日",
+    "client_status_none": "ステータスなし",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "確認が必要",
+    "client_status_risk_of_cancellation": "キャンセルリスク",
+    "client_status_do_not_book": "予約不可"
 }

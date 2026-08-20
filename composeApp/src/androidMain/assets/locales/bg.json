@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Този акаунт вече съдържа данни",
     "ok": "OK",
     "guest_upgrade_subtitle": "Регистрирайте текущия си гост акаунт, за да запазите вече създадените данни, да ги свържете с вашия акаунт и да активирате синхронизацията със сървъра.",
-    "work_schedule_long_period": "Дълъг период"
+    "work_schedule_long_period": "Дълъг период",
+    "nav_client_database": "База данни с клиенти",
+    "client_database_title": "База данни с клиенти",
+    "client_database_hint": "Клиентите се генерират автоматично от съществуващи записи.",
+    "client_database_search": "Търсене на клиент",
+    "client_database_empty": "Все още няма клиенти",
+    "client_database_visits": "Посещения",
+    "client_database_last_visit": "Последно посещение",
+    "client_status_none": "Без статус",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Изисква потвърждение",
+    "client_status_risk_of_cancellation": "Риск от отмяна",
+    "client_status_do_not_book": "Да не се записва"
 }

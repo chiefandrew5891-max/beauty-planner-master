@@ -860,5 +860,17 @@
     "guest_upgrade_existing_account_conflict_title": "该账号已包含数据",
     "ok": "确定",
     "guest_upgrade_subtitle": "注册当前的访客账号以保留您已创建的数据，将其关联到您的账号，并启用服务器同步。",
-    "work_schedule_long_period": "长期"
+    "work_schedule_long_period": "长期",
+    "nav_client_database": "客户数据库",
+    "client_database_title": "客户数据库",
+    "client_database_hint": "客户根据现有预约自动生成。",
+    "client_database_search": "搜索客户",
+    "client_database_empty": "暂无客户",
+    "client_database_visits": "访问次数",
+    "client_database_last_visit": "最后访问",
+    "client_status_none": "无状态",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "需要确认",
+    "client_status_risk_of_cancellation": "取消风险",
+    "client_status_do_not_book": "禁止预约"
 }

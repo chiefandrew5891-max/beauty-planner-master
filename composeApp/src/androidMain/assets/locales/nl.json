@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Dit account bevat al gegevens",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registreer uw huidige gastaccount om de gegevens die u al hebt aangemaakt te behouden, deze aan uw account te koppelen en synchronisatie met de server in te schakelen.",
-    "work_schedule_long_period": "Lange periode"
+    "work_schedule_long_period": "Lange periode",
+    "nav_client_database": "Klanten-database",
+    "client_database_title": "Klanten-database",
+    "client_database_hint": "Klanten worden automatisch gegenereerd uit bestaande afspraken.",
+    "client_database_search": "Zoek klant",
+    "client_database_empty": "Nog geen klanten",
+    "client_database_visits": "Bezoeken",
+    "client_database_last_visit": "Laatste bezoek",
+    "client_status_none": "Geen status",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Bevestiging vereist",
+    "client_status_risk_of_cancellation": "Annuleringsrisico",
+    "client_status_do_not_book": "Niet boeken"
 }

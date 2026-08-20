@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "See konto sisaldab juba andmeid",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registreerige oma praegune külaliskonto, et säilitada juba loodud andmeid, siduda need oma kontoga ja lubada sünkroonimine serveriga.",
-    "work_schedule_long_period": "Pikk periood"
+    "work_schedule_long_period": "Pikk periood",
+    "nav_client_database": "Kliendiandmebaas",
+    "client_database_title": "Kliendiandmebaas",
+    "client_database_hint": "Kliendid luuakse olemasolevate kohtumiste põhjal automaatselt.",
+    "client_database_search": "Otsi klienti",
+    "client_database_empty": "Kliente veel pole",
+    "client_database_visits": "Külastused",
+    "client_database_last_visit": "Viimane külastus",
+    "client_status_none": "Staatus puudub",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Nõuab kinnitust",
+    "client_status_risk_of_cancellation": "Tühistamisrisk",
+    "client_status_do_not_book": "Mitte broneerida"
 }

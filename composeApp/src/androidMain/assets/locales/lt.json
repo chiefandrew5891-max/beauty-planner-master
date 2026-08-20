@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Šioje paskyroje jau yra duomenų",
     "ok": "OK",
     "guest_upgrade_subtitle": "Užregistruokite savo dabartinę svečio paskyrą, kad išsaugotumėte jau sukurtus duomenis, susietumėte juos su savo paskyra ir įgalintumėte sinchronizavimą su serveriu.",
-    "work_schedule_long_period": "Ilgas laikotarpis"
+    "work_schedule_long_period": "Ilgas laikotarpis",
+    "nav_client_database": "Klientų duomenų bazė",
+    "client_database_title": "Klientų duomenų bazė",
+    "client_database_hint": "Klientai automatiškai sugeneruojami iš esamų susitikimų.",
+    "client_database_search": "Ieškoti kliento",
+    "client_database_empty": "Kol kas nėra klientų",
+    "client_database_visits": "Apsilankymai",
+    "client_database_last_visit": "Paskutinis apsilankymas",
+    "client_status_none": "Be statuso",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Reikia patvirtinimo",
+    "client_status_risk_of_cancellation": "Atšaukimo rizika",
+    "client_status_do_not_book": "Nerezervuoti"
 }

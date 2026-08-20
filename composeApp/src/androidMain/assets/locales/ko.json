@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "이 계정에는 이미 데이터가 포함되어 있습니다",
     "ok": "확인",
     "guest_upgrade_subtitle": "현재 게스트 계정을 등록하여 이미 생성된 데이터를 보존하고 계정에 연결한 다음 서버 동기화를 활성화하세요.",
-    "work_schedule_long_period": "장기"
+    "work_schedule_long_period": "장기",
+    "nav_client_database": "클라이언트 데이터베이스",
+    "client_database_title": "클라이언트 데이터베이스",
+    "client_database_hint": "기존 예약에서 클라이언트가 자동으로 생성됩니다.",
+    "client_database_search": "클라이언트 검색",
+    "client_database_empty": "아직 클라이언트가 없습니다",
+    "client_database_visits": "방문",
+    "client_database_last_visit": "최근 방문",
+    "client_status_none": "상태 없음",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "확인 필요",
+    "client_status_risk_of_cancellation": "취소 위험",
+    "client_status_do_not_book": "예약 금지"
 }

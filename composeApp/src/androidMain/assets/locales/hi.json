@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "इस खाते में पहले से डेटा है",
     "ok": "ठीक है",
     "guest_upgrade_subtitle": "अपने वर्तमान अतिथि खाते को पंजीकृत करें ताकि आपके द्वारा पहले से बनाया गया डेटा सुरक्षित रहे, उसे अपने खाते से लिंक करें, और सर्वर सिंक्रोनाइज़ेशन सक्षम करें।",
-    "work_schedule_long_period": "लंबी अवधि"
+    "work_schedule_long_period": "लंबी अवधि",
+    "nav_client_database": "ग्राहक डेटाबेस",
+    "client_database_title": "ग्राहक डेटाबेस",
+    "client_database_hint": "ग्राहक मौजूदा अपॉइंटमेंट से स्वचालित रूप से जेनरेट होते हैं।",
+    "client_database_search": "ग्राहक खोजें",
+    "client_database_empty": "अभी तक कोई ग्राहक नहीं",
+    "client_database_visits": "विज़िट",
+    "client_database_last_visit": "अंतिम विज़िट",
+    "client_status_none": "कोई स्थिति नहीं",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "पुष्टि आवश्यक",
+    "client_status_risk_of_cancellation": "रद्दीकरण का जोखिम",
+    "client_status_do_not_book": "बुक न करें"
 }

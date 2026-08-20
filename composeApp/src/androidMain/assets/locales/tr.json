@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Bu hesap zaten veri içeriyor",
     "ok": "Tamam",
     "guest_upgrade_subtitle": "Zaten oluşturduğunuz verileri saklamak, bunları hesabınıza bağlamak ve sunucu senkronizasyonunu etkinleştirmek için mevcut misafir hesabınızı kaydedin.",
-    "work_schedule_long_period": "Uzun dönem"
+    "work_schedule_long_period": "Uzun dönem",
+    "nav_client_database": "Müşteri Veritabanı",
+    "client_database_title": "Müşteri Veritabanı",
+    "client_database_hint": "Müşteriler, mevcut randevulardan otomatik olarak oluşturulur.",
+    "client_database_search": "Müşteri ara",
+    "client_database_empty": "Henüz müşteri yok",
+    "client_database_visits": "Ziyaretler",
+    "client_database_last_visit": "Son ziyaret",
+    "client_status_none": "Durum yok",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Onay gerekiyor",
+    "client_status_risk_of_cancellation": "İptal riski",
+    "client_status_do_not_book": "Randevu verme"
 }

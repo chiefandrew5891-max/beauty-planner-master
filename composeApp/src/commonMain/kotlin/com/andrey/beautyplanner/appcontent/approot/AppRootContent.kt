@@ -19,24 +19,22 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import com.andrey.beautyplanner.*
-import com.andrey.beautyplanner.appcontent.*
-import com.andrey.beautyplanner.utils.LiveStatusKey
-import com.andrey.beautyplanner.utils.getLiveStatus
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlin.math.abs
-import kotlinx.coroutines.launch
-import androidx.compose.material.Button
+import com.andrey.beautyplanner.*
+import com.andrey.beautyplanner.appcontent.*
+import com.andrey.beautyplanner.utils.LiveStatusKey
+import com.andrey.beautyplanner.utils.getLiveStatus
 import com.andrey.beautyplanner.appcontent.ServiceTemplatesScreen
 import com.andrey.beautyplanner.appcontent.WorkScheduleScreen
 import com.andrey.beautyplanner.appcontent.AppearanceSettingsScreen
 import com.andrey.beautyplanner.appcontent.DeveloperAccessScreen
 import com.andrey.beautyplanner.appcontent.BackupSettingsScreen
+import com.andrey.beautyplanner.appcontent.ClientDatabaseScreen
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
 import com.andrey.beautyplanner.appcontent.AuthEmailScreen
@@ -51,9 +49,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.ui.platform.LocalDensity
 
 private const val APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS = 24L * 60L * 60L * 1000L
 
@@ -906,6 +901,11 @@ fun AppRootContent(
                     state.navigateBack()
                 }
             )
+
+            Screen.CLIENT_DATABASE -> ClientDatabaseScreen(
+                appointments = AppointmentSyncUtils.visibleAppointments(state.appointments)
+            )
+
             Screen.ARCHIVE -> {
                 val premiumEnabled =
                     state.accessState.tier == AccessTier.PREMIUM ||

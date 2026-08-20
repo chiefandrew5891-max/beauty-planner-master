@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Acest cont conține deja date",
     "ok": "OK",
     "guest_upgrade_subtitle": "Înregistrați-vă contul de oaspete actual pentru a păstra datele create deja, a le conecta la contul dvs. și a activa sincronizarea cu serverul.",
-    "work_schedule_long_period": "Perioadă lungă"
+    "work_schedule_long_period": "Perioadă lungă",
+    "nav_client_database": "Baza de date clienți",
+    "client_database_title": "Baza de date clienți",
+    "client_database_hint": "Clienții sunt generați automat din programările existente.",
+    "client_database_search": "Caută client",
+    "client_database_empty": "Nu există clienți încă",
+    "client_database_visits": "Vizite",
+    "client_database_last_visit": "Ultima vizită",
+    "client_status_none": "Fără status",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Necesită confirmare",
+    "client_status_risk_of_cancellation": "Risc de anulare",
+    "client_status_do_not_book": "Nu rezerva"
 }

@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Tämä tili sisältää jo tietoja",
     "ok": "OK",
     "guest_upgrade_subtitle": "Rekisteröi nykyinen vierastilisi säilyttääksesi jo luomasi tiedot, yhdistääksesi ne tiliisi ja ottaaksesi käyttöön palvelinsynkronoinnin.",
-    "work_schedule_long_period": "Pitkä jakso"
+    "work_schedule_long_period": "Pitkä jakso",
+    "nav_client_database": "Asiakastietokanta",
+    "client_database_title": "Asiakastietokanta",
+    "client_database_hint": "Asiakkaat luodaan automaattisesti olemassa olevista ajanvarauksista.",
+    "client_database_search": "Etsi asiakas",
+    "client_database_empty": "Ei vielä asiakkaita",
+    "client_database_visits": "Käynnit",
+    "client_database_last_visit": "Viimeisin käynti",
+    "client_status_none": "Ei statusta",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Vaatii vahvistuksen",
+    "client_status_risk_of_cancellation": "Peruutusriski",
+    "client_status_do_not_book": "Älä varaa"
 }

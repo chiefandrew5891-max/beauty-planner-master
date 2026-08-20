@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Цей обліковий запис уже містить дані",
     "ok": "ОК",
     "guest_upgrade_subtitle": "Зареєструйте поточний гостьовий обліковий запис, щоб зберегти вже створені дані, прив'язати їх до свого акаунту та увімкнути синхронізацію із сервером.",
-    "work_schedule_long_period": "Тривалий період"
+    "work_schedule_long_period": "Тривалий період",
+    "nav_client_database": "База клієнтів",
+    "client_database_title": "База клієнтів",
+    "client_database_hint": "Клієнти формуються автоматично з існуючих записів.",
+    "client_database_search": "Пошук клієнта",
+    "client_database_empty": "Клієнти поки відсутні",
+    "client_database_visits": "Візитів",
+    "client_database_last_visit": "Останній візит",
+    "client_status_none": "Без статусу",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Потребує підтвердження",
+    "client_status_risk_of_cancellation": "Ризик скасування",
+    "client_status_do_not_book": "Не записувати"
 }

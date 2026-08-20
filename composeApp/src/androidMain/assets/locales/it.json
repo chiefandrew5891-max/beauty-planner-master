@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Questo account contiene già dei dati",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registra il tuo account ospite attuale per conservare i dati che hai già creato, collegarli al tuo account e abilitare la sincronizzazione con il server.",
-    "work_schedule_long_period": "Lungo periodo"
+    "work_schedule_long_period": "Lungo periodo",
+    "nav_client_database": "Database Clienti",
+    "client_database_title": "Database Clienti",
+    "client_database_hint": "I clienti vengono generati automaticamente dagli appuntamenti esistenti.",
+    "client_database_search": "Cerca cliente",
+    "client_database_empty": "Ancora nessun cliente",
+    "client_database_visits": "Visite",
+    "client_database_last_visit": "Ultima visita",
+    "client_status_none": "Nessuno stato",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Richiede conferma",
+    "client_status_risk_of_cancellation": "Rischio di cancellazione",
+    "client_status_do_not_book": "Non prenotare"
 }

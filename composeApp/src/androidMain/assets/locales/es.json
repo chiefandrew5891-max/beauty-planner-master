@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Esta cuenta ya contiene datos",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registra tu cuenta de invitado actual para conservar los datos que ya has creado, vincularlos a tu cuenta y activar la sincronización con el servidor.",
-    "work_schedule_long_period": "Periodo largo"
+    "work_schedule_long_period": "Periodo largo",
+    "nav_client_database": "Base de datos de clientes",
+    "client_database_title": "Base de datos de clientes",
+    "client_database_hint": "Los clientes se generan automáticamente a partir de las citas existentes.",
+    "client_database_search": "Buscar cliente",
+    "client_database_empty": "Aún no hay clientes",
+    "client_database_visits": "Visitas",
+    "client_database_last_visit": "Última visita",
+    "client_status_none": "Sin estado",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Requiere confirmación",
+    "client_status_risk_of_cancellation": "Riesgo de cancelación",
+    "client_status_do_not_book": "No reservar"
 }

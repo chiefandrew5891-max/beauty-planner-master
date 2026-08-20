@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Dieses Konto enthält bereits Daten",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registrieren Sie Ihr aktuelles Gastkonto, um bereits erstellte Daten zu behalten, diese mit Ihrem Konto zu verknüpfen und die Synchronisierung mit dem Server zu aktivieren.",
-    "work_schedule_long_period": "Langer Zeitraum"
+    "work_schedule_long_period": "Langer Zeitraum",
+    "nav_client_database": "Kundendatenbank",
+    "client_database_title": "Kundendatenbank",
+    "client_database_hint": "Kunden werden automatisch aus bestehenden Terminen generiert.",
+    "client_database_search": "Kunden suchen",
+    "client_database_empty": "Noch keine Kunden",
+    "client_database_visits": "Besuche",
+    "client_database_last_visit": "Letzter Besuch",
+    "client_status_none": "Kein Status",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Bestätigung erforderlich",
+    "client_status_risk_of_cancellation": "Stornierungsrisiko",
+    "client_status_do_not_book": "Nicht buchen"
 }

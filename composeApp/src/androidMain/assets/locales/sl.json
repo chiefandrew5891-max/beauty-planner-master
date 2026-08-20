@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Ta račun že vsebuje podatke",
     "ok": "OK",
     "guest_upgrade_subtitle": "Registrirajte svoj trenutni gostujoči račun, da ohranite že ustvarjene podatke, jih povežete s svojim računom in omogočite sinhronizacijo s strežnikom.",
-    "work_schedule_long_period": "Dolgo obdobje"
+    "work_schedule_long_period": "Dolgo obdobje",
+    "nav_client_database": "Baza strank",
+    "client_database_title": "Baza strank",
+    "client_database_hint": "Stranke se samodejno ustvarijo iz obstoječih terminov.",
+    "client_database_search": "Išči stranko",
+    "client_database_empty": "Strank še ni",
+    "client_database_visits": "Obiski",
+    "client_database_last_visit": "Zadnji obisk",
+    "client_status_none": "Brez statusa",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Zahteva potrditev",
+    "client_status_risk_of_cancellation": "Tveganje odpovedi",
+    "client_status_do_not_book": "Ne rezerviraj"
 }

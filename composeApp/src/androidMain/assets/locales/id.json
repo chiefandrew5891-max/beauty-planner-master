@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Akun ini sudah berisi data",
     "ok": "OK",
     "guest_upgrade_subtitle": "Daftarkan akun tamu Anda saat ini untuk menyimpan data yang sudah dibuat, menautkannya ke akun Anda, dan mengaktifkan sinkronisasi server.",
-    "work_schedule_long_period": "Periode panjang"
+    "work_schedule_long_period": "Periode panjang",
+    "nav_client_database": "Database Klien",
+    "client_database_title": "Database Klien",
+    "client_database_hint": "Klien dibuat secara otomatis dari janji temu yang ada.",
+    "client_database_search": "Cari klien",
+    "client_database_empty": "Belum ada klien",
+    "client_database_visits": "Kunjungan",
+    "client_database_last_visit": "Kunjungan terakhir",
+    "client_status_none": "Tanpa status",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Butuh konfirmasi",
+    "client_status_risk_of_cancellation": "Risiko pembatalan",
+    "client_status_do_not_book": "Jangan dipesan"
 }

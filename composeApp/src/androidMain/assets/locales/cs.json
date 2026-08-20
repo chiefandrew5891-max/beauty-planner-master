@@ -862,5 +862,17 @@
     "guest_upgrade_existing_account_conflict_title": "Tento účet již obsahuje data",
     "ok": "OK",
     "guest_upgrade_subtitle": "Zaregistrujte svůj aktuální účet hosta, abyste zachovali již vytvořená data, propojili je se svým účtem a povolili synchronizaci se serverem.",
-    "work_schedule_long_period": "Dlouhé období"
+    "work_schedule_long_period": "Dlouhé období",
+    "nav_client_database": "Databáze klientů",
+    "client_database_title": "Databáze klientů",
+    "client_database_hint": "Klienti jsou generováni automaticky ze stávajících záznamů.",
+    "client_database_search": "Hledat klienta",
+    "client_database_empty": "Zatím žádní klienti",
+    "client_database_visits": "Návštěvy",
+    "client_database_last_visit": "Poslední návštěva",
+    "client_status_none": "Bez statusu",
+    "client_status_vip": "VIP",
+    "client_status_confirmation_required": "Vyžaduje potvrzení",
+    "client_status_risk_of_cancellation": "Riziko zrušení",
+    "client_status_do_not_book": "Nezapisovat"
 }

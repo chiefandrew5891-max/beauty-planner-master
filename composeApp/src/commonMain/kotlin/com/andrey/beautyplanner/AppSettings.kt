@@ -226,6 +226,7 @@ object AppSettings {
     var weeklyBlockedIntervals by mutableStateOf<List<WeeklyBlockedInterval>>(emptyList())
     var scheduleDateOverrides by mutableStateOf<List<ScheduleDateOverride>>(emptyList())
     var dateRangeBlockedIntervals by mutableStateOf<List<DateRangeBlockedInterval>>(emptyList())
+    var clientProfiles by mutableStateOf<List<ClientProfile>>(emptyList())
 
     var pinEnabled by mutableStateOf(false)
     private var adminPinHash by mutableStateOf("")
@@ -399,6 +400,27 @@ object AppSettings {
                 }
             }
 
+        persist()
+    }
+
+    fun getClientProfiles(): List<ClientProfile> =
+        clientProfiles
+
+    fun upsertClientProfile(profile: ClientProfile) {
+        val idx = clientProfiles.indexOfFirst { it.id == profile.id }
+
+        clientProfiles =
+            if (idx >= 0) {
+                clientProfiles.toMutableList().apply { set(idx, profile) }
+            } else {
+                clientProfiles + profile
+            }
+
+        persist()
+    }
+
+    fun removeClientProfile(id: String) {
+        clientProfiles = clientProfiles.filterNot { it.id == id }
         persist()
     }
 
