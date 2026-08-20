@@ -122,6 +122,8 @@ private data class SettingsSnapshot(
     val serviceTemplates: List<ServiceTemplate> = emptyList(),
     val weeklyBlockedIntervals: List<WeeklyBlockedInterval> = emptyList(),
     val scheduleDateOverrides: List<ScheduleDateOverride> = emptyList(),
+    val dateRangeBlockedIntervals: List<DateRangeBlockedInterval> = emptyList(),
+    val clientProfiles: List<ClientProfile> = emptyList(),
 
     val pinEnabled: Boolean = false,
     val adminPinHash: String = "",
@@ -431,6 +433,42 @@ object AppSettings {
         return findClientProfile(name, phone)?.colorTag.orEmpty()
     }
 
+    fun clientDisplayName(
+        name: String,
+        phone: String
+    ): String {
+        val cleanName = name.trim()
+        if (cleanName.isBlank()) return ""
+
+        val note = findClientProfile(name, phone)
+            ?.notes
+            ?.trim()
+            .orEmpty()
+
+        return if (note.isBlank()) {
+            cleanName
+        } else {
+            "$cleanName ($note)"
+        }
+    }
+
+    fun clientDisplayColor(
+        name: String,
+        phone: String,
+        defaultColor: androidx.compose.ui.graphics.Color
+    ): androidx.compose.ui.graphics.Color {
+        return when (clientColorTag(name, phone)) {
+            "red" -> androidx.compose.ui.graphics.Color(0xFFD32F2F)
+            "orange" -> androidx.compose.ui.graphics.Color(0xFFF57C00)
+            "yellow" -> androidx.compose.ui.graphics.Color(0xFFF9A825)
+            "green" -> androidx.compose.ui.graphics.Color(0xFF388E3C)
+            "blue" -> androidx.compose.ui.graphics.Color(0xFF1976D2)
+            "purple" -> androidx.compose.ui.graphics.Color(0xFF7B1FA2)
+            "gray" -> androidx.compose.ui.graphics.Color(0xFF607D8B)
+            else -> defaultColor
+        }
+    }
+
     fun removeClientProfile(id: String) {
         clientProfiles = clientProfiles.filterNot { it.id == id }
         persist()
@@ -608,6 +646,8 @@ object AppSettings {
             serviceTemplates = defaultServiceTemplates()
             weeklyBlockedIntervals = emptyList()
             scheduleDateOverrides = emptyList()
+            dateRangeBlockedIntervals = emptyList()
+            clientProfiles = emptyList()
         }
 
         cloudSettingsUpdatedAtMillis = 0L
@@ -765,6 +805,8 @@ object AppSettings {
 
         weeklyBlockedIntervals = snapshot.weeklyBlockedIntervals
         scheduleDateOverrides = snapshot.scheduleDateOverrides
+        dateRangeBlockedIntervals = snapshot.dateRangeBlockedIntervals
+        clientProfiles = snapshot.clientProfiles
 
         pinEnabled = snapshot.pinEnabled
         adminPinHash = snapshot.adminPinHash
@@ -852,6 +894,8 @@ object AppSettings {
             serviceTemplates = serviceTemplates,
             weeklyBlockedIntervals = weeklyBlockedIntervals,
             scheduleDateOverrides = scheduleDateOverrides,
+            dateRangeBlockedIntervals = dateRangeBlockedIntervals,
+            clientProfiles = clientProfiles,
 
             pinEnabled = pinEnabled,
             adminPinHash = adminPinHash,

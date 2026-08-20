@@ -885,5 +885,6 @@
     "client_color_green": "Zöld",
     "client_color_blue": "Kék",
     "client_color_purple": "Lila",
-    "client_color_gray": "Szürke"
+    "client_color_gray": "Szürke",
+    "client_profile_note_mark": "Ügyféljelzés"
 }

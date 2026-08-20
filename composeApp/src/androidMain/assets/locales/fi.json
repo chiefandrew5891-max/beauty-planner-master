@@ -885,5 +885,6 @@
     "client_color_green": "Vihreä",
     "client_color_blue": "Sininen",
     "client_color_purple": "Violetti",
-    "client_color_gray": "Harmaa"
+    "client_color_gray": "Harmaa",
+    "client_profile_note_mark": "Asiakasmerkintä"
 }

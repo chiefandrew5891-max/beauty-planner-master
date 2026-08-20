@@ -120,13 +120,20 @@ fun ClientPickerDialog(
                                 .padding(horizontal = 6.dp, vertical = 10.dp)
                         ) {
                             Text(
-                                text = client.displayName,
+                                text = AppSettings.clientDisplayName(
+                                    name = client.displayName,
+                                    phone = client.phone
+                                ),
                                 fontSize = (14 * fontScale).sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
                                 color = if (isSelected) {
                                     MaterialTheme.colors.primary
                                 } else {
-                                    onSurface
+                                    AppSettings.clientDisplayColor(
+                                        name = client.displayName,
+                                        phone = client.phone,
+                                        defaultColor = onSurface
+                                    )
                                 },
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis

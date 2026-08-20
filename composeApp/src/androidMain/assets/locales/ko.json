@@ -885,5 +885,6 @@
     "client_color_green": "녹색",
     "client_color_blue": "파란색",
     "client_color_purple": "보라색",
-    "client_color_gray": "회색"
+    "client_color_gray": "회색",
+    "client_profile_note_mark": "클라이언트 표시"
 }

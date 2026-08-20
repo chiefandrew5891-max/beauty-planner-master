@@ -154,10 +154,17 @@ fun ClientDatabaseScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = client.displayName,
+                                    text = AppSettings.clientDisplayName(
+                                        name = client.displayName,
+                                        phone = client.phone
+                                    ),
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = (16 * fontScale).sp,
-                                    color = MaterialTheme.colors.onSurface,
+                                    color = AppSettings.clientDisplayColor(
+                                        name = client.displayName,
+                                        phone = client.phone,
+                                        defaultColor = MaterialTheme.colors.onSurface
+                                    ),
                                     modifier = Modifier.weight(1f)
                                 )
 

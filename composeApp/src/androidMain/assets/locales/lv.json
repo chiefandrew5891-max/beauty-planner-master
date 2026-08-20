@@ -885,5 +885,6 @@
     "client_color_green": "Zaļa",
     "client_color_blue": "Zila",
     "client_color_purple": "Violeta",
-    "client_color_gray": "Pelēka"
+    "client_color_gray": "Pelēka",
+    "client_profile_note_mark": "Klienta atzīme"
 }

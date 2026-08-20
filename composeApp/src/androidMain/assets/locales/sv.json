@@ -885,5 +885,6 @@
     "client_color_green": "Grön",
     "client_color_blue": "Blå",
     "client_color_purple": "Lila",
-    "client_color_gray": "Grå"
+    "client_color_gray": "Grå",
+    "client_profile_note_mark": "Klientmarkering"
 }

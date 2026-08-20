@@ -885,5 +885,6 @@
     "client_color_green": "أخضر",
     "client_color_blue": "أزرق",
     "client_color_purple": "أرجواني",
-    "client_color_gray": "رمادي"
+    "client_color_gray": "رمادي",
+    "client_profile_note_mark": "علامة العميل"
 }

@@ -887,5 +887,6 @@
     "client_color_green": "Green",
     "client_color_blue": "Blue",
     "client_color_purple": "Purple",
-    "client_color_gray": "Gray"
+    "client_color_gray": "Gray",
+    "client_profile_note_mark": "Client mark"
 }

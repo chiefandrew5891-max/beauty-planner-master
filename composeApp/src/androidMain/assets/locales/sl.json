@@ -885,5 +885,6 @@
     "client_color_green": "Zelena",
     "client_color_blue": "Modra",
     "client_color_purple": "Vijolična",
-    "client_color_gray": "Siva"
+    "client_color_gray": "Siva",
+    "client_profile_note_mark": "Oznaka stranke"
 }

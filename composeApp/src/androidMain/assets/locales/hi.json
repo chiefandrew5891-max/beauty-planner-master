@@ -885,5 +885,6 @@
     "client_color_green": "हरा",
     "client_color_blue": "नीला",
     "client_color_purple": "बैंगनी",
-    "client_color_gray": "धूसर"
+    "client_color_gray": "धूसर",
+    "client_profile_note_mark": "ग्राहक चिह्न"
 }

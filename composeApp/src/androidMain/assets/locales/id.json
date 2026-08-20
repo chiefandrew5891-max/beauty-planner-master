@@ -885,5 +885,6 @@
     "client_color_green": "Hijau",
     "client_color_blue": "Biru",
     "client_color_purple": "Ungu",
-    "client_color_gray": "Abu-abu"
+    "client_color_gray": "Abu-abu",
+    "client_profile_note_mark": "Tanda klien"
 }

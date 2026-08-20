@@ -887,5 +887,6 @@
     "client_color_green": "Зелёный",
     "client_color_blue": "Синий",
     "client_color_purple": "Фиолетовый",
-    "client_color_gray": "Серый"
+    "client_color_gray": "Серый",
+    "client_profile_note_mark": "Пометка о клиенте"
 }

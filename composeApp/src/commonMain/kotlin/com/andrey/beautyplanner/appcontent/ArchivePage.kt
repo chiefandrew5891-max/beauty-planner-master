@@ -873,10 +873,17 @@ private fun ArchiveRowCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = appointment.clientName,
+                    text = AppSettings.clientDisplayName(
+                        name = appointment.clientName,
+                        phone = appointment.phone
+                    ),
                     fontSize = (16 * fontScale).sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onSurface,
+                    color = AppSettings.clientDisplayColor(
+                        name = appointment.clientName,
+                        phone = appointment.phone,
+                        defaultColor = MaterialTheme.colors.onSurface
+                    ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false)
@@ -996,10 +1003,17 @@ private fun ArchiveAppointmentViewDialog(
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = appointment.clientName,
+                    text = AppSettings.clientDisplayName(
+                        name = appointment.clientName,
+                        phone = appointment.phone
+                    ),
                     fontWeight = FontWeight.Bold,
                     fontSize = (22 * fontScale).sp,
-                    color = MaterialTheme.colors.onSurface
+                    color = AppSettings.clientDisplayColor(
+                        name = appointment.clientName,
+                        phone = appointment.phone,
+                        defaultColor = MaterialTheme.colors.onSurface
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))

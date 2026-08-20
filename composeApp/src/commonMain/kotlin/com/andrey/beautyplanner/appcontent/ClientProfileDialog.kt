@@ -20,8 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -50,11 +48,6 @@ import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
 import kotlinx.datetime.Clock
 
-private data class ClientStatusOption(
-    val value: String,
-    val title: String
-)
-
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 fun ClientProfileDialog(
@@ -67,26 +60,8 @@ fun ClientProfileDialog(
     val fontScale = AppSettings.getFontScale()
     val onSurface = MaterialTheme.colors.onSurface
 
-    var notes by remember(initialProfile.id) { mutableStateOf(initialProfile.notes) }
-    var selectedStatus by remember(initialProfile.id) { mutableStateOf(initialProfile.status) }
+    var noteText by remember(initialProfile.id) { mutableStateOf(initialProfile.notes) }
     var selectedColorTag by remember(initialProfile.id) { mutableStateOf(initialProfile.colorTag) }
-
-    val statusOptions = listOf(
-        ClientStatusOption(ClientProfileStatus.NONE.name, Locales.t("client_status_none")),
-        ClientStatusOption(ClientProfileStatus.VIP.name, Locales.t("client_status_vip")),
-        ClientStatusOption(
-            ClientProfileStatus.CONFIRMATION_REQUIRED.name,
-            Locales.t("client_status_confirmation_required")
-        ),
-        ClientStatusOption(
-            ClientProfileStatus.RISK_OF_CANCELLATION.name,
-            Locales.t("client_status_risk_of_cancellation")
-        ),
-        ClientStatusOption(
-            ClientProfileStatus.DO_NOT_BOOK.name,
-            Locales.t("client_status_do_not_book")
-        )
-    )
 
     val colorOptions = listOf(
         "" to Locales.t("client_color_none"),
@@ -123,10 +98,17 @@ fun ClientProfileDialog(
                             .padding(end = 12.dp)
                     ) {
                         Text(
-                            text = initialProfile.displayName,
+                            text = AppSettings.clientDisplayName(
+                                name = initialProfile.displayName,
+                                phone = initialProfile.phone
+                            ),
                             fontSize = (20 * fontScale).sp,
                             fontWeight = FontWeight.Bold,
-                            color = onSurface
+                            color = AppSettings.clientDisplayColor(
+                                name = initialProfile.displayName,
+                                phone = initialProfile.phone,
+                                defaultColor = onSurface
+                            )
                         )
 
                         if (initialProfile.phone.isNotBlank()) {
@@ -161,18 +143,6 @@ fun ClientProfileDialog(
                         color = onSurface.copy(alpha = 0.82f)
                     )
                 }
-
-                StatusDropdownField(
-                    label = Locales.t("client_profile_status"),
-                    selectedValue = statusOptions.firstOrNull { it.value == selectedStatus }?.title
-                        ?: Locales.t("client_status_none"),
-                    options = statusOptions.map { it.title },
-                    onSelected = { title ->
-                        selectedStatus =
-                            statusOptions.firstOrNull { it.title == title }?.value
-                                ?: ClientProfileStatus.NONE.name
-                    }
-                )
 
                 Text(
                     text = Locales.t("client_profile_color_tag"),
@@ -239,12 +209,12 @@ fun ClientProfileDialog(
                 }
 
                 OutlinedTextField(
-                    value = notes,
-                    onValueChange = { notes = it },
+                    value = noteText,
+                    onValueChange = { noteText = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 110.dp),
-                    label = { Text(Locales.t("client_profile_notes")) },
+                    label = { Text(Locales.t("client_profile_note_mark")) },
                     shape = RoundedCornerShape(14.dp),
                     textStyle = TextStyle(
                         fontSize = (15 * fontScale).sp,
@@ -267,8 +237,8 @@ fun ClientProfileDialog(
                     onClick = {
                         onSave(
                             initialProfile.copy(
-                                notes = notes.trim(),
-                                status = selectedStatus,
+                                notes = noteText.trim(),
+                                status = ClientProfileStatus.NONE.name,
                                 colorTag = selectedColorTag,
                                 updatedAtMillis = Clock.System.now().toEpochMilliseconds()
                             )
@@ -294,52 +264,6 @@ fun ClientProfileDialog(
                     modifier = Modifier.align(Alignment.End)
                 ) {
                     Text(Locales.t("cancel"))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun StatusDropdownField(
-    label: String,
-    selectedValue: String,
-    options: List<String>,
-    onSelected: (String) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-    val interactionSource = remember { MutableInteractionSource() }
-
-    Box(modifier = Modifier.fillMaxWidth()) {
-        OutlinedTextField(
-            value = selectedValue,
-            onValueChange = {},
-            readOnly = true,
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    expanded = true
-                },
-            label = { Text(label) },
-            shape = RoundedCornerShape(14.dp)
-        )
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        onSelected(option)
-                    }
-                ) {
-                    Text(option)
                 }
             }
         }

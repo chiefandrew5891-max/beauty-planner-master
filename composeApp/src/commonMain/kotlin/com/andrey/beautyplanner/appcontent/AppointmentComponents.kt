@@ -224,12 +224,19 @@ fun AppointmentCard(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = appt.clientName,
+                                text = AppSettings.clientDisplayName(
+                                    name = appt.clientName,
+                                    phone = appt.phone
+                                ),
                                 fontSize = (15 * fontScale).sp,
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                color = MaterialTheme.colors.onSurface,
+                                color = AppSettings.clientDisplayColor(
+                                    name = appt.clientName,
+                                    phone = appt.phone,
+                                    defaultColor = MaterialTheme.colors.onSurface
+                                ),
                                 modifier = Modifier.weight(1f, fill = false)
                             )
 

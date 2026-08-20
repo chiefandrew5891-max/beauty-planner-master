@@ -885,5 +885,6 @@
     "client_color_green": "Groen",
     "client_color_blue": "Blauw",
     "client_color_purple": "Paars",
-    "client_color_gray": "Grijs"
+    "client_color_gray": "Grijs",
+    "client_profile_note_mark": "Klantmarkering"
 }
