@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Tento účet už obsahuje uložené údaje. K novému účtu nie je možné opätovne prepojiť účet hosťa, aby sa predišlo prepísaniu existujúcich informácií.",
     "guest_upgrade_existing_account_conflict_title": "Tento účet už obsahuje údaje",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Zaregistrujte svoj aktuálny účet hosťa, aby ste zachovali už vytvorené údaje, prepojili ich so svojím účtom a povolili synchronizáciu so serverom."
+    "guest_upgrade_subtitle": "Zaregistrujte svoj aktuálny účet hosťa, aby ste zachovali už vytvorené údaje, prepojili ich so svojím účtom a povolili synchronizáciu so serverom.",
+    "work_schedule_long_period": "Dlhé obdobie"
 }

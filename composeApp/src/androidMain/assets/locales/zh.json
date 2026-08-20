@@ -859,5 +859,6 @@
     "guest_upgrade_existing_account_conflict": "该账号已包含已保存的数据。无法再次将新的访客账号绑定到该账号，以免覆盖现有信息。",
     "guest_upgrade_existing_account_conflict_title": "该账号已包含数据",
     "ok": "确定",
-    "guest_upgrade_subtitle": "注册当前的访客账号以保留您已创建的数据，将其关联到您的账号，并启用服务器同步。"
+    "guest_upgrade_subtitle": "注册当前的访客账号以保留您已创建的数据，将其关联到您的账号，并启用服务器同步。",
+    "work_schedule_long_period": "长期"
 }

@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Dieses Konto enthält bereits gespeicherte Daten. Ein neues Gastkonto kann nicht erneut damit verknüpft werden, um ein Überschreiben vorhandener Informationen zu vermeiden.",
     "guest_upgrade_existing_account_conflict_title": "Dieses Konto enthält bereits Daten",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registrieren Sie Ihr aktuelles Gastkonto, um bereits erstellte Daten zu behalten, diese mit Ihrem Konto zu verknüpfen und die Synchronisierung mit dem Server zu aktivieren."
+    "guest_upgrade_subtitle": "Registrieren Sie Ihr aktuelles Gastkonto, um bereits erstellte Daten zu behalten, diese mit Ihrem Konto zu verknüpfen und die Synchronisierung mit dem Server zu aktivieren.",
+    "work_schedule_long_period": "Langer Zeitraum"
 }

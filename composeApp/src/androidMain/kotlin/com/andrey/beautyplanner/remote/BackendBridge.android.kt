@@ -110,12 +110,12 @@ actual object BackendBridge {
         clientInteractionsEnabled: Boolean,
         serviceTemplatesJson: String,
         weeklyBlockedIntervalsJson: String,
-        scheduleDateOverridesJson: String
+        scheduleDateOverridesJson: String,
+        dateRangeBlockedIntervalsJson: String
     ): Map<String, String> {
-        ensureAuthenticated()
-        return callRawFunction(
-            "syncMyMasterProfile",
-            mapOf(
+        return callFunction(
+            name = "syncMyMasterProfile",
+            payload = mapOf(
                 "ownerName" to ownerName,
                 "profileDisplayCustomName" to profileDisplayCustomName,
                 "profilePhone" to profilePhone,
@@ -128,7 +128,8 @@ actual object BackendBridge {
                 "clientInteractionsEnabled" to clientInteractionsEnabled,
                 "serviceTemplatesJson" to serviceTemplatesJson,
                 "weeklyBlockedIntervalsJson" to weeklyBlockedIntervalsJson,
-                "scheduleDateOverridesJson" to scheduleDateOverridesJson
+                "scheduleDateOverridesJson" to scheduleDateOverridesJson,
+                "dateRangeBlockedIntervalsJson" to dateRangeBlockedIntervalsJson
             )
         )
     }
@@ -241,6 +242,7 @@ actual object BackendBridge {
                             serviceTemplates = templates,
                             weeklyBlockedIntervalsJson = map["weeklyBlockedIntervalsJson"]?.toString().orEmpty(),
                             scheduleDateOverridesJson = map["scheduleDateOverridesJson"]?.toString().orEmpty(),
+                            dateRangeBlockedIntervalsJson = map["dateRangeBlockedIntervalsJson"]?.toString().orEmpty(),
                             updatedAt = map["updatedAt"]?.toString()?.toLongOrNull() ?: 0L,
                             createdAt = map["createdAt"]?.toString()?.toLongOrNull() ?: 0L
                         )
@@ -292,6 +294,13 @@ actual object BackendBridge {
             "deleteMyAccount",
             emptyMap<String, Any>()
         )
+    }
+
+    private suspend fun callFunction(
+        name: String,
+        payload: Map<String, Any?>
+    ): Map<String, String> {
+        return callRawFunction(name, payload)
     }
 
     private suspend fun callRawFunction(

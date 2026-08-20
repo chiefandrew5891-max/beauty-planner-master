@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Tento účet již obsahuje uložená data. K novému účtu nelze znovu propojit účet hosta, aby nedošlo k přepsání stávajících informací.",
     "guest_upgrade_existing_account_conflict_title": "Tento účet již obsahuje data",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Zaregistrujte svůj aktuální účet hosta, abyste zachovali již vytvořená data, propojili je se svým účtem a povolili synchronizaci se serverem."
+    "guest_upgrade_subtitle": "Zaregistrujte svůj aktuální účet hosta, abyste zachovali již vytvořená data, propojili je se svým účtem a povolili synchronizaci se serverem.",
+    "work_schedule_long_period": "Dlouhé období"
 }

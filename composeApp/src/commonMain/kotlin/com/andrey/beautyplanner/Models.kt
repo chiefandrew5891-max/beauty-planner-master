@@ -43,6 +43,18 @@ data class WeeklyBlockedInterval(
     val endTime: String,
     val isActive: Boolean = true
 )
+
+
+@Serializable
+data class DateRangeBlockedInterval(
+    val id: String,
+    val dateFrom: String, // YYYY-MM-DD
+    val dateTo: String,   // YYYY-MM-DD
+    val startTime: String,
+    val endTime: String,
+    val isActive: Boolean = true
+)
+
 @Serializable
 data class ScheduleDateOverride(
     val id: String,

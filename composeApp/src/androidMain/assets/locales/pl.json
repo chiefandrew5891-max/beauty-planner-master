@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "To konto zawiera już zapisane dane. Nie można ponownie powiązać z nim nowego konta gościa, aby uniknąć nadpisania istniejących informacji.",
     "guest_upgrade_existing_account_conflict_title": "To konto zawiera już dane",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Zarejestruj swoje obecne konto gościa, aby zachować już utworzone dane, powiązać je ze swoim kontem i włączyć synchronizację z serwerem."
+    "guest_upgrade_subtitle": "Zarejestruj swoje obecne konto gościa, aby zachować już utworzone dane, powiązać je ze swoim kontem i włączyć synchronizację z serwerem.",
+    "work_schedule_long_period": "Długi okres"
 }

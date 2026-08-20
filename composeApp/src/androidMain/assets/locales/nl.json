@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Dit account bevat al opgeslagen gegevens. Er kan niet opnieuw een nieuw gastaccount aan worden gekoppeld om te voorkomen dat bestaande informatie wordt overschreven.",
     "guest_upgrade_existing_account_conflict_title": "Dit account bevat al gegevens",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registreer uw huidige gastaccount om de gegevens die u al hebt aangemaakt te behouden, deze aan uw account te koppelen en synchronisatie met de server in te schakelen."
+    "guest_upgrade_subtitle": "Registreer uw huidige gastaccount om de gegevens die u al hebt aangemaakt te behouden, deze aan uw account te koppelen en synchronisatie met de server in te schakelen.",
+    "work_schedule_long_period": "Lange periode"
 }

@@ -860,5 +860,6 @@
     "guest_upgrade_existing_account_conflict": "このアカウントには既に保存されたデータが含まれています。既存の情報を上書きしないよう、新しいゲストアカウントを再度リンクすることはできません。",
     "guest_upgrade_existing_account_conflict_title": "このアカウントには既にデータが含まれています",
     "ok": "OK",
-    "guest_upgrade_subtitle": "現在のゲストアカウントを登録して、作成済みのデータを保持し、アカウントに紐付けて、サーバー同期を有効にします。"
+    "guest_upgrade_subtitle": "現在のゲストアカウントを登録して、作成済みのデータを保持し、アカウントに紐付けて、サーバー同期を有効にします。",
+    "work_schedule_long_period": "長期"
 }

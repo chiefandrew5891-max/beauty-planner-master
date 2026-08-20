@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Bu hesap zaten kaydedilmiş veriler içeriyor. Mevcut bilgilerin üzerine yazılmasını önlemek için yeni bir misafir hesabı tekrar buna bağlanamaz.",
     "guest_upgrade_existing_account_conflict_title": "Bu hesap zaten veri içeriyor",
     "ok": "Tamam",
-    "guest_upgrade_subtitle": "Zaten oluşturduğunuz verileri saklamak, bunları hesabınıza bağlamak ve sunucu senkronizasyonunu etkinleştirmek için mevcut misafir hesabınızı kaydedin."
+    "guest_upgrade_subtitle": "Zaten oluşturduğunuz verileri saklamak, bunları hesabınıza bağlamak ve sunucu senkronizasyonunu etkinleştirmek için mevcut misafir hesabınızı kaydedin.",
+    "work_schedule_long_period": "Uzun dönem"
 }

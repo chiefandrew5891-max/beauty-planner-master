@@ -25,6 +25,8 @@ object MasterProfileSync {
                 CloudSyncJson.json.encodeToString(AppSettings.weeklyBlockedIntervals)
             val scheduleDateOverridesJson =
                 CloudSyncJson.json.encodeToString(AppSettings.scheduleDateOverrides)
+            val dateRangeBlockedIntervalsJson =
+                CloudSyncJson.json.encodeToString(AppSettings.dateRangeBlockedIntervals)
 
             BackendBridge.syncMyMasterProfile(
                 ownerName = AppSettings.ownerName,
@@ -39,7 +41,8 @@ object MasterProfileSync {
                 clientInteractionsEnabled = AppSettings.clientInteractionsEnabled,
                 serviceTemplatesJson = serviceTemplatesJson,
                 weeklyBlockedIntervalsJson = weeklyBlockedIntervalsJson,
-                scheduleDateOverridesJson = scheduleDateOverridesJson
+                scheduleDateOverridesJson = scheduleDateOverridesJson,
+                dateRangeBlockedIntervalsJson = dateRangeBlockedIntervalsJson,
             )
         }
     }

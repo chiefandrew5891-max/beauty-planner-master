@@ -225,6 +225,7 @@ object AppSettings {
     var serviceTemplates by mutableStateOf(defaultServiceTemplates())
     var weeklyBlockedIntervals by mutableStateOf<List<WeeklyBlockedInterval>>(emptyList())
     var scheduleDateOverrides by mutableStateOf<List<ScheduleDateOverride>>(emptyList())
+    var dateRangeBlockedIntervals by mutableStateOf<List<DateRangeBlockedInterval>>(emptyList())
 
     var pinEnabled by mutableStateOf(false)
     private var adminPinHash by mutableStateOf("")
@@ -414,6 +415,21 @@ object AppSettings {
     fun removeScheduleDateOverride(id: String) {
         scheduleDateOverrides = scheduleDateOverrides.filterNot { it.id == id }
         persist()
+    }
+
+    fun upsertDateRangeBlockedInterval(item: DateRangeBlockedInterval) {
+        dateRangeBlockedIntervals =
+            dateRangeBlockedIntervals.filterNot { it.id == item.id } + item
+        persist()
+    }
+
+    fun removeDateRangeBlockedInterval(id: String) {
+        dateRangeBlockedIntervals = dateRangeBlockedIntervals.filterNot { it.id == id }
+        persist()
+    }
+
+    fun getActiveDateRangeBlockedIntervals(): List<DateRangeBlockedInterval> {
+        return dateRangeBlockedIntervals.filter { it.isActive }
     }
 
     fun reminderMinutesComputed(): List<Int> {

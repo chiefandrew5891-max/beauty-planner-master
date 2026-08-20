@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "See konto sisaldab juba salvestatud andmeid. Uut külaliskontot ei saa sellega uuesti siduda, et vältida olemasolevate andmete ülekirjutamist.",
     "guest_upgrade_existing_account_conflict_title": "See konto sisaldab juba andmeid",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registreerige oma praegune külaliskonto, et säilitada juba loodud andmeid, siduda need oma kontoga ja lubada sünkroonimine serveriga."
+    "guest_upgrade_subtitle": "Registreerige oma praegune külaliskonto, et säilitada juba loodud andmeid, siduda need oma kontoga ja lubada sünkroonimine serveriga.",
+    "work_schedule_long_period": "Pikk periood"
 }

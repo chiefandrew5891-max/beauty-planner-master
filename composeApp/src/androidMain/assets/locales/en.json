@@ -863,5 +863,6 @@
     "guest_upgrade_existing_account_conflict": "This account already contains saved data. A new guest account cannot be linked to it again, to avoid overwriting existing information.",
     "guest_upgrade_existing_account_conflict_title": "This account already contains data",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Register your current guest account to keep the data you have already created, link it to your account, and enable server synchronization."
+    "guest_upgrade_subtitle": "Register your current guest account to keep the data you have already created, link it to your account, and enable server synchronization.",
+    "work_schedule_long_period": "Long period"
 }

@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Akun ini sudah berisi data tersimpan. Akun tamu baru tidak dapat ditautkan kembali ke akun ini untuk menghindari penimpaan informasi yang ada.",
     "guest_upgrade_existing_account_conflict_title": "Akun ini sudah berisi data",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Daftarkan akun tamu Anda saat ini untuk menyimpan data yang sudah dibuat, menautkannya ke akun Anda, dan mengaktifkan sinkronisasi server."
+    "guest_upgrade_subtitle": "Daftarkan akun tamu Anda saat ini untuk menyimpan data yang sudah dibuat, menautkannya ke akun Anda, dan mengaktifkan sinkronisasi server.",
+    "work_schedule_long_period": "Periode panjang"
 }

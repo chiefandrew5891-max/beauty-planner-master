@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Ta račun že vsebuje shranjene podatke. Novega gostujočega računa ni mogoče ponovno povezati z njim, da ne bi prepisali obstoječih podatkov.",
     "guest_upgrade_existing_account_conflict_title": "Ta račun že vsebuje podatke",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registrirajte svoj trenutni gostujoči račun, da ohranite že ustvarjene podatke, jih povežete s svojim računom in omogočite sinhronizacijo s strežnikom."
+    "guest_upgrade_subtitle": "Registrirajte svoj trenutni gostujoči račun, da ohranite že ustvarjene podatke, jih povežete s svojim računom in omogočite sinhronizacijo s strežnikom.",
+    "work_schedule_long_period": "Dolgo obdobje"
 }

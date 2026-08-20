@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Questo account contiene già dati salvati. Non è possibile collegare nuovamente un nuovo account ospite per evitare di sovrascrivere le informazioni esistenti.",
     "guest_upgrade_existing_account_conflict_title": "Questo account contiene già dei dati",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registra il tuo account ospite attuale per conservare i dati che hai già creato, collegarli al tuo account e abilitare la sincronizzazione con il server."
+    "guest_upgrade_subtitle": "Registra il tuo account ospite attuale per conservare i dati che hai già creato, collegarli al tuo account e abilitare la sincronizzazione con il server.",
+    "work_schedule_long_period": "Lungo periodo"
 }

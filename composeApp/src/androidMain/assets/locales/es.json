@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Esta cuenta ya contiene datos guardados. No se puede volver a vincular una nueva cuenta de invitado a ella, para evitar sobrescribir la información existente.",
     "guest_upgrade_existing_account_conflict_title": "Esta cuenta ya contiene datos",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registra tu cuenta de invitado actual para conservar los datos que ya has creado, vincularlos a tu cuenta y activar la sincronización con el servidor."
+    "guest_upgrade_subtitle": "Registra tu cuenta de invitado actual para conservar los datos que ya has creado, vincularlos a tu cuenta y activar la sincronización con el servidor.",
+    "work_schedule_long_period": "Periodo largo"
 }

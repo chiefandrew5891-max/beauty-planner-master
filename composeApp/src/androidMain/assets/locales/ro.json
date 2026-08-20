@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Acest cont conține deja date salvate. Un cont de oaspete nou nu poate fi conectat din nou la acesta, pentru a evita suprascrierea informațiilor existente.",
     "guest_upgrade_existing_account_conflict_title": "Acest cont conține deja date",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Înregistrați-vă contul de oaspete actual pentru a păstra datele create deja, a le conecta la contul dvs. și a activa sincronizarea cu serverul."
+    "guest_upgrade_subtitle": "Înregistrați-vă contul de oaspete actual pentru a păstra datele create deja, a le conecta la contul dvs. și a activa sincronizarea cu serverul.",
+    "work_schedule_long_period": "Perioadă lungă"
 }

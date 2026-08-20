@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Ce compte contient déjà des données enregistrées. Un nouveau compte invité ne peut pas y être lié à nouveau, afin d'éviter d'écraser les informations existantes.",
     "guest_upgrade_existing_account_conflict_title": "Ce compte contient déjà des données",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Enregistrez votre compte invité actuel pour conserver les données que vous avez déjà créées, les lier à votre compte et activer la synchronisation avec le serveur."
+    "guest_upgrade_subtitle": "Enregistrez votre compte invité actuel pour conserver les données que vous avez déjà créées, les lier à votre compte et activer la synchronisation avec le serveur.",
+    "work_schedule_long_period": "Longue période"
 }

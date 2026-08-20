@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Ez a fiók már tartalmaz mentett adatokat. Új vendégfiók nem kapcsolható hozzá újra, a meglévő információk felülírásának elkerülése érdekében.",
     "guest_upgrade_existing_account_conflict_title": "Ez a fiók már tartalmaz adatokat",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Regisztrálja jelenlegi vendégfiókját, hogy megtartsa a már létrehozott adatokat, összekapcsolja azokat fiókjával, és engedélyezze a szerverrel való szinkronizálást."
+    "guest_upgrade_subtitle": "Regisztrálja jelenlegi vendégfiókját, hogy megtartsa a már létrehozott adatokat, összekapcsolja azokat fiókjával, és engedélyezze a szerverrel való szinkronizálást.",
+    "work_schedule_long_period": "Hosszú időszak"
 }

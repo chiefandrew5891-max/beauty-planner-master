@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Šioje paskyroje jau yra išsaugotų duomenų. Naujos svečio paskyros nebegalima susieti su ja, kad nebūtų perrašyta esama informacija.",
     "guest_upgrade_existing_account_conflict_title": "Šioje paskyroje jau yra duomenų",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Užregistruokite savo dabartinę svečio paskyrą, kad išsaugotumėte jau sukurtus duomenis, susietumėte juos su savo paskyra ir įgalintumėte sinchronizavimą su serveriu."
+    "guest_upgrade_subtitle": "Užregistruokite savo dabartinę svečio paskyrą, kad išsaugotumėte jau sukurtus duomenis, susietumėte juos su savo paskyra ir įgalintumėte sinchronizavimą su serveriu.",
+    "work_schedule_long_period": "Ilgas laikotarpis"
 }

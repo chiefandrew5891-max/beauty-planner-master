@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "이 계정에는 이미 저장된 데이터가 포함되어 있습니다. 기존 정보를 덮어쓰지 않도록 새 게스트 계정을 다시 연결할 수 없습니다.",
     "guest_upgrade_existing_account_conflict_title": "이 계정에는 이미 데이터가 포함되어 있습니다",
     "ok": "확인",
-    "guest_upgrade_subtitle": "현재 게스트 계정을 등록하여 이미 생성된 데이터를 보존하고 계정에 연결한 다음 서버 동기화를 활성화하세요."
+    "guest_upgrade_subtitle": "현재 게스트 계정을 등록하여 이미 생성된 데이터를 보존하고 계정에 연결한 다음 서버 동기화를 활성화하세요.",
+    "work_schedule_long_period": "장기"
 }

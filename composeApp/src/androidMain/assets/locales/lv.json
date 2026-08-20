@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Šis konts jau satur saglabātus datus. Jaunu viesa kontu tam vairs nevar piesaistīt, lai izvairītos no esošās informācijas pārrakstīšanas.",
     "guest_upgrade_existing_account_conflict_title": "Šis konts jau satur datus",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Reģistrējiet savu pašreizējo viesa kontu, lai saglabātu jau izveidotos datus, saistītu tos ar savu kontu un iespējotu sinhronizāciju ar serveri."
+    "guest_upgrade_subtitle": "Reģistrējiet savu pašreizējo viesa kontu, lai saglabātu jau izveidotos datus, saistītu tos ar savu kontu un iespējotu sinhronizāciju ar serveri.",
+    "work_schedule_long_period": "Ilgs periods"
 }

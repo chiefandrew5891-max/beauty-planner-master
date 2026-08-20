@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Tämä tili sisältää jo tallennettuja tietoja. Uutta vierastiliä ei voi linkittää siihen uudelleen olemassa olevien tietojen ylikirjoittamisen välttämiseksi.",
     "guest_upgrade_existing_account_conflict_title": "Tämä tili sisältää jo tietoja",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Rekisteröi nykyinen vierastilisi säilyttääksesi jo luomasi tiedot, yhdistääksesi ne tiliisi ja ottaaksesi käyttöön palvelinsynkronoinnin."
+    "guest_upgrade_subtitle": "Rekisteröi nykyinen vierastilisi säilyttääksesi jo luomasi tiedot, yhdistääksesi ne tiliisi ja ottaaksesi käyttöön palvelinsynkronoinnin.",
+    "work_schedule_long_period": "Pitkä jakso"
 }

@@ -29,6 +29,7 @@ data class CloudSettingsSnapshot(
     val serviceTemplates: List<ServiceTemplate> = emptyList(),
     val weeklyBlockedIntervals: List<WeeklyBlockedInterval> = emptyList(),
     val scheduleDateOverrides: List<ScheduleDateOverride> = emptyList(),
+    val dateRangeBlockedIntervals: List<DateRangeBlockedInterval> = emptyList(),
 
     val updatedAtMillis: Long = 0L
 )

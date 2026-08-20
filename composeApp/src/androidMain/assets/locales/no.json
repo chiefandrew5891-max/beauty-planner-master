@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Denne kontoen inneholder allerede lagrede data. En ny gjestekonto kan ikke knyttes til den igjen for å unngå å overskrive eksisterende informasjon.",
     "guest_upgrade_existing_account_conflict_title": "Denne kontoen inneholder allerede data",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registrer din nåværende gjestekonto for å beholde dataene du allerede har opprettet, knytte dem til kontoen din og aktivere synkronisering med serveren."
+    "guest_upgrade_subtitle": "Registrer din nåværende gjestekonto for å beholde dataene du allerede har opprettet, knytte dem til kontoen din og aktivere synkronisering med serveren.",
+    "work_schedule_long_period": "Lang periode"
 }

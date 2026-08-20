@@ -31,6 +31,7 @@ data class MasterProfilePayload(
     val serviceTemplates: List<MasterServiceTemplatePayload>,
     val weeklyBlockedIntervalsJson: String,
     val scheduleDateOverridesJson: String,
+    val dateRangeBlockedIntervalsJson: String,
     val updatedAt: Long,
     val createdAt: Long
 )
@@ -83,7 +84,8 @@ expect object BackendBridge {
         clientInteractionsEnabled: Boolean,
         serviceTemplatesJson: String,
         weeklyBlockedIntervalsJson: String,
-        scheduleDateOverridesJson: String
+        scheduleDateOverridesJson: String,
+        dateRangeBlockedIntervalsJson: String
     ): Map<String, String>
 
     suspend fun getMyMasterProfile(): MasterProfilePayload

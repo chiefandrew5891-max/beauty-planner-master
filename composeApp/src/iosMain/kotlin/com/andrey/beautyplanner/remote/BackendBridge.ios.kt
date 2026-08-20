@@ -129,7 +129,8 @@ actual object BackendBridge {
         clientInteractionsEnabled: Boolean,
         serviceTemplatesJson: String,
         weeklyBlockedIntervalsJson: String,
-        scheduleDateOverridesJson: String
+        scheduleDateOverridesJson: String,
+        dateRangeBlockedIntervalsJson: String
     ): Map<String, String> {
         ensureAuthenticated()
 
@@ -148,7 +149,8 @@ actual object BackendBridge {
                 "clientInteractionsEnabled" to clientInteractionsEnabled.toString(),
                 "serviceTemplatesJson" to serviceTemplatesJson,
                 "weeklyBlockedIntervalsJson" to weeklyBlockedIntervalsJson,
-                "scheduleDateOverridesJson" to scheduleDateOverridesJson
+                "scheduleDateOverridesJson" to scheduleDateOverridesJson,
+                "dateRangeBlockedIntervalsJson" to dateRangeBlockedIntervalsJson
             )
         )
     }
@@ -188,6 +190,7 @@ actual object BackendBridge {
             payload = mapOf("avatarId" to avatarId)
         )
     }
+
     actual suspend fun getMyMasterProfile(): MasterProfilePayload {
         ensureAuthenticated()
 
@@ -219,6 +222,7 @@ actual object BackendBridge {
             serviceTemplates = templates,
             weeklyBlockedIntervalsJson = result["weeklyBlockedIntervalsJson"]?.toString().orEmpty(),
             scheduleDateOverridesJson = result["scheduleDateOverridesJson"]?.toString().orEmpty(),
+            dateRangeBlockedIntervalsJson = result["dateRangeBlockedIntervalsJson"]?.toString().orEmpty(),
             updatedAt = result["updatedAt"]?.toString()?.toLongOrNull() ?: 0L,
             createdAt = result["createdAt"]?.toString()?.toLongOrNull() ?: 0L
         )
@@ -232,6 +236,7 @@ actual object BackendBridge {
             payload = emptyMap()
         )
     }
+
     actual suspend fun syncMyPublicSchedule(
         autoPublishBusySlots: Boolean,
         busySlotsJson: String

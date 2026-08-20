@@ -75,8 +75,11 @@ private data class Block(
 ) {
     enum class Kind { FREE, APPOINTMENT }
 }
-private fun hmToHourInt(hm: String): Int {
-    return hm.substringBefore(":").toIntOrNull() ?: 0
+private fun hmToMinutesInt(hm: String): Int {
+    val parts = hm.split(":")
+    val hour = parts.getOrNull(0)?.toIntOrNull() ?: return 0
+    val minute = parts.getOrNull(1)?.toIntOrNull() ?: 0
+    return hour * 60 + minute
 }
 
 private fun isBlockedByWorkSchedule(
@@ -84,16 +87,39 @@ private fun isBlockedByWorkSchedule(
     startHm: String
 ): Boolean {
     val dayOfWeek = date.dayOfWeek.isoDayNumber
-    val hour = hmToHourInt(startHm)
+    val slotStartMinutes = hmToMinutesInt(startHm)
 
-    return AppSettings.getActiveWeeklyBlockedIntervals().any { interval ->
+    val blockedByWeekly = AppSettings.getActiveWeeklyBlockedIntervals().any { interval ->
         if (interval.dayOfWeek != dayOfWeek) return@any false
 
-        val startHour = hmToHourInt(interval.startTime)
-        val endHour = hmToHourInt(interval.endTime)
+        val startMinutes = hmToMinutesInt(interval.startTime)
+        val endMinutes = hmToMinutesInt(interval.endTime)
 
-        hour >= startHour && hour < endHour
+        slotStartMinutes >= startMinutes && slotStartMinutes < endMinutes
     }
+
+    if (blockedByWeekly) {
+        return true
+    }
+
+    val blockedByRange = AppSettings.getActiveDateRangeBlockedIntervals().any { interval ->
+        val fromDate = runCatching {
+            kotlinx.datetime.LocalDate.parse(interval.dateFrom)
+        }.getOrNull() ?: return@any false
+
+        val toDate = runCatching {
+            kotlinx.datetime.LocalDate.parse(interval.dateTo)
+        }.getOrNull() ?: return@any false
+
+        if (date < fromDate || date > toDate) return@any false
+
+        val startMinutes = hmToMinutesInt(interval.startTime)
+        val endMinutes = hmToMinutesInt(interval.endTime)
+
+        slotStartMinutes >= startMinutes && slotStartMinutes < endMinutes
+    }
+
+    return blockedByRange
 }
 @Composable
 fun DayDetailsView(

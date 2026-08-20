@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Esta conta já contém dados salvos. Uma nova conta de convidado não pode ser vinculada a ela novamente, para evitar sobrescrever as informações existentes.",
     "guest_upgrade_existing_account_conflict_title": "Esta conta já contém dados",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registre sua conta de convidado atual para manter os dados que você já criou, vinculá-los à sua conta e ativar a sincronização com o servidor."
+    "guest_upgrade_subtitle": "Registre sua conta de convidado atual para manter os dados que você já criou, vinculá-los à sua conta e ativar a sincronização com o servidor.",
+    "work_schedule_long_period": "Longo período"
 }

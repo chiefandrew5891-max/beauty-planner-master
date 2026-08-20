@@ -861,5 +861,6 @@
     "guest_upgrade_existing_account_conflict": "Detta konto innehåller redan sparad data. Ett nytt gästkonto kan inte länkas till det igen för att undvika att skriva över befintlig information.",
     "guest_upgrade_existing_account_conflict_title": "Detta konto innehåller redan data",
     "ok": "OK",
-    "guest_upgrade_subtitle": "Registrera ditt nuvarande gästkonto för att behålla data du redan har skapat, länka det till ditt konto och aktivera synkronisering med servern."
+    "guest_upgrade_subtitle": "Registrera ditt nuvarande gästkonto för att behålla data du redan har skapat, länka det till ditt konto och aktivera synkronisering med servern.",
+    "work_schedule_long_period": "Lång period"
 }
