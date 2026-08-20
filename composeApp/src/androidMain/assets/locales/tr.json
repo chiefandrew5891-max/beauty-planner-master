@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Onay gerekiyor",
     "client_status_risk_of_cancellation": "İptal riski",
-    "client_status_do_not_book": "Randevu verme"
+    "client_status_do_not_book": "Randevu verme",
+    "client_profile_status": "Müşteri durumu",
+    "client_profile_notes": "Müşteri notu",
+    "client_profile_color_tag": "Renk etiketi",
+    "client_color_none": "Renksiz",
+    "client_color_red": "Kırmızı",
+    "client_color_orange": "Turuncu",
+    "client_color_yellow": "Sarı",
+    "client_color_green": "Yeşil",
+    "client_color_blue": "Mavi",
+    "client_color_purple": "Mor",
+    "client_color_gray": "Gri"
 }

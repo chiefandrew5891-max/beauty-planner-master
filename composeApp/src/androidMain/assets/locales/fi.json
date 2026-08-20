@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Vaatii vahvistuksen",
     "client_status_risk_of_cancellation": "Peruutusriski",
-    "client_status_do_not_book": "Älä varaa"
+    "client_status_do_not_book": "Älä varaa",
+    "client_profile_status": "Asiakkaan tila",
+    "client_profile_notes": "Asiakasmuistiinpano",
+    "client_profile_color_tag": "Väritunniste",
+    "client_color_none": "Ei väriä",
+    "client_color_red": "Punainen",
+    "client_color_orange": "Oranssi",
+    "client_color_yellow": "Keltainen",
+    "client_color_green": "Vihreä",
+    "client_color_blue": "Sininen",
+    "client_color_purple": "Violetti",
+    "client_color_gray": "Harmaa"
 }

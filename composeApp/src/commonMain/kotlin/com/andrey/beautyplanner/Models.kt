@@ -61,6 +61,25 @@ data class ScheduleDateOverride(
     val date: String, // YYYY-MM-DD
     val unblockAll: Boolean = true
 )
+
+enum class ClientProfileStatus {
+    NONE,
+    VIP,
+    CONFIRMATION_REQUIRED,
+    RISK_OF_CANCELLATION,
+    DO_NOT_BOOK
+}
+
+@Serializable
+data class ClientProfile(
+    val id: String,
+    val displayName: String,
+    val phone: String = "",
+    val notes: String = "",
+    val colorTag: String = "",
+    val status: String = ClientProfileStatus.NONE.name,
+    val updatedAtMillis: Long = 0L
+)
 enum class Screen {
     AUTH_WELCOME,
     AUTH_EMAIL,

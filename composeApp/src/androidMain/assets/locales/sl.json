@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Zahteva potrditev",
     "client_status_risk_of_cancellation": "Tveganje odpovedi",
-    "client_status_do_not_book": "Ne rezerviraj"
+    "client_status_do_not_book": "Ne rezerviraj",
+    "client_profile_status": "Status stranke",
+    "client_profile_notes": "Zapis o stranki",
+    "client_profile_color_tag": "Barvna oznaka",
+    "client_color_none": "Brez barve",
+    "client_color_red": "Rdeča",
+    "client_color_orange": "Oranžna",
+    "client_color_yellow": "Rumena",
+    "client_color_green": "Zelena",
+    "client_color_blue": "Modra",
+    "client_color_purple": "Vijolična",
+    "client_color_gray": "Siva"
 }

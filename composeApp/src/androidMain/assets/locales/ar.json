@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "يتطلب تأكيد",
     "client_status_risk_of_cancellation": "خطر الإلغاء",
-    "client_status_do_not_book": "لا تقم بالحجز"
+    "client_status_do_not_book": "لا تقم بالحجز",
+    "client_profile_status": "حالة العميل",
+    "client_profile_notes": "ملاحظة العميل",
+    "client_profile_color_tag": "علامة اللون",
+    "client_color_none": "بدون لون",
+    "client_color_red": "أحمر",
+    "client_color_orange": "برتقالي",
+    "client_color_yellow": "أصفر",
+    "client_color_green": "أخضر",
+    "client_color_blue": "أزرق",
+    "client_color_purple": "أرجواني",
+    "client_color_gray": "رمادي"
 }

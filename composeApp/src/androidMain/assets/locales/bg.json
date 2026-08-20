@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Изисква потвърждение",
     "client_status_risk_of_cancellation": "Риск от отмяна",
-    "client_status_do_not_book": "Да не се записва"
+    "client_status_do_not_book": "Да не се записва",
+    "client_profile_status": "Статус на клиента",
+    "client_profile_notes": "Бележка за клиента",
+    "client_profile_color_tag": "Цветен етикет",
+    "client_color_none": "Без цвят",
+    "client_color_red": "Червен",
+    "client_color_orange": "Оранжев",
+    "client_color_yellow": "Жълт",
+    "client_color_green": "Зелен",
+    "client_color_blue": "Син",
+    "client_color_purple": "Лилав",
+    "client_color_gray": "Сив"
 }

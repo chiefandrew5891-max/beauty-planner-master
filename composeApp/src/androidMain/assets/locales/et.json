@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Nõuab kinnitust",
     "client_status_risk_of_cancellation": "Tühistamisrisk",
-    "client_status_do_not_book": "Mitte broneerida"
+    "client_status_do_not_book": "Mitte broneerida",
+    "client_profile_status": "Kliendi staatus",
+    "client_profile_notes": "Kliendi märkus",
+    "client_profile_color_tag": "Värvisilt",
+    "client_color_none": "Värv puudub",
+    "client_color_red": "Punane",
+    "client_color_orange": "Oranž",
+    "client_color_yellow": "Kollane",
+    "client_color_green": "Roheline",
+    "client_color_blue": "Sinine",
+    "client_color_purple": "Lilla",
+    "client_color_gray": "Hall"
 }

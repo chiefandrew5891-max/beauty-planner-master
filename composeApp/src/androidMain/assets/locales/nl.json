@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Bevestiging vereist",
     "client_status_risk_of_cancellation": "Annuleringsrisico",
-    "client_status_do_not_book": "Niet boeken"
+    "client_status_do_not_book": "Niet boeken",
+    "client_profile_status": "Klantstatus",
+    "client_profile_notes": "Klantnotitie",
+    "client_profile_color_tag": "Kleur-tag",
+    "client_color_none": "Geen kleur",
+    "client_color_red": "Rood",
+    "client_color_orange": "Oranje",
+    "client_color_yellow": "Geel",
+    "client_color_green": "Groen",
+    "client_color_blue": "Blauw",
+    "client_color_purple": "Paars",
+    "client_color_gray": "Grijs"
 }

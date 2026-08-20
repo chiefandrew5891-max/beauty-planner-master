@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Kräver bekräftelse",
     "client_status_risk_of_cancellation": "Avbokningsrisk",
-    "client_status_do_not_book": "Boka ej"
+    "client_status_do_not_book": "Boka ej",
+    "client_profile_status": "Klientstatus",
+    "client_profile_notes": "Klientanteckning",
+    "client_profile_color_tag": "Färg-tagg",
+    "client_color_none": "Ingen färg",
+    "client_color_red": "Röd",
+    "client_color_orange": "Orange",
+    "client_color_yellow": "Gul",
+    "client_color_green": "Grön",
+    "client_color_blue": "Blå",
+    "client_color_purple": "Lila",
+    "client_color_gray": "Grå"
 }

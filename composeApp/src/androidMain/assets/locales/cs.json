@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Vyžaduje potvrzení",
     "client_status_risk_of_cancellation": "Riziko zrušení",
-    "client_status_do_not_book": "Nezapisovat"
+    "client_status_do_not_book": "Nezapisovat",
+    "client_profile_status": "Status klienta",
+    "client_profile_notes": "Poznámka ke klientovi",
+    "client_profile_color_tag": "Barevný štítek",
+    "client_color_none": "Bez barvy",
+    "client_color_red": "Červená",
+    "client_color_orange": "Oranžová",
+    "client_color_yellow": "Žlutá",
+    "client_color_green": "Zelená",
+    "client_color_blue": "Modrá",
+    "client_color_purple": "Fialová",
+    "client_color_gray": "Šedá"
 }

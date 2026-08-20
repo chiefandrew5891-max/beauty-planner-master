@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "पुष्टि आवश्यक",
     "client_status_risk_of_cancellation": "रद्दीकरण का जोखिम",
-    "client_status_do_not_book": "बुक न करें"
+    "client_status_do_not_book": "बुक न करें",
+    "client_profile_status": "ग्राहक स्थिति",
+    "client_profile_notes": "ग्राहक नोट",
+    "client_profile_color_tag": "रंग टैग",
+    "client_color_none": "कोई रंग नहीं",
+    "client_color_red": "लाल",
+    "client_color_orange": "नारंगी",
+    "client_color_yellow": "पीला",
+    "client_color_green": "हरा",
+    "client_color_blue": "नीला",
+    "client_color_purple": "बैंगनी",
+    "client_color_gray": "धूसर"
 }

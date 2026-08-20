@@ -872,5 +872,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "需要确认",
     "client_status_risk_of_cancellation": "取消风险",
-    "client_status_do_not_book": "禁止预约"
+    "client_status_do_not_book": "禁止预约",
+    "client_profile_status": "客户状态",
+    "client_profile_notes": "客户备注",
+    "client_profile_color_tag": "颜色标签",
+    "client_color_none": "无颜色",
+    "client_color_red": "红色",
+    "client_color_orange": "橙色",
+    "client_color_yellow": "黄色",
+    "client_color_green": "绿色",
+    "client_color_blue": "蓝色",
+    "client_color_purple": "紫色",
+    "client_color_gray": "灰色"
 }

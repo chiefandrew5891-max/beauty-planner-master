@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Απαιτείται επιβεβαίωση",
     "client_status_risk_of_cancellation": "Κίνδυνος ακύρωσης",
-    "client_status_do_not_book": "Να μην γίνει κράτηση"
+    "client_status_do_not_book": "Να μην γίνει κράτηση",
+    "client_profile_status": "Κατάσταση πελάτη",
+    "client_profile_notes": "Σημείωση πελάτη",
+    "client_profile_color_tag": "Έγχρωμη ετικέτα",
+    "client_color_none": "Χωρίς χρώμα",
+    "client_color_red": "Κόκκινο",
+    "client_color_orange": "Πορτοκαλί",
+    "client_color_yellow": "Κίτρινο",
+    "client_color_green": "Πράσινο",
+    "client_color_blue": "Μπλε",
+    "client_color_purple": "Μωβ",
+    "client_color_gray": "Γκρι"
 }

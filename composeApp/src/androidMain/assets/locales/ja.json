@@ -873,5 +873,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "確認が必要",
     "client_status_risk_of_cancellation": "キャンセルリスク",
-    "client_status_do_not_book": "予約不可"
+    "client_status_do_not_book": "予約不可",
+    "client_profile_status": "クライアントのステータス",
+    "client_profile_notes": "クライアントメモ",
+    "client_profile_color_tag": "カラータグ",
+    "client_color_none": "色なし",
+    "client_color_red": "赤",
+    "client_color_orange": "オレンジ",
+    "client_color_yellow": "黄色",
+    "client_color_green": "緑",
+    "client_color_blue": "青",
+    "client_color_purple": "紫",
+    "client_color_gray": "グレー"
 }

@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Reikia patvirtinimo",
     "client_status_risk_of_cancellation": "Atšaukimo rizika",
-    "client_status_do_not_book": "Nerezervuoti"
+    "client_status_do_not_book": "Nerezervuoti",
+    "client_profile_status": "Kliento statusas",
+    "client_profile_notes": "Kliento pastaba",
+    "client_profile_color_tag": "Spalvos žyma",
+    "client_color_none": "Be spalvos",
+    "client_color_red": "Raudona",
+    "client_color_orange": "Oranžinė",
+    "client_color_yellow": "Geltona",
+    "client_color_green": "Žalia",
+    "client_color_blue": "Mėlyna",
+    "client_color_purple": "Violetinė",
+    "client_color_gray": "Pilka"
 }

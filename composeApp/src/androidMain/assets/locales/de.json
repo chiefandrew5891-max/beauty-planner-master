@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Bestätigung erforderlich",
     "client_status_risk_of_cancellation": "Stornierungsrisiko",
-    "client_status_do_not_book": "Nicht buchen"
+    "client_status_do_not_book": "Nicht buchen",
+    "client_profile_status": "Kundenstatus",
+    "client_profile_notes": "Kundennotiz",
+    "client_profile_color_tag": "Farbmarkierung",
+    "client_color_none": "Keine Farbe",
+    "client_color_red": "Rot",
+    "client_color_orange": "Orange",
+    "client_color_yellow": "Gelb",
+    "client_color_green": "Grün",
+    "client_color_blue": "Blau",
+    "client_color_purple": "Lila",
+    "client_color_gray": "Grau"
 }

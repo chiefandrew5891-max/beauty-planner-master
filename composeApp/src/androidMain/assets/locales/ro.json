@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Necesită confirmare",
     "client_status_risk_of_cancellation": "Risc de anulare",
-    "client_status_do_not_book": "Nu rezerva"
+    "client_status_do_not_book": "Nu rezerva",
+    "client_profile_status": "Statut client",
+    "client_profile_notes": "Notă client",
+    "client_profile_color_tag": "Etichetă culoare",
+    "client_color_none": "Fără culoare",
+    "client_color_red": "Roșu",
+    "client_color_orange": "Portocaliu",
+    "client_color_yellow": "Galben",
+    "client_color_green": "Verde",
+    "client_color_blue": "Albastru",
+    "client_color_purple": "Violet",
+    "client_color_gray": "Gri"
 }

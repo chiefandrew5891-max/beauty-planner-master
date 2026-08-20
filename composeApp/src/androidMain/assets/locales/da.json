@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Kræver bekræftelse",
     "client_status_risk_of_cancellation": "Afbestillingsrisiko",
-    "client_status_do_not_book": "Må ikke bookes"
+    "client_status_do_not_book": "Må ikke bookes",
+    "client_profile_status": "Klientstatus",
+    "client_profile_notes": "Bemærkning om klient",
+    "client_profile_color_tag": "Farve-tag",
+    "client_color_none": "Ingen farve",
+    "client_color_red": "Rød",
+    "client_color_orange": "Orange",
+    "client_color_yellow": "Gul",
+    "client_color_green": "Grøn",
+    "client_color_blue": "Blå",
+    "client_color_purple": "Lilla",
+    "client_color_gray": "Grå"
 }

@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Butuh konfirmasi",
     "client_status_risk_of_cancellation": "Risiko pembatalan",
-    "client_status_do_not_book": "Jangan dipesan"
+    "client_status_do_not_book": "Jangan dipesan",
+    "client_profile_status": "Status klien",
+    "client_profile_notes": "Catatan klien",
+    "client_profile_color_tag": "Label warna",
+    "client_color_none": "Tanpa warna",
+    "client_color_red": "Merah",
+    "client_color_orange": "Oranye",
+    "client_color_yellow": "Kuning",
+    "client_color_green": "Hijau",
+    "client_color_blue": "Biru",
+    "client_color_purple": "Ungu",
+    "client_color_gray": "Abu-abu"
 }

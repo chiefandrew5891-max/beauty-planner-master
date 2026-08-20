@@ -874,5 +874,16 @@
     "client_status_vip": "VIP",
     "client_status_confirmation_required": "Nepieciešams apstiprinājums",
     "client_status_risk_of_cancellation": "Atcelšanas risks",
-    "client_status_do_not_book": "Neieplānot"
+    "client_status_do_not_book": "Neieplānot",
+    "client_profile_status": "Klienta statuss",
+    "client_profile_notes": "Klienta piezīme",
+    "client_profile_color_tag": "Krāsu birka",
+    "client_color_none": "Bez krāsas",
+    "client_color_red": "Sarkana",
+    "client_color_orange": "Oranža",
+    "client_color_yellow": "Dzeltena",
+    "client_color_green": "Zaļa",
+    "client_color_blue": "Zila",
+    "client_color_purple": "Violeta",
+    "client_color_gray": "Pelēka"
 }
