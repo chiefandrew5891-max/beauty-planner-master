@@ -886,5 +886,6 @@
     "client_color_blue": "Bleu",
     "client_color_purple": "Violet",
     "client_color_gray": "Gris",
-    "client_profile_note_mark": "Marque client"
+    "client_profile_note_mark": "Marque client",
+    "client_profile_pick_color_marker": "Définir le marqueur de couleur"
 }

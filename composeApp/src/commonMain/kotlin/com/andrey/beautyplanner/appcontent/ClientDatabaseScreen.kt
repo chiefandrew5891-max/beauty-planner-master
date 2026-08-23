@@ -12,12 +12,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
@@ -102,7 +107,7 @@ fun ClientDatabaseScreen(
                         fontSize = (13 * fontScale).sp
                     )
                 },
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(12.dp),
                 textStyle = TextStyle(
                     fontSize = (15 * fontScale).sp,
                     color = onSurface
@@ -125,6 +130,11 @@ fun ClientDatabaseScreen(
                 )
             } else {
                 filtered.forEach { client ->
+                    val clientNote = AppSettings.clientNote(
+                        name = client.displayName,
+                        phone = client.phone
+                    )
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -134,7 +144,7 @@ fun ClientDatabaseScreen(
                             ) {
                                 editingClientId = client.id
                             },
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(14.dp),
                         elevation = 2.dp,
                         backgroundColor = MaterialTheme.colors.surface,
                         border = BorderStroke(
@@ -150,30 +160,52 @@ fun ClientDatabaseScreen(
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
+                                verticalAlignment = Alignment.Top,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(
-                                    text = AppSettings.clientDisplayName(
-                                        name = client.displayName,
-                                        phone = client.phone
-                                    ),
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = (16 * fontScale).sp,
-                                    color = AppSettings.clientDisplayColor(
-                                        name = client.displayName,
-                                        phone = client.phone,
-                                        defaultColor = MaterialTheme.colors.onSurface
-                                    ),
-                                    modifier = Modifier.weight(1f)
-                                )
+                                Row(
+                                    modifier = Modifier.weight(1f),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        text = client.displayName,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = (16 * fontScale).sp,
+                                        color = MaterialTheme.colors.onSurface,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.weight(1f)
+                                    )
+
+                                    if (clientNote.isNotBlank()) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Outlined.Warning,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colors.primary
+                                            )
+
+                                            Text(
+                                                text = clientNote,
+                                                fontSize = (12 * fontScale).sp,
+                                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
+                                    }
+                                }
 
                                 if (client.colorTag.isNotBlank()) {
                                     Box(
                                         modifier = Modifier
                                             .background(
                                                 color = colorTagToColor(client.colorTag),
-                                                shape = androidx.compose.foundation.shape.RoundedCornerShape(50)
+                                                shape = RoundedCornerShape(50)
                                             )
                                             .padding(horizontal = 10.dp, vertical = 6.dp)
                                     )

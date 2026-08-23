@@ -886,5 +886,6 @@
     "client_color_blue": "Niebieski",
     "client_color_purple": "Fioletowy",
     "client_color_gray": "Szary",
-    "client_profile_note_mark": "Oznaczenie klienta"
+    "client_profile_note_mark": "Oznaczenie klienta",
+    "client_profile_pick_color_marker": "Ustaw znacznik koloru"
 }

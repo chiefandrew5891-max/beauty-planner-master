@@ -886,5 +886,6 @@
     "client_color_blue": "Μπλε",
     "client_color_purple": "Μωβ",
     "client_color_gray": "Γκρι",
-    "client_profile_note_mark": "Σήμανση πελάτη"
+    "client_profile_note_mark": "Σήμανση πελάτη",
+    "client_profile_pick_color_marker": "Ορισμός έγχρωμου δείκτη"
 }

@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -119,6 +122,11 @@ fun UnpaidAppointmentsScreen(
                             appointment.serviceName
                         }
 
+                        val clientNote = AppSettings.clientNote(
+                            name = appointment.clientName,
+                            phone = appointment.phone
+                        )
+
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp),
@@ -134,24 +142,44 @@ fun UnpaidAppointmentsScreen(
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
+                                    verticalAlignment = Alignment.Top
                                 ) {
-                                    Text(
-                                        text = AppSettings.clientDisplayName(
-                                            name = appointment.clientName,
-                                            phone = appointment.phone
-                                        ),
-                                        fontSize = (16 * fontScale).sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = AppSettings.clientDisplayColor(
-                                            name = appointment.clientName,
-                                            phone = appointment.phone,
-                                            defaultColor = MaterialTheme.colors.onSurface
-                                        ),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.weight(1f, fill = false)
-                                    )
+                                    Row(
+                                        modifier = Modifier.weight(1f, fill = false),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Text(
+                                            text = appointment.clientName,
+                                            fontSize = (16 * fontScale).sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colors.onSurface,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = Modifier.weight(1f)
+                                        )
+
+                                        if (clientNote.isNotBlank()) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Outlined.Warning,
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colors.primary
+                                                )
+
+                                                Text(
+                                                    text = clientNote,
+                                                    fontSize = (12 * fontScale).sp,
+                                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            }
+                                        }
+                                    }
 
                                     if (appointment.isOnlineBooking()) {
                                         Text(

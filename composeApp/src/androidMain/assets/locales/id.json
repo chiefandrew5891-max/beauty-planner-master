@@ -886,5 +886,6 @@
     "client_color_blue": "Biru",
     "client_color_purple": "Ungu",
     "client_color_gray": "Abu-abu",
-    "client_profile_note_mark": "Tanda klien"
+    "client_profile_note_mark": "Tanda klien",
+    "client_profile_pick_color_marker": "Atur penanda warna"
 }

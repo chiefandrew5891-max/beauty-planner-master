@@ -426,6 +426,23 @@ object AppSettings {
         return clientProfiles.firstOrNull { it.id == key }
     }
 
+    fun clientNote(
+        name: String,
+        phone: String
+    ): String {
+        return findClientProfile(name, phone)
+            ?.notes
+            ?.trim()
+            .orEmpty()
+    }
+
+    fun hasClientNote(
+        name: String,
+        phone: String
+    ): Boolean {
+        return clientNote(name, phone).isNotBlank()
+    }
+
     fun clientColorTag(
         name: String,
         phone: String

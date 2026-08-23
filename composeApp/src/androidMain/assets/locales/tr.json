@@ -886,5 +886,6 @@
     "client_color_blue": "Mavi",
     "client_color_purple": "Mor",
     "client_color_gray": "Gri",
-    "client_profile_note_mark": "Müşteri işareti"
+    "client_profile_note_mark": "Müşteri işareti",
+    "client_profile_pick_color_marker": "Renk işaretçisini ayarla"
 }

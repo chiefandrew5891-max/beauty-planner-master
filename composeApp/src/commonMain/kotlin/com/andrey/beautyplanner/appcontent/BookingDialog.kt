@@ -4,15 +4,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,13 +29,10 @@ import com.andrey.beautyplanner.ContactSuggestion
 import com.andrey.beautyplanner.ContactsAutocomplete
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.ServiceTemplate
-import kotlinx.coroutines.delay
-import androidx.compose.ui.text.TextStyle
 import com.andrey.beautyplanner.appcontent.appFontFamily
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
 import com.andrey.beautyplanner.getPlatform
 import com.andrey.beautyplanner.isOnlineBooking
+import kotlinx.coroutines.delay
 
 private fun displayServiceTitle(title: String): String {
     return if (title.startsWith("service_")) {
@@ -40,10 +41,12 @@ private fun displayServiceTitle(title: String): String {
         title
     }
 }
+
 private fun isValidPriceInput(value: String): Boolean {
     if (value.isBlank()) return false
     return value.matches(Regex("""^\d+([.,]\d{0,2})?$"""))
 }
+
 private fun filterPhoneInput(value: String): String {
     val allowed = value.filter { ch ->
         ch.isDigit() || ch == '+' || ch == ' ' || ch == '(' || ch == ')' || ch == '-'
@@ -559,6 +562,11 @@ fun BookingDialog(
                     ) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             mergedSuggestions.forEachIndexed { index, suggestion ->
+                                val clientNote = AppSettings.clientNote(
+                                    name = suggestion.displayName,
+                                    phone = suggestion.phone
+                                )
+
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -571,21 +579,42 @@ fun BookingDialog(
                                         }
                                         .padding(horizontal = 14.dp, vertical = 10.dp)
                                 ) {
-                                    Text(
-                                        text = AppSettings.clientDisplayName(
-                                            name = suggestion.displayName,
-                                            phone = suggestion.phone
-                                        ),
-                                        fontSize = (14 * fontScale).sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        color = AppSettings.clientDisplayColor(
-                                            name = suggestion.displayName,
-                                            phone = suggestion.phone,
-                                            defaultColor = MaterialTheme.colors.onSurface
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Text(
+                                            text = suggestion.displayName,
+                                            fontSize = (14 * fontScale).sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            color = MaterialTheme.colors.onSurface,
+                                            modifier = Modifier.weight(1f)
                                         )
-                                    )
+
+                                        if (clientNote.isNotBlank()) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Outlined.Warning,
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colors.primary
+                                                )
+
+                                                Text(
+                                                    text = clientNote,
+                                                    fontSize = (12 * fontScale).sp,
+                                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            }
+                                        }
+                                    }
 
                                     if (suggestion.phone.isNotBlank()) {
                                         Text(

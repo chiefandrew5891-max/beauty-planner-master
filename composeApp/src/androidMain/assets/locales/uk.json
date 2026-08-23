@@ -886,5 +886,6 @@
     "client_color_blue": "Синій",
     "client_color_purple": "Фіолетовий",
     "client_color_gray": "Сірий",
-    "client_profile_note_mark": "Помітка про клієнта"
+    "client_profile_note_mark": "Помітка про клієнта",
+    "client_profile_pick_color_marker": "Задати кольоровий маркер"
 }

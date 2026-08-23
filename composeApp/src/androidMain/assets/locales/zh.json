@@ -884,5 +884,6 @@
     "client_color_blue": "蓝色",
     "client_color_purple": "紫色",
     "client_color_gray": "灰色",
-    "client_profile_note_mark": "客户标记"
+    "client_profile_note_mark": "客户标记",
+    "client_profile_pick_color_marker": "设置颜色标记"
 }

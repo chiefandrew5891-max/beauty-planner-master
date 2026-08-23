@@ -885,5 +885,6 @@
     "client_color_blue": "青",
     "client_color_purple": "紫",
     "client_color_gray": "グレー",
-    "client_profile_note_mark": "クライアントマーク"
+    "client_profile_note_mark": "クライアントマーク",
+    "client_profile_pick_color_marker": "カラーマーカーを設定"
 }

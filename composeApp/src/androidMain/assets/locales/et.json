@@ -886,5 +886,6 @@
     "client_color_blue": "Sinine",
     "client_color_purple": "Lilla",
     "client_color_gray": "Hall",
-    "client_profile_note_mark": "Kliendi märge"
+    "client_profile_note_mark": "Kliendi märge",
+    "client_profile_pick_color_marker": "Määra värvimarker"
 }

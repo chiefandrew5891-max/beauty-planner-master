@@ -9,11 +9,29 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +50,7 @@ import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.AppointmentPaymentStatus
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.effectivePaymentStatus
+import com.andrey.beautyplanner.isOnlineBooking
 import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.datetime.Clock
@@ -40,7 +59,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlin.math.PI
 import kotlin.math.sin
-import com.andrey.beautyplanner.isOnlineBooking
 
 private fun ddMMyyyy(dateString: String): String {
     val p = dateString.split("-")
@@ -88,6 +106,7 @@ private fun urgencyPulseSpec(minutesLeft: Int): Pair<Int, Float> {
  * - showDateInCard=true  -> верстка как в UpcomingAppointmentCard (MonthViews)
  * - showDateInCard=false -> верстка как в DayDetailsView (заполненный слот)
  */
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AppointmentCard(
@@ -112,6 +131,10 @@ fun AppointmentCard(
         currencyCode = appt.currency
     )
     val paymentStatus = appt.effectivePaymentStatus()
+    val clientNote = AppSettings.clientNote(
+        name = appt.clientName,
+        phone = appt.phone
+    )
 
     if (showDateInCard) {
         val formattedDate = ddMMyyyy(appt.dateString)
@@ -221,24 +244,44 @@ fun AppointmentCard(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.Top
                         ) {
-                            Text(
-                                text = AppSettings.clientDisplayName(
-                                    name = appt.clientName,
-                                    phone = appt.phone
-                                ),
-                                fontSize = (15 * fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                color = AppSettings.clientDisplayColor(
-                                    name = appt.clientName,
-                                    phone = appt.phone,
-                                    defaultColor = MaterialTheme.colors.onSurface
-                                ),
-                                modifier = Modifier.weight(1f, fill = false)
-                            )
+                            Row(
+                                modifier = Modifier.weight(1f, fill = false),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    text = appt.clientName,
+                                    fontSize = (15 * fontScale).sp,
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = MaterialTheme.colors.onSurface,
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                if (clientNote.isNotBlank()) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Outlined.Warning,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colors.primary
+                                        )
+
+                                        Text(
+                                            text = clientNote,
+                                            fontSize = (12 * fontScale).sp,
+                                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
+                                }
+                            }
 
                             if (appt.isOnlineBooking()) {
                                 Text(
@@ -360,17 +403,44 @@ fun AppointmentCard(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.Top
                     ) {
-                        Text(
-                            text = appt.clientName,
-                            fontSize = (17 * fontScale).sp,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            color = MaterialTheme.colors.onSurface.copy(alpha = 1f),
-                            modifier = Modifier.weight(1f, fill = false)
-                        )
+                        Row(
+                            modifier = Modifier.weight(1f, fill = false),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = appt.clientName,
+                                fontSize = (15 * fontScale).sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = MaterialTheme.colors.onSurface,
+                                modifier = Modifier.weight(1f)
+                            )
+
+                            if (clientNote.isNotBlank()) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Warning,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colors.primary
+                                    )
+
+                                    Text(
+                                        text = clientNote,
+                                        fontSize = (12 * fontScale).sp,
+                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        }
 
                         if (appt.isOnlineBooking()) {
                             Text(
@@ -465,6 +535,10 @@ fun AppointmentDetailsDialog(
         currencyCode = appt.currency
     )
     val paymentStatus = appt.effectivePaymentStatus()
+    val clientNote = AppSettings.clientNote(
+        name = appt.clientName,
+        phone = appt.phone
+    )
 
     val dateTextColor = MaterialTheme.colors.primary.copy(alpha = 0.95f)
     val timeTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.72f)
@@ -503,13 +577,43 @@ fun AppointmentDetailsDialog(
             },
             text = {
                 Column(Modifier.fillMaxWidth()) {
-                    Text(
-                        text = appt.clientName,
-                        fontWeight = FontWeight.Bold,
-                        fontStyle = FontStyle.Italic,
-                        fontSize = (22 * fontScale).sp,
-                        color = MaterialTheme.colors.onSurface
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = appt.clientName,
+                            fontWeight = FontWeight.Bold,
+                            fontStyle = FontStyle.Italic,
+                            fontSize = (22 * fontScale).sp,
+                            color = MaterialTheme.colors.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        if (clientNote.isNotBlank()) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Warning,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.primary
+                                )
+
+                                Text(
+                                    text = clientNote,
+                                    fontSize = (13 * fontScale).sp,
+                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+                    }
 
                     Spacer(Modifier.height(10.dp))
 

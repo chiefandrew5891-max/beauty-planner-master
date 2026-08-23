@@ -886,5 +886,6 @@
     "client_color_blue": "Mėlyna",
     "client_color_purple": "Violetinė",
     "client_color_gray": "Pilka",
-    "client_profile_note_mark": "Kliento žyma"
+    "client_profile_note_mark": "Kliento žyma",
+    "client_profile_pick_color_marker": "Nustatyti spalvų žymeklį"
 }

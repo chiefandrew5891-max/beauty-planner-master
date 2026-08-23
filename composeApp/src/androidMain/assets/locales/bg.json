@@ -886,5 +886,6 @@
     "client_color_blue": "Син",
     "client_color_purple": "Лилав",
     "client_color_gray": "Сив",
-    "client_profile_note_mark": "Отбелязване на клиент"
+    "client_profile_note_mark": "Отбелязване на клиент",
+    "client_profile_pick_color_marker": "Задаване на цветен маркер"
 }

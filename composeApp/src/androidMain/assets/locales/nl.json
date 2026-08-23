@@ -886,5 +886,6 @@
     "client_color_blue": "Blauw",
     "client_color_purple": "Paars",
     "client_color_gray": "Grijs",
-    "client_profile_note_mark": "Klantmarkering"
+    "client_profile_note_mark": "Klantmarkering",
+    "client_profile_pick_color_marker": "Kleurmarker instellen"
 }
