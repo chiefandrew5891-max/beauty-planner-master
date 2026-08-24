@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -88,9 +90,11 @@ fun AppRootChrome(
     fun DrawerItem(title: String, selected: Boolean, onClick: () -> Unit) {
         val itemBg =
             if (selected) MaterialTheme.colors.primary.copy(alpha = 0.12f) else Color.Transparent
+
         TextButton(
             onClick = onClick,
             modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = itemBg,
                 contentColor = onSurface
@@ -345,12 +349,15 @@ fun AppRootChrome(
             drawerState = state.drawerState,
             gesturesEnabled = drawerGesturesEnabled,
             drawerContent = {
+                val drawerScrollState = rememberScrollState()
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .statusBarsPadding()
+                        .verticalScroll(drawerScrollState)
                         .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
                         text = Locales.t("nav_menu"),
@@ -542,15 +549,6 @@ fun AppRootChrome(
                     // =========================================================
                     // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS NAV ENTRY
                     // =========================================================
-
-                    DrawerItem(
-                        title = Locales.t("nav_settings"),
-                        selected = state.currentScreen == Screen.SETTINGS
-                    ) {
-                        state.screenHistory = emptyList()
-                        state.currentScreen = Screen.SETTINGS
-                        state.closeDrawer()
-                    }
 
                     DrawerItem(
                         title = Locales.t("nav_about_app"),
