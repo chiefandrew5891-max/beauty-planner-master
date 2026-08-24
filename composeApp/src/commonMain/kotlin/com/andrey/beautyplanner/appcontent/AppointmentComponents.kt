@@ -31,7 +31,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -131,10 +130,6 @@ fun AppointmentCard(
         currencyCode = appt.currency
     )
     val paymentStatus = appt.effectivePaymentStatus()
-    val clientNote = AppSettings.clientNote(
-        name = appt.clientName,
-        phone = appt.phone
-    )
 
     if (showDateInCard) {
         val formattedDate = ddMMyyyy(appt.dateString)
@@ -246,42 +241,18 @@ fun AppointmentCard(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.Top
                         ) {
-                            Row(
-                                modifier = Modifier.weight(1f, fill = false),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(
-                                    text = appt.clientName,
-                                    fontSize = (15 * fontScale).sp,
-                                    fontWeight = FontWeight.Bold,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    color = MaterialTheme.colors.onSurface,
-                                    modifier = Modifier.weight(1f)
-                                )
-
-                                if (clientNote.isNotBlank()) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Warning,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colors.primary
-                                        )
-
-                                        Text(
-                                            text = clientNote,
-                                            fontSize = (12 * fontScale).sp,
-                                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                    }
-                                }
-                            }
+                            Text(
+                                text = AppSettings.clientDisplayName(
+                                    name = appt.clientName,
+                                    phone = appt.phone
+                                ),
+                                fontSize = (15 * fontScale).sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                color = MaterialTheme.colors.onSurface,
+                                modifier = Modifier.weight(1f, fill = false)
+                            )
 
                             if (appt.isOnlineBooking()) {
                                 Text(
@@ -420,7 +391,7 @@ fun AppointmentCard(
                                 modifier = Modifier.weight(1f)
                             )
 
-                            if (clientNote.isNotBlank()) {
+                            if35clientNote.isNotBlank()) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -535,10 +506,6 @@ fun AppointmentDetailsDialog(
         currencyCode = appt.currency
     )
     val paymentStatus = appt.effectivePaymentStatus()
-    val clientNote = AppSettings.clientNote(
-        name = appt.clientName,
-        phone = appt.phone
-    )
 
     val dateTextColor = MaterialTheme.colors.primary.copy(alpha = 0.95f)
     val timeTextColor = MaterialTheme.colors.onSurface.copy(alpha = 0.72f)
@@ -577,43 +544,18 @@ fun AppointmentDetailsDialog(
             },
             text = {
                 Column(Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = appt.clientName,
-                            fontWeight = FontWeight.Bold,
-                            fontStyle = FontStyle.Italic,
-                            fontSize = (22 * fontScale).sp,
-                            color = MaterialTheme.colors.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        if (clientNote.isNotBlank()) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Warning,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.primary
-                                )
-
-                                Text(
-                                    text = clientNote,
-                                    fontSize = (13 * fontScale).sp,
-                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                        }
-                    }
+                    Text(
+                        text = AppSettings.clientDisplayName(
+                            name = appt.clientName,
+                            phone = appt.phone
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Italic,
+                        fontSize = (22 * fontScale).sp,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
 
                     Spacer(Modifier.height(10.dp))
 

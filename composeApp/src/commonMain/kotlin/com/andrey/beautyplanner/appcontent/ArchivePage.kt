@@ -22,13 +22,10 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -848,11 +845,6 @@ private fun ArchiveRowCard(
         AppointmentPaymentStatus.PAID_AFTER_DELAY -> Locales.t("archive_status_paid_after_delay")
     }
 
-    val clientNote = AppSettings.clientNote(
-        name = appointment.clientName,
-        phone = appointment.phone
-    )
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -880,42 +872,18 @@ private fun ArchiveRowCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
-                Row(
-                    modifier = Modifier.weight(1f, fill = false),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = appointment.clientName,
-                        fontSize = (16 * fontScale).sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    if (clientNote.isNotBlank()) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Warning,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.primary
-                            )
-
-                            Text(
-                                text = clientNote,
-                                fontSize = (12 * fontScale).sp,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                }
+                Text(
+                    text = AppSettings.clientDisplayName(
+                        name = appointment.clientName,
+                        phone = appointment.phone
+                    ),
+                    fontSize = (16 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
+                )
 
                 if (appointment.isOnlineBooking()) {
                     Text(
@@ -1003,11 +971,6 @@ private fun ArchiveAppointmentViewDialog(
         AppointmentPaymentStatus.PAID_AFTER_DELAY -> Locales.t("archive_status_paid_after_delay")
     }
 
-    val clientNote = AppSettings.clientNote(
-        name = appointment.clientName,
-        phone = appointment.phone
-    )
-
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -1035,42 +998,17 @@ private fun ArchiveAppointmentViewDialog(
         },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = appointment.clientName,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = (22 * fontScale).sp,
-                        color = MaterialTheme.colors.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    if (clientNote.isNotBlank()) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Warning,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.primary
-                            )
-
-                            Text(
-                                text = clientNote,
-                                fontSize = (13 * fontScale).sp,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                }
+                Text(
+                    text = AppSettings.clientDisplayName(
+                        name = appointment.clientName,
+                        phone = appointment.phone
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = (22 * fontScale).sp,
+                    color = MaterialTheme.colors.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
 
                 Spacer(modifier = Modifier.height(10.dp))
 

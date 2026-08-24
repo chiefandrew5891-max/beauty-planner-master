@@ -17,14 +17,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -165,11 +162,6 @@ fun ClientDatabaseScreen(
                 )
             } else {
                 filtered.forEach { client ->
-                    val clientNote = AppSettings.clientNote(
-                        name = client.displayName,
-                        phone = client.phone
-                    )
-
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -198,14 +190,11 @@ fun ClientDatabaseScreen(
                                 verticalAlignment = Alignment.Top,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                val titleText = if (clientNote.isBlank()) {
-                                    client.displayName
-                                } else {
-                                    "${client.displayName} ($clientNote)"
-                                }
-
                                 Text(
-                                    text = titleText,
+                                    text = AppSettings.clientDisplayName(
+                                        name = client.displayName,
+                                        phone = client.phone
+                                    ),
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = (16 * fontScale).sp,
                                     color = MaterialTheme.colors.onSurface,

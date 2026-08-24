@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -562,11 +561,6 @@ fun BookingDialog(
                     ) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             mergedSuggestions.forEachIndexed { index, suggestion ->
-                                val clientNote = AppSettings.clientNote(
-                                    name = suggestion.displayName,
-                                    phone = suggestion.phone
-                                )
-
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -579,42 +573,17 @@ fun BookingDialog(
                                         }
                                         .padding(horizontal = 14.dp, vertical = 10.dp)
                                 ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        Text(
-                                            text = suggestion.displayName,
-                                            fontSize = (14 * fontScale).sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            color = MaterialTheme.colors.onSurface,
-                                            modifier = Modifier.weight(1f)
-                                        )
-
-                                        if (clientNote.isNotBlank()) {
-                                            Row(
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                            ) {
-                                                Icon(
-                                                    imageVector = Icons.Outlined.Warning,
-                                                    contentDescription = null,
-                                                    tint = MaterialTheme.colors.primary
-                                                )
-
-                                                Text(
-                                                    text = clientNote,
-                                                    fontSize = (12 * fontScale).sp,
-                                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                                    maxLines = 1,
-                                                    overflow = TextOverflow.Ellipsis
-                                                )
-                                            }
-                                        }
-                                    }
+                                    Text(
+                                        text = AppSettings.clientDisplayName(
+                                            name = suggestion.displayName,
+                                            phone = suggestion.phone
+                                        ),
+                                        fontSize = (14 * fontScale).sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis,
+                                        color = MaterialTheme.colors.onSurface
+                                    )
 
                                     if (suggestion.phone.isNotBlank()) {
                                         Text(
