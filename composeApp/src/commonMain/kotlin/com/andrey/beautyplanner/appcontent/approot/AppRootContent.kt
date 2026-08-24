@@ -16,6 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -38,9 +43,6 @@ import com.andrey.beautyplanner.appcontent.ClientDatabaseScreen
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
 import com.andrey.beautyplanner.appcontent.AuthEmailScreen
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import com.andrey.beautyplanner.auth.SignInProvider
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -435,11 +437,25 @@ fun AppRootContent(
                     }
                 }
 
+                var weekdaysRowTopInRoot by remember { mutableStateOf<Int?>(null) }
+                var headerBottomInRoot by remember { mutableStateOf<Int?>(null) }
+
                 val calendarCollapseThresholdPx = 40
 
-                val isCollapsed by remember(listState) {
+                val isCollapsed by remember(
+                    weekdaysRowTopInRoot,
+                    headerBottomInRoot
+                ) {
                     derivedStateOf {
-                        listState.firstVisibleItemScrollOffset >= calendarCollapseThresholdPx
+                        val weekdaysTop = weekdaysRowTopInRoot
+                        val headerBottom = headerBottomInRoot
+
+                        if (weekdaysTop == null || headerBottom == null) {
+                            false
+                        } else {
+                            val passedPx = headerBottom - weekdaysTop
+                            passedPx >= calendarCollapseThresholdPx
+                        }
                     }
                 }
 
@@ -452,7 +468,6 @@ fun AppRootContent(
                                 3 -> "month_mar"
                                 4 -> "month_apr"
                                 5 -> "month_may"
-                                6 -> "month_jun"
                                 6 -> "month_jun"
                                 7 -> "month_jul"
                                 8 -> "month_aug"
@@ -497,6 +512,9 @@ fun AppRootContent(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
+                                        .onGloballyPositioned { coordinates ->
+                                            headerBottomInRoot = coordinates.boundsInRoot().bottom.toInt()
+                                        }
                                         .padding(horizontal = 24.dp, vertical = 16.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.SpaceBetween
@@ -566,7 +584,10 @@ fun AppRootContent(
                                             monthDate = state.calendarViewDate,
                                             today = state.today,
                                             selectedDate = state.selectedDate,
-                                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments)
+                                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                                            onWeekdaysRowTopChanged = { top ->
+                                                weekdaysRowTopInRoot = top
+                                            }
                                         ) { date ->
                                             state.selectedDate = date
                                             state.navigateTo(Screen.DAY_DETAILS)

@@ -23,6 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.boundsInRoot
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
 import kotlinx.datetime.LocalDate
@@ -123,6 +125,7 @@ fun MonthCalendarGrid(
     today: LocalDate,
     selectedDate: LocalDate,
     appointments: List<Appointment> = emptyList(),
+    onWeekdaysRowTopChanged: ((Int) -> Unit)? = null,
     onDateClick: (LocalDate) -> Unit
 ) {
     val isLeap = monthDate.year % 4 == 0 && (monthDate.year % 100 != 0 || monthDate.year % 400 == 0)
@@ -170,7 +173,13 @@ fun MonthCalendarGrid(
                 .width(effectiveWidth)
                 .padding(bottom = 4.dp)
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        onWeekdaysRowTopChanged?.invoke(coordinates.boundsInRoot().top.toInt())
+                    }
+            ) {
                 val weekdays = listOf("mon", "tue", "wed", "thu", "fri", "sat", "sun")
                 weekdays.forEach { day ->
                     Box(
@@ -220,6 +229,11 @@ fun MonthCalendarGrid(
                         else -> Color.Transparent
                     }
 
+                    val appointmentMarkerColor = when {
+                        isPastDay -> MaterialTheme.colors.onSurface.copy(alpha = 0.28f)
+                        else -> MaterialTheme.colors.primary.copy(alpha = 0.90f)
+                    }
+
                     Box(
                         modifier = Modifier
                             .size(cellSize)
@@ -242,7 +256,7 @@ fun MonthCalendarGrid(
                             modifier = Modifier.align(Alignment.Center)
                         )
 
-                        if (isPastDay && hasAppointments && !isSelected) {
+                        if (hasAppointments && !isSelected) {
                             Box(
                                 modifier = Modifier
                                     .align(Alignment.BottomCenter)
@@ -250,7 +264,7 @@ fun MonthCalendarGrid(
                                     .width(16.dp)
                                     .height(2.dp)
                                     .clip(RoundedCornerShape(50))
-                                    .background(MaterialTheme.colors.primary.copy(alpha = 0.90f))
+                                    .background(appointmentMarkerColor)
                             )
                         }
                     }
