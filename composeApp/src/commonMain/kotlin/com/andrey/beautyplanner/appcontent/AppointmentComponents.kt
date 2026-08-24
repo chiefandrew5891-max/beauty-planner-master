@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -143,7 +144,7 @@ fun AppointmentCard(
         val shouldPulse = minutesLeft != null && minutesLeft in 0..(24 * 60)
 
         val (pulseDuration, maxAlpha) = if (shouldPulse) {
-            urgencyPulseSpec(minutesLeft!!)
+            urgencyPulseSpec(minutesLeft ?: 0)
         } else {
             2400 to 0f
         }
@@ -371,47 +372,20 @@ fun AppointmentCard(
                         .weight(1f)
                         .padding(horizontal = 8.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Row(
-                            modifier = Modifier.weight(1f, fill = false),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = appt.clientName,
-                                fontSize = (15 * fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                color = MaterialTheme.colors.onSurface,
-                                modifier = Modifier.weight(1f)
-                            )
+                    Text(
+                        text = AppSettings.clientDisplayName(
+                            name = appt.clientName,
+                            phone = appt.phone
+                        ),
+                        fontSize = (15 * fontScale).sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
 
-                            if35clientNote.isNotBlank()) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Warning,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colors.primary
-                                    )
-
-                                    Text(
-                                        text = clientNote,
-                                        fontSize = (12 * fontScale).sp,
-                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
-                            }
-                        }
+                    if (appt.isOnlineBooking()) {
 
                         if (appt.isOnlineBooking()) {
                             Text(
