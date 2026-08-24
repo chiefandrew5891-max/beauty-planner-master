@@ -887,5 +887,10 @@
     "client_color_purple": "Roxo",
     "client_color_gray": "Cinza",
     "client_profile_note_mark": "Marca do cliente",
-    "client_profile_pick_color_marker": "Definir marcador de cor"
+    "client_profile_pick_color_marker": "Definir marcador de cor",
+    "client_profile_blacklist": "Adicionar à lista negra",
+    "client_blacklist_button": "Lista negra",
+    "client_blacklist_title": "Lista negra",
+    "client_blacklist_hint": "Clientes marcados como não permitidos para agendamento são exibidos aqui.",
+    "client_blacklist_empty": "Nenhum cliente na lista negra ainda."
 }

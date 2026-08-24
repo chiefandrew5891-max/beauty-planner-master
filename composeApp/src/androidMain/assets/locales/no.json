@@ -887,5 +887,10 @@
     "client_color_purple": "Lilla",
     "client_color_gray": "Grå",
     "client_profile_note_mark": "Klientmerke",
-    "client_profile_pick_color_marker": "Angi fargemarkør"
+    "client_profile_pick_color_marker": "Angi fargemarkør",
+    "client_profile_blacklist": "Legg til i svarteliste",
+    "client_blacklist_button": "Svarteliste",
+    "client_blacklist_title": "Svarteliste",
+    "client_blacklist_hint": "Kunder som er merket som ikke tillatt for booking, vises her.",
+    "client_blacklist_empty": "Ingen kunder på svartelisten ennå."
 }

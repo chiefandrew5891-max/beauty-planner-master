@@ -887,5 +887,10 @@
     "client_color_purple": "Viola",
     "client_color_gray": "Grigio",
     "client_profile_note_mark": "Contrassegno cliente",
-    "client_profile_pick_color_marker": "Imposta marcatore colore"
+    "client_profile_pick_color_marker": "Imposta marcatore colore",
+    "client_profile_blacklist": "Aggiungi alla blacklist",
+    "client_blacklist_button": "Blacklist",
+    "client_blacklist_title": "Blacklist",
+    "client_blacklist_hint": "I clienti contrassegnati come non idonei alla prenotazione vengono mostrati qui.",
+    "client_blacklist_empty": "Nessun cliente nella blacklist."
 }

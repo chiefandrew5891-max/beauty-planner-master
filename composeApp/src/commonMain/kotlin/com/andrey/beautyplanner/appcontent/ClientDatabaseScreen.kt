@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -40,11 +43,13 @@ import com.andrey.beautyplanner.ClientDatabase
 import com.andrey.beautyplanner.ClientProfile
 import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.Screen
 import kotlinx.datetime.Clock
 
 @Composable
 fun ClientDatabaseScreen(
-    appointments: List<Appointment>
+    appointments: List<Appointment>,
+    onOpenBlacklist: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
     val onSurface = MaterialTheme.colors.onSurface
@@ -75,6 +80,10 @@ fun ClientDatabaseScreen(
     val editingEntry = filtered.firstOrNull { it.id == editingClientId }
         ?: entries.firstOrNull { it.id == editingClientId }
 
+    val hasBlacklistedClients = remember(entries) {
+        entries.any { it.status == ClientProfileStatus.DO_NOT_BOOK.name }
+    }
+
     CenteredNarrowContentContainer {
         Column(
             modifier = Modifier
@@ -95,6 +104,32 @@ fun ClientDatabaseScreen(
                 fontSize = (14 * fontScale).sp,
                 color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f)
             )
+
+            if (hasBlacklistedClients) {
+                OutlinedButton(
+                    onClick = onOpenBlacklist,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        backgroundColor = Color.Transparent
+                    ),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+                    )
+                ) {
+                    Text(
+                        text = Locales.t("client_blacklist_button"),
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
+                Divider(
+                    modifier = Modifier.padding(vertical = 2.dp),
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.10f)
+                )
+            }
 
             OutlinedTextField(
                 value = query,
@@ -163,42 +198,21 @@ fun ClientDatabaseScreen(
                                 verticalAlignment = Alignment.Top,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Row(
-                                    modifier = Modifier.weight(1f),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Text(
-                                        text = client.displayName,
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = (16 * fontScale).sp,
-                                        color = MaterialTheme.colors.onSurface,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.weight(1f)
-                                    )
-
-                                    if (clientNote.isNotBlank()) {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Outlined.Warning,
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colors.primary
-                                            )
-
-                                            Text(
-                                                text = clientNote,
-                                                fontSize = (12 * fontScale).sp,
-                                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.78f),
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
-                                        }
-                                    }
+                                val titleText = if (clientNote.isBlank()) {
+                                    client.displayName
+                                } else {
+                                    "${client.displayName} ($clientNote)"
                                 }
+
+                                Text(
+                                    text = titleText,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = (16 * fontScale).sp,
+                                    color = MaterialTheme.colors.onSurface,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f)
+                                )
 
                                 if (client.colorTag.isNotBlank()) {
                                     Box(
@@ -236,13 +250,6 @@ fun ClientDatabaseScreen(
                                     text = Locales.t("client_status_${client.status.lowercase()}"),
                                     color = MaterialTheme.colors.primary,
                                     fontWeight = FontWeight.Medium
-                                )
-                            }
-
-                            if (client.notes.isNotBlank()) {
-                                Text(
-                                    text = client.notes,
-                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.80f)
                                 )
                             }
                         }

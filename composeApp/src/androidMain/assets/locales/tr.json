@@ -887,5 +887,10 @@
     "client_color_purple": "Mor",
     "client_color_gray": "Gri",
     "client_profile_note_mark": "Müşteri işareti",
-    "client_profile_pick_color_marker": "Renk işaretçisini ayarla"
+    "client_profile_pick_color_marker": "Renk işaretçisini ayarla",
+    "client_profile_blacklist": "Kara listeye ekle",
+    "client_blacklist_button": "Kara liste",
+    "client_blacklist_title": "Kara liste",
+    "client_blacklist_hint": "Randevu alması yasak olarak işaretlenen müşteriler burada gösterilir.",
+    "client_blacklist_empty": "Henüz kara listede müşteri yok."
 }

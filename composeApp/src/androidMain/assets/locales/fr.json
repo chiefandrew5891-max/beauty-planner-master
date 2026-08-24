@@ -887,5 +887,10 @@
     "client_color_purple": "Violet",
     "client_color_gray": "Gris",
     "client_profile_note_mark": "Marque client",
-    "client_profile_pick_color_marker": "Définir le marqueur de couleur"
+    "client_profile_pick_color_marker": "Définir le marqueur de couleur",
+    "client_profile_blacklist": "Ajouter à la liste noire",
+    "client_blacklist_button": "Liste noire",
+    "client_blacklist_title": "Liste noire",
+    "client_blacklist_hint": "Les clients marqués comme non autorisés à réserver sont affichés ici.",
+    "client_blacklist_empty": "Aucun client dans la liste noire pour l'instant."
 }

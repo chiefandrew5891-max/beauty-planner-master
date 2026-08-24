@@ -887,5 +887,10 @@
     "client_color_purple": "Violeta",
     "client_color_gray": "Pelēka",
     "client_profile_note_mark": "Klienta atzīme",
-    "client_profile_pick_color_marker": "Iestatīt krāsu marķieri"
+    "client_profile_pick_color_marker": "Iestatīt krāsu marķieri",
+    "client_profile_blacklist": "Pievienot melnajam sarakstam",
+    "client_blacklist_button": "Melnais saraksts",
+    "client_blacklist_title": "Melnais saraksts",
+    "client_blacklist_hint": "Šeit tiek rādīti klienti, kuriem nav atļauts veikt rezervācijas.",
+    "client_blacklist_empty": "Melnajā sarakstā pagaidām nav neviena klienta."
 }

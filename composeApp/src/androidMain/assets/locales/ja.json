@@ -886,5 +886,10 @@
     "client_color_purple": "紫",
     "client_color_gray": "グレー",
     "client_profile_note_mark": "クライアントマーク",
-    "client_profile_pick_color_marker": "カラーマーカーを設定"
+    "client_profile_pick_color_marker": "カラーマーカーを設定",
+    "client_profile_blacklist": "ブラックリストに追加",
+    "client_blacklist_button": "ブラックリスト",
+    "client_blacklist_title": "ブラックリスト",
+    "client_blacklist_hint": "予約が許可されていないとマークされたクライアントがここに表示されます。",
+    "client_blacklist_empty": "ブラックリストに登録されているクライアントはありません。"
 }

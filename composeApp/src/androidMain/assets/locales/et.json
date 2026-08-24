@@ -887,5 +887,10 @@
     "client_color_purple": "Lilla",
     "client_color_gray": "Hall",
     "client_profile_note_mark": "Kliendi märge",
-    "client_profile_pick_color_marker": "Määra värvimarker"
+    "client_profile_pick_color_marker": "Määra värvimarker",
+    "client_profile_blacklist": "Lisa musta nimekirja",
+    "client_blacklist_button": "Must nimekiri",
+    "client_blacklist_title": "Must nimekiri",
+    "client_blacklist_hint": "Siin kuvatakse kliendid, kellel ei ole lubatud broneeringuid teha.",
+    "client_blacklist_empty": "Mustas nimekirjas pole veel ühtegi klienti."
 }

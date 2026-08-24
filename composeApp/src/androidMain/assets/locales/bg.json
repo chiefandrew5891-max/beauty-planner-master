@@ -887,5 +887,10 @@
     "client_color_purple": "Лилав",
     "client_color_gray": "Сив",
     "client_profile_note_mark": "Отбелязване на клиент",
-    "client_profile_pick_color_marker": "Задаване на цветен маркер"
+    "client_profile_pick_color_marker": "Задаване на цветен маркер",
+    "client_profile_blacklist": "Добавяне в черен списък",
+    "client_blacklist_button": "Черен списък",
+    "client_blacklist_title": "Черен списък",
+    "client_blacklist_hint": "Тук се показват клиентите, маркирани като неупълномощени за резервация.",
+    "client_blacklist_empty": "Все още няма клиенти в черния списък."
 }

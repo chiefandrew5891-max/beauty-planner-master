@@ -887,5 +887,10 @@
     "client_color_purple": "أرجواني",
     "client_color_gray": "رمادي",
     "client_profile_note_mark": "علامة العميل",
-    "client_profile_pick_color_marker": "تعيين علامة اللون"
+    "client_profile_pick_color_marker": "تعيين علامة اللون",
+    "client_profile_blacklist": "إضافة إلى القائمة السوداء",
+    "client_blacklist_button": "القائمة السوداء",
+    "client_blacklist_title": "القائمة السوداء",
+    "client_blacklist_hint": "يتم هنا عرض العملاء المحددين كغير مسموح لهم بالحجز.",
+    "client_blacklist_empty": "لا يوجد عملاء في القائمة السوداء حتى الآن."
 }

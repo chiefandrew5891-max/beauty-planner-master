@@ -887,5 +887,10 @@
     "client_color_purple": "Paars",
     "client_color_gray": "Grijs",
     "client_profile_note_mark": "Klantmarkering",
-    "client_profile_pick_color_marker": "Kleurmarker instellen"
+    "client_profile_pick_color_marker": "Kleurmarker instellen",
+    "client_profile_blacklist": "Toevoegen aan zwarte lijst",
+    "client_blacklist_button": "Zwarte lijst",
+    "client_blacklist_title": "Zwarte lijst",
+    "client_blacklist_hint": "Klanten die zijn gemarkeerd als niet toegestaan om te boeken, worden hier weergegeven.",
+    "client_blacklist_empty": "Nog geen klanten op de zwarte lijst."
 }

@@ -887,5 +887,10 @@
     "client_color_purple": "Lila",
     "client_color_gray": "Grå",
     "client_profile_note_mark": "Klientmarkering",
-    "client_profile_pick_color_marker": "Ange färgmarkör"
+    "client_profile_pick_color_marker": "Ange färgmarkör",
+    "client_profile_blacklist": "Lägg till i svartlistan",
+    "client_blacklist_button": "Svartlista",
+    "client_blacklist_title": "Svartlista",
+    "client_blacklist_hint": "Kunder som markerats som ej tillåtna för bokning visas här.",
+    "client_blacklist_empty": "Inga svartlistade kunder än."
 }

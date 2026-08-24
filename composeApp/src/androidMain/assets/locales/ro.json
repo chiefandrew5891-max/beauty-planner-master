@@ -887,5 +887,10 @@
     "client_color_purple": "Violet",
     "client_color_gray": "Gri",
     "client_profile_note_mark": "Marcaj client",
-    "client_profile_pick_color_marker": "Setare marcator culoare"
+    "client_profile_pick_color_marker": "Setare marcator culoare",
+    "client_profile_blacklist": "Adăugați la lista neagră",
+    "client_blacklist_button": "Listă neagră",
+    "client_blacklist_title": "Listă neagră",
+    "client_blacklist_hint": "Clienții marcați ca nepermisi pentru rezervare sunt afișați aici.",
+    "client_blacklist_empty": "Niciun client pe lista neagră momentan."
 }

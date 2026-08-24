@@ -887,5 +887,10 @@
     "client_color_purple": "Фіолетовий",
     "client_color_gray": "Сірий",
     "client_profile_note_mark": "Помітка про клієнта",
-    "client_profile_pick_color_marker": "Задати кольоровий маркер"
+    "client_profile_pick_color_marker": "Задати кольоровий маркер",
+    "client_profile_blacklist": "Додати до чорного списку",
+    "client_blacklist_button": "Чорний список",
+    "client_blacklist_title": "Чорний список",
+    "client_blacklist_hint": "Тут відображаються клієнти, позначені як недоступні для запису.",
+    "client_blacklist_empty": "У чорному списку поки нікого немає."
 }

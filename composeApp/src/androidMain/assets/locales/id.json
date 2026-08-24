@@ -887,5 +887,10 @@
     "client_color_purple": "Ungu",
     "client_color_gray": "Abu-abu",
     "client_profile_note_mark": "Tanda klien",
-    "client_profile_pick_color_marker": "Atur penanda warna"
+    "client_profile_pick_color_marker": "Atur penanda warna",
+    "client_profile_blacklist": "Tambahkan ke daftar hitam",
+    "client_blacklist_button": "Daftar hitam",
+    "client_blacklist_title": "Daftar hitam",
+    "client_blacklist_hint": "Klien yang ditandai tidak diizinkan untuk memesan ditampilkan di sini.",
+    "client_blacklist_empty": "Belum ada klien di daftar hitam."
 }

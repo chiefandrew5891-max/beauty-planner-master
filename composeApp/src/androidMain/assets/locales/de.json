@@ -887,5 +887,10 @@
     "client_color_purple": "Lila",
     "client_color_gray": "Grau",
     "client_profile_note_mark": "Kundenmarkierung",
-    "client_profile_pick_color_marker": "Farbmarkierung festlegen"
+    "client_profile_pick_color_marker": "Farbmarkierung festlegen",
+    "client_profile_blacklist": "Zur Sperrliste hinzufügen",
+    "client_blacklist_button": "Sperrliste",
+    "client_blacklist_title": "Sperrliste",
+    "client_blacklist_hint": "Hier werden Kunden angezeigt, die für die Buchung gesperrt sind.",
+    "client_blacklist_empty": "Noch keine Kunden auf der Sperrliste."
 }

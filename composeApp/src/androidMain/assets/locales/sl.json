@@ -887,5 +887,10 @@
     "client_color_purple": "Vijolična",
     "client_color_gray": "Siva",
     "client_profile_note_mark": "Oznaka stranke",
-    "client_profile_pick_color_marker": "Nastavi barvni označevalec"
+    "client_profile_pick_color_marker": "Nastavi barvni označevalec",
+    "client_profile_blacklist": "Dodaj na črni seznam",
+    "client_blacklist_button": "Črni seznam",
+    "client_blacklist_title": "Črni seznam",
+    "client_blacklist_hint": "Tukaj so prikazane stranke, označene kot nedopustne za rezervacijo.",
+    "client_blacklist_empty": "Na črnem seznamu ni še nobene stranke."
 }

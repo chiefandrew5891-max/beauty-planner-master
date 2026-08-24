@@ -10,10 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -22,12 +23,12 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -84,43 +85,20 @@ fun ClientProfileDialog(
                             .padding(end = 12.dp)
                     ) {
                         val clientNote = initialProfile.notes.trim()
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = initialProfile.displayName,
-                                fontSize = (20 * fontScale).sp,
-                                fontWeight = FontWeight.Bold,
-                                color = onSurface,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1f)
-                            )
-
-                            if (clientNote.isNotBlank()) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Warning,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colors.primary
-                                    )
-
-                                    Text(
-                                        text = clientNote,
-                                        fontSize = (12 * fontScale).sp,
-                                        color = onSurface.copy(alpha = 0.78f),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
-                            }
+                        val titleText = if (clientNote.isBlank()) {
+                            initialProfile.displayName
+                        } else {
+                            "${initialProfile.displayName} ($clientNote)"
                         }
+
+                        Text(
+                            text = titleText,
+                            fontSize = (20 * fontScale).sp,
+                            fontWeight = FontWeight.Bold,
+                            color = onSurface,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
 
                         if (initialProfile.phone.isNotBlank()) {
                             Spacer(modifier = Modifier.height(4.dp))
@@ -177,12 +155,16 @@ fun ClientProfileDialog(
                     )
                 )
 
-                Button(
+                OutlinedButton(
                     onClick = { showColorDialog = true },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.10f)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        backgroundColor = Color.Transparent
+                    ),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
                     )
                 ) {
                     Text(

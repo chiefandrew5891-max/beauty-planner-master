@@ -903,7 +903,14 @@ fun AppRootContent(
             )
 
             Screen.CLIENT_DATABASE -> ClientDatabaseScreen(
-                appointments = AppointmentSyncUtils.visibleAppointments(state.appointments)
+                appointments = state.appointments,
+                onOpenBlacklist = {
+                    state.navigateTo(Screen.BLACKLIST)
+                }
+            )
+
+            Screen.BLACKLIST -> BlacklistScreen(
+                appointments = state.appointments
             )
 
             Screen.ARCHIVE -> {

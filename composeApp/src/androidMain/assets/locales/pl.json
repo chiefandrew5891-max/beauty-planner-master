@@ -887,5 +887,10 @@
     "client_color_purple": "Fioletowy",
     "client_color_gray": "Szary",
     "client_profile_note_mark": "Oznaczenie klienta",
-    "client_profile_pick_color_marker": "Ustaw znacznik koloru"
+    "client_profile_pick_color_marker": "Ustaw znacznik koloru",
+    "client_profile_blacklist": "Dodaj do czarnej listy",
+    "client_blacklist_button": "Czarna lista",
+    "client_blacklist_title": "Czarna lista",
+    "client_blacklist_hint": "Tutaj wyświetlani są klienci oznaczeni jako nieuprawnieni do rezerwacji.",
+    "client_blacklist_empty": "Brak klientów na czarnej liście."
 }

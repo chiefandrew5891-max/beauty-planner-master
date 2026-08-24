@@ -578,7 +578,8 @@ fun AppRootChrome(
                         state.currentScreen == Screen.PRIVACY_POLICY ||
                         state.currentScreen == Screen.NOTIFICATION_SETTINGS ||
                         state.currentScreen == Screen.PREMIUM_ACCESS ||
-                        state.currentScreen == Screen.GUEST_ACCOUNT_REGISTRATION
+                        state.currentScreen == Screen.GUEST_ACCOUNT_REGISTRATION ||
+                        state.currentScreen == Screen.BLACKLIST
 
             val density = LocalDensity.current
             val edgeWidthPx = with(density) { 64.dp.toPx() }

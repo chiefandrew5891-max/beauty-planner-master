@@ -887,5 +887,10 @@
     "client_color_purple": "보라색",
     "client_color_gray": "회색",
     "client_profile_note_mark": "클라이언트 표시",
-    "client_profile_pick_color_marker": "색상 마커 설정"
+    "client_profile_pick_color_marker": "색상 마커 설정",
+    "client_profile_blacklist": "차단 목록에 추가",
+    "client_blacklist_button": "차단 목록",
+    "client_blacklist_title": "차단 목록",
+    "client_blacklist_hint": "예약이 허용되지 않음으로 표시된 클라이언트가 여기에 표시됩니다.",
+    "client_blacklist_empty": "차단된 클라이언트가 없습니다."
 }

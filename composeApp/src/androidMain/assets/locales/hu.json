@@ -887,5 +887,10 @@
     "client_color_purple": "Lila",
     "client_color_gray": "Szürke",
     "client_profile_note_mark": "Ügyféljelzés",
-    "client_profile_pick_color_marker": "Színjelölő beállítása"
+    "client_profile_pick_color_marker": "Színjelölő beállítása",
+    "client_profile_blacklist": "Hozzáadás a feketelistához",
+    "client_blacklist_button": "Feketelista",
+    "client_blacklist_title": "Feketelista",
+    "client_blacklist_hint": "Itt jelennek meg azok az ügyfelek, akik nem foglalhatnak időpontot.",
+    "client_blacklist_empty": "Még nincsenek ügyfelek a feketelistán."
 }

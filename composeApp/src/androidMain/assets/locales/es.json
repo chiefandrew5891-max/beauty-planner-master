@@ -887,5 +887,10 @@
     "client_color_purple": "Morado",
     "client_color_gray": "Gris",
     "client_profile_note_mark": "Marca del cliente",
-    "client_profile_pick_color_marker": "Establecer marcador de color"
+    "client_profile_pick_color_marker": "Establecer marcador de color",
+    "client_profile_blacklist": "Añadir a la lista negra",
+    "client_blacklist_button": "Lista negra",
+    "client_blacklist_title": "Lista negra",
+    "client_blacklist_hint": "Los clientes marcados como no permitidos para reservar se muestran aquí.",
+    "client_blacklist_empty": "No hay clientes en la lista negra todavía."
 }

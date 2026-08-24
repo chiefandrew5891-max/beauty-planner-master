@@ -887,5 +887,10 @@
     "client_color_purple": "Μωβ",
     "client_color_gray": "Γκρι",
     "client_profile_note_mark": "Σήμανση πελάτη",
-    "client_profile_pick_color_marker": "Ορισμός έγχρωμου δείκτη"
+    "client_profile_pick_color_marker": "Ορισμός έγχρωμου δείκτη",
+    "client_profile_blacklist": "Προσθήκη στη μαύρη λίστα",
+    "client_blacklist_button": "Μαύρη λίστα",
+    "client_blacklist_title": "Μαύρη λίστα",
+    "client_blacklist_hint": "Εδώ εμφανίζονται πελάτες που δεν επιτρέπεται να κάνουν κράτηση.",
+    "client_blacklist_empty": "Δεν υπάρχουν πελάτες στη μαύρη λίστα ακόμα."
 }

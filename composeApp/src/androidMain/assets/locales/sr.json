@@ -887,5 +887,10 @@
     "client_color_purple": "Љубичаста",
     "client_color_gray": "Сива",
     "client_profile_note_mark": "Ознака клијента",
-    "client_profile_pick_color_marker": "Подеси маркер у боји"
+    "client_profile_pick_color_marker": "Подеси маркер у боји",
+    "client_profile_blacklist": "Додај на цrну листу",
+    "client_blacklist_button": "Црна листа",
+    "client_blacklist_title": "Црна листа",
+    "client_blacklist_hint": "Овде се приказују клијенти који су означени као недозвољени за заказивање.",
+    "client_blacklist_empty": "Нема клијената на цrној листи за сада."
 }

@@ -887,5 +887,10 @@
     "client_color_purple": "Lilla",
     "client_color_gray": "Grå",
     "client_profile_note_mark": "Klientmarkering",
-    "client_profile_pick_color_marker": "Indstil farvemarkør"
+    "client_profile_pick_color_marker": "Indstil farvemarkør",
+    "client_profile_blacklist": "Føj til sortliste",
+    "client_blacklist_button": "Sortliste",
+    "client_blacklist_title": "Sortliste",
+    "client_blacklist_hint": "Klienter, der er markeret som ikke tilladt til booking, vises her.",
+    "client_blacklist_empty": "Ingen klienter på sortlisten endnu."
 }

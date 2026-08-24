@@ -887,5 +887,10 @@
     "client_color_purple": "Fialová",
     "client_color_gray": "Sivá",
     "client_profile_note_mark": "Značka klienta",
-    "client_profile_pick_color_marker": "Nastaviť farebný značkovač"
+    "client_profile_pick_color_marker": "Nastaviť farebný značkovač",
+    "client_profile_blacklist": "Pridať na čiernu listinu",
+    "client_blacklist_button": "Čierna listina",
+    "client_blacklist_title": "Čierna listina",
+    "client_blacklist_hint": "Tu sa zobrazujú klienti označení ako neoprávnení na rezervácie.",
+    "client_blacklist_empty": "Na čiernej listine zatiaľ nie sú žiadni klienti."
 }

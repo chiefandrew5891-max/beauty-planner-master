@@ -889,5 +889,10 @@
     "client_color_purple": "Purple",
     "client_color_gray": "Gray",
     "client_profile_note_mark": "Client mark",
-    "client_profile_pick_color_marker": "Set color marker"
+    "client_profile_pick_color_marker": "Set color marker",
+    "client_profile_blacklist": "Add to blacklist",
+    "client_blacklist_button": "Blacklist",
+    "client_blacklist_title": "Blacklist",
+    "client_blacklist_hint": "Clients marked as not allowed for booking are shown here.",
+    "client_blacklist_empty": "No blacklisted clients yet."
 }
