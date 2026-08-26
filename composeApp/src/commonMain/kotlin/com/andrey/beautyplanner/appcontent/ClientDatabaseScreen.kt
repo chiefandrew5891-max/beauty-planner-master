@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -197,7 +198,11 @@ fun ClientDatabaseScreen(
                                     ),
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = (16 * fontScale).sp,
-                                    color = MaterialTheme.colors.onSurface,
+                                    color = AppSettings.clientDisplayColor(
+                                        name = client.displayName,
+                                        phone = client.phone,
+                                        defaultColor = MaterialTheme.colors.onSurface
+                                    ),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.weight(1f)
@@ -206,11 +211,12 @@ fun ClientDatabaseScreen(
                                 if (client.colorTag.isNotBlank()) {
                                     Box(
                                         modifier = Modifier
+                                            .padding(start = 12.dp, top = 2.dp)
+                                            .size(12.dp)
                                             .background(
                                                 color = colorTagToColor(client.colorTag),
                                                 shape = RoundedCornerShape(50)
                                             )
-                                            .padding(horizontal = 10.dp, vertical = 6.dp)
                                     )
                                 }
                             }

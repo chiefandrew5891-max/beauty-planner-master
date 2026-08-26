@@ -582,7 +582,11 @@ fun BookingDialog(
                                         fontWeight = FontWeight.SemiBold,
                                         maxLines = 2,
                                         overflow = TextOverflow.Ellipsis,
-                                        color = MaterialTheme.colors.onSurface
+                                        color = AppSettings.clientDisplayColor(
+                                            name = suggestion.displayName,
+                                            phone = suggestion.phone,
+                                            defaultColor = MaterialTheme.colors.onSurface
+                                        )
                                     )
 
                                     if (suggestion.phone.isNotBlank()) {

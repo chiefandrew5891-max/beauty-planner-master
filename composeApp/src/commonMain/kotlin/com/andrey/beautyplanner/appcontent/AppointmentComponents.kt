@@ -251,7 +251,11 @@ fun AppointmentCard(
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
-                                color = MaterialTheme.colors.onSurface,
+                                color = AppSettings.clientDisplayColor(
+                                    name = appt.clientName,
+                                    phone = appt.phone,
+                                    defaultColor = MaterialTheme.colors.onSurface
+                                ),
                                 modifier = Modifier.weight(1f, fill = false)
                             )
 
@@ -381,7 +385,11 @@ fun AppointmentCard(
                         fontWeight = FontWeight.Bold,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colors.onSurface,
+                        color = AppSettings.clientDisplayColor(
+                            name = appt.clientName,
+                            phone = appt.phone,
+                            defaultColor = MaterialTheme.colors.onSurface
+                        ),
                         modifier = Modifier.weight(1f, fill = false)
                     )
 
@@ -526,7 +534,11 @@ fun AppointmentDetailsDialog(
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
                         fontSize = (22 * fontScale).sp,
-                        color = MaterialTheme.colors.onSurface,
+                        color = AppSettings.clientDisplayColor(
+                            name = appt.clientName,
+                            phone = appt.phone,
+                            defaultColor = MaterialTheme.colors.onSurface
+                        ),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )

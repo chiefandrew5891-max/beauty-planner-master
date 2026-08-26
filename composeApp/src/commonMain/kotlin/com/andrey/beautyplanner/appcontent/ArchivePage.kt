@@ -1005,7 +1005,11 @@ private fun ArchiveAppointmentViewDialog(
                     ),
                     fontWeight = FontWeight.Bold,
                     fontSize = (22 * fontScale).sp,
-                    color = MaterialTheme.colors.onSurface,
+                    color = AppSettings.clientDisplayColor(
+                        name = appointment.clientName,
+                        phone = appointment.phone,
+                        defaultColor = MaterialTheme.colors.onSurface
+                    ),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )

@@ -587,6 +587,16 @@ fun AppRootContent(
                                             appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
                                             onWeekdaysRowTopChanged = { top ->
                                                 weekdaysRowTopInRoot = top
+                                            },
+                                            onSwipeToPreviousMonth = {
+                                                if (!isCollapsed) {
+                                                    state.calendarViewDate = state.calendarViewDate.minus(1, DateTimeUnit.MONTH)
+                                                }
+                                            },
+                                            onSwipeToNextMonth = {
+                                                if (!isCollapsed) {
+                                                    state.calendarViewDate = state.calendarViewDate.plus(1, DateTimeUnit.MONTH)
+                                                }
                                             }
                                         ) { date ->
                                             state.selectedDate = date

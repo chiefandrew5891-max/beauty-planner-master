@@ -134,7 +134,11 @@ fun ClientPickerDialog(
                                 color = if (isSelected) {
                                     MaterialTheme.colors.primary
                                 } else {
-                                    onSurface
+                                    AppSettings.clientDisplayColor(
+                                        name = client.displayName,
+                                        phone = client.phone,
+                                        defaultColor = onSurface
+                                    )
                                 },
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis

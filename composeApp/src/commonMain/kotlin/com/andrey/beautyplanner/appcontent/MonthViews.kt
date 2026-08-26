@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.input.pointer.pointerInput
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
 import kotlinx.datetime.LocalDate
@@ -126,6 +128,8 @@ fun MonthCalendarGrid(
     selectedDate: LocalDate,
     appointments: List<Appointment> = emptyList(),
     onWeekdaysRowTopChanged: ((Int) -> Unit)? = null,
+    onSwipeToPreviousMonth: (() -> Unit)? = null,
+    onSwipeToNextMonth: (() -> Unit)? = null,
     onDateClick: (LocalDate) -> Unit
 ) {
     val isLeap = monthDate.year % 4 == 0 && (monthDate.year % 100 != 0 || monthDate.year % 400 == 0)
@@ -150,6 +154,8 @@ fun MonthCalendarGrid(
 
     val totalCells = dayOfWeekOffset + daysInMonth
     val rows = ((totalCells + 6) / 7).coerceAtLeast(5)
+    var horizontalDragAccumulated = 0f
+    val swipeThresholdPx = 60f
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(),
@@ -171,6 +177,31 @@ fun MonthCalendarGrid(
         Column(
             modifier = Modifier
                 .width(effectiveWidth)
+                .pointerInput(monthDate, onSwipeToPreviousMonth, onSwipeToNextMonth) {
+                    detectHorizontalDragGestures(
+                        onDragStart = {
+                            horizontalDragAccumulated = 0f
+                        },
+                        onHorizontalDrag = { change, dragAmount ->
+                            change.consume()
+                            horizontalDragAccumulated += dragAmount
+                        },
+                        onDragEnd = {
+                            when {
+                                horizontalDragAccumulated <= -swipeThresholdPx -> {
+                                    onSwipeToNextMonth?.invoke()
+                                }
+                                horizontalDragAccumulated >= swipeThresholdPx -> {
+                                    onSwipeToPreviousMonth?.invoke()
+                                }
+                            }
+                            horizontalDragAccumulated = 0f
+                        },
+                        onDragCancel = {
+                            horizontalDragAccumulated = 0f
+                        }
+                    )
+                }
                 .padding(bottom = 4.dp)
         ) {
             Row(
