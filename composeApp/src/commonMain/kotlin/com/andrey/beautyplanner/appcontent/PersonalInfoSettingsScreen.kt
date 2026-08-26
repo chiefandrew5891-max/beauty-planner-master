@@ -162,9 +162,17 @@ fun PersonalInfoSettingsScreen(appState: com.andrey.beautyplanner.appcontent.app
                         runCatching {
                             BackendBridge.uploadMyProfileAvatar(cropped)
                         }.onSuccess { result ->
+                            val uploadedUrl = result["downloadUrl"].orEmpty()
+                            val uploadedStoragePath = result["storagePath"].orEmpty()
+
                             avatarBase64Draft = cropped
-                            avatarUrlDraft = result["downloadUrl"].orEmpty()
-                            AppSettings.profileAvatarStoragePath = result["storagePath"].orEmpty()
+                            avatarUrlDraft = uploadedUrl
+
+                            AppSettings.profileAvatarUrl = uploadedUrl
+                            AppSettings.profileAvatarBase64 = cropped
+                            AppSettings.profileAvatarStoragePath = uploadedStoragePath
+                            AppSettings.persist()
+
                             refreshAvatarLibrary()
                         }.onFailure {
                             avatarUrlErrorMessage = Locales.t("profile_avatar_url_error")

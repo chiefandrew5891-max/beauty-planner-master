@@ -265,6 +265,20 @@ fun MonthCalendarGrid(
                         else -> MaterialTheme.colors.primary.copy(alpha = 0.90f)
                     }
 
+                    val markerWidth = when {
+                        fontScale >= 1.2f -> 25.dp
+                        fontScale >= 1.0f -> 22.dp
+                        else -> 16.dp
+                    }
+
+                    val markerBottomPadding = when {
+                        fontScale >= 1.2f -> 4.dp
+                        fontScale >= 1.0f -> 6.dp
+                        else -> 8.dp
+                    }
+
+                    val markerHeight = if (fontScale >= 1.2f) 3.dp else 2.dp
+
                     Box(
                         modifier = Modifier
                             .size(cellSize)
@@ -291,9 +305,9 @@ fun MonthCalendarGrid(
                             Box(
                                 modifier = Modifier
                                     .align(Alignment.BottomCenter)
-                                    .padding(bottom = 8.dp)
-                                    .width(16.dp)
-                                    .height(2.dp)
+                                    .padding(bottom = markerBottomPadding)
+                                    .width(markerWidth)
+                                    .height(markerHeight)
                                     .clip(RoundedCornerShape(50))
                                     .background(appointmentMarkerColor)
                             )

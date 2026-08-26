@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 
@@ -52,7 +55,9 @@ fun SessionLoadingScreen(
 
     CenteredNarrowContentContainer {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp, vertical = 24.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -60,7 +65,9 @@ fun SessionLoadingScreen(
                 text = Locales.t("session_loading_title"),
                 fontSize = (26 * fontScale).sp,
                 fontWeight = FontWeight.Bold,
-                color = titleColor
+                color = titleColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.size(24.dp))
@@ -102,7 +109,9 @@ fun SessionLoadingScreen(
             Text(
                 text = subtitle,
                 fontSize = (14 * fontScale).sp,
-                color = subtitleColor
+                color = subtitleColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
