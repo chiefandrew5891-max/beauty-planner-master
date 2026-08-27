@@ -892,5 +892,10 @@
     "client_blacklist_button": "Црна листа",
     "client_blacklist_title": "Црна листа",
     "client_blacklist_hint": "Овде се приказују клијенти који су означени као недозвољени за заказивање.",
-    "client_blacklist_empty": "Нема клијената на цrној листи за сада."
+    "client_blacklist_empty": "Нема клијената на цrној листи за сада.",
+    "blacklist_client_warning_title": "Клијент на цrној листи",
+    "blacklist_client_warning_message": "Изабрани клијент је на вашој цrној листи. Обично то значи да заказивање за њега није пожељно. Желите ли ипак да наставите?",
+    "blacklist_client_warning_confirm": "Настави",
+    "blacklist_client_warning_cancel": "Откажи",
+    "booking_price_numbers_only": "Унесите само бројеве"
 }

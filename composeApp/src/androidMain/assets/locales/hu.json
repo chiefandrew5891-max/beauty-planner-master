@@ -892,5 +892,10 @@
     "client_blacklist_button": "Feketelista",
     "client_blacklist_title": "Feketelista",
     "client_blacklist_hint": "Itt jelennek meg azok az ügyfelek, akik nem foglalhatnak időpontot.",
-    "client_blacklist_empty": "Még nincsenek ügyfelek a feketelistán."
+    "client_blacklist_empty": "Még nincsenek ügyfelek a feketelistán.",
+    "blacklist_client_warning_title": "Ügyfél a feketelistán",
+    "blacklist_client_warning_message": "A kiválasztott ügyfél szerepel a feketelistáján. Ez általában azt jelenti, hogy a foglalás nem ajánlott számára. Biztosan folytatja?",
+    "blacklist_client_warning_confirm": "Folytatás",
+    "blacklist_client_warning_cancel": "Mégsem",
+    "booking_price_numbers_only": "Csak számokat adjon meg"
 }

@@ -892,5 +892,10 @@
     "client_blacklist_button": "Sperrliste",
     "client_blacklist_title": "Sperrliste",
     "client_blacklist_hint": "Hier werden Kunden angezeigt, die für die Buchung gesperrt sind.",
-    "client_blacklist_empty": "Noch keine Kunden auf der Sperrliste."
+    "client_blacklist_empty": "Noch keine Kunden auf der Sperrliste.",
+    "blacklist_client_warning_title": "Kunde auf der Sperrliste",
+    "blacklist_client_warning_message": "Der ausgewählte Kunde befindet sich auf Ihrer Sperrliste. Normalerweise bedeutet dies, dass eine Buchung für diesen Kunden unerwünscht ist. Trotzdem fortfahren?",
+    "blacklist_client_warning_confirm": "Fortfahren",
+    "blacklist_client_warning_cancel": "Abbrechen",
+    "booking_price_numbers_only": "Nur Zahlen eingeben"
 }

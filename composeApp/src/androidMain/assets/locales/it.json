@@ -892,5 +892,10 @@
     "client_blacklist_button": "Blacklist",
     "client_blacklist_title": "Blacklist",
     "client_blacklist_hint": "I clienti contrassegnati come non idonei alla prenotazione vengono mostrati qui.",
-    "client_blacklist_empty": "Nessun cliente nella blacklist."
+    "client_blacklist_empty": "Nessun cliente nella blacklist.",
+    "blacklist_client_warning_title": "Cliente nella blacklist",
+    "blacklist_client_warning_message": "Il cliente selezionato è nella tua blacklist. Di solito questo significa che la prenotazione per lui non è auspicabile. Vuoi procedere comunque?",
+    "blacklist_client_warning_confirm": "Continua",
+    "blacklist_client_warning_cancel": "Annulla",
+    "booking_price_numbers_only": "Inserisci solo numeri"
 }

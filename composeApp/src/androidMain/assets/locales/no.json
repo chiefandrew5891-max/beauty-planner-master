@@ -892,5 +892,10 @@
     "client_blacklist_button": "Svarteliste",
     "client_blacklist_title": "Svarteliste",
     "client_blacklist_hint": "Kunder som er merket som ikke tillatt for booking, vises her.",
-    "client_blacklist_empty": "Ingen kunder på svartelisten ennå."
+    "client_blacklist_empty": "Ingen kunder på svartelisten ennå.",
+    "blacklist_client_warning_title": "Klient på svartelisten",
+    "blacklist_client_warning_message": "Den valgte kienten er på svartelisten din. Vanligvis betyr dette at booking for vedkommende ikke er ønskelig. Vil du fortsette likevel?",
+    "blacklist_client_warning_confirm": "Fortsett",
+    "blacklist_client_warning_cancel": "Avbryt",
+    "booking_price_numbers_only": "Angi bare tall"
 }

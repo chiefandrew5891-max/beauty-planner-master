@@ -892,5 +892,10 @@
     "client_blacklist_button": "Melnais saraksts",
     "client_blacklist_title": "Melnais saraksts",
     "client_blacklist_hint": "Šeit tiek rādīti klienti, kuriem nav atļauts veikt rezervācijas.",
-    "client_blacklist_empty": "Melnajā sarakstā pagaidām nav neviena klienta."
+    "client_blacklist_empty": "Melnajā sarakstā pagaidām nav neviena klienta.",
+    "blacklist_client_warning_title": "Klienta ir melnajā sarakstā",
+    "blacklist_client_warning_message": "Izvēlētais klienta ir jūsu melnajā sarakstā. Parasti tas nozīmē, ka rezervācija viņam nav vēlama. Vai tomēr turpināt?",
+    "blacklist_client_warning_confirm": "Turpināt",
+    "blacklist_client_warning_cancel": "Atcelt",
+    "booking_price_numbers_only": "Ievadiet tikai skaitļus"
 }

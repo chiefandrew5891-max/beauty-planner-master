@@ -892,5 +892,10 @@
     "client_blacklist_button": "Listă neagră",
     "client_blacklist_title": "Listă neagră",
     "client_blacklist_hint": "Clienții marcați ca nepermisi pentru rezervare sunt afișați aici.",
-    "client_blacklist_empty": "Niciun client pe lista neagră momentan."
+    "client_blacklist_empty": "Niciun client pe lista neagră momentan.",
+    "blacklist_client_warning_title": "Client în lista neagră",
+    "blacklist_client_warning_message": "Clientul selectat este în lista neagră. De obicei, aceasta înseamnă că rezervarea pentru el nu este recomandată. Doriți să continuați oricum?",
+    "blacklist_client_warning_confirm": "Continuare",
+    "blacklist_client_warning_cancel": "Anulare",
+    "booking_price_numbers_only": "Introduceți doar cifre"
 }

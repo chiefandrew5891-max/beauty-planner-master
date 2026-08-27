@@ -892,5 +892,10 @@
     "client_blacklist_button": "القائمة السوداء",
     "client_blacklist_title": "القائمة السوداء",
     "client_blacklist_hint": "يتم هنا عرض العملاء المحددين كغير مسموح لهم بالحجز.",
-    "client_blacklist_empty": "لا يوجد عملاء في القائمة السوداء حتى الآن."
+    "client_blacklist_empty": "لا يوجد عملاء في القائمة السوداء حتى الآن.",
+    "blacklist_client_warning_title": "العميل في القائمة السوداء",
+    "blacklist_client_warning_message": "العميل المحدد موجود في القائمة السوداء الخاصة بك. يعني هذا عادةً أن الحجز له غير مرغوب فيه. هل تريد المتابعة على أي حال؟",
+    "blacklist_client_warning_confirm": "متابعة",
+    "blacklist_client_warning_cancel": "إلغاء",
+    "booking_price_numbers_only": "أدخل أرقامًا فقط"
 }

@@ -892,5 +892,10 @@
     "client_blacklist_button": "Juodasis sąrašas",
     "client_blacklist_title": "Juodasis sąrašas",
     "client_blacklist_hint": "Čia rodomi kliento statusą, kuriems draudžiama rezervuotis, turintys asmenys.",
-    "client_blacklist_empty": "Juodajame sąraše dar nėra klientų."
+    "client_blacklist_empty": "Juodajame sąraše dar nėra klientų.",
+    "blacklist_client_warning_title": "Klientas juodajame sąraše",
+    "blacklist_client_warning_message": "Pasirinktas klientas yra jūsų juodajame sąraše. Paprastai tai reiškia, kad rezervacija jam yra nepageidaujama. Vis tiek tęsti?",
+    "blacklist_client_warning_confirm": "Tęsti",
+    "blacklist_client_warning_cancel": "Atšaukti",
+    "booking_price_numbers_only": "Įveskite tik skaičius"
 }

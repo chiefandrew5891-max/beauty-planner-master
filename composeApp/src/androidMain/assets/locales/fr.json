@@ -892,5 +892,10 @@
     "client_blacklist_button": "Liste noire",
     "client_blacklist_title": "Liste noire",
     "client_blacklist_hint": "Les clients marqués comme non autorisés à réserver sont affichés ici.",
-    "client_blacklist_empty": "Aucun client dans la liste noire pour l'instant."
+    "client_blacklist_empty": "Aucun client dans la liste noire pour l'instant.",
+    "blacklist_client_warning_title": "Client dans la liste noire",
+    "blacklist_client_warning_message": "Le client sélectionné figure dans votre liste noire. En général, cela signifie que la réservation pour lui n'est pas souhaitable. Continuer quand même ?",
+    "blacklist_client_warning_confirm": "Continuer",
+    "blacklist_client_warning_cancel": "Annuler",
+    "booking_price_numbers_only": "Entrez uniquement des chiffres"
 }

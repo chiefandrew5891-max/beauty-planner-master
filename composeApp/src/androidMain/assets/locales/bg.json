@@ -892,5 +892,10 @@
     "client_blacklist_button": "Черен списък",
     "client_blacklist_title": "Черен списък",
     "client_blacklist_hint": "Тук се показват клиентите, маркирани като неупълномощени за резервация.",
-    "client_blacklist_empty": "Все още няма клиенти в черния списък."
+    "client_blacklist_empty": "Все още няма клиенти в черния списък.",
+    "blacklist_client_warning_title": "Клиентът е в черния списък",
+    "blacklist_client_warning_message": "Избраният клиент е във вашия черен списък. Обикновено това означава, че резервацията за него е нежелателна. Искате ли да продължите въпреки това?",
+    "blacklist_client_warning_confirm": "Продължаване",
+    "blacklist_client_warning_cancel": "Отказ",
+    "booking_price_numbers_only": "Въведете само числа"
 }

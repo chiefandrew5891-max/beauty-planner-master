@@ -892,5 +892,10 @@
     "client_blacklist_button": "Kara liste",
     "client_blacklist_title": "Kara liste",
     "client_blacklist_hint": "Randevu alması yasak olarak işaretlenen müşteriler burada gösterilir.",
-    "client_blacklist_empty": "Henüz kara listede müşteri yok."
+    "client_blacklist_empty": "Henüz kara listede müşteri yok.",
+    "blacklist_client_warning_title": "Müşteri kara listede",
+    "blacklist_client_warning_message": "Seçilen müşteri kara listenizde yer alıyor. Bu genellikle bu kişi için randevu oluşturmanın istenmediği anlamına gelir. Yine de devam edilsin mi?",
+    "blacklist_client_warning_confirm": "Devam et",
+    "blacklist_client_warning_cancel": "İptal",
+    "booking_price_numbers_only": "Yalnızca sayı girin"
 }

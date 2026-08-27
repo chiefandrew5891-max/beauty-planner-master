@@ -894,5 +894,10 @@
     "client_blacklist_button": "Blacklist",
     "client_blacklist_title": "Blacklist",
     "client_blacklist_hint": "Clients marked as not allowed for booking are shown here.",
-    "client_blacklist_empty": "No blacklisted clients yet."
+    "client_blacklist_empty": "No blacklisted clients yet.",
+    "blacklist_client_warning_title": "Client in blacklist",
+    "blacklist_client_warning_message": "The selected client is in your blacklist. Usually this means booking for them is undesirable. Continue anyway?",
+    "blacklist_client_warning_confirm": "Continue",
+    "blacklist_client_warning_cancel": "Cancel",
+    "booking_price_numbers_only": "Enter numbers only"
 }

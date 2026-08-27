@@ -892,5 +892,10 @@
     "client_blacklist_button": "Μαύρη λίστα",
     "client_blacklist_title": "Μαύρη λίστα",
     "client_blacklist_hint": "Εδώ εμφανίζονται πελάτες που δεν επιτρέπεται να κάνουν κράτηση.",
-    "client_blacklist_empty": "Δεν υπάρχουν πελάτες στη μαύρη λίστα ακόμα."
+    "client_blacklist_empty": "Δεν υπάρχουν πελάτες στη μαύρη λίστα ακόμα.",
+    "blacklist_client_warning_title": "Ο πελάτης είναι στη μαύρη λίστα",
+    "blacklist_client_warning_message": "O επιλεγμένος πελάτης βρίσκεται στη μαύρη λίστα σας. Συνήθως αυτό σημαίνει ότι η κράτηση για αυτόν δεν είναι επιθυμητή. Συνέχεια ούτως ή άλλως;",
+    "blacklist_client_warning_confirm": "Συνέχεια",
+    "blacklist_client_warning_cancel": "Ακύρωση",
+    "booking_price_numbers_only": "Εισάγετε μόνο αριθμούς"
 }

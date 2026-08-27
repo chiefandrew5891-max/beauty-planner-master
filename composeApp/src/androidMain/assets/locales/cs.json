@@ -892,5 +892,10 @@
     "client_blacklist_button": "Černá listina",
     "client_blacklist_title": "Černá listina",
     "client_blacklist_hint": "Zde se zobrazují klienti, kteří mají zakázáno provádět rezervace.",
-    "client_blacklist_empty": "Na černé listině zatím nejsou žádní klienti."
+    "client_blacklist_empty": "Na černé listině zatím nejsou žádní klienti.",
+    "blacklist_client_warning_title": "Klient je na černé listině",
+    "blacklist_client_warning_message": "Vybraný klient je na vaší černé listině. Obvykle to znamená, že rezervace pro něj není žádoucí. Chcete přesto pokračovat?",
+    "blacklist_client_warning_confirm": "Pokračovat",
+    "blacklist_client_warning_cancel": "Zrušit",
+    "booking_price_numbers_only": "Zadejte pouze čísla"
 }

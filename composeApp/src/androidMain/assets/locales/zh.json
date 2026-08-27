@@ -890,5 +890,10 @@
     "client_blacklist_button": "黑名单",
     "client_blacklist_title": "黑名单",
     "client_blacklist_hint": "标记为禁止预约的客户将显示在此处。",
-    "client_blacklist_empty": "黑名单中暂无客户。"
+    "client_blacklist_empty": "黑名单中暂无客户。",
+    "blacklist_client_warning_title": "客户在黑名单中",
+    "blacklist_client_warning_message": "所选客户在您的黑名单中。通常这意味着不建议为该客户进行预约。是否仍要继续？",
+    "blacklist_client_warning_confirm": "继续",
+    "blacklist_client_warning_cancel": "取消",
+    "booking_price_numbers_only": "仅输入数字"
 }

@@ -892,5 +892,10 @@
     "client_blacklist_button": "Must nimekiri",
     "client_blacklist_title": "Must nimekiri",
     "client_blacklist_hint": "Siin kuvatakse kliendid, kellel ei ole lubatud broneeringuid teha.",
-    "client_blacklist_empty": "Mustas nimekirjas pole veel ühtegi klienti."
+    "client_blacklist_empty": "Mustas nimekirjas pole veel ühtegi klienti.",
+    "blacklist_client_warning_title": "Klient on mustas nimekirjas",
+    "blacklist_client_warning_message": "Valitud klient on teie mustas nimekirjas. Tavaliselt tähendab see, et broneering tema jaoks ei ole soovitav. Kas jätkata siiski?",
+    "blacklist_client_warning_confirm": "Jätka",
+    "blacklist_client_warning_cancel": "Tühista",
+    "booking_price_numbers_only": "Sisestage ainult numbrid"
 }

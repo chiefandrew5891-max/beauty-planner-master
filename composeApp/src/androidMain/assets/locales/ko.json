@@ -892,5 +892,10 @@
     "client_blacklist_button": "차단 목록",
     "client_blacklist_title": "차단 목록",
     "client_blacklist_hint": "예약이 허용되지 않음으로 표시된 클라이언트가 여기에 표시됩니다.",
-    "client_blacklist_empty": "차단된 클라이언트가 없습니다."
+    "client_blacklist_empty": "차단된 클라이언트가 없습니다.",
+    "blacklist_client_warning_title": "차단된 클라이언트",
+    "blacklist_client_warning_message": "선택한 클라이언트가 차단 목록에 있습니다. 일반적으로 이 클라이언트의 예약은 권장되지 않습니다. 계속하시겠습니까?",
+    "blacklist_client_warning_confirm": "계속",
+    "blacklist_client_warning_cancel": "취소",
+    "booking_price_numbers_only": "숫자만 입력하세요"
 }

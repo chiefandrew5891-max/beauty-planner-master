@@ -892,5 +892,10 @@
     "client_blacklist_button": "Musta lista",
     "client_blacklist_title": "Musta lista",
     "client_blacklist_hint": "Asiakkaat, joilla ei ole lupa tehdä varauksia, näkyvät täällä.",
-    "client_blacklist_empty": "Ei mustalla listalla olevia asiakkaita vielä."
+    "client_blacklist_empty": "Ei mustalla listalla olevia asiakkaita vielä.",
+    "blacklist_client_warning_title": "Asiakas on mustalla listalla",
+    "blacklist_client_warning_message": "Valittu asiakas on mustalla listallasi. Tämä tarkoittaa yleensä, että ajan varaaminen hänelle ei ole suotavaa. Jatketaanko silti?",
+    "blacklist_client_warning_confirm": "Jatka",
+    "blacklist_client_warning_cancel": "Peruuta",
+    "booking_price_numbers_only": "Syötä vain numeroita"
 }

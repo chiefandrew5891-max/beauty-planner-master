@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
+import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.ClientSuggestion
 import com.andrey.beautyplanner.ClientSuggestions
 import com.andrey.beautyplanner.ContactSuggestion
@@ -177,6 +178,69 @@ fun BookingDialog(
     var mergedSuggestions by remember { mutableStateOf<List<ClientSuggestion>>(emptyList()) }
     var showSuggestions by remember { mutableStateOf(false) }
 
+    var showBlacklistWarningDialog by remember { mutableStateOf(false) }
+    var pendingBlacklistConfirmedSave by remember { mutableStateOf(false) }
+
+    fun isBlacklistedClient(nameValue: String, phoneValue: String): Boolean {
+        return AppSettings.findClientProfile(
+            name = nameValue,
+            phone = phoneValue
+        )?.status == ClientProfileStatus.DO_NOT_BOOK.name
+    }
+
+    fun shouldWarnAboutBlacklistedClient(): Boolean {
+        val trimmedName = name.trim()
+        val trimmedPhone = phone.trim()
+
+        if (trimmedName.isBlank()) return false
+
+        if (isBlacklistedClient(trimmedName, trimmedPhone)) {
+            return true
+        }
+
+        val matchedLocalClient = localClientSuggestions.firstOrNull {
+            it.displayName.trim().equals(trimmedName, ignoreCase = true) &&
+                    (trimmedPhone.isBlank() || it.phone.trim() == trimmedPhone)
+        }
+
+        return matchedLocalClient?.let {
+            isBlacklistedClient(it.displayName, it.phone)
+        } ?: false
+    }
+
+    fun performSave() {
+        triedSave = true
+        if (!formOk) return
+
+        if (!pendingBlacklistConfirmedSave && shouldWarnAboutBlacklistedClient()) {
+            showBlacklistWarningDialog = true
+            return
+        }
+
+        pendingBlacklistConfirmedSave = false
+
+        val durationMinutes = ((parseHmToMinutes(endTime) ?: 0) - startAbsMinutes)
+            .coerceAtLeast(10)
+
+        val serviceToStore = if (serviceIsOther) {
+            customServiceText.trim()
+        } else {
+            serviceKey.trim()
+        }
+
+        onSave(
+            startTime,
+            durationMinutes,
+            name.trim(),
+            phone.trim(),
+            serviceToStore,
+            price.trim(),
+            initialData?.currency ?: AppSettings.selectedCurrency,
+            notes.trim(),
+            paymentDeferred
+        )
+    }
+
     val contactsPermissionGranted by remember {
         derivedStateOf { ContactsAutocomplete.isPermissionGranted() }
     }
@@ -268,6 +332,12 @@ fun BookingDialog(
         showSuggestions = mergedSuggestions.isNotEmpty()
     }
 
+    LaunchedEffect(pendingBlacklistConfirmedSave) {
+        if (!pendingBlacklistConfirmedSave) return@LaunchedEffect
+        showBlacklistWarningDialog = false
+        performSave()
+    }
+
     if (showEnableEditConfirm) {
         AlertDialog(
             onDismissRequest = { showEnableEditConfirm = false },
@@ -287,6 +357,56 @@ fun BookingDialog(
                 }
             },
             shape = RoundedCornerShape(16.dp)
+        )
+    }
+
+    if (showBlacklistWarningDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showBlacklistWarningDialog = false
+                pendingBlacklistConfirmedSave = false
+            },
+            title = {
+                Text(
+                    text = Locales.t("blacklist_client_warning_title"),
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+            },
+            text = {
+                Text(
+                    text = Locales.t("blacklist_client_warning_message"),
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showBlacklistWarningDialog = false
+                        pendingBlacklistConfirmedSave = true
+                    }
+                ) {
+                    Text(
+                        text = Locales.t("blacklist_client_warning_confirm"),
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showBlacklistWarningDialog = false
+                        pendingBlacklistConfirmedSave = false
+                    }
+                ) {
+                    Text(
+                        text = Locales.t("blacklist_client_warning_cancel"),
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.75f)
+                    )
+                }
+            },
+            shape = RoundedCornerShape(16.dp),
+            backgroundColor = MaterialTheme.colors.surface
         )
     }
 
@@ -842,9 +962,10 @@ fun BookingDialog(
                         errorCursorColor = MaterialTheme.colors.error
                     )
                 )
+
                 if (triedSave && editEnabled && !priceOk) {
                     Text(
-                        text = "Enter numbers only",
+                        text = Locales.t("booking_price_numbers_only"),
                         color = MaterialTheme.colors.error,
                         fontSize = (12 * fontScale).sp,
                         modifier = Modifier
@@ -852,6 +973,7 @@ fun BookingDialog(
                             .padding(top = 6.dp)
                     )
                 }
+
                 Spacer(Modifier.height(12.dp))
 
                 OutlinedTextField(
@@ -920,29 +1042,7 @@ fun BookingDialog(
 
                     Button(
                         onClick = {
-                            triedSave = true
-                            if (!formOk) return@Button
-
-                            val durationMinutes = ((parseHmToMinutes(endTime) ?: 0) - startAbsMinutes)
-                                .coerceAtLeast(10)
-
-                            val serviceToStore = if (serviceIsOther) {
-                                customServiceText.trim()
-                            } else {
-                                serviceKey.trim()
-                            }
-
-                            onSave(
-                                startTime,
-                                durationMinutes,
-                                name.trim(),
-                                phone.trim(),
-                                serviceToStore,
-                                price.trim(),
-                                initialData?.currency ?: AppSettings.selectedCurrency,
-                                notes.trim(),
-                                paymentDeferred
-                            )
+                            performSave()
                         },
                         modifier = Modifier
                             .fillMaxWidth()

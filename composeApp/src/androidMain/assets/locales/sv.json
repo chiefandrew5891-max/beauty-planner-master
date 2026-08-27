@@ -892,5 +892,10 @@
     "client_blacklist_button": "Svartlista",
     "client_blacklist_title": "Svartlista",
     "client_blacklist_hint": "Kunder som markerats som ej tillåtna för bokning visas här.",
-    "client_blacklist_empty": "Inga svartlistade kunder än."
+    "client_blacklist_empty": "Inga svartlistade kunder än.",
+    "blacklist_client_warning_title": "Kund på svartlistan",
+    "blacklist_client_warning_message": "Den valda kunden finns på din svartlista. Det betyder oftast att bokning för denne inte är lämplig. Vill du fortsätta ändå?",
+    "blacklist_client_warning_confirm": "Fortsätt",
+    "blacklist_client_warning_cancel": "Avbryt",
+    "booking_price_numbers_only": "Ange endast siffror"
 }

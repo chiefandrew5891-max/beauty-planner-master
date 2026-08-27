@@ -892,5 +892,10 @@
     "client_blacklist_button": "Sortliste",
     "client_blacklist_title": "Sortliste",
     "client_blacklist_hint": "Klienter, der er markeret som ikke tilladt til booking, vises her.",
-    "client_blacklist_empty": "Ingen klienter på sortlisten endnu."
+    "client_blacklist_empty": "Ingen klienter på sortlisten endnu.",
+    "blacklist_client_warning_title": "Klient er på sortlisten",
+    "blacklist_client_warning_message": "Den valgte klient er på din sortliste. Dette betyder normalt, at booking for vedkommende ikke er ønskelig. Vil du fortsætte alligevel?",
+    "blacklist_client_warning_confirm": "Fortsæt",
+    "blacklist_client_warning_cancel": "Annuller",
+    "booking_price_numbers_only": "Indtast kun tal"
 }

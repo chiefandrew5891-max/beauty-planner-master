@@ -892,5 +892,10 @@
     "client_blacklist_button": "ब्लैकलिस्ट",
     "client_blacklist_title": "ब्लैकलिस्ट",
     "client_blacklist_hint": "बुकिंग के लिए प्रतिबंधित के रूप में चिह्नित ग्राहक यहाँ दिखाए जाते हैं।",
-    "client_blacklist_empty": "अभी तक कोई ब्लैकलिस्टेड ग्राहक नहीं है।"
+    "client_blacklist_empty": "अभी तक कोई ब्लैकलिस्टेड ग्राहक नहीं है।",
+    "blacklist_client_warning_title": "ग्राहक ब्लैकलिस्ट में है",
+    "blacklist_client_warning_message": "चयनित ग्राहक आपकी ब्लैकलिस्ट में है। आमतौर पर इसका मतलब है कि उनके लिए बुकिंग करनावांछित नहीं है। फिर भी जारी रखें?",
+    "blacklist_client_warning_confirm": "जारी रखें",
+    "blacklist_client_warning_cancel": "रद्द करें",
+    "booking_price_numbers_only": "केवल संख्याएँ दर्ज करें"
 }

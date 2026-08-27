@@ -892,5 +892,10 @@
     "client_blacklist_button": "Zwarte lijst",
     "client_blacklist_title": "Zwarte lijst",
     "client_blacklist_hint": "Klanten die zijn gemarkeerd als niet toegestaan om te boeken, worden hier weergegeven.",
-    "client_blacklist_empty": "Nog geen klanten op de zwarte lijst."
+    "client_blacklist_empty": "Nog geen klanten op de zwarte lijst.",
+    "blacklist_client_warning_title": "Klant op zwarte lijst",
+    "blacklist_client_warning_message": "De geselecteerde klant staat op je zwarte lijst. Dit betekent meestal dat boeken voor deze klant niet wenselijk is. Toch doorgaan?",
+    "blacklist_client_warning_confirm": "Doorgaan",
+    "blacklist_client_warning_cancel": "Annuleren",
+    "booking_price_numbers_only": "Voer alleen cijfers in"
 }

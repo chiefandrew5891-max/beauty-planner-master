@@ -894,5 +894,10 @@
     "client_blacklist_button": "Чёрный список",
     "client_blacklist_title": "Чёрный список",
     "client_blacklist_hint": "Здесь отображаются клиенты, отмеченные как недоступные для записи.",
-    "client_blacklist_empty": "В чёрном списке пока никого нет."
+    "client_blacklist_empty": "В чёрном списке пока никого нет.",
+    "blacklist_client_warning_title": "Клиент в чёрном списке",
+    "blacklist_client_warning_message": "Выбранный клиент находится в вашем чёрном списке. Обычно это означает, что запись для него нежелательна. Всё равно продолжить?",
+    "blacklist_client_warning_confirm": "Продолжить",
+    "blacklist_client_warning_cancel": "Отмена",
+    "booking_price_numbers_only": "Введите только число"
 }

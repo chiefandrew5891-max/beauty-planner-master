@@ -892,5 +892,10 @@
     "client_blacklist_button": "Daftar hitam",
     "client_blacklist_title": "Daftar hitam",
     "client_blacklist_hint": "Klien yang ditandai tidak diizinkan untuk memesan ditampilkan di sini.",
-    "client_blacklist_empty": "Belum ada klien di daftar hitam."
+    "client_blacklist_empty": "Belum ada klien di daftar hitam.",
+    "blacklist_client_warning_title": "Klien di daftar hitam",
+    "blacklist_client_warning_message": "Klien yang dipilih ada di daftar hitam Anda. Biasanya ini berarti pemesanan untuk mereka tidak disarankan. Tetap lanjutkan?",
+    "blacklist_client_warning_confirm": "Lanjutkan",
+    "blacklist_client_warning_cancel": "Batal",
+    "booking_price_numbers_only": "Masukkan angka saja"
 }

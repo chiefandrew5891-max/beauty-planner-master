@@ -892,5 +892,10 @@
     "client_blacklist_button": "Lista negra",
     "client_blacklist_title": "Lista negra",
     "client_blacklist_hint": "Clientes marcados como não permitidos para agendamento são exibidos aqui.",
-    "client_blacklist_empty": "Nenhum cliente na lista negra ainda."
+    "client_blacklist_empty": "Nenhum cliente na lista negra ainda.",
+    "blacklist_client_warning_title": "Cliente na lista negra",
+    "blacklist_client_warning_message": "O cliente selecionado está na sua lista negra. Geralmente, isso significa que o agendamento para ele não é recomendado. Deseja continuar mesmo assim?",
+    "blacklist_client_warning_confirm": "Continuar",
+    "blacklist_client_warning_cancel": "Cancelar",
+    "booking_price_numbers_only": "Insira apenas números"
 }
