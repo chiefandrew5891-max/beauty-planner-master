@@ -65,15 +65,34 @@ object MasterProfileSync {
 
             if (!payload.found && !hasMeaningfulProfileData) return@runCatching
 
+            val previousAvatarUrl = AppSettings.profileAvatarUrl
+            val previousAvatarBase64 = AppSettings.profileAvatarBase64
+            val previousAvatarStoragePath = AppSettings.profileAvatarStoragePath
+
             AppSettings.ownerName = payload.ownerName
             AppSettings.profileDisplayCustomName = payload.profileDisplayCustomName
             AppSettings.profilePhone = payload.profilePhone
             AppSettings.profilePhoneVisible = payload.profilePhoneVisible
             AppSettings.profileSpecialization = payload.profileSpecialization
             AppSettings.profileRating = payload.profileRating
+
             AppSettings.profileAvatarUrl = payload.profileAvatarUrl
-            AppSettings.profileAvatarBase64 = payload.profileAvatarBase64
             AppSettings.profileAvatarStoragePath = payload.profileAvatarStoragePath
+
+            AppSettings.profileAvatarBase64 =
+                when {
+                    payload.profileAvatarBase64.isNotBlank() -> payload.profileAvatarBase64
+
+                    payload.profileAvatarUrl.isBlank() &&
+                            payload.profileAvatarStoragePath.isBlank() -> ""
+
+                    payload.profileAvatarUrl == previousAvatarUrl &&
+                            payload.profileAvatarStoragePath == previousAvatarStoragePath &&
+                            previousAvatarBase64.isNotBlank() -> previousAvatarBase64
+
+                    else -> previousAvatarBase64
+                }
+
             AppSettings.clientInteractionsEnabled = payload.clientInteractionsEnabled
 
             val remoteServiceTemplates = payload.serviceTemplates.map { template ->
