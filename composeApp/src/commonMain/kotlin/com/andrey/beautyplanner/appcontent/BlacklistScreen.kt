@@ -10,12 +10,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Alignment
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.ClientDatabase
@@ -103,14 +112,47 @@ fun BlacklistScreen(
                                 .padding(horizontal = 14.dp, vertical = 12.dp),
                             verticalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            Text(
-                                text = titleText,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = (16 * fontScale).sp,
-                                color = MaterialTheme.colors.onSurface,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Top
+                            ) {
+                                Text(
+                                    text = titleText,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = (16 * fontScale).sp,
+                                    color = MaterialTheme.colors.onSurface,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                Spacer(modifier = Modifier.width(8.dp))
+
+                                IconButton(
+                                    onClick = {
+                                        val existingProfile = AppSettings.findClientProfile(
+                                            name = client.displayName,
+                                            phone = client.phone
+                                        )
+
+                                        if (existingProfile != null) {
+                                            AppSettings.upsertClientProfile(
+                                                existingProfile.copy(
+                                                    status = ClientProfileStatus.NONE.name
+                                                )
+                                            )
+                                        }
+                                    },
+                                    modifier = Modifier.size(22.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = Locales.t("delete_btn"),
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                }
+                            }
 
                             if (client.phone.isNotBlank()) {
                                 Text(
@@ -134,11 +176,11 @@ fun BlacklistScreen(
                             if (client.colorTag.isNotBlank()) {
                                 Box(
                                     modifier = Modifier
+                                        .size(12.dp)
                                         .background(
                                             color = colorTagToColor(client.colorTag),
                                             shape = RoundedCornerShape(50)
                                         )
-                                        .padding(horizontal = 10.dp, vertical = 6.dp)
                                 )
                             }
                         }

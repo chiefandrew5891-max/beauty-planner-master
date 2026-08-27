@@ -457,16 +457,26 @@ object AppSettings {
         val cleanName = name.trim()
         if (cleanName.isBlank()) return ""
 
-        val note = findClientProfile(name, phone)
+        val profile = findClientProfile(name, phone)
+        val note = profile
             ?.notes
             ?.trim()
             .orEmpty()
 
-        return if (note.isBlank()) {
+        val blacklistPrefix =
+            if (profile?.status == ClientProfileStatus.DO_NOT_BOOK.name) {
+                "⊘ "
+            } else {
+                ""
+            }
+
+        val baseText = if (note.isBlank()) {
             cleanName
         } else {
             "$cleanName ($note)"
         }
+
+        return blacklistPrefix + baseText
     }
 
     fun clientDisplayColor(
