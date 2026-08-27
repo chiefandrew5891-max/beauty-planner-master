@@ -877,7 +877,11 @@ private fun ArchiveRowCard(
                     phone = appointment.phone,
                     fontSize = (16 * fontScale).sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onSurface,
+                    color = AppSettings.clientDisplayColor(
+                        name = appointment.clientName,
+                        phone = appointment.phone,
+                        defaultColor = MaterialTheme.colors.onSurface
+                    ),
                     modifier = Modifier.weight(1f),
                     maxLines = 2
                 )
