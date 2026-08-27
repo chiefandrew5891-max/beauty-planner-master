@@ -457,26 +457,23 @@ object AppSettings {
         val cleanName = name.trim()
         if (cleanName.isBlank()) return ""
 
-        val profile = findClientProfile(name, phone)
-        val note = profile
+        val note = findClientProfile(name, phone)
             ?.notes
             ?.trim()
             .orEmpty()
 
-        val blacklistPrefix =
-            if (profile?.status == ClientProfileStatus.DO_NOT_BOOK.name) {
-                "⊘ "
-            } else {
-                ""
-            }
-
-        val baseText = if (note.isBlank()) {
+        return if (note.isBlank()) {
             cleanName
         } else {
             "$cleanName ($note)"
         }
+    }
 
-        return blacklistPrefix + baseText
+    fun isClientBlacklisted(
+        name: String,
+        phone: String
+    ): Boolean {
+        return findClientProfile(name, phone)?.status == ClientProfileStatus.DO_NOT_BOOK.name
     }
 
     fun clientDisplayColor(
@@ -612,6 +609,8 @@ object AppSettings {
             serviceTemplates = serviceTemplates,
             weeklyBlockedIntervals = weeklyBlockedIntervals,
             scheduleDateOverrides = scheduleDateOverrides,
+            dateRangeBlockedIntervals = dateRangeBlockedIntervals,
+            clientProfiles = clientProfiles,
 
             updatedAtMillis = nowMillis
         )
@@ -653,6 +652,13 @@ object AppSettings {
         if (snapshot.scheduleDateOverrides.isNotEmpty() || scheduleDateOverrides.isEmpty()) {
             scheduleDateOverrides = snapshot.scheduleDateOverrides
         }
+
+        if (snapshot.dateRangeBlockedIntervals.isNotEmpty() || dateRangeBlockedIntervals.isEmpty()) {
+            dateRangeBlockedIntervals = snapshot.dateRangeBlockedIntervals
+        }
+
+        clientProfiles = snapshot.clientProfiles
+
         cloudSettingsUpdatedAtMillis = snapshot.updatedAtMillis
         persist()
     }

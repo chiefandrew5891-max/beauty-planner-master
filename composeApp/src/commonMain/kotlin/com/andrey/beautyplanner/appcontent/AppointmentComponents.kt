@@ -53,6 +53,7 @@ import com.andrey.beautyplanner.effectivePaymentStatus
 import com.andrey.beautyplanner.isOnlineBooking
 import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.parseHmToMinutes
+import com.andrey.beautyplanner.appcontent.ClientNameWithIndicators
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -242,21 +243,18 @@ fun AppointmentCard(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.Top
                         ) {
-                            Text(
-                                text = AppSettings.clientDisplayName(
-                                    name = appt.clientName,
-                                    phone = appt.phone
-                                ),
+                            ClientNameWithIndicators(
+                                name = appt.clientName,
+                                phone = appt.phone,
                                 fontSize = (15 * fontScale).sp,
                                 fontWeight = FontWeight.Bold,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
                                 color = AppSettings.clientDisplayColor(
                                     name = appt.clientName,
                                     phone = appt.phone,
                                     defaultColor = MaterialTheme.colors.onSurface
                                 ),
-                                modifier = Modifier.weight(1f, fill = false)
+                                modifier = Modifier.weight(1f),
+                                maxLines = 2
                             )
 
                             if (appt.isOnlineBooking()) {
@@ -376,21 +374,18 @@ fun AppointmentCard(
                         .weight(1f)
                         .padding(horizontal = 8.dp)
                 ) {
-                    Text(
-                        text = AppSettings.clientDisplayName(
-                            name = appt.clientName,
-                            phone = appt.phone
-                        ),
+                    ClientNameWithIndicators(
+                        name = appt.clientName,
+                        phone = appt.phone,
                         fontSize = (15 * fontScale).sp,
                         fontWeight = FontWeight.Bold,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
                         color = AppSettings.clientDisplayColor(
                             name = appt.clientName,
                             phone = appt.phone,
                             defaultColor = MaterialTheme.colors.onSurface
                         ),
-                        modifier = Modifier.weight(1f, fill = false)
+                        modifier = Modifier.weight(1f),
+                        maxLines = 2
                     )
 
                     if (appt.isOnlineBooking()) {
@@ -526,21 +521,14 @@ fun AppointmentDetailsDialog(
             },
             text = {
                 Column(Modifier.fillMaxWidth()) {
-                    Text(
-                        text = AppSettings.clientDisplayName(
-                            name = appt.clientName,
-                            phone = appt.phone
-                        ),
-                        fontWeight = FontWeight.Bold,
-                        fontStyle = FontStyle.Italic,
+                    ClientNameWithIndicators(
+                        name = appt.clientName,
+                        phone = appt.phone,
                         fontSize = (22 * fontScale).sp,
-                        color = AppSettings.clientDisplayColor(
-                            name = appt.clientName,
-                            phone = appt.phone,
-                            defaultColor = MaterialTheme.colors.onSurface
-                        ),
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 2
                     )
 
                     Spacer(Modifier.height(10.dp))

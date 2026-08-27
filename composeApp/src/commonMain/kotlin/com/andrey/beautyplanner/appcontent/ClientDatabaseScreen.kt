@@ -42,6 +42,7 @@ import com.andrey.beautyplanner.ClientDatabase
 import com.andrey.beautyplanner.ClientProfile
 import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.appcontent.ClientNameWithIndicators
 import kotlinx.datetime.Clock
 
 @Composable
@@ -191,21 +192,18 @@ fun ClientDatabaseScreen(
                                 verticalAlignment = Alignment.Top,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(
-                                    text = AppSettings.clientDisplayName(
-                                        name = client.displayName,
-                                        phone = client.phone
-                                    ),
-                                    fontWeight = FontWeight.SemiBold,
+                                ClientNameWithIndicators(
+                                    name = client.displayName,
+                                    phone = client.phone,
                                     fontSize = (16 * fontScale).sp,
+                                    fontWeight = FontWeight.SemiBold,
                                     color = AppSettings.clientDisplayColor(
                                         name = client.displayName,
                                         phone = client.phone,
                                         defaultColor = MaterialTheme.colors.onSurface
                                     ),
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    maxLines = 2
                                 )
 
                                 if (client.colorTag.isNotBlank()) {

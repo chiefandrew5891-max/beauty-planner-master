@@ -37,6 +37,7 @@ import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.ClientDatabase
 import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.appcontent.ClientNameWithIndicators
 
 @Composable
 fun BlacklistScreen(
@@ -85,16 +86,10 @@ fun BlacklistScreen(
                 )
             } else {
                 blacklistedClients.forEach { client ->
-                    val clientNote = AppSettings.clientNote(
+                    val titleText = AppSettings.clientDisplayName(
                         name = client.displayName,
                         phone = client.phone
                     )
-
-                    val titleText = if (clientNote.isBlank()) {
-                        client.displayName
-                    } else {
-                        "${client.displayName} ($clientNote)"
-                    }
 
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -117,14 +112,14 @@ fun BlacklistScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.Top
                             ) {
-                                Text(
-                                    text = titleText,
-                                    fontWeight = FontWeight.SemiBold,
+                                ClientNameWithIndicators(
+                                    name = client.displayName,
+                                    phone = client.phone,
                                     fontSize = (16 * fontScale).sp,
+                                    fontWeight = FontWeight.SemiBold,
                                     color = MaterialTheme.colors.onSurface,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    maxLines = 2
                                 )
 
                                 Spacer(modifier = Modifier.width(8.dp))

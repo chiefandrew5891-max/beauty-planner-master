@@ -32,6 +32,7 @@ import com.andrey.beautyplanner.ServiceTemplate
 import com.andrey.beautyplanner.appcontent.appFontFamily
 import com.andrey.beautyplanner.getPlatform
 import com.andrey.beautyplanner.isOnlineBooking
+import com.andrey.beautyplanner.appcontent.ClientNameWithIndicators
 import kotlinx.coroutines.delay
 
 private fun displayServiceTitle(title: String): String {
@@ -693,20 +694,18 @@ fun BookingDialog(
                                         }
                                         .padding(horizontal = 14.dp, vertical = 10.dp)
                                 ) {
-                                    Text(
-                                        text = AppSettings.clientDisplayName(
-                                            name = suggestion.displayName,
-                                            phone = suggestion.phone
-                                        ),
+                                    ClientNameWithIndicators(
+                                        name = suggestion.displayName,
+                                        phone = suggestion.phone,
                                         fontSize = (14 * fontScale).sp,
                                         fontWeight = FontWeight.SemiBold,
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis,
                                         color = AppSettings.clientDisplayColor(
                                             name = suggestion.displayName,
                                             phone = suggestion.phone,
                                             defaultColor = MaterialTheme.colors.onSurface
-                                        )
+                                        ),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        maxLines = 2
                                     )
 
                                     if (suggestion.phone.isNotBlank()) {

@@ -872,17 +872,14 @@ private fun ArchiveRowCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
-                Text(
-                    text = AppSettings.clientDisplayName(
-                        name = appointment.clientName,
-                        phone = appointment.phone
-                    ),
+                ClientNameWithIndicators(
+                    name = appointment.clientName,
+                    phone = appointment.phone,
                     fontSize = (16 * fontScale).sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onSurface,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f, fill = false)
+                    modifier = Modifier.weight(1f),
+                    maxLines = 2
                 )
 
                 if (appointment.isOnlineBooking()) {
@@ -998,20 +995,18 @@ private fun ArchiveAppointmentViewDialog(
         },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = AppSettings.clientDisplayName(
-                        name = appointment.clientName,
-                        phone = appointment.phone
-                    ),
-                    fontWeight = FontWeight.Bold,
+                ClientNameWithIndicators(
+                    name = appointment.clientName,
+                    phone = appointment.phone,
                     fontSize = (22 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
                     color = AppSettings.clientDisplayColor(
                         name = appointment.clientName,
                         phone = appointment.phone,
                         defaultColor = MaterialTheme.colors.onSurface
                     ),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 2
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))

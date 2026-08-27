@@ -32,6 +32,7 @@ import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.ClientSuggestion
 import com.andrey.beautyplanner.ClientSuggestions
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.appcontent.ClientNameWithIndicators
 import com.andrey.beautyplanner.appcontent.appFontFamily
 
 @Composable
@@ -124,11 +125,9 @@ fun ClientPickerDialog(
                                 .clickable { onSelect(client) }
                                 .padding(horizontal = 6.dp, vertical = 10.dp)
                         ) {
-                            Text(
-                                text = AppSettings.clientDisplayName(
-                                    name = client.displayName,
-                                    phone = client.phone
-                                ),
+                            ClientNameWithIndicators(
+                                name = client.displayName,
+                                phone = client.phone,
                                 fontSize = (14 * fontScale).sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
                                 color = if (isSelected) {
@@ -140,8 +139,8 @@ fun ClientPickerDialog(
                                         defaultColor = onSurface
                                     )
                                 },
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
+                                modifier = Modifier.fillMaxWidth(),
+                                maxLines = 2
                             )
                         }
 

@@ -30,6 +30,7 @@ data class CloudSettingsSnapshot(
     val weeklyBlockedIntervals: List<WeeklyBlockedInterval> = emptyList(),
     val scheduleDateOverrides: List<ScheduleDateOverride> = emptyList(),
     val dateRangeBlockedIntervals: List<DateRangeBlockedInterval> = emptyList(),
+    val clientProfiles: List<ClientProfile> = emptyList(),
 
     val updatedAtMillis: Long = 0L
 )
