@@ -899,5 +899,10 @@
     "blacklist_client_warning_message": "The selected client is in your blacklist. Usually this means booking for them is undesirable. Continue anyway?",
     "blacklist_client_warning_confirm": "Continue",
     "blacklist_client_warning_cancel": "Cancel",
-    "booking_price_numbers_only": "Enter numbers only"
+    "booking_price_numbers_only": "Enter numbers only",
+    "home_search_clients": "Search clients",
+    "home_search_clients_placeholder": "Search client by name",
+    "home_search_clear": "Clear search",
+    "home_search_no_results": "No upcoming appointments found for this search.",
+    "home_search_premium_only_placeholder": "Search available with Premium or active trial"
 }

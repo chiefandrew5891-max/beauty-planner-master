@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "O επιλεγμένος πελάτης βρίσκεται στη μαύρη λίστα σας. Συνήθως αυτό σημαίνει ότι η κράτηση για αυτόν δεν είναι επιθυμητή. Συνέχεια ούτως ή άλλως;",
     "blacklist_client_warning_confirm": "Συνέχεια",
     "blacklist_client_warning_cancel": "Ακύρωση",
-    "booking_price_numbers_only": "Εισάγετε μόνο αριθμούς"
+    "booking_price_numbers_only": "Εισάγετε μόνο αριθμούς",
+    "home_search_clients": "Αναζήτηση πελατών",
+    "home_search_clients_placeholder": "Αναζήτηση πελάτη με όνομα",
+    "home_search_clear": "Καθαρισμός αναζήτησης",
+    "home_search_no_results": "Δεν βρέθηκαν επερχόμενα ραντεβού για αυτήν την αναζήτηση.",
+    "home_search_premium_only_placeholder": "Η αναζήτηση είναι διαθέσιμη μόνο με Premium ή κατά τη διάρκεια ενεργής δοκιμαστικής περιόδου"
 }

@@ -83,6 +83,7 @@ class AppRootState(
     var calendarViewDate by mutableStateOf(LocalDate(today.year, today.month, 1))
     var selectedDate by mutableStateOf(today)
 
+    var homeSearchQuery by mutableStateOf("")
     var showBookingDialog by mutableStateOf(false)
     var showDeleteConfirm by mutableStateOf<Appointment?>(null)
     var selectedTimeSlot by mutableStateOf("")
@@ -701,6 +702,10 @@ class AppRootState(
 
     fun navigateTo(screen: Screen) {
         if (currentScreen != screen) {
+            if (currentScreen == Screen.MONTH && screen != Screen.MONTH) {
+                homeSearchQuery = ""
+            }
+
             screenHistory = screenHistory + currentScreen
             currentScreen = screen
         }
@@ -710,8 +715,12 @@ class AppRootState(
         if (screenHistory.isNotEmpty()) {
             val previous = screenHistory.last()
             screenHistory = screenHistory.dropLast(1)
+            if (previous == Screen.MONTH) {
+                homeSearchQuery = ""
+            }
             currentScreen = previous
         } else {
+            homeSearchQuery = ""
             currentScreen = Screen.MONTH
         }
     }
@@ -729,6 +738,7 @@ class AppRootState(
 
     fun navigateHome() {
         screenHistory = emptyList()
+        homeSearchQuery = ""
         currentScreen = Screen.MONTH
     }
 

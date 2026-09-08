@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "De geselecteerde klant staat op je zwarte lijst. Dit betekent meestal dat boeken voor deze klant niet wenselijk is. Toch doorgaan?",
     "blacklist_client_warning_confirm": "Doorgaan",
     "blacklist_client_warning_cancel": "Annuleren",
-    "booking_price_numbers_only": "Voer alleen cijfers in"
+    "booking_price_numbers_only": "Voer alleen cijfers in",
+    "home_search_clients": "Klanten zoeken",
+    "home_search_clients_placeholder": "Zoek klant op naam",
+    "home_search_clear": "Zoekopdracht wissen",
+    "home_search_no_results": "Geen aankomende afspraken gevonden voor deze zoekopdracht.",
+    "home_search_premium_only_placeholder": "Zoeken is alleen beschikbaar met Premium of tijdens een actieve proefperiode"
 }

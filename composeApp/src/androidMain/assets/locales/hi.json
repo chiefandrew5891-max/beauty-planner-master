@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "चयनित ग्राहक आपकी ब्लैकलिस्ट में है। आमतौर पर इसका मतलब है कि उनके लिए बुकिंग करनावांछित नहीं है। फिर भी जारी रखें?",
     "blacklist_client_warning_confirm": "जारी रखें",
     "blacklist_client_warning_cancel": "रद्द करें",
-    "booking_price_numbers_only": "केवल संख्याएँ दर्ज करें"
+    "booking_price_numbers_only": "केवल संख्याएँ दर्ज करें",
+    "home_search_clients": "ग्राहक खोजें",
+    "home_search_clients_placeholder": "नाम से ग्राहक खोजें",
+    "home_search_clear": "खोज साफ़ करें",
+    "home_search_no_results": "इस खोज के लिए कोई आगामी अपॉइंटमेंट नहीं मिला।",
+    "home_search_premium_only_placeholder": "खोज केवल प्रीमियम या सक्रिय परीक्षण अवधि के साथ उपलब्ध है"
 }

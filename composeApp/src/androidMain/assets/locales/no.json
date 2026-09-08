@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Den valgte kienten er på svartelisten din. Vanligvis betyr dette at booking for vedkommende ikke er ønskelig. Vil du fortsette likevel?",
     "blacklist_client_warning_confirm": "Fortsett",
     "blacklist_client_warning_cancel": "Avbryt",
-    "booking_price_numbers_only": "Angi bare tall"
+    "booking_price_numbers_only": "Angi bare tall",
+    "home_search_clients": "Søk etter kunder",
+    "home_search_clients_placeholder": "Søk etter kunde på navn",
+    "home_search_clear": "Nullstill søk",
+    "home_search_no_results": "Ingen kommende avtaler funnet for dette søket.",
+    "home_search_premium_only_placeholder": "Søk er kun tilgjengelig med Premium eller i en aktiv prøveperiode"
 }

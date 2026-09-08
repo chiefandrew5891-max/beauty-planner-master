@@ -896,5 +896,10 @@
     "blacklist_client_warning_message": "選択したクライアントはブラックリストに登録されています。通常、このクライアントの予約は推奨されません。続行しますか？",
     "blacklist_client_warning_confirm": "続行",
     "blacklist_client_warning_cancel": "キャンセル",
-    "booking_price_numbers_only": "数字のみを入力してください"
+    "booking_price_numbers_only": "数字のみを入力してください",
+    "home_search_clients": "クライアントを検索",
+    "home_search_clients_placeholder": "名前でクライアントを検索",
+    "home_search_clear": "検索をクリア",
+    "home_search_no_results": "この検索に一致する今後の予約は見つかりませんでした。",
+    "home_search_premium_only_placeholder": "検索はPremiumまたは有効なトライアル期間中のみ利用可能です"
 }

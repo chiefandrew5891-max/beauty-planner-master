@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Der ausgewählte Kunde befindet sich auf Ihrer Sperrliste. Normalerweise bedeutet dies, dass eine Buchung für diesen Kunden unerwünscht ist. Trotzdem fortfahren?",
     "blacklist_client_warning_confirm": "Fortfahren",
     "blacklist_client_warning_cancel": "Abbrechen",
-    "booking_price_numbers_only": "Nur Zahlen eingeben"
+    "booking_price_numbers_only": "Nur Zahlen eingeben",
+    "home_search_clients": "Kunden suchen",
+    "home_search_clients_placeholder": "Kunden nach Name suchen",
+    "home_search_clear": "Suche löschen",
+    "home_search_no_results": "Keine anstehenden Termine für diese Suche gefunden.",
+    "home_search_premium_only_placeholder": "Die Suche ist nur mit Premium oder während einer aktiven Testphase verfügbar"
 }

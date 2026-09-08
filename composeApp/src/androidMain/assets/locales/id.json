@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Klien yang dipilih ada di daftar hitam Anda. Biasanya ini berarti pemesanan untuk mereka tidak disarankan. Tetap lanjutkan?",
     "blacklist_client_warning_confirm": "Lanjutkan",
     "blacklist_client_warning_cancel": "Batal",
-    "booking_price_numbers_only": "Masukkan angka saja"
+    "booking_price_numbers_only": "Masukkan angka saja",
+    "home_search_clients": "Cari klien",
+    "home_search_clients_placeholder": "Cari klien berdasarkan nama",
+    "home_search_clear": "Hapus pencarian",
+    "home_search_no_results": "Tidak ada jadwal mendatang yang ditemukan untuk pencarian ini.",
+    "home_search_premium_only_placeholder": "Pencarian hanya tersedia dengan Premium atau masa uji coba aktif"
 }

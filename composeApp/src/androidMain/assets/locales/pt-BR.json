@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "O cliente selecionado está na sua lista negra. Geralmente, isso significa que o agendamento para ele não é recomendado. Deseja continuar mesmo assim?",
     "blacklist_client_warning_confirm": "Continuar",
     "blacklist_client_warning_cancel": "Cancelar",
-    "booking_price_numbers_only": "Insira apenas números"
+    "booking_price_numbers_only": "Insira apenas números",
+    "home_search_clients": "Buscar clientes",
+    "home_search_clients_placeholder": "Buscar cliente por nome",
+    "home_search_clear": "Limpar busca",
+    "home_search_no_results": "Nenhum compromisso futuro encontrado para esta busca.",
+    "home_search_premium_only_placeholder": "A busca está disponível apenas com Premium ou período de teste ativo"
 }

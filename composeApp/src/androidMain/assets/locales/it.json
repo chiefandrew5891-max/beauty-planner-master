@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Il cliente selezionato è nella tua blacklist. Di solito questo significa che la prenotazione per lui non è auspicabile. Vuoi procedere comunque?",
     "blacklist_client_warning_confirm": "Continua",
     "blacklist_client_warning_cancel": "Annulla",
-    "booking_price_numbers_only": "Inserisci solo numeri"
+    "booking_price_numbers_only": "Inserisci solo numeri",
+    "home_search_clients": "Cerca clienti",
+    "home_search_clients_placeholder": "Cerca cliente per nome",
+    "home_search_clear": "Cancella ricerca",
+    "home_search_no_results": "Nessun appuntamento imminente trovato per questa ricerca.",
+    "home_search_premium_only_placeholder": "Ricerca disponibile con Premium o periodo di prova attivo"
 }

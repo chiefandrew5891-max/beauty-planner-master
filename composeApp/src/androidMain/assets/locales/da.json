@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Den valgte klient er på din sortliste. Dette betyder normalt, at booking for vedkommende ikke er ønskelig. Vil du fortsætte alligevel?",
     "blacklist_client_warning_confirm": "Fortsæt",
     "blacklist_client_warning_cancel": "Annuller",
-    "booking_price_numbers_only": "Indtast kun tal"
+    "booking_price_numbers_only": "Indtast kun tal",
+    "home_search_clients": "Søg efter klienter",
+    "home_search_clients_placeholder": "Søg efter klient efter navn",
+    "home_search_clear": "Ryd søgning",
+    "home_search_no_results": "Ingen kommende aftaler fundet for denne søgning.",
+    "home_search_premium_only_placeholder": "Søgning er kun tilgængelig med Premium eller i en aktiv prøveperiode"
 }

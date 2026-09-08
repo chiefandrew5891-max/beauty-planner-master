@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Pasirinktas klientas yra jūsų juodajame sąraše. Paprastai tai reiškia, kad rezervacija jam yra nepageidaujama. Vis tiek tęsti?",
     "blacklist_client_warning_confirm": "Tęsti",
     "blacklist_client_warning_cancel": "Atšaukti",
-    "booking_price_numbers_only": "Įveskite tik skaičius"
+    "booking_price_numbers_only": "Įveskite tik skaičius",
+    "home_search_clients": "Ieškoti klientų",
+    "home_search_clients_placeholder": "Ieškoti kliento pagal vardą",
+    "home_search_clear": "Išvalyti paiešką",
+    "home_search_no_results": "Pagal šią paiešką būsimų susitikimų nerasta.",
+    "home_search_premium_only_placeholder": "Paieška pasiekiama tik su „Premium“ arba aktyviu bandomuoju laikotarpiu"
 }

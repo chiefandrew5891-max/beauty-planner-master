@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Изабрани клијент је на вашој цrној листи. Обично то значи да заказивање за њега није пожељно. Желите ли ипак да наставите?",
     "blacklist_client_warning_confirm": "Настави",
     "blacklist_client_warning_cancel": "Откажи",
-    "booking_price_numbers_only": "Унесите само бројеве"
+    "booking_price_numbers_only": "Унесите само бројеве",
+    "home_search_clients": "Претрага клијената",
+    "home_search_clients_placeholder": "Претражи клијента по имену",
+    "home_search_clear": "Очисти претрагу",
+    "home_search_no_results": "Нема пронађених предстојећих термина за ову претрагу.",
+    "home_search_premium_only_placeholder": "Претрага је доступна само уз Премиум или током активног пробног периода"
 }

@@ -19,6 +19,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -42,7 +55,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -337,6 +349,101 @@ fun AppRootChrome(
             }
         }
     }
+
+    @Composable
+    fun HomeTopBarSearchField(
+        value: String,
+        enabled: Boolean,
+        onValueChange: (String) -> Unit,
+        onClear: () -> Unit
+    ) {
+        val fontScale = state.fontScale
+        val onSurface = MaterialTheme.colors.onSurface
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .widthIn(min = 120.dp, max = 300.dp)
+                    .padding(horizontal = 4.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(bottom = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BasicTextField(
+                        value = value,
+                        onValueChange = {
+                            if (enabled) {
+                                onValueChange(it)
+                            }
+                        },
+                        singleLine = true,
+                        enabled = enabled,
+                        textStyle = TextStyle(
+                            color = if (enabled) onSurface else onSurface.copy(alpha = 0.45f),
+                            fontSize = if (value.isBlank()) {
+                                (12 * fontScale).sp
+                            } else {
+                                (13 * fontScale).sp
+                            }
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search
+                        ),
+                        modifier = Modifier.wrapContentWidth(),
+                        decorationBox = { innerTextField ->
+                            Box(
+                                modifier = Modifier.wrapContentWidth()
+                            ) {
+                                if (value.isBlank()) {
+                                    Text(
+                                        text = if (enabled) {
+                                            Locales.t("home_search_clients_placeholder")
+                                        } else {
+                                            Locales.t("home_search_premium_only_placeholder")
+                                        },
+                                        color = onSurface.copy(alpha = 0.38f),
+                                        fontSize = (12 * fontScale).sp,
+                                        textAlign = TextAlign.Start
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        }
+                    )
+
+                    if (enabled && value.isNotBlank()) {
+                        Spacer(Modifier.width(4.dp))
+
+                        IconButton(
+                            onClick = onClear,
+                            modifier = Modifier.size(22.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = Locales.t("home_search_clear"),
+                                tint = onSurface.copy(alpha = 0.60f),
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(onSurface.copy(alpha = if (enabled) 0.16f else 0.10f))
+                )
+            }
+        }
+    }
+
     val drawerGesturesEnabled =
         state.currentScreen != Screen.AUTH_WELCOME &&
         state.currentScreen != Screen.AUTH_EMAIL
@@ -673,7 +780,9 @@ fun AppRootChrome(
                                         elevation = 2.dp,
                                         contentPadding = PaddingValues(horizontal = 8.dp)
                                     ) {
-                                        Box(Modifier.fillMaxSize()) {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize()
+                                        ) {
                                             IconButton(
                                                 onClick = {
                                                     if (showBackButton) {
@@ -697,6 +806,42 @@ fun AppRootChrome(
                                                     },
                                                     tint = MaterialTheme.colors.primary
                                                 )
+                                            }
+
+                                            if (isHomeScreen) {
+                                                val searchEnabled =
+                                                    state.accessState.tier == AccessTier.PREMIUM ||
+                                                            state.accessState.isTrialActive
+
+                                                Box(
+                                                    modifier = Modifier
+                                                        .align(Alignment.Center)
+                                                        .padding(horizontal = 64.dp)
+                                                ) {
+                                                    Row(
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Icon(
+                                                            imageVector = Icons.Default.Search,
+                                                            contentDescription = Locales.t("home_search_clients"),
+                                                            tint = if (searchEnabled) {
+                                                                MaterialTheme.colors.primary
+                                                            } else {
+                                                                MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
+                                                            },
+                                                            modifier = Modifier.size(24.dp)
+                                                        )
+
+                                                        Spacer(Modifier.width(8.dp))
+
+                                                        HomeTopBarSearchField(
+                                                            value = state.homeSearchQuery,
+                                                            enabled = searchEnabled,
+                                                            onValueChange = { state.homeSearchQuery = it },
+                                                            onClear = { state.homeSearchQuery = "" }
+                                                        )
+                                                    }
+                                                }
                                             }
 
                                             Row(

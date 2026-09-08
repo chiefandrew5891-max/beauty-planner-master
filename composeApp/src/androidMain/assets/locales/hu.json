@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "A kiválasztott ügyfél szerepel a feketelistáján. Ez általában azt jelenti, hogy a foglalás nem ajánlott számára. Biztosan folytatja?",
     "blacklist_client_warning_confirm": "Folytatás",
     "blacklist_client_warning_cancel": "Mégsem",
-    "booking_price_numbers_only": "Csak számokat adjon meg"
+    "booking_price_numbers_only": "Csak számokat adjon meg",
+    "home_search_clients": "Ügyfelek keresése",
+    "home_search_clients_placeholder": "Ügyfél keresése név alapján",
+    "home_search_clear": "Keresés törlése",
+    "home_search_no_results": "Nem található közelgő időpont ehhez a kereséshez.",
+    "home_search_premium_only_placeholder": "A keresés csak Prémium előfizetéssel vagy aktív próbaidőszak alatt érhető el"
 }

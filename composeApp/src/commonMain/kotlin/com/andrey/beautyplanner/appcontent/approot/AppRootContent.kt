@@ -413,7 +413,8 @@ fun AppRootContent(
                     state.appointments.size,
                     state.accessState.tier,
                     state.accessState.hasPremium,
-                    state.accessState.isTrialActive
+                    state.accessState.isTrialActive,
+                    state.homeSearchQuery
                 ) {
                     derivedStateOf {
                         val upcomingAll = getUpcomingAppointments(
@@ -422,6 +423,10 @@ fun AppRootContent(
                             nowTime = nowTimeHm
                         )
 
+                        val searchEnabled =
+                            state.accessState.tier == AccessTier.PREMIUM ||
+                                    state.accessState.isTrialActive
+
                         val isPremiumActive = AccessManager.isPremiumAccessActive(
                             Clock.System.now().toEpochMilliseconds()
                         )
@@ -429,10 +434,20 @@ fun AppRootContent(
                         val shouldLimitUpcomingOnHome =
                             !isPremiumActive && !state.accessState.isTrialActive
 
-                        if (shouldLimitUpcomingOnHome) {
+                        val baseUpcoming = if (shouldLimitUpcomingOnHome) {
                             upcomingAll.take(AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT)
                         } else {
                             upcomingAll
+                        }
+
+                        val query = state.homeSearchQuery.trim().lowercase()
+
+                        if (!searchEnabled || query.isBlank()) {
+                            baseUpcoming
+                        } else {
+                            baseUpcoming.filter { appointment ->
+                                appointment.clientName.trim().lowercase().contains(query)
+                            }
                         }
                     }
                 }
@@ -627,8 +642,16 @@ fun AppRootContent(
                                                     .padding(top = 12.dp, bottom = 40.dp),
                                                 contentAlignment = Alignment.Center
                                             ) {
+                                                val searchEnabled =
+                                                    state.accessState.tier == AccessTier.PREMIUM ||
+                                                            state.accessState.isTrialActive
+
                                                 Text(
-                                                    text = Locales.t("no_upcoming_appointments"),
+                                                    text = if (searchEnabled && state.homeSearchQuery.trim().isNotBlank()) {
+                                                        Locales.t("home_search_no_results")
+                                                    } else {
+                                                        Locales.t("no_upcoming_appointments")
+                                                    },
                                                     color = Color.Gray,
                                                     fontSize = (14 * state.fontScale).sp
                                                 )

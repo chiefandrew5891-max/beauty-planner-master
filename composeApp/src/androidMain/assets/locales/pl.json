@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Wybrany klient znajduje się na Twojej czarnej liście. Zazwyczaj oznacza to, że rezerwacja dla niego jest niewskazana. Kontynuować mimo to?",
     "blacklist_client_warning_confirm": "Kontynuuj",
     "blacklist_client_warning_cancel": "Anuluj",
-    "booking_price_numbers_only": "Wprowadź tylko cyfry"
+    "booking_price_numbers_only": "Wprowadź tylko cyfry",
+    "home_search_clients": "Szukaj klientów",
+    "home_search_clients_placeholder": "Szukaj klienta po imieniu",
+    "home_search_clear": "Wyczyść wyszukiwanie",
+    "home_search_no_results": "Nie znaleziono nadchodzących wizyt dla tego wyszukiwania.",
+    "home_search_premium_only_placeholder": "Wyszukiwanie jest dostępne tylko w wersji Premium lub podczas aktywnego okresu próbnego"
 }

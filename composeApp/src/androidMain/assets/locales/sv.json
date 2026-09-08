@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Den valda kunden finns på din svartlista. Det betyder oftast att bokning för denne inte är lämplig. Vill du fortsätta ändå?",
     "blacklist_client_warning_confirm": "Fortsätt",
     "blacklist_client_warning_cancel": "Avbryt",
-    "booking_price_numbers_only": "Ange endast siffror"
+    "booking_price_numbers_only": "Ange endast siffror",
+    "home_search_clients": "Sök kunder",
+    "home_search_clients_placeholder": "Sök kund på namn",
+    "home_search_clear": "Rensa sökning",
+    "home_search_no_results": "Inga kommande bokningar hittades för denna sökning.",
+    "home_search_premium_only_placeholder": "Sökning är endast tillgänglig med Premium eller under en aktiv provperiod"
 }

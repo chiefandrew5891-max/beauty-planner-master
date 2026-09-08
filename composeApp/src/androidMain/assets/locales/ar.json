@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "العميل المحدد موجود في القائمة السوداء الخاصة بك. يعني هذا عادةً أن الحجز له غير مرغوب فيه. هل تريد المتابعة على أي حال؟",
     "blacklist_client_warning_confirm": "متابعة",
     "blacklist_client_warning_cancel": "إلغاء",
-    "booking_price_numbers_only": "أدخل أرقامًا فقط"
+    "booking_price_numbers_only": "أدخل أرقامًا فقط",
+    "home_search_clients": "بحث العملاء",
+    "home_search_clients_placeholder": "ابحث عن عميل بالاسم",
+    "home_search_clear": "مسح البحث",
+    "home_search_no_results": "لم يتم العثور على مواعيد قادمة لهذا البحث.",
+    "home_search_premium_only_placeholder": "البحث متاح فقط مع اشتراك Premium أو خلال فترة التجربة النشطة"
 }

@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Вибраний клієнт перебуває у вашому чорному списку. Зазвичай це означає, що запис для нього є небажаним. Усе одно продовжити?",
     "blacklist_client_warning_confirm": "Продовжити",
     "blacklist_client_warning_cancel": "Скасувати",
-    "booking_price_numbers_only": "Введіть лише число"
+    "booking_price_numbers_only": "Введіть лише число",
+    "home_search_clients": "Пошук клієнтів",
+    "home_search_clients_placeholder": "Пошук клієнта за іменем",
+    "home_search_clear": "Очистити пошук",
+    "home_search_no_results": "За вашим запитом майбутні записи не знайдено.",
+    "home_search_premium_only_placeholder": "Пошук доступний лише в Premium або під час активного пробного періоду"
 }

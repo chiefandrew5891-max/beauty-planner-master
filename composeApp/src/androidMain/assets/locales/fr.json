@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Le client sélectionné figure dans votre liste noire. En général, cela signifie que la réservation pour lui n'est pas souhaitable. Continuer quand même ?",
     "blacklist_client_warning_confirm": "Continuer",
     "blacklist_client_warning_cancel": "Annuler",
-    "booking_price_numbers_only": "Entrez uniquement des chiffres"
+    "booking_price_numbers_only": "Entrez uniquement des chiffres",
+    "home_search_clients": "Rechercher des clients",
+    "home_search_clients_placeholder": "Rechercher un client par son nom",
+    "home_search_clear": "Effacer la recherche",
+    "home_search_no_results": "Aucun rendez-vous à venir trouvé pour cette recherche.",
+    "home_search_premium_only_placeholder": "La recherche est disponible uniquement avec Premium ou pendant une période d'essai active"
 }

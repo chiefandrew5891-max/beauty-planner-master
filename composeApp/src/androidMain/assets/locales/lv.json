@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Izvēlētais klienta ir jūsu melnajā sarakstā. Parasti tas nozīmē, ka rezervācija viņam nav vēlama. Vai tomēr turpināt?",
     "blacklist_client_warning_confirm": "Turpināt",
     "blacklist_client_warning_cancel": "Atcelt",
-    "booking_price_numbers_only": "Ievadiet tikai skaitļus"
+    "booking_price_numbers_only": "Ievadiet tikai skaitļus",
+    "home_search_clients": "Meklēt klientus",
+    "home_search_clients_placeholder": "Meklēt klientu pēc vārda",
+    "home_search_clear": "Notīrīt meklēšanu",
+    "home_search_no_results": "Šim meklējumam nav atrasta neviena gaidāmā vizīte.",
+    "home_search_premium_only_placeholder": "Meklēšana ir pieejama tikai ar Premium vai aktīvā izmēģinājuma periodā"
 }

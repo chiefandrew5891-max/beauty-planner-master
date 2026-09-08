@@ -895,5 +895,10 @@
     "blacklist_client_warning_message": "所选客户在您的黑名单中。通常这意味着不建议为该客户进行预约。是否仍要继续？",
     "blacklist_client_warning_confirm": "继续",
     "blacklist_client_warning_cancel": "取消",
-    "booking_price_numbers_only": "仅输入数字"
+    "booking_price_numbers_only": "仅输入数字",
+    "home_search_clients": "搜索客户",
+    "home_search_clients_placeholder": "按姓名搜索客户",
+    "home_search_clear": "清除搜索",
+    "home_search_no_results": "未找到与此搜索相符的即将到来的预约。",
+    "home_search_premium_only_placeholder": "搜索仅在 Premium 或有效试用期内可用"
 }

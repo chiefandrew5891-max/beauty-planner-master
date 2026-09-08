@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Vybraný klient je na vaší černé listině. Obvykle to znamená, že rezervace pro něj není žádoucí. Chcete přesto pokračovat?",
     "blacklist_client_warning_confirm": "Pokračovat",
     "blacklist_client_warning_cancel": "Zrušit",
-    "booking_price_numbers_only": "Zadejte pouze čísla"
+    "booking_price_numbers_only": "Zadejte pouze čísla",
+    "home_search_clients": "Hledat klienty",
+    "home_search_clients_placeholder": "Hledat klienta podle jména",
+    "home_search_clear": "Vymazat hledání",
+    "home_search_no_results": "Pro toto hledání nebyly nalezeny žádné nadcházející schůzky.",
+    "home_search_premium_only_placeholder": "Vyhledávání je k dispozici pouze s předplatným Premium nebo během aktivního zkušebního období"
 }

@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Избраният клиент е във вашия черен списък. Обикновено това означава, че резервацията за него е нежелателна. Искате ли да продължите въпреки това?",
     "blacklist_client_warning_confirm": "Продължаване",
     "blacklist_client_warning_cancel": "Отказ",
-    "booking_price_numbers_only": "Въведете само числа"
+    "booking_price_numbers_only": "Въведете само числа",
+    "home_search_clients": "Търсене на клиенти",
+    "home_search_clients_placeholder": "Търсене на клиент по име",
+    "home_search_clear": "Изчистване на търсенето",
+    "home_search_no_results": "Няма намерени предстоящи часове за това търсене.",
+    "home_search_premium_only_placeholder": "Търсенето е достъпно само с Premium или по време на активен пробен период"
 }

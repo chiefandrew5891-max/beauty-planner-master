@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Seçilen müşteri kara listenizde yer alıyor. Bu genellikle bu kişi için randevu oluşturmanın istenmediği anlamına gelir. Yine de devam edilsin mi?",
     "blacklist_client_warning_confirm": "Devam et",
     "blacklist_client_warning_cancel": "İptal",
-    "booking_price_numbers_only": "Yalnızca sayı girin"
+    "booking_price_numbers_only": "Yalnızca sayı girin",
+    "home_search_clients": "Müşteri ara",
+    "home_search_clients_placeholder": "İsme göre müşteri ara",
+    "home_search_clear": "Aramayı temizle",
+    "home_search_no_results": "Bu arama için yaklaşan randevu bulunamadı.",
+    "home_search_premium_only_placeholder": "Arama yalnızca Premium ile veya aktif deneme süresince kullanılabilir"
 }

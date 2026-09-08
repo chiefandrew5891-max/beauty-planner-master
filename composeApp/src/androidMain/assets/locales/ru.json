@@ -899,5 +899,10 @@
     "blacklist_client_warning_message": "Выбранный клиент находится в вашем чёрном списке. Обычно это означает, что запись для него нежелательна. Всё равно продолжить?",
     "blacklist_client_warning_confirm": "Продолжить",
     "blacklist_client_warning_cancel": "Отмена",
-    "booking_price_numbers_only": "Введите только число"
+    "booking_price_numbers_only": "Введите только число",
+    "home_search_clients": "Поиск клиентов",
+    "home_search_clients_placeholder": "Поиск клиента по имени",
+    "home_search_clear": "Очистить поиск",
+    "home_search_no_results": "По вашему запросу предстоящие записи не найдены",
+    "home_search_premium_only_placeholder": "Поиск доступен только в Premium или во время активного пробного периода"
 }

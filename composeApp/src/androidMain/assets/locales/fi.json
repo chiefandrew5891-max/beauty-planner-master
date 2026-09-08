@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Valittu asiakas on mustalla listallasi. Tämä tarkoittaa yleensä, että ajan varaaminen hänelle ei ole suotavaa. Jatketaanko silti?",
     "blacklist_client_warning_confirm": "Jatka",
     "blacklist_client_warning_cancel": "Peruuta",
-    "booking_price_numbers_only": "Syötä vain numeroita"
+    "booking_price_numbers_only": "Syötä vain numeroita",
+    "home_search_clients": "Hae asiakkaita",
+    "home_search_clients_placeholder": "Hae asiakasta nimellä",
+    "home_search_clear": "Tyhjennä haku",
+    "home_search_no_results": "Tälle haulle ei löytynyt tulevia varauksia.",
+    "home_search_premium_only_placeholder": "Haku on käytettävissä vain Premiumilla tai aktiivisen kokeilujakson aikana"
 }

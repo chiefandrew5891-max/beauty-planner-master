@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Clientul selectat este în lista neagră. De obicei, aceasta înseamnă că rezervarea pentru el nu este recomandată. Doriți să continuați oricum?",
     "blacklist_client_warning_confirm": "Continuare",
     "blacklist_client_warning_cancel": "Anulare",
-    "booking_price_numbers_only": "Introduceți doar cifre"
+    "booking_price_numbers_only": "Introduceți doar cifre",
+    "home_search_clients": "Căutare clienți",
+    "home_search_clients_placeholder": "Căutare client după nume",
+    "home_search_clear": "Ștergere căutare",
+    "home_search_no_results": "Nu s-au găsit programări viitoare pentru această căutare.",
+    "home_search_premium_only_placeholder": "Căutarea este disponibilă doar cu Premium sau în perioada de probă activă"
 }

@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "El cliente seleccionado está en tu lista negra. Por lo general, esto significa que la reserva para él no es recomendable. ¿Continuar de todos modos?",
     "blacklist_client_warning_confirm": "Continuar",
     "blacklist_client_warning_cancel": "Cancelar",
-    "booking_price_numbers_only": "Introduce solo números"
+    "booking_price_numbers_only": "Introduce solo números",
+    "home_search_clients": "Buscar clientes",
+    "home_search_clients_placeholder": "Buscar cliente por nombre",
+    "home_search_clear": "Borrar búsqueda",
+    "home_search_no_results": "No se encontraron próximas citas para esta búsqueda.",
+    "home_search_premium_only_placeholder": "La búsqueda está disponible solo con Premium o durante un periodo de prueba activo"
 }

@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Valitud klient on teie mustas nimekirjas. Tavaliselt tähendab see, et broneering tema jaoks ei ole soovitav. Kas jätkata siiski?",
     "blacklist_client_warning_confirm": "Jätka",
     "blacklist_client_warning_cancel": "Tühista",
-    "booking_price_numbers_only": "Sisestage ainult numbrid"
+    "booking_price_numbers_only": "Sisestage ainult numbrid",
+    "home_search_clients": "Otsi kliente",
+    "home_search_clients_placeholder": "Otsi klienti nime järgi",
+    "home_search_clear": "Tühjenda otsing",
+    "home_search_no_results": "Selle otsingu jaoks ei leitud tulevasi kohtumisi.",
+    "home_search_premium_only_placeholder": "Otsing on saadaval ainult Premium-kontoga või aktiivse prooviperioodi ajal"
 }

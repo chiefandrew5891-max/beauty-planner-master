@@ -897,5 +897,10 @@
     "blacklist_client_warning_message": "Izbrana stranka je na vašem črnem seznamu. To običajno pomeni, da rezervacija zanj ni zaželena. Vseeno nadaljujete?",
     "blacklist_client_warning_confirm": "Nadaljuj",
     "blacklist_client_warning_cancel": "Prekliči",
-    "booking_price_numbers_only": "Vnesite samo številke"
+    "booking_price_numbers_only": "Vnesite samo številke",
+    "home_search_clients": "Iskanje strank",
+    "home_search_clients_placeholder": "Išči stranko po imenu",
+    "home_search_clear": "Počisti iskanje",
+    "home_search_no_results": "Za to iskanje ni prihodnjih terminov.",
+    "home_search_premium_only_placeholder": "Iskanje je na voljo samo s paketom Premium ali v aktivnem preizkusnem obdobju"
 }
