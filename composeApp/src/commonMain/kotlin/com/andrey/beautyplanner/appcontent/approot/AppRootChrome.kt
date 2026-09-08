@@ -24,6 +24,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.filled.Close
@@ -360,87 +361,97 @@ fun AppRootChrome(
         val fontScale = state.fontScale
         val onSurface = MaterialTheme.colors.onSurface
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        val minFieldWidth = when {
+            fontScale >= 1.2f -> 150.dp
+            fontScale <= 0.9f -> 120.dp
+            else -> 130.dp
+        }
+
+        val maxFieldWidth = when {
+            fontScale >= 1.2f -> 320.dp
+            fontScale <= 0.9f -> 260.dp
+            else -> 280.dp
+        }
+
+        Column(
+            modifier = Modifier
+                .widthIn(min = minFieldWidth, max = maxFieldWidth)
+                .padding(horizontal = 2.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .widthIn(min = 120.dp, max = 300.dp)
-                    .padding(horizontal = 4.dp),
-                verticalArrangement = Arrangement.Center
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .padding(bottom = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    BasicTextField(
-                        value = value,
-                        onValueChange = {
-                            if (enabled) {
-                                onValueChange(it)
-                            }
-                        },
-                        singleLine = true,
-                        enabled = enabled,
-                        textStyle = TextStyle(
-                            color = if (enabled) onSurface else onSurface.copy(alpha = 0.45f),
-                            fontSize = if (value.isBlank()) {
-                                (12 * fontScale).sp
-                            } else {
-                                (13 * fontScale).sp
-                            }
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search
-                        ),
-                        modifier = Modifier.wrapContentWidth(),
-                        decorationBox = { innerTextField ->
-                            Box(
-                                modifier = Modifier.wrapContentWidth()
-                            ) {
-                                if (value.isBlank()) {
-                                    Text(
-                                        text = if (enabled) {
-                                            Locales.t("home_search_clients_placeholder")
-                                        } else {
-                                            Locales.t("home_search_premium_only_placeholder")
-                                        },
-                                        color = onSurface.copy(alpha = 0.38f),
-                                        fontSize = (12 * fontScale).sp,
-                                        textAlign = TextAlign.Start
-                                    )
-                                }
-                                innerTextField()
-                            }
+                val showPlaceholder = value.isBlank()
+
+                BasicTextField(
+                    value = value,
+                    onValueChange = {
+                        if (enabled) {
+                            onValueChange(it)
                         }
-                    )
-
-                    if (enabled && value.isNotBlank()) {
-                        Spacer(Modifier.width(4.dp))
-
-                        IconButton(
-                            onClick = onClear,
-                            modifier = Modifier.size(22.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = Locales.t("home_search_clear"),
-                                tint = onSurface.copy(alpha = 0.60f),
-                                modifier = Modifier.size(14.dp)
-                            )
-                        }
-                    }
-                }
-
-                Box(
+                    },
+                    singleLine = true,
+                    enabled = enabled,
+                    textStyle = TextStyle(
+                        color = if (enabled) onSurface else onSurface.copy(alpha = 0.50f),
+                        fontSize = (15 * fontScale).sp
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(1.dp)
-                        .background(onSurface.copy(alpha = if (enabled) 0.16f else 0.10f))
+                        .padding(end = if (enabled && value.isNotBlank()) 26.dp else 0.dp),
+                    decorationBox = { innerTextField ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 6.dp)
+                        ) {
+                            if (showPlaceholder) {
+                                Text(
+                                    text = if (enabled) {
+                                        Locales.t("home_search_clients_placeholder")
+                                    } else {
+                                        Locales.t("home_search_premium_only_placeholder")
+                                    },
+                                    color = onSurface.copy(alpha = 0.26f),
+                                    fontSize = (11 * fontScale).sp,
+                                    textAlign = TextAlign.Start
+                                )
+                            }
+
+                            innerTextField()
+                        }
+                    }
                 )
+
+                if (enabled && value.isNotBlank()) {
+                    IconButton(
+                        onClick = onClear,
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .size(20.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = Locales.t("home_search_clear"),
+                            tint = onSurface.copy(alpha = 0.52f),
+                            modifier = Modifier.size(13.dp)
+                        )
+                    }
+                }
             }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(
+                        onSurface.copy(alpha = if (enabled) 0.14f else 0.08f)
+                    )
+            )
         }
     }
 
