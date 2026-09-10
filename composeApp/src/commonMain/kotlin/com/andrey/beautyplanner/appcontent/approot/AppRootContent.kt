@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -85,6 +88,7 @@ fun AppRootContent(
     var showStartupLoader by rememberSaveable { mutableStateOf(false) }
     var loaderStartedAtMillis by rememberSaveable { mutableStateOf(0L) }
     val ownerName = AppSettings.ownerName.trim()
+    val focusManager = LocalFocusManager.current
 
     var viewingAppt by remember { mutableStateOf<Appointment?>(null) }
     var viewingStartHm by remember { mutableStateOf("") }
@@ -521,6 +525,13 @@ fun AppRootContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .pullRefresh(pullRefreshState)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    focusManager.clearFocus(force = true)
+                                }
+                            )
+                        }
                     ) {
                         CenteredContentContainer(maxWidth = 980.dp) {
                             Column(Modifier.fillMaxSize()) {
@@ -683,12 +694,14 @@ fun AppRootContent(
                                                 nowDate = state.today,
                                                 nowMinutes = nowMin,
                                                 onClick = {
+                                                    focusManager.clearFocus(force = true)
                                                     viewingAppt = appt
                                                     viewingStartHm = appt.time
                                                     viewingEndHm = endHm
                                                     viewingStatus = status
                                                 },
                                                 onLongClick = {
+                                                    focusManager.clearFocus(force = true)
                                                     viewingAppt = appt
                                                     viewingStartHm = appt.time
                                                     viewingEndHm = endHm

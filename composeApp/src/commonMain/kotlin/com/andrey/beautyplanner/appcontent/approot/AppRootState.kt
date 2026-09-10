@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.focus.FocusRequester
 import com.andrey.beautyplanner.*
 import com.andrey.beautyplanner.billing.*
 import com.andrey.beautyplanner.notifications.Notifications
@@ -84,6 +85,7 @@ class AppRootState(
     var selectedDate by mutableStateOf(today)
 
     var homeSearchQuery by mutableStateOf("")
+    val homeSearchFocusRequester = FocusRequester()
     var showBookingDialog by mutableStateOf(false)
     var showDeleteConfirm by mutableStateOf<Appointment?>(null)
     var selectedTimeSlot by mutableStateOf("")

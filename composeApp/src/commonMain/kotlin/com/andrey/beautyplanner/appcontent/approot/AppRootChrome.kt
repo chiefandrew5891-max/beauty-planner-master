@@ -29,9 +29,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
@@ -59,6 +56,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.Screen
@@ -79,9 +84,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.platform.LocalDensity
 import kotlin.math.abs
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -355,11 +357,13 @@ fun AppRootChrome(
     fun HomeTopBarSearchField(
         value: String,
         enabled: Boolean,
+        focusRequester: FocusRequester,
         onValueChange: (String) -> Unit,
         onClear: () -> Unit
     ) {
         val fontScale = state.fontScale
         val onSurface = MaterialTheme.colors.onSurface
+        val surface = MaterialTheme.colors.surface
 
         val minFieldWidth = when {
             fontScale >= 1.2f -> 150.dp
@@ -373,14 +377,25 @@ fun AppRootChrome(
             else -> 280.dp
         }
 
-        Column(
+        Box(
             modifier = Modifier
                 .widthIn(min = minFieldWidth, max = maxFieldWidth)
-                .padding(horizontal = 2.dp),
-            verticalArrangement = Arrangement.Center
+                .height(34.dp)
+                .border(
+                    width = 0.6.dp,
+                    color = onSurface.copy(alpha = if (enabled) 0.18f else 0.10f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .background(
+                    color = surface,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(start = 10.dp, end = if (enabled && value.isNotBlank()) 30.dp else 10.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            BoxWithConstraints(
-                modifier = Modifier.fillMaxWidth()
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterStart
             ) {
                 val showPlaceholder = value.isBlank()
 
@@ -402,12 +417,11 @@ fun AppRootChrome(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = if (enabled && value.isNotBlank()) 26.dp else 0.dp),
+                        .focusRequester(focusRequester),
                     decorationBox = { innerTextField ->
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 6.dp)
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.CenterStart
                         ) {
                             if (showPlaceholder) {
                                 Text(
@@ -416,9 +430,10 @@ fun AppRootChrome(
                                     } else {
                                         Locales.t("home_search_premium_only_placeholder")
                                     },
-                                    color = onSurface.copy(alpha = 0.26f),
+                                    color = onSurface.copy(alpha = 0.24f),
                                     fontSize = (11 * fontScale).sp,
-                                    textAlign = TextAlign.Start
+                                    textAlign = TextAlign.Start,
+                                    maxLines = 1
                                 )
                             }
 
@@ -432,26 +447,17 @@ fun AppRootChrome(
                         onClick = onClear,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
-                            .size(20.dp)
+                            .size(18.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = Locales.t("home_search_clear"),
-                            tint = onSurface.copy(alpha = 0.52f),
-                            modifier = Modifier.size(13.dp)
+                            tint = onSurface.copy(alpha = 0.50f),
+                            modifier = Modifier.size(12.dp)
                         )
                     }
                 }
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(
-                        onSurface.copy(alpha = if (enabled) 0.14f else 0.08f)
-                    )
-            )
         }
     }
 
@@ -848,6 +854,7 @@ fun AppRootChrome(
                                                         HomeTopBarSearchField(
                                                             value = state.homeSearchQuery,
                                                             enabled = searchEnabled,
+                                                            focusRequester = state.homeSearchFocusRequester,
                                                             onValueChange = { state.homeSearchQuery = it },
                                                             onClear = { state.homeSearchQuery = "" }
                                                         )

@@ -141,7 +141,42 @@ fun UserGuideScreen() {
                 )
                 GuideParagraph(Locales.t("guide_first_launch_sign_in_p2"))
                 GuideParagraph(Locales.t("guide_first_launch_sign_in_p3"))
+                GuideParagraph(Locales.t("guide_first_launch_sign_in_p4_guest_upgrade"))
                 GuideImage("guide_first_launch_sign_in_image")
+            }
+
+            Divider()
+
+            GuideExpandableSection(
+                title = Locales.t("guide_section_guest_account_upgrade")
+            ) {
+                GuideParagraph(Locales.t("guide_guest_account_upgrade_p1"))
+                GuideParagraph(Locales.t("guide_guest_account_upgrade_p2"))
+                GuideParagraph(Locales.t("guide_guest_account_upgrade_p3"))
+                GuideParagraph(Locales.t("guide_guest_account_upgrade_p4"))
+                GuideParagraph(Locales.t("guide_guest_account_upgrade_p5"))
+
+                GuideNumberedList(
+                    title = Locales.t("guide_common_basic_workflow"),
+                    items = listOf(
+                        Locales.t("guide_guest_account_upgrade_step_1"),
+                        Locales.t("guide_guest_account_upgrade_step_2"),
+                        Locales.t("guide_guest_account_upgrade_step_3"),
+                        Locales.t("guide_guest_account_upgrade_step_4"),
+                        Locales.t("guide_guest_account_upgrade_step_5"),
+                        Locales.t("guide_guest_account_upgrade_step_6")
+                    )
+                )
+
+                GuideImage("guide_guest_account_upgrade_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_guest_account_upgrade_image2")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_guest_account_upgrade_image3")
             }
 
             Divider()
@@ -155,7 +190,23 @@ fun UserGuideScreen() {
                 GuideMiniSectionTitle(Locales.t("guide_main_screen_upcoming_title"))
                 GuideParagraph(Locales.t("guide_main_screen_upcoming_body"))
                 GuideParagraph(Locales.t("guide_main_screen_p2"))
+                GuideParagraph(Locales.t("guide_main_screen_p3_search"))
                 GuideImage("guide_main_screen_image")
+            }
+
+            GuideExpandableSection(
+                title = Locales.t("guide_section_home_client_search")
+            ) {
+                GuideParagraph(Locales.t("guide_home_client_search_p1"))
+                GuideParagraph(Locales.t("guide_home_client_search_p2"))
+                GuideParagraph(Locales.t("guide_home_client_search_p3"))
+                GuideParagraph(Locales.t("guide_home_client_search_p4"))
+
+                GuideImage("guide_home_client_search_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_home_client_search_image2")
             }
 
             Divider()
@@ -384,6 +435,7 @@ fun UserGuideScreen() {
                 GuideParagraph(Locales.t("guide_side_menu_p1"))
                 GuideParagraph(Locales.t("guide_side_menu_p2"))
                 GuideParagraph(Locales.t("guide_side_menu_p3"))
+                GuideParagraph(Locales.t("guide_side_menu_p4_guest_upgrade"))
                 GuideBulletList(
                     items = listOf(
                         Locales.t("guide_side_menu_item_1"),
@@ -505,6 +557,41 @@ fun UserGuideScreen() {
                 GuideParagraph(Locales.t("guide_client_data_autofill_p3"))
                 GuideParagraph(Locales.t("guide_client_data_autofill_p4"))
                 GuideImage("guide_client_data_autofill_image")
+            }
+
+            Divider()
+
+            GuideExpandableSection(
+                title = Locales.t("guide_section_client_database")
+            ) {
+                GuideParagraph(Locales.t("guide_client_database_p1"))
+                GuideParagraph(Locales.t("guide_client_database_p2"))
+                GuideParagraph(Locales.t("guide_client_database_p3"))
+                GuideParagraph(Locales.t("guide_client_database_p4"))
+
+                GuideBulletList(
+                    title = Locales.t("guide_common_in_this_section_the_user_can"),
+                    items = listOf(
+                        Locales.t("guide_client_database_item_1"),
+                        Locales.t("guide_client_database_item_2"),
+                        Locales.t("guide_client_database_item_3"),
+                        Locales.t("guide_client_database_item_4"),
+                        Locales.t("guide_client_database_item_5"),
+                        Locales.t("guide_client_database_item_6"),
+                        Locales.t("guide_client_database_item_7"),
+                        Locales.t("guide_client_database_item_8")
+                    )
+                )
+
+                GuideImage("guide_client_database_image")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_client_database_image2")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_client_database_image3")
             }
 
             Divider()
