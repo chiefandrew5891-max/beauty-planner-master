@@ -497,6 +497,44 @@ class AppRootState(
         )
     }
 
+    private fun applyImmediatePostPurchasePremiumState(
+        productId: String,
+        subscriptionState: String,
+        expiryMillis: Long,
+        autoRenewing: Boolean
+    ) {
+        val authUserId = currentAuthUser?.uid.orEmpty()
+        val backendUserId = AppSettings.backendUserId
+
+        AppSettings.premiumSubscriptionState = subscriptionState
+        AppSettings.premiumSubscribedProductId = productId
+        AppSettings.premiumSubscriptionExpiryMillis = expiryMillis
+        AppSettings.premiumSubscriptionAutoRenewing = autoRenewing
+
+        AppSettings.cachedAccessTier = "PREMIUM"
+        AppSettings.cachedHasPremium = true
+        AppSettings.cachedSubscriptionState = subscriptionState
+
+        if (authUserId.isNotBlank()) {
+            AppSettings.premiumLastOwnerAuthUserId = authUserId
+        }
+
+        if (backendUserId.isNotBlank()) {
+            AppSettings.premiumLastOwnerBackendUserId = backendUserId
+        }
+
+        AppSettings.localPremiumFallbackBlocked = false
+        AppSettings.localPremiumFallbackPendingSync = true
+        AppSettings.persist()
+
+        refreshAccessState()
+        billingUiState = billingUiState.copy(
+            status = BillingStatus.PURCHASED,
+            errorMessage = null,
+            ownedPremium = true
+        )
+    }
+
     fun maybeShowTrialEndedFreeModePopup() {
         val isFreeAfterTrial =
             accessState.tier != AccessTier.PREMIUM &&
@@ -2066,18 +2104,12 @@ class AppRootState(
                         val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
 
                         if (isIosPlatform && localSubscriptionActive) {
-                            val applied = com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
-                                currentAuthUserId = currentAuthUser?.uid,
-                                currentBackendUserId = AppSettings.backendUserId,
+                            applyImmediatePostPurchasePremiumState(
                                 productId = info.productId.ifBlank { result.productId },
                                 subscriptionState = info.state.name,
                                 expiryMillis = info.expiryTimeMillis ?: 0L,
                                 autoRenewing = info.isAutoRenewing
                             )
-
-                            if (applied) {
-                                refreshAccessState()
-                            }
                         }
 
                         runCatching {
@@ -2114,12 +2146,12 @@ class AppRootState(
                             }
                         }.onFailure { e ->
                             if (isIosPlatform && localSubscriptionActive) {
-                                billingUiState = billingUiState.copy(
-                                    status = BillingStatus.PURCHASED,
-                                    errorMessage = null,
-                                    ownedPremium = true
+                                applyImmediatePostPurchasePremiumState(
+                                    productId = info.productId.ifBlank { result.productId },
+                                    subscriptionState = info.state.name,
+                                    expiryMillis = info.expiryTimeMillis ?: 0L,
+                                    autoRenewing = info.isAutoRenewing
                                 )
-                                refreshAccessState()
 
                                 scope.launch {
                                     delay(2500L)

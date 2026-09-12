@@ -102,9 +102,11 @@ actual class BillingManager actual constructor() {
                 productId = result["productId"].orEmpty(),
                 purchaseToken = result["purchaseToken"].orEmpty(),
                 isAutoRenewing = result["isAutoRenewing"].equals("true", ignoreCase = true),
-                startTimeMillis = null,
-                expiryTimeMillis = null,
-                lastVerifiedAtMillis = Clock.System.now().toEpochMilliseconds()
+                startTimeMillis = result["startTimeMillis"]?.toLongOrNull(),
+                expiryTimeMillis = result["expiryTimeMillis"]?.toLongOrNull(),
+                lastVerifiedAtMillis =
+                    result["lastVerifiedAtMillis"]?.toLongOrNull()
+                        ?: Clock.System.now().toEpochMilliseconds()
             )
         } catch (_: Throwable) {
             SubscriptionInfo(state = SubscriptionState.NONE)
