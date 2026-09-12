@@ -194,6 +194,8 @@ fun UserGuideScreen() {
                 GuideImage("guide_main_screen_image")
             }
 
+            Divider()
+
             GuideExpandableSection(
                 title = Locales.t("guide_section_home_client_search")
             ) {
@@ -652,10 +654,6 @@ fun UserGuideScreen() {
                 GuideParagraph(Locales.t("guide_deleting_appointment_p2"))
 
                 GuideImage("guide_deleting_appointment_image")
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                GuideImage("guide_deleting_appointment_image2")
             }
 
             Divider()
