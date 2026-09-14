@@ -11,7 +11,10 @@ object AccessRepository {
         remote: AccessStatusResponse,
         currentAuthUserId: String?
     ) {
-        AppSettings.backendUserId = remote.userId
+        val canonicalUserId = remote.userId.ifBlank { currentAuthUserId.orEmpty() }
+
+        AppSettings.backendUserId = canonicalUserId
+        AppSettings.localProfileUserId = canonicalUserId
         AppSettings.trialStartedAtMillis = remote.trialStartedAtMillis
         AppSettings.premiumSubscriptionState = remote.subscriptionState
         AppSettings.premiumSubscribedProductId = remote.premiumProductId
@@ -25,7 +28,7 @@ object AccessRepository {
 
         if (remote.hasPremium || remote.tier == "PREMIUM" || remote.subscriptionState == "ACTIVE") {
             AppSettings.premiumLastOwnerAuthUserId = currentAuthUserId.orEmpty()
-            AppSettings.premiumLastOwnerBackendUserId = remote.userId
+            AppSettings.premiumLastOwnerBackendUserId = canonicalUserId
         }
 
         AppSettings.localPremiumFallbackBlocked = false

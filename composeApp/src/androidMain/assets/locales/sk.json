@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Ak sa objaví konflikt, zrušte akciu a použite iný účet alebo iný spôsob prihlásenia.",
     "guide_main_screen_p3_search": "Horný panel na domovskej obrazovke môže obsahovať aj kompaktné pole na vyhľadávanie klienta. Pomáha rýchlo filtrovať zoznam nadchádzajúcich rezervácií podľa mena klienta.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Ak ste do aplikácie prvýkrát vstúpili v hosťovskom režime, neskôr môžete tento hosťovský profil zaregistrovať ako plný účet a zachovať si svoje aktuálne údaje.",
-    "guide_side_menu_p4_guest_upgrade": "Pri používaní aplikácie v hosťovskom režime môže bočná ponuka obsahovať aj akciu na registráciu súčasného hosťovského profilu ako plného účtu."
+    "guide_side_menu_p4_guest_upgrade": "Pri používaní aplikácie v hosťovskom režime môže bočná ponuka obsahovať aj akciu na registráciu súčasného hosťovského profilu ako plného účtu.",
+    "client_details_sort_title": "Zoradenie termínov",
+    "client_details_sort_newest": "Najnovšie prvé",
+    "client_details_sort_oldest": "Najstaršie prvé",
+    "client_details_sort_completed": "Dokončené",
+    "client_details_sort_pending": "Čakajúce",
+    "client_details_notes_and_status": "Poznámky a stav",
+    "client_details_no_records": "Pre tohto klienta zatiaľ nie sú žiadne záznamy."
 }

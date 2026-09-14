@@ -933,5 +933,12 @@
     "guide_guest_account_upgrade_step_6": "如果发生冲突，请取消并使用其他账户或登录方式。",
     "guide_main_screen_p3_search": "主屏幕上的顶部栏还可以包含一个紧凑的客户搜索字段。它有助于按客户名称快速过滤即将到来的预约列表。",
     "guide_first_launch_sign_in_p4_guest_upgrade": "如果您最初以访客模式进入应用，您以后可以注册此访客资料作为完整账户并保留您当前的数据。",
-    "guide_side_menu_p4_guest_upgrade": "在访客模式下使用应用时，侧边菜单还可以包含用于将当前访客资料注册为完整账户的操作。"
+    "guide_side_menu_p4_guest_upgrade": "在访客模式下使用应用时，侧边菜单还可以包含用于将当前访客资料注册为完整账户的操作。",
+    "client_details_sort_title": "预约排序",
+    "client_details_sort_newest": "最新优先",
+    "client_details_sort_oldest": "最早优先",
+    "client_details_sort_completed": "已完成",
+    "client_details_sort_pending": "待处理",
+    "client_details_notes_and_status": "备注与状态",
+    "client_details_no_records": "该客户暂无预约记录。"
 }

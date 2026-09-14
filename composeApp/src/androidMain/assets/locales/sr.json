@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Ako dođe do konflikta, otkažite i koristite drugi nalog ili drugi način prijavljivanja.",
     "guide_main_screen_p3_search": "Gornja traka na početnom ekranu takođe može sadržati kompaktno polje za pretragu klijenata. Pomaže u brzom filtriranju liste predstojećih termina prema imenu klijenta.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Ako ste prvi put ušli u aplikaciju u gostujućem režimu, kasnije možete registrovati ovaj profil gosta kao pun nalog i zadržati svoje trenutne podatke.",
-    "guide_side_menu_p4_guest_upgrade": "Kada koristite aplikaciju u gostujućem režimu, bočni meni takođe može sadržati radnju za registraciju trenutnog profila gosta kao punog naloga."
+    "guide_side_menu_p4_guest_upgrade": "Kada koristite aplikaciju u gostujućem režimu, bočni meni takođe može sadržati radnju za registraciju trenutnog profila gosta kao punog naloga.",
+    "client_details_sort_title": "Sortiranje termina",
+    "client_details_sort_newest": "Najnovije prvo",
+    "client_details_sort_oldest": "Najstarije prvo",
+    "client_details_sort_completed": "Završeni",
+    "client_details_sort_pending": "Na čekanju",
+    "client_details_notes_and_status": "Beleške i status",
+    "client_details_no_records": "Još uvek nema termina za ovog klijenta."
 }

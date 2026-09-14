@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Si un conflit apparaît, annulez et utilisez un autre compte ou une autre méthode de connexion.",
     "guide_main_screen_p3_search": "La barre supérieure de l'écran principal peut également contenir un champ de recherche de client compact. Il aide à filtrer rapidement la liste des rendez-vous à venir par nom de client.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Si vous êtes entré pour la première fois dans l'application en mode invité, vous pourrez ensuite enregistrer ce profil d'invité comme compte complet et conserver vos données actuelles.",
-    "guide_side_menu_p4_guest_upgrade": "Lors de l'utilisation de l'application en mode invité, le menu latéral peut également contenir une action pour enregistrer le profil d'invité actuel en tant que compte complet."
+    "guide_side_menu_p4_guest_upgrade": "Lors de l'utilisation de l'application en mode invité, le menu latéral peut également contenir une action pour enregistrer le profil d'invité actuel en tant que compte complet.",
+    "client_details_sort_title": "Trier les rendez-vous",
+    "client_details_sort_newest": "Plus récents en premier",
+    "client_details_sort_oldest": "Plus anciens en premier",
+    "client_details_sort_completed": "Terminés",
+    "client_details_sort_pending": "En attente",
+    "client_details_notes_and_status": "Notes et statut",
+    "client_details_no_records": "Aucun rendez-vous pour ce client pour le moment."
 }

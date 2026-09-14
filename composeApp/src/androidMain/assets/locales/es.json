@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Si aparece un conflicto, cancela y usa otra cuenta o método de inicio de sesión.",
     "guide_main_screen_p3_search": "La barra superior de la pantalla principal también puede contener un campo de búsqueda de clientes compacto. Ayuda a filtrar rápidamente la lista de próximas citas por nombre de cliente.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Si entraste por primera vez a la aplicación en modo invitado, más tarde puedes registrar este perfil de invitado como una cuenta completa y conservar tus datos actuales.",
-    "guide_side_menu_p4_guest_upgrade": "Al usar la aplicación en modo invitado, el menú lateral también puede contener una acción para registrar el perfil de invitado actual como una cuenta completa."
+    "guide_side_menu_p4_guest_upgrade": "Al usar la aplicación en modo invitado, el menú lateral también puede contener una acción para registrar el perfil de invitado actual como una cuenta completa.",
+    "client_details_sort_title": "Ordenar citas",
+    "client_details_sort_newest": "Más recientes primero",
+    "client_details_sort_oldest": "Más antiguas primero",
+    "client_details_sort_completed": "Completadas",
+    "client_details_sort_pending": "Pendientes",
+    "client_details_notes_and_status": "Notas y estado",
+    "client_details_no_records": "Aún no hay citas para este cliente."
 }

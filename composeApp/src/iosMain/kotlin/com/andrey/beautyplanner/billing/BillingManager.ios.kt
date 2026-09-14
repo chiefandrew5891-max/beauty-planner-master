@@ -49,7 +49,8 @@ actual class BillingManager actual constructor() {
 
             PurchaseResult.Success(
                 productId = result["productId"] ?: productId,
-                purchaseToken = result["purchaseToken"].orEmpty(),
+                purchaseToken = result["originalTransactionId"].orEmpty()
+                    .ifBlank { result["purchaseToken"].orEmpty() },
                 transactionId = result["transactionId"].orEmpty()
             )
         } catch (t: Throwable) {

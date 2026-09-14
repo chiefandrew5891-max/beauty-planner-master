@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Om en konflikt uppstår, avbryt och använd ett annat konto eller en annan inloggningsmetod.",
     "guide_main_screen_p3_search": "Det övre fältet på startskärmen kan också innehålla ett kompakt kundsökfält. Det hjälper till att snabbt filtrera listan över kommande bokningar efter kundens namn.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Om du först gick in i appen i gästläge kan du senare registrera denna gästprofil som ett fullständigt konto och behålla dina aktuella data.",
-    "guide_side_menu_p4_guest_upgrade": "När du använder appen i gästläge kan sidomenyn också innehålla en åtgärd för att registrera den nuvarande gästprofilen som ett fullständigt konto."
+    "guide_side_menu_p4_guest_upgrade": "När du använder appen i gästläge kan sidomenyn också innehålla en åtgärd för att registrera den nuvarande gästprofilen som ett fullständigt konto.",
+    "client_details_sort_title": "Sortera bokningar",
+    "client_details_sort_newest": "Nyaste först",
+    "client_details_sort_oldest": "Äldsta först",
+    "client_details_sort_completed": "Slutförda",
+    "client_details_sort_pending": "Väntande",
+    "client_details_notes_and_status": "Anteckningar och status",
+    "client_details_no_records": "Inga bokningar för denna kund ännu."
 }

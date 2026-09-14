@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Pokud se objeví konflikt, zrušte akci a použijte jiný účet nebo jiný způsob přihlášení.",
     "guide_main_screen_p3_search": "Horní lišta na hlavní obrazovce může také obsahovat kompaktní pole pro vyhledávání klientů. Pomáhá rychle filtrovat seznam nadcházejících schůzek podle jména klienta.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Pokud jste do aplikace poprvé vstoupili v režimu hosta, můžete později tento profil hosta zaregistrovat jako plný účet a zachovat své aktuální údaje.",
-    "guide_side_menu_p4_guest_upgrade": "Při používání aplikace v režimu hosta může boční nabídka obsahovat také akci pro registraci aktuálního profilu hosta jako plného účtu."
+    "guide_side_menu_p4_guest_upgrade": "Při používání aplikace v režimu hosta může boční nabídka obsahovat také akci pro registraci aktuálního profilu hosta jako plného účtu.",
+    "client_details_sort_title": "Řazení záznamů",
+    "client_details_sort_newest": "Nejnovější první",
+    "client_details_sort_oldest": "Nejstarší první",
+    "client_details_sort_completed": "Dokončené",
+    "client_details_sort_pending": "Čekající",
+    "client_details_notes_and_status": "Poznámky a stav",
+    "client_details_no_records": "Pro tohoto klienta zatím nejsou žádné záznamy."
 }

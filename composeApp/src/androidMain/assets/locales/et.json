@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Konflikti ilmnemisel tühistage ja kasutage teist kontot või muud sisselogimismeetodit.",
     "guide_main_screen_p3_search": "Peamise ekraani ülemine riba võib sisaldada ka kompaktset kliendi otsinguvälja. See aitab eelseisvate kohtumiste loendit kliendi nime järgi kiiresti filtreerida.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Kui sisenesite rakendusse esimest korda külalisrežiimis, saate selle külalisprofiili hiljem täieliku kontona registreerida ja oma praegused andmed säilitada.",
-    "guide_side_menu_p4_guest_upgrade": "Rakenduse kasutamisel külalisrežiimis võib külgmenüü sisaldada ka toimingut praeguse külalisprofiili registreerimiseks täieliku kontona."
+    "guide_side_menu_p4_guest_upgrade": "Rakenduse kasutamisel külalisrežiimis võib külgmenüü sisaldada ka toimingut praeguse külalisprofiili registreerimiseks täieliku kontona.",
+    "client_details_sort_title": "Kirjete sorteerimine",
+    "client_details_sort_newest": "Uuemad enne",
+    "client_details_sort_oldest": "Vanemad enne",
+    "client_details_sort_completed": "Tehtud",
+    "client_details_sort_pending": "Ootel",
+    "client_details_notes_and_status": "Märkmed ja staatus",
+    "client_details_no_records": "Sellel kliendil pole veel kirjeid."
 }

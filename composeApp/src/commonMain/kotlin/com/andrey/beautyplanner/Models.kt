@@ -88,6 +88,7 @@ enum class Screen {
     SETTINGS,
     STATS,
     CLIENT_DATABASE,
+    CLIENT_DETAILS,
     BLACKLIST,
     UNPAID_APPOINTMENTS,
     ARCHIVE,

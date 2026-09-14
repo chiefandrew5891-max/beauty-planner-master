@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Se ocorrer um conflito, cancele e use outra conta ou outro método de login.",
     "guide_main_screen_p3_search": "A barra superior na tela principal também pode conter um campo de pesquisa de clientes compacto. Ele ajuda a filtrar rapidamente a lista de próximos agendamentos pelo nome do cliente.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Se você entrou no aplicativo pela primeira vez no modo de convidado, poderá registrar posteriormente este perfil de convidado como uma conta completa e manter seus dados atuais.",
-    "guide_side_menu_p4_guest_upgrade": "Ao usar o aplicativo no modo de convidado, o menu lateral também pode conter uma ação para registrar o perfil de convidado atual como uma conta completa."
+    "guide_side_menu_p4_guest_upgrade": "Ao usar o aplicativo no modo de convidado, o menu lateral também pode conter uma ação para registrar o perfil de convidado atual como uma conta completa.",
+    "client_details_sort_title": "Ordenar agendamentos",
+    "client_details_sort_newest": "Mais recentes primeiro",
+    "client_details_sort_oldest": "Mais antigos primeiro",
+    "client_details_sort_completed": "Concluídos",
+    "client_details_sort_pending": "Pendentes",
+    "client_details_notes_and_status": "Notas e status",
+    "client_details_no_records": "Ainda não há agendamentos para este cliente."
 }

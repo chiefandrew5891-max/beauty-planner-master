@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Wenn ein Konflikt auftritt, brechen Sie ab und verwenden Sie ein anderes Konto oder eine andere Anmeldemethode.",
     "guide_main_screen_p3_search": "Die obere Leiste auf dem Hauptbildschirm kann auch ein kompaktes Kundensuchfeld enthalten. Es hilft dabei, die Liste der bevorstehenden Termine schnell nach Kundenname zu filtern.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Wenn Sie die App zuerst im Gastmodus betreten haben, können Sie dieses Gastprofil später als vollwertiges Konto registrieren und Ihre aktuellen Daten behalten.",
-    "guide_side_menu_p4_guest_upgrade": "Bei der Verwendung der App im Gastmodus kann das Seitenmenü auch eine Aktion zur Registrierung des aktuellen Gastprofils als vollwertiges Konto enthalten."
+    "guide_side_menu_p4_guest_upgrade": "Bei der Verwendung der App im Gastmodus kann das Seitenmenü auch eine Aktion zur Registrierung des aktuellen Gastprofils als vollwertiges Konto enthalten.",
+    "client_details_sort_title": "Terminsortierung",
+    "client_details_sort_newest": "Neueste zuerst",
+    "client_details_sort_oldest": "Älteste zuerst",
+    "client_details_sort_completed": "Erledigt",
+    "client_details_sort_pending": "Ausstehend",
+    "client_details_notes_and_status": "Notizen und Status",
+    "client_details_no_records": "Bisher keine Termine für diesen Kunden."
 }

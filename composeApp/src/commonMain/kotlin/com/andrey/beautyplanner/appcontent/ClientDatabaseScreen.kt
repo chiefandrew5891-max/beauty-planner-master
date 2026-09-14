@@ -39,22 +39,20 @@ import androidx.compose.ui.graphics.Color
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.ClientDatabase
-import com.andrey.beautyplanner.ClientProfile
 import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
-import com.andrey.beautyplanner.appcontent.ClientNameWithIndicators
 import kotlinx.datetime.Clock
 
 @Composable
 fun ClientDatabaseScreen(
     appointments: List<Appointment>,
-    onOpenBlacklist: () -> Unit
+    onOpenBlacklist: () -> Unit,
+    onOpenClientDetails: (String) -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
     val onSurface = MaterialTheme.colors.onSurface
 
     var query by remember { mutableStateOf("") }
-    var editingClientId by remember { mutableStateOf<String?>(null) }
 
     val entries = remember(appointments, AppSettings.clientProfiles) {
         ClientDatabase.build(
@@ -75,9 +73,6 @@ fun ClientDatabaseScreen(
             }
         }
     }
-
-    val editingEntry = filtered.firstOrNull { it.id == editingClientId }
-        ?: entries.firstOrNull { it.id == editingClientId }
 
     val hasBlacklistedClients = remember(entries) {
         entries.any { it.status == ClientProfileStatus.DO_NOT_BOOK.name }
@@ -107,27 +102,21 @@ fun ClientDatabaseScreen(
             if (hasBlacklistedClients) {
                 OutlinedButton(
                     onClick = onOpenBlacklist,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        backgroundColor = Color.Transparent
-                    ),
+                    shape = RoundedCornerShape(14.dp),
                     border = BorderStroke(
                         width = 1.dp,
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+                        color = Color(0xFFD32F2F).copy(alpha = 0.35f)
+                    ),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        backgroundColor = Color(0xFFD32F2F).copy(alpha = 0.06f),
+                        contentColor = Color(0xFFD32F2F)
                     )
                 ) {
                     Text(
-                        text = Locales.t("client_blacklist_button"),
-                        color = MaterialTheme.colors.primary,
+                        text = Locales.t("client_database_open_blacklist"),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-
-                Divider(
-                    modifier = Modifier.padding(vertical = 2.dp),
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.10f)
-                )
             }
 
             OutlinedTextField(
@@ -135,25 +124,20 @@ fun ClientDatabaseScreen(
                 onValueChange = { query = it },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                label = {
-                    Text(
-                        text = Locales.t("client_database_search"),
-                        fontSize = (13 * fontScale).sp
-                    )
-                },
-                shape = RoundedCornerShape(12.dp),
+                label = { Text(Locales.t("client_database_search")) },
+                shape = RoundedCornerShape(14.dp),
                 textStyle = TextStyle(
                     fontSize = (15 * fontScale).sp,
-                    color = onSurface
+                    color = MaterialTheme.colors.onSurface
                 ),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = onSurface,
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = MaterialTheme.colors.surface,
                     focusedBorderColor = MaterialTheme.colors.primary,
-                    unfocusedBorderColor = onSurface.copy(alpha = 0.28f),
+                    unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.22f),
                     focusedLabelColor = MaterialTheme.colors.primary,
-                    unfocusedLabelColor = onSurface.copy(alpha = 0.60f),
-                    cursorColor = MaterialTheme.colors.primary,
-                    backgroundColor = MaterialTheme.colors.surface
+                    unfocusedLabelColor = MaterialTheme.colors.onSurface.copy(alpha = 0.55f),
+                    cursorColor = MaterialTheme.colors.primary
                 )
             )
 
@@ -171,7 +155,7 @@ fun ClientDatabaseScreen(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
-                                editingClientId = client.id
+                                onOpenClientDetails(client.id)
                             },
                         shape = RoundedCornerShape(14.dp),
                         elevation = 2.dp,
@@ -250,32 +234,5 @@ fun ClientDatabaseScreen(
                 }
             }
         }
-    }
-
-    if (editingEntry != null) {
-        val existingProfile = AppSettings.clientProfiles
-            .firstOrNull { it.id == editingEntry.id }
-            ?: ClientProfile(
-                id = editingEntry.id,
-                displayName = editingEntry.displayName,
-                phone = editingEntry.phone,
-                notes = "",
-                colorTag = "",
-                status = ClientProfileStatus.NONE.name,
-                updatedAtMillis = Clock.System.now().toEpochMilliseconds()
-            )
-
-        ClientProfileDialog(
-            initialProfile = existingProfile,
-            visitCount = editingEntry.visitCount,
-            lastVisitDate = editingEntry.lastVisitDate,
-            onDismiss = {
-                editingClientId = null
-            },
-            onSave = { updated ->
-                AppSettings.upsertClientProfile(updated)
-                editingClientId = null
-            }
-        )
     }
 }

@@ -497,6 +497,49 @@ class AppRootState(
         )
     }
 
+    private fun migrateLocalProfileKeyIfNeeded(
+        fromUserId: String,
+        toUserId: String
+    ) {
+        val fromKey = LocalProfileManager.profileKeyForUser(fromUserId)
+        val toKey = LocalProfileManager.profileKeyForUser(toUserId)
+
+        if (fromKey == toKey) {
+            AppSettings.localProfileUserId = toUserId
+            AppSettings.persist()
+            return
+        }
+
+        val fromAppointments = runCatching {
+            DataManager.loadFromDatabase(fromKey)
+        }.getOrDefault(emptyList())
+
+        val toAppointments = runCatching {
+            DataManager.loadFromDatabase(toKey)
+        }.getOrDefault(emptyList())
+
+        val merged = CloudSyncCoordinator.mergeLocalAndRemoteAppointments(
+            local = toAppointments,
+            remote = fromAppointments
+        )
+
+        runCatching {
+            DataManager.saveToDatabase(merged, toKey)
+        }
+
+        if (fromAppointments.isNotEmpty()) {
+            runCatching {
+                DataManager.saveToDatabase(emptyList(), fromKey)
+            }
+        }
+
+        AppSettings.localProfileUserId = toUserId
+        AppSettings.persist()
+
+        appointments.clear()
+        appointments.addAll(merged)
+    }
+
     private fun applyImmediatePostPurchasePremiumState(
         productId: String,
         subscriptionState: String,
@@ -738,6 +781,8 @@ class AppRootState(
         return true
     }
 
+    var selectedClientDetailsId by mutableStateOf<String?>(null)
+
     var screenHistory by mutableStateOf(listOf<Screen>())
 
     fun navigateTo(screen: Screen) {
@@ -751,7 +796,16 @@ class AppRootState(
         }
     }
 
+    fun openClientDetails(clientId: String) {
+        selectedClientDetailsId = clientId
+        navigateTo(Screen.CLIENT_DETAILS)
+    }
+
     fun navigateBack() {
+        if (currentScreen == Screen.CLIENT_DETAILS) {
+            selectedClientDetailsId = null
+        }
+
         if (screenHistory.isNotEmpty()) {
             val previous = screenHistory.last()
             screenHistory = screenHistory.dropLast(1)
@@ -760,6 +814,7 @@ class AppRootState(
             }
             currentScreen = previous
         } else {
+            selectedClientDetailsId = null
             homeSearchQuery = ""
             currentScreen = Screen.MONTH
         }
@@ -778,6 +833,7 @@ class AppRootState(
 
     fun navigateHome() {
         screenHistory = emptyList()
+        selectedClientDetailsId = null
         homeSearchQuery = ""
         currentScreen = Screen.MONTH
     }
@@ -939,6 +995,8 @@ class AppRootState(
 
         handleAuthenticatedUserChange(currentUser)
 
+        val previousLocalProfileUserId = AppSettings.localProfileUserId.trim()
+
         val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
             installId = installId,
             firebaseUid = currentUser.uid,
@@ -953,6 +1011,21 @@ class AppRootState(
             remote = remote,
             currentAuthUserId = currentAuthUser?.uid
         )
+
+        val canonicalUserId = remote.userId.trim()
+        if (
+            previousLocalProfileUserId.isNotBlank() &&
+            canonicalUserId.isNotBlank() &&
+            previousLocalProfileUserId != canonicalUserId
+        ) {
+            migrateLocalProfileKeyIfNeeded(
+                fromUserId = previousLocalProfileUserId,
+                toUserId = canonicalUserId
+            )
+        } else if (canonicalUserId.isNotBlank()) {
+            AppSettings.localProfileUserId = canonicalUserId
+            AppSettings.persist()
+        }
 
         syncAccessStatusFromServerIfPossible()
 
@@ -1011,6 +1084,8 @@ class AppRootState(
                                 AppSettings.clearMasterProfileLocalState(clearMasterData = false)
                             }
 
+                            val previousLocalProfileUserId = AppSettings.localProfileUserId.trim()
+
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                 installId = IdentityManager.getOrCreateInstallId(),
                                 firebaseUid = result.user.uid,
@@ -1024,6 +1099,22 @@ class AppRootState(
                                 remote = remote,
                                 currentAuthUserId = result.user.uid
                             )
+
+                            val canonicalUserId = remote.userId.trim()
+                            if (
+                                !guestUpgradeMode &&
+                                previousLocalProfileUserId.isNotBlank() &&
+                                canonicalUserId.isNotBlank() &&
+                                previousLocalProfileUserId != canonicalUserId
+                            ) {
+                                migrateLocalProfileKeyIfNeeded(
+                                    fromUserId = previousLocalProfileUserId,
+                                    toUserId = canonicalUserId
+                                )
+                            } else if (canonicalUserId.isNotBlank()) {
+                                AppSettings.localProfileUserId = canonicalUserId
+                                AppSettings.persist()
+                            }
 
                             syncAccessStatusFromServerIfPossible()
 
@@ -1120,6 +1211,8 @@ class AppRootState(
                                 AppSettings.clearMasterProfileLocalState(clearMasterData = false)
                             }
 
+                            val previousLocalProfileUserId = AppSettings.localProfileUserId.trim()
+
                             val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                 installId = IdentityManager.getOrCreateInstallId(),
                                 firebaseUid = result.user.uid,
@@ -1133,6 +1226,22 @@ class AppRootState(
                                 remote = remote,
                                 currentAuthUserId = result.user.uid
                             )
+
+                            val canonicalUserId = remote.userId.trim()
+                            if (
+                                !guestUpgradeMode &&
+                                previousLocalProfileUserId.isNotBlank() &&
+                                canonicalUserId.isNotBlank() &&
+                                previousLocalProfileUserId != canonicalUserId
+                            ) {
+                                migrateLocalProfileKeyIfNeeded(
+                                    fromUserId = previousLocalProfileUserId,
+                                    toUserId = canonicalUserId
+                                )
+                            } else if (canonicalUserId.isNotBlank()) {
+                                AppSettings.localProfileUserId = canonicalUserId
+                                AppSettings.persist()
+                            }
 
                             syncAccessStatusFromServerIfPossible()
 
@@ -1683,6 +1792,8 @@ class AppRootState(
 
                                     handleAuthenticatedUserChange(result.user)
 
+                                    val previousLocalProfileUserId = AppSettings.localProfileUserId.trim()
+
                                     val remote = com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                         installId = IdentityManager.getOrCreateInstallId(),
                                         firebaseUid = result.user.uid,
@@ -1696,6 +1807,21 @@ class AppRootState(
                                         remote = remote,
                                         currentAuthUserId = result.user.uid
                                     )
+
+                                    val canonicalUserId = remote.userId.trim()
+                                    if (
+                                        previousLocalProfileUserId.isNotBlank() &&
+                                        canonicalUserId.isNotBlank() &&
+                                        previousLocalProfileUserId != canonicalUserId
+                                    ) {
+                                        migrateLocalProfileKeyIfNeeded(
+                                            fromUserId = previousLocalProfileUserId,
+                                            toUserId = canonicalUserId
+                                        )
+                                    } else if (canonicalUserId.isNotBlank()) {
+                                        AppSettings.localProfileUserId = canonicalUserId
+                                        AppSettings.persist()
+                                    }
 
                                     syncAccessStatusFromServerIfPossible()
 
@@ -1780,6 +1906,8 @@ class AppRootState(
                                     AppSettings.clearMasterProfileLocalState(clearMasterData = false)
                                 }
 
+                                val previousLocalProfileUserId = AppSettings.localProfileUserId.trim()
+
                                 val remote = try {
                                     com.andrey.beautyplanner.remote.BackendBridge.bootstrapUser(
                                         installId = IdentityManager.getOrCreateInstallId(),
@@ -1790,8 +1918,6 @@ class AppRootState(
                                         displayName = result.user.displayName
                                     )
                                 } catch (e: Throwable) {
-                                    runCatching { AuthGateway.signOut() }
-                                    runCatching { AuthGateway.clearCredentialState() }
                                     throw e
                                 }
 
@@ -1799,6 +1925,22 @@ class AppRootState(
                                     remote = remote,
                                     currentAuthUserId = result.user.uid
                                 )
+
+                                val canonicalUserId = remote.userId.trim()
+                                if (
+                                    !guestUpgradeMode &&
+                                    previousLocalProfileUserId.isNotBlank() &&
+                                    canonicalUserId.isNotBlank() &&
+                                    previousLocalProfileUserId != canonicalUserId
+                                ) {
+                                    migrateLocalProfileKeyIfNeeded(
+                                        fromUserId = previousLocalProfileUserId,
+                                        toUserId = canonicalUserId
+                                    )
+                                } else if (canonicalUserId.isNotBlank()) {
+                                    AppSettings.localProfileUserId = canonicalUserId
+                                    AppSettings.persist()
+                                }
 
                                 syncAccessStatusFromServerIfPossible()
 
@@ -2095,12 +2237,28 @@ class AppRootState(
                     )
                 ) {
                     is PurchaseResult.Success -> {
+                        println(
+                            "buyPremium success: " +
+                                    "backendUserId=${AppSettings.backendUserId}, " +
+                                    "localProfileUserId=${AppSettings.localProfileUserId}, " +
+                                    "productId=${result.productId}, " +
+                                    "purchaseToken=${result.purchaseToken}, " +
+                                    "transactionId=${result.transactionId}"
+                        )
                         val platformCode = getPlatform().backendPlatform.uppercase().let {
                             if (it == "IOS") "APP_STORE" else "PLAY"
                         }
                         val isIosPlatform = platformCode == "APP_STORE"
 
                         val info = billingManager.getSubscriptionInfo()
+                        println(
+                            "buyPremium subscriptionInfo: " +
+                                    "state=${info.state}, " +
+                                    "productId=${info.productId}, " +
+                                    "purchaseToken=${info.purchaseToken}, " +
+                                    "expiryTimeMillis=${info.expiryTimeMillis}, " +
+                                    "autoRenewing=${info.isAutoRenewing}"
+                        )
                         val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
 
                         if (isIosPlatform && localSubscriptionActive) {
@@ -2119,6 +2277,17 @@ class AppRootState(
                                 purchaseToken = result.purchaseToken,
                                 platform = platformCode,
                                 transactionId = result.transactionId
+                            )
+                            println(
+                                "buyPremium verifySubscription response: " +
+                                        "userId=${remote.userId}, " +
+                                        "tier=${remote.tier}, " +
+                                        "hasPremium=${remote.hasPremium}, " +
+                                        "subscriptionState=${remote.subscriptionState}, " +
+                                        "premiumProductId=${remote.premiumProductId}, " +
+                                        "subscriptionExpiryMillis=${remote.subscriptionExpiryMillis}, " +
+                                        "subscriptionAutoRenewing=${remote.subscriptionAutoRenewing}, " +
+                                        "subscriptionOrderId=${remote.subscriptionOrderId}"
                             )
                             com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
                                 remote = remote,
@@ -2145,6 +2314,7 @@ class AppRootState(
                                 }
                             }
                         }.onFailure { e ->
+                            println("buyPremium verifySubscription failure: ${e.message}")
                             if (isIosPlatform && localSubscriptionActive) {
                                 applyImmediatePostPurchasePremiumState(
                                     productId = info.productId.ifBlank { result.productId },
@@ -2564,7 +2734,10 @@ class AppRootState(
     }
 
     private fun persistAuthenticatedSession(user: AuthUser) {
-        AppSettings.localProfileUserId = user.uid
+        if (AppSettings.localProfileUserId.isBlank()) {
+            AppSettings.localProfileUserId = user.uid
+        }
+
         AppSettings.lastAuthProvider = user.provider.name
         AppSettings.lastAuthEmail = user.email
         AppSettings.lastAuthDisplayName = user.displayName

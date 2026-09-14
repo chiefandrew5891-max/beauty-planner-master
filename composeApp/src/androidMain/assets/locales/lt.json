@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Jei kyla konfliktas, atšaukite ir naudokite kitą paskyrą arba kitą prisijungimo būdą.",
     "guide_main_screen_p3_search": "Viršutinėje pagrindinio ekrano juostoje taip pat gali būti kompaktiškas kliento paieškos laukelis. Tai padeda greitai filtruoti būsimų susitikimų sąrašą pagal kliento vardą.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Jei pirmą kartą įėjote į programėlę svečio režimu, vėliau galite užregistruoti šį svečio profilį kaip visą paskyrą ir išsaugoti esamus duomenis.",
-    "guide_side_menu_p4_guest_upgrade": "Naudojant programėlę svečio režimu, šoniniame meniu taip pat gali būti veiksmas, skirtas užregistruoti dabartinį svečio profilį kaip visą paskyrą."
+    "guide_side_menu_p4_guest_upgrade": "Naudojant programėlę svečio režimu, šoniniame meniu taip pat gali būti veiksmas, skirtas užregistruoti dabartinį svečio profilį kaip visą paskyrą.",
+    "client_details_sort_title": "Įrašų rūšiavimas",
+    "client_details_sort_newest": "Naujausi viršuje",
+    "client_details_sort_oldest": "Seniausi viršuje",
+    "client_details_sort_completed": "Atlikti",
+    "client_details_sort_pending": "Laukiantys",
+    "client_details_notes_and_status": "Pastabos ir būsena",
+    "client_details_no_records": "Šiam klientui kol kas nėra įrašų."
 }

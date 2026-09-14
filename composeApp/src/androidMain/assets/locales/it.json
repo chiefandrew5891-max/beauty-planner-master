@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Se appare un conflitto, annulla e usa un altro account o un altro metodo di accesso.",
     "guide_main_screen_p3_search": "La barra superiore della schermata principale può contenere anche un campo di ricerca clienti compatto. Aiuta a filtrare rapidamente l'elenco dei prossimi appuntamenti per nome del cliente.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Se sei entrato nell'app per la prima volta in modalità ospite, in seguito potrai registrare questo profilo ospite come account completo e conservare i tuoi dati attuali.",
-    "guide_side_menu_p4_guest_upgrade": "Durante l'utilizzo dell'app in modalità ospite, il menu laterale può anche contenere un'azione per registrare il profilo ospite corrente come account completo."
+    "guide_side_menu_p4_guest_upgrade": "Durante l'utilizzo dell'app in modalità ospite, il menu laterale può anche contenere un'azione per registrare il profilo ospite corrente come account completo.",
+    "client_details_sort_title": "Ordina appuntamenti",
+    "client_details_sort_newest": "I più recenti",
+    "client_details_sort_oldest": "I meno recenti",
+    "client_details_sort_completed": "Completati",
+    "client_details_sort_pending": "In attesa",
+    "client_details_notes_and_status": "Note e stato",
+    "client_details_no_records": "Nessun appuntamento per questo cliente."
 }

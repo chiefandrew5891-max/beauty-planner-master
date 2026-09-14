@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Če se pojavi konflikt, prekličite in uporabite drug račun ali drug način prijave.",
     "guide_main_screen_p3_search": "Zgornja vrstica na začetnem zaslonu lahko vsebuje tudi kompaktno polje za iskanje strank. Pomaga pri hitrem filtriranju seznama prihajajočih terminov glede na ime stranke.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Če ste v aplikacijo najprej vstopili v načinu za goste, lahko kasneje registrirate ta profil gosta kot poln račun in obdržite svoje trenutne podatke.",
-    "guide_side_menu_p4_guest_upgrade": "Pri uporabi aplikacije v načinu za goste lahko stranski meni vsebuje tudi dejanje za registracijo trenutnega profila gosta kot polnega računa."
+    "guide_side_menu_p4_guest_upgrade": "Pri uporabi aplikacije v načinu za goste lahko stranski meni vsebuje tudi dejanje za registracijo trenutnega profila gosta kot polnega računa.",
+    "client_details_sort_title": "Razvrščanje terminov",
+    "client_details_sort_newest": "Najnovejše prej",
+    "client_details_sort_oldest": "Najstarejše prej",
+    "client_details_sort_completed": "Opravljeno",
+    "client_details_sort_pending": "V teku",
+    "client_details_notes_and_status": "Opombe in status",
+    "client_details_no_records": "Za tega stranko še ni terminov."
 }

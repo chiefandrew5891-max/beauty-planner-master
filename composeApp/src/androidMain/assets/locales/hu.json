@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Ha ütközés jelenik meg, szakítsa meg, és használjon másik fiókot vagy más bejelentkezési módot.",
     "guide_main_screen_p3_search": "A főképernyő felső sávja tartalmazhat egy kompakt ügyfélkereső mezőt is. Segít gyorsan szűrni a közelgő időpontok listáját az ügyfél neve alapján.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Ha először vendég módban lépett be az alkalmazásba, később regisztrálhatja ezt a vendégprofilt teljes fiókként, és megtarthatja jelenlegi adatait.",
-    "guide_side_menu_p4_guest_upgrade": "Ha az alkalmazást vendég módban használja, az oldalsó menü tartalmazhat egy műveletet is a jelenlegi vendégprofil teljes fiókként történő regisztrálásához."
+    "guide_side_menu_p4_guest_upgrade": "Ha az alkalmazást vendég módban használja, az oldalsó menü tartalmazhat egy műveletet is a jelenlegi vendégprofil teljes fiókként történő regisztrálásához.",
+    "client_details_sort_title": "Időpontok rendezése",
+    "client_details_sort_newest": "Legújabb elöl",
+    "client_details_sort_oldest": "Legrégebbi elöl",
+    "client_details_sort_completed": "Teljesítve",
+    "client_details_sort_pending": "Függőben",
+    "client_details_notes_and_status": "Megjegyzések és státusz",
+    "client_details_no_records": "Még nincsenek időpontok ehhez az ügyfélhez."
 }

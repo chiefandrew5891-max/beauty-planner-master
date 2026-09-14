@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Hvis det oppstår en konflikt, avbryt og bruk en annen konto eller en annen påloggingsmetode.",
     "guide_main_screen_p3_search": "Toppfeltet på hovedskjermen kan også inneholde et kompakt kundesøkefelt. Det hjelper med å raskt filtrere listen over kommende avtaler etter klientnavn.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Hvis du først gikk inn i appen i gjestemodus, kan du senere registrere denne gjesteprofilen som en full konto og beholde dine nåværende data.",
-    "guide_side_menu_p4_guest_upgrade": "Når du bruker appen i gjestemodus, kan sidemenyen også inneholde en handling for å registrere den gjeldende gjesteprofilen som en full konto."
+    "guide_side_menu_p4_guest_upgrade": "Når du bruker appen i gjestemodus, kan sidemenyen også inneholde en handling for å registrere den gjeldende gjesteprofilen som en full konto.",
+    "client_details_sort_title": "Sorter avtaler",
+    "client_details_sort_newest": "Nyeste først",
+    "client_details_sort_oldest": "Eldste først",
+    "client_details_sort_completed": "Fullført",
+    "client_details_sort_pending": "Venter",
+    "client_details_notes_and_status": "Notater og status",
+    "client_details_no_records": "Ingen avtaler for denne kunden ennå."
 }

@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Bir çakışma ortaya çıkarsa iptal edin ve başka bir hesap veya başka bir oturum açma yöntemi kullanın.",
     "guide_main_screen_p3_search": "Ana ekrandaki üst çubukta kompakt bir müşteri arama alanı da bulunabilir. Yaklaşan randevular listesini müşteri adına göre hızlıca filtrelemeye yardımcı olur.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Uygulamaya ilk olarak misafir modunda girdiyseniz, daha sonra bu misafir profilini tam bir hesap olarak kaydedebilir ve mevcut verilerinizi koruyabilirsiniz.",
-    "guide_side_menu_p4_guest_upgrade": "Uygulamayı misafir modunda kullanırken yan menü, mevcut misafir profilini tam bir hesap olarak kaydetmek için bir eylem de içerebilir."
+    "guide_side_menu_p4_guest_upgrade": "Uygulamayı misafir modunda kullanırken yan menü, mevcut misafir profilini tam bir hesap olarak kaydetmek için bir eylem de içerebilir.",
+    "client_details_sort_title": "Randevuları sırala",
+    "client_details_sort_newest": "Önce en yeniler",
+    "client_details_sort_oldest": "Önce en eskiler",
+    "client_details_sort_completed": "Tamamlananlar",
+    "client_details_sort_pending": "Bekleyenler",
+    "client_details_notes_and_status": "Notlar ve durum",
+    "client_details_no_records": "Bu müşteri için henüz randevu yok."
 }

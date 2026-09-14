@@ -1,59 +1,53 @@
 package com.andrey.beautyplanner.appcontent.approot
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.andrey.beautyplanner.*
+import com.andrey.beautyplanner.appcontent.*
+import com.andrey.beautyplanner.auth.SignInProvider
+import com.andrey.beautyplanner.utils.LiveStatusKey
+import com.andrey.beautyplanner.utils.getLiveStatus
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import com.andrey.beautyplanner.*
-import com.andrey.beautyplanner.appcontent.*
-import com.andrey.beautyplanner.utils.LiveStatusKey
-import com.andrey.beautyplanner.utils.getLiveStatus
-import com.andrey.beautyplanner.appcontent.ServiceTemplatesScreen
-import com.andrey.beautyplanner.appcontent.WorkScheduleScreen
-import com.andrey.beautyplanner.appcontent.AppearanceSettingsScreen
-import com.andrey.beautyplanner.appcontent.DeveloperAccessScreen
-import com.andrey.beautyplanner.appcontent.BackupSettingsScreen
-import com.andrey.beautyplanner.appcontent.ClientDatabaseScreen
-import androidx.compose.runtime.saveable.rememberSaveable
-import com.andrey.beautyplanner.appcontent.AuthWelcomeScreen
-import com.andrey.beautyplanner.appcontent.AuthEmailScreen
-import com.andrey.beautyplanner.auth.SignInProvider
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.graphics.Brush
 
 private const val APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS = 24L * 60L * 60L * 1000L
 
@@ -61,15 +55,18 @@ private fun canManageAppointment(
     appointment: Appointment,
     nowMillis: Long = Clock.System.now().toEpochMilliseconds()
 ): Boolean {
-    val appointmentDate = runCatching { kotlinx.datetime.LocalDate.parse(appointment.dateString) }.getOrNull() ?: return true
+    val appointmentDate = runCatching {
+        LocalDate.parse(appointment.dateString)
+    }.getOrNull() ?: return true
+
     val timeParts = appointment.time.split(":")
     val hour = timeParts.getOrNull(0)?.toIntOrNull() ?: 0
     val minute = timeParts.getOrNull(1)?.toIntOrNull() ?: 0
 
     val appointmentStart = runCatching {
-        kotlinx.datetime.LocalDateTime(
+        LocalDateTime(
             year = appointmentDate.year,
-            monthNumber = appointmentDate.monthNumber,
+            month = appointmentDate.month,
             dayOfMonth = appointmentDate.dayOfMonth,
             hour = hour,
             minute = minute
@@ -78,6 +75,7 @@ private fun canManageAppointment(
 
     return nowMillis <= appointmentStart + APPOINTMENT_MANAGE_GRACE_PERIOD_MILLIS
 }
+
 @OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun AppRootContent(
@@ -148,7 +146,11 @@ fun AppRootContent(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
         when (state.currentScreen) {
             Screen.SETTINGS -> SettingsPage(
                 accessState = state.accessState,
@@ -349,29 +351,14 @@ fun AppRootContent(
                     }
                 )
             }
-            // =========================================================
-            // TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS SCREEN
-            // Экран временно скрыт из пользовательского UI.
-            // Логику и файл экрана не удалять.
-            // BEGIN TEMP HIDE
-            // =========================================================
+
             Screen.CLIENT_INTERACTIONS -> {
-             //   val nowMillis = Clock.System.now().toEpochMilliseconds()
-             //   if (!AccessManager.hasFeature(PremiumFeature.STATS, nowMillis)) {
-              //      state.showPremiumRequired(
-              //          message = Locales.t("premium_required_client_interactions"),
-              //          returnTo = Screen.MONTH
-              //      )
-              //  } else {
-              //      ClientInteractionsScreen(appState = state)
-             //   }
+                // TEMP HIDE FOR APP REVIEW
             }
-            // =========================================================
-            // END TEMP HIDE FOR APP REVIEW: CLIENT INTERACTIONS SCREEN
-            // =========================================================
 
             Screen.MONTH -> {
                 var nowTimeHm by remember { mutableStateOf(getCurrentTimeHm()) }
+
                 LaunchedEffect(Unit) {
                     while (true) {
                         nowTimeHm = getCurrentTimeHm()
@@ -382,6 +369,7 @@ fun AppRootContent(
                 val nowMin = remember(nowTimeHm) {
                     com.andrey.beautyplanner.utils.parseHmToMinutes(nowTimeHm) ?: 0
                 }
+
                 val activeAppointmentsCount = getUpcomingAppointmentsCount(
                     appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
                     today = state.today,
@@ -517,10 +505,12 @@ fun AppRootContent(
                         }
                     }
                 }
+
                 val pullRefreshState = rememberPullRefreshState(
                     refreshing = state.isRefreshing,
                     onRefresh = { state.manualRefresh() }
                 )
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -532,187 +522,199 @@ fun AppRootContent(
                                 }
                             )
                         }
-                    ) {
-                        CenteredContentContainer(maxWidth = 980.dp) {
-                            Column(Modifier.fillMaxSize()) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .onGloballyPositioned { coordinates ->
-                                            headerBottomInRoot = coordinates.boundsInRoot().bottom.toInt()
+                ) {
+                    CenteredContentContainer(maxWidth = 980.dp) {
+                        Column(Modifier.fillMaxSize()) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .onGloballyPositioned { coordinates ->
+                                        headerBottomInRoot = coordinates.boundsInRoot().bottom.toInt()
+                                    }
+                                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = headerText,
+                                    fontSize = (24 * state.fontScale).sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.onBackground
+                                )
+
+                                Row {
+                                    val arrowsEnabled = !isCollapsed
+                                    val arrowTint = if (arrowsEnabled) {
+                                        MaterialTheme.colors.primary
+                                    } else {
+                                        MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
+                                    }
+
+                                    IconButton(
+                                        enabled = arrowsEnabled,
+                                        onClick = {
+                                            state.calendarViewDate =
+                                                state.calendarViewDate.minus(1, DateTimeUnit.MONTH)
                                         }
-                                        .padding(horizontal = 24.dp, vertical = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text(
-                                        text = headerText,
-                                        fontSize = (24 * state.fontScale).sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colors.onBackground
-                                    )
-                                    Row {
-                                        val arrowsEnabled = !isCollapsed
-                                        val arrowTint = if (arrowsEnabled) {
-                                            MaterialTheme.colors.primary
-                                        } else {
-                                            MaterialTheme.colors.onSurface.copy(alpha = 0.35f)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowLeft,
+                                            contentDescription = null,
+                                            tint = arrowTint
+                                        )
+                                    }
+
+                                    IconButton(
+                                        enabled = arrowsEnabled,
+                                        onClick = {
+                                            state.calendarViewDate =
+                                                state.calendarViewDate.plus(1, DateTimeUnit.MONTH)
                                         }
-                                        IconButton(
-                                            enabled = arrowsEnabled,
-                                            onClick = { state.calendarViewDate = state.calendarViewDate.minus(1, DateTimeUnit.MONTH) }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowRight,
+                                            contentDescription = null,
+                                            tint = arrowTint
+                                        )
+                                    }
+                                }
+                            }
+
+                            LazyColumn(
+                                state = listState,
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(bottom = 24.dp)
+                            ) {
+                                item {
+                                    if (!appointmentLimitNotice.isNullOrBlank()) {
+                                        Card(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 24.dp, vertical = 8.dp),
+                                            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.10f),
+                                            elevation = 0.dp
                                         ) {
-                                            Icon(
-                                                imageVector = Icons.Filled.KeyboardArrowLeft,
-                                                contentDescription = null,
-                                                tint = arrowTint
-                                            )
-                                        }
-                                        IconButton(
-                                            enabled = arrowsEnabled,
-                                            onClick = { state.calendarViewDate = state.calendarViewDate.plus(1, DateTimeUnit.MONTH) }
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Filled.KeyboardArrowRight,
-                                                contentDescription = null,
-                                                tint = arrowTint
+                                            Text(
+                                                text = appointmentLimitNotice,
+                                                modifier = Modifier.padding(14.dp),
+                                                fontSize = (14 * state.fontScale).sp,
+                                                color = MaterialTheme.colors.onSurface
                                             )
                                         }
                                     }
                                 }
 
-                                LazyColumn(
-                                    state = listState,
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentPadding = PaddingValues(bottom = 24.dp)
-                                ) {
-                                    item {
-                                        if (!appointmentLimitNotice.isNullOrBlank()) {
-                                            Card(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                                                backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.10f),
-                                                elevation = 0.dp
-                                            ) {
-                                                Text(
-                                                    text = appointmentLimitNotice,
-                                                    modifier = Modifier.padding(14.dp),
-                                                    fontSize = (14 * state.fontScale).sp,
-                                                    color = MaterialTheme.colors.onSurface
-                                                )
+                                item {
+                                    MonthCalendarGrid(
+                                        monthDate = state.calendarViewDate,
+                                        today = state.today,
+                                        selectedDate = state.selectedDate,
+                                        appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
+                                        onWeekdaysRowTopChanged = { top ->
+                                            weekdaysRowTopInRoot = top
+                                        },
+                                        onSwipeToPreviousMonth = {
+                                            if (!isCollapsed) {
+                                                state.calendarViewDate =
+                                                    state.calendarViewDate.minus(1, DateTimeUnit.MONTH)
+                                            }
+                                        },
+                                        onSwipeToNextMonth = {
+                                            if (!isCollapsed) {
+                                                state.calendarViewDate =
+                                                    state.calendarViewDate.plus(1, DateTimeUnit.MONTH)
                                             }
                                         }
+                                    ) { date ->
+                                        state.selectedDate = date
+                                        state.navigateTo(Screen.DAY_DETAILS)
                                     }
+                                }
 
+                                item {
+                                    Divider(
+                                        modifier = Modifier.padding(horizontal = 40.dp, vertical = 16.dp),
+                                        color = Color.LightGray.copy(alpha = 0.5f),
+                                        thickness = 1.dp
+                                    )
+                                    Text(
+                                        text = Locales.t("upcoming_appointments_list"),
+                                        modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
+                                        fontSize = (16 * state.fontScale).sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.Gray
+                                    )
+                                }
+
+                                if (upcoming.isEmpty()) {
                                     item {
-                                        MonthCalendarGrid(
-                                            monthDate = state.calendarViewDate,
-                                            today = state.today,
-                                            selectedDate = state.selectedDate,
-                                            appointments = AppointmentSyncUtils.visibleAppointments(state.appointments),
-                                            onWeekdaysRowTopChanged = { top ->
-                                                weekdaysRowTopInRoot = top
-                                            },
-                                            onSwipeToPreviousMonth = {
-                                                if (!isCollapsed) {
-                                                    state.calendarViewDate = state.calendarViewDate.minus(1, DateTimeUnit.MONTH)
-                                                }
-                                            },
-                                            onSwipeToNextMonth = {
-                                                if (!isCollapsed) {
-                                                    state.calendarViewDate = state.calendarViewDate.plus(1, DateTimeUnit.MONTH)
-                                                }
-                                            }
-                                        ) { date ->
-                                            state.selectedDate = date
-                                            state.navigateTo(Screen.DAY_DETAILS)
-                                        }
-                                    }
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = 12.dp, bottom = 40.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            val searchEnabled =
+                                                state.accessState.tier == AccessTier.PREMIUM ||
+                                                        state.accessState.isTrialActive
 
-                                    item {
-                                        Divider(
-                                            modifier = Modifier.padding(horizontal = 40.dp, vertical = 16.dp),
-                                            color = Color.LightGray.copy(alpha = 0.5f),
-                                            thickness = 1.dp
-                                        )
-                                        Text(
-                                            text = Locales.t("upcoming_appointments_list"),
-                                            modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
-                                            fontSize = (16 * state.fontScale).sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = Color.Gray
-                                        )
-                                    }
-
-                                    if (upcoming.isEmpty()) {
-                                        item {
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(top = 12.dp, bottom = 40.dp),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                val searchEnabled =
-                                                    state.accessState.tier == AccessTier.PREMIUM ||
-                                                            state.accessState.isTrialActive
-
-                                                Text(
-                                                    text = if (searchEnabled && state.homeSearchQuery.trim().isNotBlank()) {
-                                                        Locales.t("home_search_no_results")
-                                                    } else {
-                                                        Locales.t("no_upcoming_appointments")
-                                                    },
-                                                    color = Color.Gray,
-                                                    fontSize = (14 * state.fontScale).sp
-                                                )
-                                            }
-                                        }
-                                    } else {
-                                        items(upcoming.size) { idx ->
-                                            val appt = upcoming[idx]
-                                            val durationMin =
-                                                if (appt.durationMinutes > 0) appt.durationMinutes
-                                                else appt.durationHours.coerceAtLeast(1) * 60
-                                            val startMin =
-                                                com.andrey.beautyplanner.utils.parseHmToMinutes(appt.time) ?: 0
-                                            val endMin = startMin + durationMin
-                                            val endHour = ((endMin / 60) % 24).toString().padStart(2, '0')
-                                            val endMinute = (endMin % 60).toString().padStart(2, '0')
-                                            val endHm = "$endHour:$endMinute"
-                                            val status = getLiveStatus(
-                                                appt = appt,
-                                                nowDate = state.today,
-                                                nowMinutes = nowMin
-                                            )
-                                            AppointmentCard(
-                                                appt = appt,
-                                                status = status,
-                                                showDateInCard = true,
-                                                startHm = appt.time,
-                                                endHm = endHm,
-                                                nowDate = state.today,
-                                                nowMinutes = nowMin,
-                                                onClick = {
-                                                    focusManager.clearFocus(force = true)
-                                                    viewingAppt = appt
-                                                    viewingStartHm = appt.time
-                                                    viewingEndHm = endHm
-                                                    viewingStatus = status
+                                            Text(
+                                                text = if (searchEnabled && state.homeSearchQuery.trim().isNotBlank()) {
+                                                    Locales.t("home_search_no_results")
+                                                } else {
+                                                    Locales.t("no_upcoming_appointments")
                                                 },
-                                                onLongClick = {
-                                                    focusManager.clearFocus(force = true)
-                                                    viewingAppt = appt
-                                                    viewingStartHm = appt.time
-                                                    viewingEndHm = endHm
-                                                    viewingStatus = status
-                                                }
+                                                color = Color.Gray,
+                                                fontSize = (14 * state.fontScale).sp
                                             )
                                         }
+                                    }
+                                } else {
+                                    items(upcoming.size) { idx ->
+                                        val appt = upcoming[idx]
+                                        val durationMin =
+                                            if (appt.durationMinutes > 0) appt.durationMinutes
+                                            else appt.durationHours.coerceAtLeast(1) * 60
+                                        val startMin =
+                                            com.andrey.beautyplanner.utils.parseHmToMinutes(appt.time) ?: 0
+                                        val endMin = startMin + durationMin
+                                        val endHour = ((endMin / 60) % 24).toString().padStart(2, '0')
+                                        val endMinute = (endMin % 60).toString().padStart(2, '0')
+                                        val endHm = "$endHour:$endMinute"
+                                        val status = getLiveStatus(
+                                            appt = appt,
+                                            nowDate = state.today,
+                                            nowMinutes = nowMin
+                                        )
+                                        AppointmentCard(
+                                            appt = appt,
+                                            status = status,
+                                            showDateInCard = true,
+                                            startHm = appt.time,
+                                            endHm = endHm,
+                                            nowDate = state.today,
+                                            nowMinutes = nowMin,
+                                            onClick = {
+                                                focusManager.clearFocus(force = true)
+                                                viewingAppt = appt
+                                                viewingStartHm = appt.time
+                                                viewingEndHm = endHm
+                                                viewingStatus = status
+                                            },
+                                            onLongClick = {
+                                                focusManager.clearFocus(force = true)
+                                                viewingAppt = appt
+                                                viewingStartHm = appt.time
+                                                viewingEndHm = endHm
+                                                viewingStatus = status
+                                            }
+                                        )
                                     }
                                 }
                             }
                         }
+                    }
+
                     PullRefreshIndicator(
                         refreshing = state.isRefreshing,
                         state = pullRefreshState,
@@ -766,12 +768,14 @@ fun AppRootContent(
                     state.bookingReadOnly = false
                 }
             )
+
             Screen.PRIVACY_POLICY -> PrivacyPolicyScreen(
                 languageCode = Locales.currentLanguage,
                 onBack = {
                     state.navigateBack()
                 }
             )
+
             Screen.PREMIUM_ACCESS -> PremiumAccessScreen(
                 accessState = state.accessState,
                 message = state.premiumRequiredMessage,
@@ -803,6 +807,7 @@ fun AppRootContent(
                     state.navigateTo(Screen.PRIVACY_POLICY)
                 }
             )
+
             Screen.BACKUP_SETTINGS -> BackupSettingsScreen(
                 onExport = {
                     if (state.currentAuthUser?.provider == SignInProvider.ANONYMOUS) {
@@ -909,6 +914,7 @@ fun AppRootContent(
                 },
                 dbOpsAllowed = AppSettings.pinEnabled && AppSettings.isPinSet()
             )
+
             Screen.DEVELOPER_ACCESS -> DeveloperAccessScreen(
                 state = state,
                 accessState = state.accessState,
@@ -973,8 +979,26 @@ fun AppRootContent(
                 appointments = state.appointments,
                 onOpenBlacklist = {
                     state.navigateTo(Screen.BLACKLIST)
+                },
+                onOpenClientDetails = { clientId ->
+                    state.openClientDetails(clientId)
                 }
             )
+
+            Screen.CLIENT_DETAILS -> {
+                val clientId = state.selectedClientDetailsId
+                if (clientId != null) {
+                    ClientDetailsScreen(
+                        clientId = clientId,
+                        appointments = state.appointments,
+                        onBack = {
+                            state.navigateBack()
+                        }
+                    )
+                } else {
+                    state.navigateBack()
+                }
+            }
 
             Screen.BLACKLIST -> BlacklistScreen(
                 appointments = state.appointments
@@ -996,6 +1020,7 @@ fun AppRootContent(
                     }
                 )
             }
+
             Screen.NOTIFICATION_SETTINGS -> NotificationsSettingsScreen()
             Screen.SERVICE_TEMPLATES -> ServiceTemplatesScreen()
             Screen.WORK_SCHEDULE -> WorkScheduleScreen()
@@ -1104,10 +1129,8 @@ fun AppRootContent(
                             if (threshold != null) {
                                 state.freeLimitPopupMessage = when (threshold) {
                                     1 -> Locales.t("free_limit_popup_after_first_trial")
-
                                     AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT ->
                                         Locales.t("free_limit_popup_limit_reached_trial")
-
                                     else -> {
                                         val remaining =
                                             AccessManager.FREE_ACTIVE_APPOINTMENTS_LIMIT - newActiveCount
@@ -1197,9 +1220,7 @@ fun AppRootContent(
                     state.bookingReadOnly = false
                 },
                 onDeleteClick = {
-                    if (!actionsEnabled) {
-                        return@AppointmentDetailsDialog
-                    }
+                    if (!actionsEnabled) return@AppointmentDetailsDialog
                     viewingAppt = null
                     viewingStatus = null
                     state.showDeleteConfirm = apptToView
@@ -1271,4 +1292,3 @@ fun AppRootContent(
         }
     }
 }
-//Create new Animation_screen fix11

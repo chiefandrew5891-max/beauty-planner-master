@@ -935,5 +935,12 @@
     "guide_guest_account_upgrade_step_6": "Dacă apare un conflict, anulați și utilizați un alt cont sau o altă metodă de conectare.",
     "guide_main_screen_p3_search": "Bara de sus de pe ecranul principal poate conține, de asemenea, un câmp compact de căutare a clienților. Ajută la filtrarea rapidă a listei de programări viitoare după numele clientului.",
     "guide_first_launch_sign_in_p4_guest_upgrade": "Dacă ați intrat prima dată în aplicație în modul oaspete, puteți înregistra ulterior acest profil de oaspete ca un cont complet și vă puteți păstra datele actuale.",
-    "guide_side_menu_p4_guest_upgrade": "Când utilizați aplicația în modul oaspete, meniul lateral poate conține, de asemenea, o acțiune pentru înregistrarea profilului de oaspete curent ca un cont complet."
+    "guide_side_menu_p4_guest_upgrade": "Când utilizați aplicația în modul oaspete, meniul lateral poate conține, de asemenea, o acțiune pentru înregistrarea profilului de oaspete curent ca un cont complet.",
+    "client_details_sort_title": "Sortare programări",
+    "client_details_sort_newest": "Cele mai noi primul",
+    "client_details_sort_oldest": "Cele mai vechi primul",
+    "client_details_sort_completed": "Finalizate",
+    "client_details_sort_pending": "În așteptare",
+    "client_details_notes_and_status": "Note și statut",
+    "client_details_no_records": "Nicio programare pentru acest client momentan."
 }
