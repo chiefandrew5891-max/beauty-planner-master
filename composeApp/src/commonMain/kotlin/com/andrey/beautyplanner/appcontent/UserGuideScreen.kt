@@ -616,7 +616,7 @@ fun UserGuideScreen() {
                     )
                 )
 
-                GuideImage("guide_client_database_image2")
+                GuideImage("guide_client_database_image3")
 
                 Spacer(modifier = Modifier.height(30.dp))
 
@@ -630,7 +630,11 @@ fun UserGuideScreen() {
                     )
                 )
 
-                GuideImage("guide_client_database_image3")
+                GuideImage("guide_client_database_image2")
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GuideImage("guide_client_database_image4")
             }
 
             Divider()
