@@ -2237,28 +2237,12 @@ class AppRootState(
                     )
                 ) {
                     is PurchaseResult.Success -> {
-                        println(
-                            "buyPremium success: " +
-                                    "backendUserId=${AppSettings.backendUserId}, " +
-                                    "localProfileUserId=${AppSettings.localProfileUserId}, " +
-                                    "productId=${result.productId}, " +
-                                    "purchaseToken=${result.purchaseToken}, " +
-                                    "transactionId=${result.transactionId}"
-                        )
                         val platformCode = getPlatform().backendPlatform.uppercase().let {
                             if (it == "IOS") "APP_STORE" else "PLAY"
                         }
                         val isIosPlatform = platformCode == "APP_STORE"
 
                         val info = billingManager.getSubscriptionInfo()
-                        println(
-                            "buyPremium subscriptionInfo: " +
-                                    "state=${info.state}, " +
-                                    "productId=${info.productId}, " +
-                                    "purchaseToken=${info.purchaseToken}, " +
-                                    "expiryTimeMillis=${info.expiryTimeMillis}, " +
-                                    "autoRenewing=${info.isAutoRenewing}"
-                        )
                         val localSubscriptionActive = info.state == SubscriptionState.ACTIVE
 
                         if (isIosPlatform && localSubscriptionActive) {
@@ -2277,17 +2261,6 @@ class AppRootState(
                                 purchaseToken = result.purchaseToken,
                                 platform = platformCode,
                                 transactionId = result.transactionId
-                            )
-                            println(
-                                "buyPremium verifySubscription response: " +
-                                        "userId=${remote.userId}, " +
-                                        "tier=${remote.tier}, " +
-                                        "hasPremium=${remote.hasPremium}, " +
-                                        "subscriptionState=${remote.subscriptionState}, " +
-                                        "premiumProductId=${remote.premiumProductId}, " +
-                                        "subscriptionExpiryMillis=${remote.subscriptionExpiryMillis}, " +
-                                        "subscriptionAutoRenewing=${remote.subscriptionAutoRenewing}, " +
-                                        "subscriptionOrderId=${remote.subscriptionOrderId}"
                             )
                             com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
                                 remote = remote,
@@ -2314,7 +2287,6 @@ class AppRootState(
                                 }
                             }
                         }.onFailure { e ->
-                            println("buyPremium verifySubscription failure: ${e.message}")
                             if (isIosPlatform && localSubscriptionActive) {
                                 applyImmediatePostPurchasePremiumState(
                                     productId = info.productId.ifBlank { result.productId },

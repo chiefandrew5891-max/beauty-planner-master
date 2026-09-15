@@ -15,15 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andrey.beautyplanner.AppSettings
@@ -43,6 +44,7 @@ import com.andrey.beautyplanner.ClientDatabase
 import com.andrey.beautyplanner.ClientProfile
 import com.andrey.beautyplanner.ClientProfileStatus
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.PhoneCaller
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -65,6 +67,7 @@ fun ClientDetailsScreen(
 ) {
     val fontScale = AppSettings.getFontScale()
     val onSurface = MaterialTheme.colors.onSurface
+    val primary = MaterialTheme.colors.primary
 
     var showProfileDialog by remember(clientId) { mutableStateOf(false) }
     var selectedFilter by remember(clientId) { mutableStateOf(ClientDetailsFilter.NEWEST) }
@@ -95,25 +98,12 @@ fun ClientDetailsScreen(
                     .padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = Locales.t("cd_back"),
-                            tint = onSurface
-                        )
-                    }
-
-                    Text(
-                        text = Locales.t("client_database_title"),
-                        fontSize = (20 * fontScale).sp,
-                        fontWeight = FontWeight.Bold,
-                        color = onSurface
-                    )
-                }
+                Text(
+                    text = Locales.t("client_database_title"),
+                    fontSize = (20 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = onSurface
+                )
 
                 Text(
                     text = Locales.t("client_details_no_records"),
@@ -175,43 +165,47 @@ fun ClientDetailsScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(
-                    onClick = onBack,
-                    modifier = Modifier.padding(end = 4.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = Locales.t("cd_back"),
-                        tint = onSurface
+                Text(
+                    text = clientEntry.displayName,
+                    fontSize = (22 * fontScale).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppSettings.clientDisplayColor(
+                        name = clientEntry.displayName,
+                        phone = clientEntry.phone,
+                        defaultColor = onSurface
                     )
-                }
+                )
 
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(top = 4.dp)
-                ) {
-                    Text(
-                        text = clientEntry.displayName,
-                        fontSize = (22 * fontScale).sp,
-                        fontWeight = FontWeight.Bold,
-                        color = AppSettings.clientDisplayColor(
-                            name = clientEntry.displayName,
-                            phone = clientEntry.phone,
-                            defaultColor = onSurface
+                if (clientEntry.phone.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                PhoneCaller.call(clientEntry.phone)
+                            }
+                            .padding(vertical = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Call,
+                            contentDescription = null,
+                            tint = primary,
+                            modifier = Modifier.size(19.dp)
                         )
-                    )
 
-                    if (clientEntry.phone.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = clientEntry.phone,
                             fontSize = (14 * fontScale).sp,
-                            color = onSurface.copy(alpha = 0.72f)
+                            color = primary,
+                            textDecoration = TextDecoration.Underline
                         )
                     }
                 }
