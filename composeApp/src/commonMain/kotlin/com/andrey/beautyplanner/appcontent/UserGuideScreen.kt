@@ -585,13 +585,50 @@ fun UserGuideScreen() {
                     )
                 )
 
+                GuideNumberedList(
+                    title = Locales.t("guide_common_basic_workflow"),
+                    items = listOf(
+                        Locales.t("guide_client_database_step_4"),
+                        Locales.t("guide_client_database_step_5"),
+                        Locales.t("guide_client_database_step_6"),
+                        Locales.t("guide_client_database_step_7"),
+                        Locales.t("guide_client_database_step_8")
+                    )
+                )
+
                 GuideImage("guide_client_database_image")
 
                 Spacer(modifier = Modifier.height(30.dp))
 
+                GuideSectionTitle(Locales.t("guide_client_page_title"))
+                GuideParagraph(Locales.t("guide_client_page_p1"))
+                GuideParagraph(Locales.t("guide_client_page_p2"))
+                GuideParagraph(Locales.t("guide_client_page_p3"))
+
+                GuideBulletList(
+                    title = Locales.t("guide_common_on_this_screen_the_user_can"),
+                    items = listOf(
+                        Locales.t("guide_client_page_item_1"),
+                        Locales.t("guide_client_page_item_2"),
+                        Locales.t("guide_client_page_item_3"),
+                        Locales.t("guide_client_page_item_4"),
+                        Locales.t("guide_client_page_item_5")
+                    )
+                )
+
                 GuideImage("guide_client_database_image2")
 
                 Spacer(modifier = Modifier.height(30.dp))
+
+                GuideBulletList(
+                    title = Locales.t("client_details_sort_title"),
+                    items = listOf(
+                        Locales.t("guide_client_page_sort_item_1"),
+                        Locales.t("guide_client_page_sort_item_2"),
+                        Locales.t("guide_client_page_sort_item_3"),
+                        Locales.t("guide_client_page_sort_item_4")
+                    )
+                )
 
                 GuideImage("guide_client_database_image3")
             }

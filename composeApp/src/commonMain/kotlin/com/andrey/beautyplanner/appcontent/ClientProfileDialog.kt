@@ -100,15 +100,6 @@ fun ClientProfileDialog(
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
-
-                        if (initialProfile.phone.isNotBlank()) {
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = initialProfile.phone,
-                                fontSize = (13 * fontScale).sp,
-                                color = onSurface.copy(alpha = 0.68f)
-                            )
-                        }
                     }
 
                     IconButton(onClick = onDismiss) {
@@ -118,20 +109,6 @@ fun ClientProfileDialog(
                             tint = onSurface.copy(alpha = 0.82f)
                         )
                     }
-                }
-
-                Text(
-                    text = "${Locales.t("client_database_visits")}: $visitCount",
-                    fontSize = (14 * fontScale).sp,
-                    color = onSurface.copy(alpha = 0.82f)
-                )
-
-                if (lastVisitDate.isNotBlank()) {
-                    Text(
-                        text = "${Locales.t("client_database_last_visit")}: $lastVisitDate",
-                        fontSize = (14 * fontScale).sp,
-                        color = onSurface.copy(alpha = 0.82f)
-                    )
                 }
 
                 OutlinedTextField(
