@@ -155,7 +155,7 @@ actual object BackendBridge {
                 .call(emptyMap<String, Any>())
                 .addOnSuccessListener { result ->
                     try {
-                        val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
+                        val map = result.getData() as? Map<*, *> ?: emptyMap<Any?, Any?>()
                         val rawJson = map["itemsJson"]?.toString().orEmpty()
 
                         val mapped = runCatching {
@@ -192,7 +192,7 @@ actual object BackendBridge {
                 .call(emptyMap<String, Any>())
                 .addOnSuccessListener { result ->
                     try {
-                        val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
+                        val map = result.getData() as? Map<*, *> ?: emptyMap<Any?, Any?>()
 
                         val rawTemplates = map["serviceTemplates"] as? List<*> ?: emptyList<Any?>()
                         val templates = rawTemplates.mapNotNull { item ->
@@ -315,7 +315,7 @@ actual object BackendBridge {
                 .call(payload)
                 .addOnSuccessListener { result ->
                     try {
-                        val map = result.data as? Map<*, *> ?: emptyMap<Any?, Any?>()
+                        val map = result.getData() as? Map<*, *> ?: emptyMap<Any?, Any?>()
                         val normalized = buildMap<String, String> {
                             map.forEach { (key, value) ->
                                 val normalizedKey = key?.toString().orEmpty()
