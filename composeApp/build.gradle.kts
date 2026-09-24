@@ -80,8 +80,19 @@ android {
         applicationId = "com.andrey.beautyplanner"
         minSdk = 24
         targetSdk = 36
-        versionCode = 14
+        versionCode = 15
         versionName = "1.4.0"
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
 
     compileOptions {

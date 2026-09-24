@@ -5,8 +5,10 @@ import com.andrey.beautyplanner.AccessTier
 import com.andrey.beautyplanner.AppSettings
 import com.andrey.beautyplanner.remote.AccessStatusResponse
 import kotlin.math.ceil
+import kotlinx.datetime.Clock
 
 object AccessRepository {
+    private const val PREMIUM_EXPIRY_GRACE_WINDOW_MILLIS = 24 * 60 * 60 * 1000L
     fun applyRemoteStatus(
         remote: AccessStatusResponse,
         currentAuthUserId: String?
@@ -76,9 +78,8 @@ object AccessRepository {
         AppSettings.premiumSubscribedProductId = productId
         AppSettings.premiumSubscriptionExpiryMillis = expiryMillis
         AppSettings.premiumSubscriptionAutoRenewing = autoRenewing
+        AppSettings.premiumLastVerifiedAtMillis = Clock.System.now().toEpochMilliseconds()
 
-        AppSettings.cachedAccessTier = "PREMIUM"
-        AppSettings.cachedHasPremium = true
         AppSettings.cachedSubscriptionState = subscriptionState
 
         AppSettings.localPremiumFallbackPendingSync = true
@@ -122,12 +123,28 @@ object AccessRepository {
     }
 
     fun getCachedAccessState(nowMillis: Long): AccessState {
-        val hasActiveSubscriptionState = AppSettings.premiumSubscriptionState == "ACTIVE"
+        val subscriptionState = AppSettings.premiumSubscriptionState.uppercase()
+        val expiryMillis = AppSettings.premiumSubscriptionExpiryMillis
+        val lastVerifiedAtMillis = AppSettings.premiumLastVerifiedAtMillis
+
+        val isStateActive = subscriptionState == "ACTIVE"
+        val isExpiryInFuture = expiryMillis > nowMillis
+        val isWithinGraceWindow =
+            expiryMillis > 0L &&
+                    expiryMillis <= nowMillis &&
+                    nowMillis - expiryMillis <= PREMIUM_EXPIRY_GRACE_WINDOW_MILLIS
+
+        val hasRecentPendingSyncFallback =
+            AppSettings.localPremiumFallbackPendingSync &&
+                    lastVerifiedAtMillis > 0L &&
+                    nowMillis - lastVerifiedAtMillis <= PREMIUM_EXPIRY_GRACE_WINDOW_MILLIS
 
         val hasEffectivePremium =
-            AppSettings.cachedHasPremium ||
-                    AppSettings.cachedAccessTier == "PREMIUM" ||
-                    hasActiveSubscriptionState
+            isStateActive && (
+                    isExpiryInFuture ||
+                            isWithinGraceWindow ||
+                            hasRecentPendingSyncFallback
+                    )
 
         val trialEndsAtMillis = AppSettings.cachedTrialEndsAtMillis
 
