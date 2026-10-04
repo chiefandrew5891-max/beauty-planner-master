@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "naujausi viršuje",
     "guide_client_page_sort_item_2": "seniausi viršuje",
     "guide_client_page_sort_item_3": "atlikti",
-    "guide_client_page_sort_item_4": "laukiantys"
+    "guide_client_page_sort_item_4": "laukiantys",
+    "premium_plan_monthly": "Mėnesinė prenumerata",
+    "premium_plan_yearly": "Metinė prenumerata"
 }

@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "nejnovější první",
     "guide_client_page_sort_item_2": "nejstarší první",
     "guide_client_page_sort_item_3": "dokončené",
-    "guide_client_page_sort_item_4": "čekající"
+    "guide_client_page_sort_item_4": "čekající",
+    "premium_plan_monthly": "Měsíční předplatné",
+    "premium_plan_yearly": "Roční předplatné"
 }

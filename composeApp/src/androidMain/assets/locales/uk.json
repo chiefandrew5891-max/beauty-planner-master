@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "спочатку нові",
     "guide_client_page_sort_item_2": "спочатку старі",
     "guide_client_page_sort_item_3": "виконані",
-    "guide_client_page_sort_item_4": "очікують"
+    "guide_client_page_sort_item_4": "очікують",
+    "premium_plan_monthly": "Місячна підписка",
+    "premium_plan_yearly": "Річна підписка"
 }

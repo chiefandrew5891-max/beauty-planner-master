@@ -962,5 +962,7 @@
     "guide_client_page_sort_item_1": "newest first",
     "guide_client_page_sort_item_2": "oldest first",
     "guide_client_page_sort_item_3": "completed",
-    "guide_client_page_sort_item_4": "pending"
+    "guide_client_page_sort_item_4": "pending",
+    "premium_plan_monthly": "Monthly subscription",
+    "premium_plan_yearly": "Yearly subscription"
 }

@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "최신순",
     "guide_client_page_sort_item_2": "오래된순",
     "guide_client_page_sort_item_3": "완료됨",
-    "guide_client_page_sort_item_4": "대기중"
+    "guide_client_page_sort_item_4": "대기중",
+    "premium_plan_monthly": "월간 구독",
+    "premium_plan_yearly": "연간 구독"
 }

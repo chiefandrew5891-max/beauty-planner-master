@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "най-новите първо",
     "guide_client_page_sort_item_2": "най-старите първо",
     "guide_client_page_sort_item_3": "извършени",
-    "guide_client_page_sort_item_4": "чакащи"
+    "guide_client_page_sort_item_4": "чакащи",
+    "premium_plan_monthly": "Месечен абонамент",
+    "premium_plan_yearly": "Годишен абонамент"
 }

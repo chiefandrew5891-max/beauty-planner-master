@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "uuermaad enne",
     "guide_client_page_sort_item_2": "vanemad enne",
     "guide_client_page_sort_item_3": "tehtud",
-    "guide_client_page_sort_item_4": "ootel"
+    "guide_client_page_sort_item_4": "ootel",
+    "premium_plan_monthly": "Kuupõhine tellimus",
+    "premium_plan_yearly": "Aastapõhine tellimus"
 }

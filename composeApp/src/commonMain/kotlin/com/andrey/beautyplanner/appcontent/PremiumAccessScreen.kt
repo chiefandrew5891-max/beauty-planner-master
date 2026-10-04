@@ -2,24 +2,44 @@ package com.andrey.beautyplanner.appcontent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andrey.beautyplanner.AccessManager
 import com.andrey.beautyplanner.AccessState
 import com.andrey.beautyplanner.AccessTier
 import com.andrey.beautyplanner.AppSettings
@@ -27,27 +47,11 @@ import com.andrey.beautyplanner.Locales
 import com.andrey.beautyplanner.StoreOpener
 import com.andrey.beautyplanner.billing.BillingStatus
 import com.andrey.beautyplanner.billing.BillingUiState
-import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_ID
+import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_ID_MONTHLY
+import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_ID_YEARLY
+import com.andrey.beautyplanner.billing.PREMIUM_SUBS_PRODUCT_IDS
 import com.andrey.beautyplanner.getPlatform
 import kotlinx.datetime.Clock
-import androidx.compose.material.Divider
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import com.andrey.beautyplanner.AccessManager
 
 private const val TERMS_OF_USE_URL = "https://sites.google.com/view/beautyplanner/terms-of-use"
 
@@ -59,7 +63,7 @@ fun PremiumAccessScreen(
     accountLabel: String,
     isGuestUser: Boolean,
     onContinueFree: () -> Unit,
-    onUnlockPremium: () -> Unit,
+    onUnlockPremium: (String) -> Unit,
     onRestorePurchases: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit
 ) {
@@ -67,8 +71,22 @@ fun PremiumAccessScreen(
     val fontScale = AppSettings.getFontScale()
     val linkColor = MaterialTheme.colors.primary
 
-    val premiumProduct = billingUiState.products.firstOrNull {
-        it.productId == PREMIUM_SUBS_PRODUCT_ID
+    val premiumProducts = billingUiState.products
+        .filter { it.productId in PREMIUM_SUBS_PRODUCT_IDS }
+        .sortedBy { product ->
+            when (product.productId) {
+                PREMIUM_SUBS_PRODUCT_ID_MONTHLY -> 0
+                PREMIUM_SUBS_PRODUCT_ID_YEARLY -> 1
+                else -> 99
+            }
+        }
+
+    val monthlyProduct = premiumProducts.firstOrNull {
+        it.productId == PREMIUM_SUBS_PRODUCT_ID_MONTHLY
+    }
+
+    val yearlyProduct = premiumProducts.firstOrNull {
+        it.productId == PREMIUM_SUBS_PRODUCT_ID_YEARLY
     }
 
     val isPremiumActive = AccessManager.isPremiumAccessActive(
@@ -92,28 +110,11 @@ fun PremiumAccessScreen(
         it.isNotBlank() && it != Locales.t("premium_required_default")
     }.orEmpty()
 
-    val buyButtonText = when {
-        isPremiumActive ->
-            Locales.t("premium_already_owned")
-
-        premiumProduct != null && premiumProduct.formattedPrice.isNotBlank() ->
-            "${Locales.t("premium_buy_btn")} • ${premiumProduct.formattedPrice}"
-
-        billingUiState.status == BillingStatus.LOADING_PRODUCTS ||
-                billingUiState.status == BillingStatus.CONNECTING ->
-            Locales.t("premium_loading_price")
-
-        else ->
-            Locales.t("premium_buy_btn")
-    }
-
     val buyEnabled =
         !isGuestUser &&
                 !isPremiumActive &&
                 billingUiState.status != BillingStatus.PURCHASING &&
-                billingUiState.status != BillingStatus.RESTORING &&
-                premiumProduct != null &&
-                premiumProduct.offerToken.isNotBlank()
+                billingUiState.status != BillingStatus.RESTORING
 
     val expiryMillis = AppSettings.premiumSubscriptionExpiryMillis
     val daysLeft = calculateSubscriptionDaysLeft(
@@ -362,6 +363,7 @@ fun PremiumAccessScreen(
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colors.primary
                 )
+
                 if (!isIos) {
                     Spacer(modifier = Modifier.padding(top = 6.dp))
                     Text(
@@ -455,28 +457,28 @@ fun PremiumAccessScreen(
 
                 Spacer(modifier = Modifier.padding(top = 24.dp))
 
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = onUnlockPremium,
-                        enabled = buyEnabled,
-                        modifier = Modifier
-                            .widthIn(max = 420.dp)
-                            .fillMaxWidth()
-                            .height(44.dp),
-                        shape = RoundedCornerShape(12.dp)
+                if (isPremiumActive) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                        Button(
+                            onClick = {},
+                            enabled = false,
+                            modifier = Modifier
+                                .widthIn(max = 420.dp)
+                                .fillMaxWidth()
+                                .height(44.dp),
+                            shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(
-                                text = buyButtonText,
-                                fontWeight = FontWeight.Medium
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = Locales.t("premium_already_owned"),
+                                    fontWeight = FontWeight.Medium
+                                )
 
-                            if (isPremiumActive) {
                                 Spacer(modifier = Modifier.width(8.dp))
 
                                 Box(
@@ -495,6 +497,59 @@ fun PremiumAccessScreen(
                                         modifier = Modifier.size(12.dp)
                                     )
                                 }
+                            }
+                        }
+                    }
+                } else {
+                    monthlyProduct?.let { product ->
+                        SubscriptionPlanButton(
+                            title = Locales.t("premium_plan_monthly"),
+                            price = product.formattedPrice,
+                            onClick = { onUnlockPremium(product.productId) },
+                            enabled = buyEnabled && product.offerToken.isNotBlank(),
+                            fontScale = fontScale
+                        )
+
+                        Spacer(modifier = Modifier.padding(top = 10.dp))
+                    }
+
+                    yearlyProduct?.let { product ->
+                        SubscriptionPlanButton(
+                            title = Locales.t("premium_plan_yearly"),
+                            price = product.formattedPrice,
+                            onClick = { onUnlockPremium(product.productId) },
+                            enabled = buyEnabled && product.offerToken.isNotBlank(),
+                            fontScale = fontScale
+                        )
+                    }
+
+                    if (premiumProducts.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Button(
+                                onClick = {},
+                                enabled = false,
+                                modifier = Modifier
+                                    .widthIn(max = 420.dp)
+                                    .fillMaxWidth()
+                                    .height(44.dp),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text(
+                                    text = if (
+                                        billingUiState.status == BillingStatus.LOADING_PRODUCTS ||
+                                        billingUiState.status == BillingStatus.CONNECTING
+                                    ) {
+                                        Locales.t("premium_loading_price")
+                                    } else {
+                                        Locales.t("premium_buy_btn")
+                                    },
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }
                         }
                     }
@@ -544,6 +599,57 @@ fun PremiumAccessScreen(
                         textDecoration = TextDecoration.Underline,
                         fontSize = (12 * fontScale).sp,
                         modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SubscriptionPlanButton(
+    title: String,
+    price: String,
+    onClick: () -> Unit,
+    enabled: Boolean,
+    fontScale: Float
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = Modifier
+                .widthIn(max = 420.dp)
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 56.dp),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                    fontSize = (15 * fontScale).sp,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                if (price.isNotBlank()) {
+                    Text(
+                        text = price,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Center,
+                        fontSize = (13 * fontScale).sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 2.dp)
                     )
                 }
             }

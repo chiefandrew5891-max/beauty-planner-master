@@ -962,5 +962,7 @@
     "guide_client_page_sort_item_1": "сначала новые",
     "guide_client_page_sort_item_2": "сначала старые",
     "guide_client_page_sort_item_3": "выполненные",
-    "guide_client_page_sort_item_4": "ожидающие"
+    "guide_client_page_sort_item_4": "ожидающие",
+    "premium_plan_monthly": "Месячная подписка",
+    "premium_plan_yearly": "Годовая подписка"
 }

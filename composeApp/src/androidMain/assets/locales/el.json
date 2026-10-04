@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "τα νεότερα πρώτα",
     "guide_client_page_sort_item_2": "τα παλαιότερα πρώτα",
     "guide_client_page_sort_item_3": "ολοκληρωμένα",
-    "guide_client_page_sort_item_4": "σε εκκρεμότητα"
+    "guide_client_page_sort_item_4": "σε εκκρεμότητα",
+    "premium_plan_monthly": "Μηνιαία συνδρομή",
+    "premium_plan_yearly": "Ετήσια συνδρομή"
 }

@@ -35,15 +35,28 @@ actual class BillingManager actual constructor() {
                     return@PurchasesUpdatedListener
                 }
 
+                val purchasedProductId = purchase.products.firstOrNull { it in PREMIUM_SUBS_PRODUCT_IDS }
+                    ?: purchase.products.firstOrNull()
+
+                if (purchasedProductId == null) {
+                    pendingPurchaseContinuation = null
+                    callback(
+                        PurchaseResult.Error(
+                            "Purchased product does not match any known premium subscription."
+                        )
+                    )
+                    return@PurchasesUpdatedListener
+                }
+
                 handleSuccessfulPurchase(
                     purchase = purchase,
-                    productId = PREMIUM_SUBS_PRODUCT_ID
+                    productId = purchasedProductId
                 ) { ok, message ->
                     pendingPurchaseContinuation = null
                     if (ok) {
                         callback(
                             PurchaseResult.Success(
-                                productId = PREMIUM_SUBS_PRODUCT_ID,
+                                productId = purchasedProductId,
                                 purchaseToken = purchase.purchaseToken,
                                 transactionId = ""
                             )
@@ -244,8 +257,8 @@ actual class BillingManager actual constructor() {
                     return@queryPurchasesAsync
                 }
 
-                val owned = purchases.orEmpty().firstOrNull {
-                    it.products.contains(PREMIUM_SUBS_PRODUCT_ID)
+                val owned = purchases.orEmpty().firstOrNull { purchase ->
+                    purchase.products.any { it in PREMIUM_SUBS_PRODUCT_IDS }
                 }
 
                 if (owned == null) {
@@ -253,9 +266,17 @@ actual class BillingManager actual constructor() {
                     return@queryPurchasesAsync
                 }
 
+                val restoredProductId = owned.products.firstOrNull { it in PREMIUM_SUBS_PRODUCT_IDS }
+                    ?: owned.products.firstOrNull()
+
+                if (restoredProductId == null) {
+                    cont.resume(RestoreResult.NothingToRestore)
+                    return@queryPurchasesAsync
+                }
+
                 handleSuccessfulPurchase(
                     purchase = owned,
-                    productId = PREMIUM_SUBS_PRODUCT_ID
+                    productId = restoredProductId
                 ) { ok, message ->
                     if (ok) {
                         cont.resume(RestoreResult.Restored)
@@ -287,14 +308,18 @@ actual class BillingManager actual constructor() {
                     return@queryPurchasesAsync
                 }
 
-                val purchase = purchases.orEmpty().firstOrNull {
-                    it.products.contains(PREMIUM_SUBS_PRODUCT_ID)
+                val purchase = purchases.orEmpty().firstOrNull { candidate ->
+                    candidate.products.any { it in PREMIUM_SUBS_PRODUCT_IDS }
                 }
 
                 if (purchase == null) {
                     cont.resume(SubscriptionInfo(state = SubscriptionState.NONE))
                     return@queryPurchasesAsync
                 }
+
+                val matchedProductId = purchase.products.firstOrNull { it in PREMIUM_SUBS_PRODUCT_IDS }
+                    ?: purchase.products.firstOrNull()
+                    ?: ""
 
                 val state = when (purchase.purchaseState) {
                     Purchase.PurchaseState.PURCHASED -> SubscriptionState.ACTIVE
@@ -305,7 +330,7 @@ actual class BillingManager actual constructor() {
                 cont.resume(
                     SubscriptionInfo(
                         state = state,
-                        productId = PREMIUM_SUBS_PRODUCT_ID,
+                        productId = matchedProductId,
                         purchaseToken = purchase.purchaseToken,
                         isAutoRenewing = purchase.isAutoRenewing,
                         startTimeMillis = purchase.purchaseTime,

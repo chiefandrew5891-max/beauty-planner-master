@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "nyeste først",
     "guide_client_page_sort_item_2": "eldste først",
     "guide_client_page_sort_item_3": "fullført",
-    "guide_client_page_sort_item_4": "venter"
+    "guide_client_page_sort_item_4": "venter",
+    "premium_plan_monthly": "Månedlig abonnement",
+    "premium_plan_yearly": "Årlig abonnement"
 }

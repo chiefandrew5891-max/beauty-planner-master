@@ -3,7 +3,10 @@ import StoreKit
 
 @objc final class StoreKitBridge: NSObject {
 
-    private static let premiumProductId = "beautyplanner_premium_yearly"
+    private static let premiumProductIds: Set<String> = [
+        "beautyplanner_premium_monthly",
+        "beautyplanner_premium_yearly"
+    ]
 
     private struct SubscriptionSnapshot {
         let state: String
@@ -38,7 +41,7 @@ import StoreKit
                     let transaction = try checkVerified(update)
                     print("StoreKitBridge.Transaction.updates: verified transaction for \(transaction.productID) id=\(transaction.id)")
 
-                    if transaction.productID == premiumProductId {
+                    if premiumProductIds.contains(transaction.productID) {
                         let snapshot = await buildSnapshot(for: transaction)
                         storeSnapshot(snapshot)
                         print("StoreKitBridge.Transaction.updates: cached premium snapshot state=\(snapshot.state)")
@@ -123,6 +126,13 @@ import StoreKit
                 switch result {
                 case .success(let verification):
                     let transaction = try checkVerified(verification)
+
+                    guard premiumProductIds.contains(transaction.productID) else {
+                        print("StoreKitBridge.purchaseProduct: unexpected product id \(transaction.productID)")
+                        completion(nil, "Purchased product is not a supported premium subscription")
+                        return
+                    }
+
                     let snapshot = await buildSnapshot(for: transaction)
                     storeSnapshot(snapshot)
 
@@ -218,16 +228,16 @@ import StoreKit
 
             guard let snapshot else {
                 completion([
-                    "state": "NONE",
-                    "productId": "",
-                    "purchaseToken": "",
-                    "transactionId": "",
-                    "originalTransactionId": "",
-                    "isAutoRenewing": "false",
-                    "startTimeMillis": "",
-                    "expiryTimeMillis": "",
-                    "lastVerifiedAtMillis": String(nowMillis())
-                ], nil)
+                               "state": "NONE",
+                               "productId": "",
+                               "purchaseToken": "",
+                               "transactionId": "",
+                               "originalTransactionId": "",
+                               "isAutoRenewing": "false",
+                               "startTimeMillis": "",
+                               "expiryTimeMillis": "",
+                               "lastVerifiedAtMillis": String(nowMillis())
+                           ], nil)
                 return
             }
 
@@ -254,12 +264,12 @@ import StoreKit
             for await entitlement in Transaction.currentEntitlements {
                 let transaction = try checkVerified(entitlement)
 
-                guard transaction.productID == premiumProductId else {
+                guard premiumProductIds.contains(transaction.productID) else {
                     continue
                 }
 
                 let snapshot = await buildSnapshot(for: transaction)
-                print("StoreKitBridge.currentPremiumSnapshot: found premium entitlement state=\(snapshot.state)")
+                print("StoreKitBridge.currentPremiumSnapshot: found premium entitlement state=\(snapshot.state) for product=\(snapshot.productId)")
                 return snapshot
             }
 
@@ -281,6 +291,7 @@ import StoreKit
             "expirationDate": String(describing: transaction.expirationDate),
             "revocationDate": String(describing: transaction.revocationDate)
         ])
+
         let expirationMillis = transaction.expirationDate.map { Int64($0.timeIntervalSince1970 * 1000.0) }
         let purchaseMillis = Int64(transaction.purchaseDate.timeIntervalSince1970 * 1000.0)
         let revoked = transaction.revocationDate != nil

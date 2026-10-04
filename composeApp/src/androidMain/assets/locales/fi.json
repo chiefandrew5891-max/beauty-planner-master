@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "uusimmat ensin",
     "guide_client_page_sort_item_2": "vanhimmat ensin",
     "guide_client_page_sort_item_3": "valmiit",
-    "guide_client_page_sort_item_4": "odottavat"
+    "guide_client_page_sort_item_4": "odottavat",
+    "premium_plan_monthly": "Kuukausitilaus",
+    "premium_plan_yearly": "Vuositilaus"
 }

@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "terbaru dulu",
     "guide_client_page_sort_item_2": "terlama dulu",
     "guide_client_page_sort_item_3": "selesai",
-    "guide_client_page_sort_item_4": "tertunda"
+    "guide_client_page_sort_item_4": "tertunda",
+    "premium_plan_monthly": "Langganan bulanan",
+    "premium_plan_yearly": "Langganan tahunan"
 }

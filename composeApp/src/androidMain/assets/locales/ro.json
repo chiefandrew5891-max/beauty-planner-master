@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "cele mai noi primul",
     "guide_client_page_sort_item_2": "cele mai vechi primul",
     "guide_client_page_sort_item_3": "finalizate",
-    "guide_client_page_sort_item_4": "în așteptare"
+    "guide_client_page_sort_item_4": "în așteptare",
+    "premium_plan_monthly": "Abonament lunar",
+    "premium_plan_yearly": "Abonament anual"
 }

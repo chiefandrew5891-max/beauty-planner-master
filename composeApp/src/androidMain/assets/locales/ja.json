@@ -959,5 +959,7 @@
     "guide_client_page_sort_item_1": "新しい順",
     "guide_client_page_sort_item_2": "古い順",
     "guide_client_page_sort_item_3": "完了済み",
-    "guide_client_page_sort_item_4": "保留中"
+    "guide_client_page_sort_item_4": "保留中",
+    "premium_plan_monthly": "月額サブスクリプション",
+    "premium_plan_yearly": "年額サブスクリプション"
 }

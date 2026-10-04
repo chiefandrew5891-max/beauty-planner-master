@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "legújabb elöl",
     "guide_client_page_sort_item_2": "legrégebbi elöl",
     "guide_client_page_sort_item_3": "teljesítve",
-    "guide_client_page_sort_item_4": "függőben"
+    "guide_client_page_sort_item_4": "függőben",
+    "premium_plan_monthly": "Havi előfizetés",
+    "premium_plan_yearly": "Éves előfizetés"
 }

@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "neueste zuerst",
     "guide_client_page_sort_item_2": "älteste zuerst",
     "guide_client_page_sort_item_3": "erledigt",
-    "guide_client_page_sort_item_4": "ausstehend"
+    "guide_client_page_sort_item_4": "ausstehend",
+    "premium_plan_monthly": "Monatliches Abonnement",
+    "premium_plan_yearly": "Jährliches Abonnement"
 }

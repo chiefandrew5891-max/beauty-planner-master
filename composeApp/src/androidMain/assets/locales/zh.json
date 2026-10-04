@@ -958,5 +958,7 @@
     "guide_client_page_sort_item_1": "最新优先",
     "guide_client_page_sort_item_2": "最早优先",
     "guide_client_page_sort_item_3": "已完成",
-    "guide_client_page_sort_item_4": "待处理"
+    "guide_client_page_sort_item_4": "待处理",
+    "premium_plan_monthly": "每月订阅",
+    "premium_plan_yearly": "每年订阅"
 }

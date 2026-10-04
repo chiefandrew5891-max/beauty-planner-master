@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "nyaste först",
     "guide_client_page_sort_item_2": "äldsta först",
     "guide_client_page_sort_item_3": "slutförda",
-    "guide_client_page_sort_item_4": "väntande"
+    "guide_client_page_sort_item_4": "väntande",
+    "premium_plan_monthly": "Månatlig prenumeration",
+    "premium_plan_yearly": "Årlig prenumeration"
 }

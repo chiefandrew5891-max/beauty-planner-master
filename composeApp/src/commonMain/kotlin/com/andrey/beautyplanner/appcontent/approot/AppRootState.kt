@@ -2184,9 +2184,7 @@ class AppRootState(
             errorMessage = null
         )
 
-        val products = billingManager.loadProducts(
-            listOf(PREMIUM_SUBS_PRODUCT_ID)
-        )
+        val products = billingManager.loadProducts(PREMIUM_SUBS_PRODUCT_IDS)
 
         billingUiState = billingUiState.copy(
             status = BillingStatus.READY,
@@ -2196,7 +2194,7 @@ class AppRootState(
         )
     }
 
-    fun buyPremium() {
+    fun buyPremium(productId: String) {
         scope.launch {
             if (currentAuthUser?.provider == SignInProvider.ANONYMOUS) {
                 billingUiState = billingUiState.copy(
@@ -2209,7 +2207,7 @@ class AppRootState(
             showGlobalLoading(Locales.t("loading"))
             try {
                 val product = billingUiState.products.firstOrNull {
-                    it.productId == PREMIUM_SUBS_PRODUCT_ID
+                    it.productId == productId
                 }
 
                 if (product == null) {
@@ -2287,34 +2285,11 @@ class AppRootState(
                                 }
                             }
                         }.onFailure { e ->
-                            if (isIosPlatform && localSubscriptionActive) {
-                                applyImmediatePostPurchasePremiumState(
-                                    productId = info.productId.ifBlank { result.productId },
-                                    subscriptionState = info.state.name,
-                                    expiryMillis = info.expiryTimeMillis ?: 0L,
-                                    autoRenewing = info.isAutoRenewing
-                                )
-
-                                scope.launch {
-                                    delay(2500L)
-                                    runCatching {
-                                        val refreshed = com.andrey.beautyplanner.remote.BackendBridge.getAccessStatus(
-                                            AppSettings.backendUserId
-                                        )
-                                        com.andrey.beautyplanner.access.AccessRepository.applyRemoteStatus(
-                                            remote = refreshed,
-                                            currentAuthUserId = currentAuthUser?.uid
-                                        )
-                                        refreshAccessState()
-                                    }
-                                }
-                            } else {
-                                billingUiState = billingUiState.copy(
-                                    status = BillingStatus.ERROR,
-                                    errorMessage = e.message ?: "Backend verification failed",
-                                    ownedPremium = accessState.hasPremium
-                                )
-                            }
+                            billingUiState = billingUiState.copy(
+                                status = BillingStatus.ERROR,
+                                errorMessage = e.message ?: "Backend verification failed",
+                                ownedPremium = accessState.hasPremium
+                            )
                         }
                     }
 
@@ -2376,7 +2351,9 @@ class AppRootState(
                             val applied = com.andrey.beautyplanner.access.AccessRepository.applyLocalPremiumFallback(
                                 currentAuthUserId = currentAuthUser?.uid,
                                 currentBackendUserId = AppSettings.backendUserId,
-                                productId = info.productId.ifBlank { PREMIUM_SUBS_PRODUCT_ID },
+                                productId = info.productId.ifBlank {
+                                    AppSettings.premiumSubscribedProductId.ifBlank { PREMIUM_SUBS_PRODUCT_ID_YEARLY }
+                                },
                                 subscriptionState = info.state.name,
                                 expiryMillis = info.expiryTimeMillis ?: 0L,
                                 autoRenewing = info.isAutoRenewing

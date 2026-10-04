@@ -797,8 +797,8 @@ fun AppRootContent(
                 onContinueFree = {
                     state.closePremiumScreen()
                 },
-                onUnlockPremium = {
-                    state.buyPremium()
+                onUnlockPremium = { productId ->
+                    state.buyPremium(productId)
                 },
                 onRestorePurchases = {
                     state.restorePremium()

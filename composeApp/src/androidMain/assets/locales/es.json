@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "más recientes primero",
     "guide_client_page_sort_item_2": "más antiguas primero",
     "guide_client_page_sort_item_3": "completadas",
-    "guide_client_page_sort_item_4": "pendientes"
+    "guide_client_page_sort_item_4": "pendientes",
+    "premium_plan_monthly": "Suscripción mensual",
+    "premium_plan_yearly": "Suscripción anual"
 }

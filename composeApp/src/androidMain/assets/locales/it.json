@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "i più recenti",
     "guide_client_page_sort_item_2": "i meno recenti",
     "guide_client_page_sort_item_3": "completati",
-    "guide_client_page_sort_item_4": "in attesa"
+    "guide_client_page_sort_item_4": "in attesa",
+    "premium_plan_monthly": "Abbonamento mensile",
+    "premium_plan_yearly": "Abbonamento annuale"
 }

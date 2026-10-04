@@ -960,5 +960,7 @@
     "guide_client_page_sort_item_1": "najnovejše prej",
     "guide_client_page_sort_item_2": "najstarejše prej",
     "guide_client_page_sort_item_3": "opravljeno",
-    "guide_client_page_sort_item_4": "v teku"
+    "guide_client_page_sort_item_4": "v teku",
+    "premium_plan_monthly": "Mesečna naročnina",
+    "premium_plan_yearly": "Letna naročnina"
 }
