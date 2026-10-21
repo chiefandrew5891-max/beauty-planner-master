@@ -58,6 +58,9 @@ kotlin {
 
                 implementation(libs.googlePlayBilling)
 
+                implementation("com.google.android.play:review:2.0.2")
+                implementation("com.google.android.play:review-ktx:2.0.2")
+
                 implementation(libs.firebase.auth.ktx)
                 implementation(libs.firebase.functions.ktx)
                 implementation(libs.firebase.firestore)
