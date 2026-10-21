@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "finalizate",
     "guide_client_page_sort_item_4": "în așteptare",
     "premium_plan_monthly": "Abonament lunar",
-    "premium_plan_yearly": "Abonament anual"
+    "premium_plan_yearly": "Abonament anual",
+    "about_app_rate_section_title": "Evaluează aplicația",
+    "about_app_rate_section_hint": "Dacă Beauty Planner vă este util, vă rugăm să lăsați o evaluare.",
+    "about_app_rate_app": "Evaluează aplicația",
+    "review_prompt_title": "Vă place Beauty Planner?",
+    "review_prompt_message": "Vă rugăm să evaluați aplicația. Ne ajută să o îmbunătățim și să susținem dezvoltarea.",
+    "review_prompt_action_rate": "Evaluează acum",
+    "review_prompt_action_later": "Mai târziu",
+    "review_prompt_action_never": "Nu mai întreba"
 }

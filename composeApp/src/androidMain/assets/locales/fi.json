@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "valmiit",
     "guide_client_page_sort_item_4": "odottavat",
     "premium_plan_monthly": "Kuukausitilaus",
-    "premium_plan_yearly": "Vuositilaus"
+    "premium_plan_yearly": "Vuositilaus",
+    "about_app_rate_section_title": "Arvioi sovellus",
+    "about_app_rate_section_hint": "Jos Beauty Planner on sinulle hyödyllinen, jätäthän arvostelun.",
+    "about_app_rate_app": "Arvioi sovellus",
+    "review_prompt_title": "Pidätkö Beauty Planner -sovelluksesta?",
+    "review_prompt_message": "Arvioi sovellus. Se auttaa parantamaan sovellusta ja tukemaan kehitystä.",
+    "review_prompt_action_rate": "Arvioi nyt",
+    "review_prompt_action_later": "Myöhemmin",
+    "review_prompt_action_never": "Älä kysy uudelleen"
 }

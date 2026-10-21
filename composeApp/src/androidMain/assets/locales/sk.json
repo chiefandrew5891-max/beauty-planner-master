@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "dokončené",
     "guide_client_page_sort_item_4": "čakajúce",
     "premium_plan_monthly": "Mesačné predplatné",
-    "premium_plan_yearly": "Ročné predplatné"
+    "premium_plan_yearly": "Ročné predplatné",
+    "about_app_rate_section_title": "Ohodnoťte aplikáciu",
+    "about_app_rate_section_hint": "Ak je pre vás Beauty Planner užitočný, zanechajte prosím hodnotenie.",
+    "about_app_rate_app": "Ohodnotiť aplikáciu",
+    "review_prompt_title": "Páči sa vám Beauty Planner?",
+    "review_prompt_message": "Ohodnoťte prosím aplikáciu. Pomáha to zlepšovať aplikáciu a podporovať vývoj.",
+    "review_prompt_action_rate": "Ohodnotiť teraz",
+    "review_prompt_action_later": "Neskôr",
+    "review_prompt_action_never": "Viac sa nepýtať"
 }

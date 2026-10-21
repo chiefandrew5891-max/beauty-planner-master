@@ -1072,4 +1072,30 @@ fun AppRootDialogs(state: AppRootState) {
             shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
         )
     }
+    if (state.showReviewPromptDialog) {
+        AlertDialog(
+            onDismissRequest = { state.dismissReviewPromptForNow() },
+            title = {
+                Text(Locales.t("review_prompt_title"))
+            },
+            text = {
+                Text(Locales.t("review_prompt_message"))
+            },
+            confirmButton = {
+                TextButton(onClick = { state.requestInAppReviewFromPrompt() }) {
+                    Text(Locales.t("review_prompt_action_rate"))
+                }
+            },
+            dismissButton = {
+                Row {
+                    TextButton(onClick = { state.dismissReviewPromptForNow() }) {
+                        Text(Locales.t("review_prompt_action_later"))
+                    }
+                    TextButton(onClick = { state.disableReviewPromptForever() }) {
+                        Text(Locales.t("review_prompt_action_never"))
+                    }
+                }
+            }
+        )
+    }
 }

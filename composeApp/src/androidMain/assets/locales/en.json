@@ -964,5 +964,13 @@
     "guide_client_page_sort_item_3": "completed",
     "guide_client_page_sort_item_4": "pending",
     "premium_plan_monthly": "Monthly subscription",
-    "premium_plan_yearly": "Yearly subscription"
+    "premium_plan_yearly": "Yearly subscription",
+    "about_app_rate_section_title": "Rate the app",
+    "about_app_rate_section_hint": "If Beauty Planner is useful for you, please leave a rating.",
+    "about_app_rate_app": "Rate app",
+    "review_prompt_title": "Enjoying Beauty Planner?",
+    "review_prompt_message": "Please rate the app. It helps us improve and support development.",
+    "review_prompt_action_rate": "Rate now",
+    "review_prompt_action_later": "Later",
+    "review_prompt_action_never": "Don't ask again"
 }

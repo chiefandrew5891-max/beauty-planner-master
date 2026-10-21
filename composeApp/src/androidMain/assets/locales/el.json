@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "ολοκληρωμένα",
     "guide_client_page_sort_item_4": "σε εκκρεμότητα",
     "premium_plan_monthly": "Μηνιαία συνδρομή",
-    "premium_plan_yearly": "Ετήσια συνδρομή"
+    "premium_plan_yearly": "Ετήσια συνδρομή",
+    "about_app_rate_section_title": "Αξιολογήστε την εφαρμογή",
+    "about_app_rate_section_hint": "Εάν το Beauty Planner σας είναι χρήσιμο, παρακαλούμε αφήστε μια αξιολόγηση.",
+    "about_app_rate_app": "Αξιολόγηση εφαρμογής",
+    "review_prompt_title": "Σας αρέσει το Beauty Planner;",
+    "review_prompt_message": "Παρακαλούμε αξιολογήστε την εφαρμογή. Αυτό βοηθά στη βελτίωση και την υποστήριξη της ανάπτυξης.",
+    "review_prompt_action_rate": "Αξιολόγηση τώρα",
+    "review_prompt_action_later": "Αργότερα",
+    "review_prompt_action_never": "Να μην ερωτηθώ ξανά"
 }

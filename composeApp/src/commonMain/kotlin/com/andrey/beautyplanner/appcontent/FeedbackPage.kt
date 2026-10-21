@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +30,7 @@ fun FeedbackPage(
     updateStatus: AppUpdateStatus,
     isCheckingUpdates: Boolean,
     onCheckUpdatesClick: () -> Unit,
+    onRateAppClick: () -> Unit,
     onOpenUserGuide: () -> Unit
 ) {
     val fontScale = AppSettings.getFontScale()
@@ -163,6 +165,30 @@ fun FeedbackPage(
                     }
                 )
             }
+
+            Spacer(modifier = Modifier.padding(top = 6.dp))
+
+            Divider()
+
+            Spacer(modifier = Modifier.padding(top = 6.dp))
+
+            Text(
+                text = Locales.t("about_app_rate_section_title"),
+                fontSize = (16 * fontScale).sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colors.onSurface
+            )
+
+            Text(
+                text = Locales.t("about_app_rate_section_hint"),
+                fontSize = (14 * fontScale).sp,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+            )
+
+            SecondaryActionButton(
+                text = Locales.t("about_app_rate_app"),
+                onClick = onRateAppClick
+            )
         }
     }
 }

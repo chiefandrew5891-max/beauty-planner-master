@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "selesai",
     "guide_client_page_sort_item_4": "tertunda",
     "premium_plan_monthly": "Langganan bulanan",
-    "premium_plan_yearly": "Langganan tahunan"
+    "premium_plan_yearly": "Langganan tahunan",
+    "about_app_rate_section_title": "Beri nilai aplikasi",
+    "about_app_rate_section_hint": "Jika Beauty Planner berguna bagi Anda, silakan berikan penilaian.",
+    "about_app_rate_app": "Nilai aplikasi",
+    "review_prompt_title": "Menikmati Beauty Planner?",
+    "review_prompt_message": "Silakan beri nilai aplikasi ini. Ini membantu meningkatkan dan mendukung pengembangan.",
+    "review_prompt_action_rate": "Nilai sekarang",
+    "review_prompt_action_later": "Nanti",
+    "review_prompt_action_never": "Jangan tanya lagi"
 }

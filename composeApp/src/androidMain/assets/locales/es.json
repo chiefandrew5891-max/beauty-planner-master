@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "completadas",
     "guide_client_page_sort_item_4": "pendientes",
     "premium_plan_monthly": "Suscripción mensual",
-    "premium_plan_yearly": "Suscripción anual"
+    "premium_plan_yearly": "Suscripción anual",
+    "about_app_rate_section_title": "Califica la aplicación",
+    "about_app_rate_section_hint": "Si Beauty Planner te resulta útil, por favor deja una valoración.",
+    "about_app_rate_app": "Calificar aplicación",
+    "review_prompt_title": "¿Te gusta Beauty Planner?",
+    "review_prompt_message": "Por favor, califica la aplicación. Ayuda a mejorar y apoyar el desarrollo.",
+    "review_prompt_action_rate": "Calificar ahora",
+    "review_prompt_action_later": "Más tarde",
+    "review_prompt_action_never": "No volver a preguntar"
 }

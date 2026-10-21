@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "tehtud",
     "guide_client_page_sort_item_4": "ootel",
     "premium_plan_monthly": "Kuupõhine tellimus",
-    "premium_plan_yearly": "Aastapõhine tellimus"
+    "premium_plan_yearly": "Aastapõhine tellimus",
+    "about_app_rate_section_title": "Hinda rakendust",
+    "about_app_rate_section_hint": "Kui Beauty Planner on teie jaoks kasulik, jätke palun hinnang.",
+    "about_app_rate_app": "Hinda rakendust",
+    "review_prompt_title": "Kas Beauty Planner meeldib?",
+    "review_prompt_message": "Palun hinda rakendust. See aitab rakendust täiustada ja arendust toetada.",
+    "review_prompt_action_rate": "Hinda kohe",
+    "review_prompt_action_later": "Hiljem",
+    "review_prompt_action_never": "Ära enam küsi"
 }

@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "извършени",
     "guide_client_page_sort_item_4": "чакащи",
     "premium_plan_monthly": "Месечен абонамент",
-    "premium_plan_yearly": "Годишен абонамент"
+    "premium_plan_yearly": "Годишен абонамент",
+    "about_app_rate_section_title": "Оценете приложението",
+    "about_app_rate_section_hint": "Ако Beauty Planner ви е полезен, моля, оставете оценка.",
+    "about_app_rate_app": "Оценете приложението",
+    "review_prompt_title": "Харесва ли ви Beauty Planner?",
+    "review_prompt_message": "Моля, оценете приложението. Това помага за подобряването му и поддържа разработването.",
+    "review_prompt_action_rate": "Оценете сега",
+    "review_prompt_action_later": "По-късно",
+    "review_prompt_action_never": "Не питайте отново"
 }

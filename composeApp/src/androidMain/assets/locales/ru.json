@@ -964,5 +964,13 @@
     "guide_client_page_sort_item_3": "выполненные",
     "guide_client_page_sort_item_4": "ожидающие",
     "premium_plan_monthly": "Месячная подписка",
-    "premium_plan_yearly": "Годовая подписка"
+    "premium_plan_yearly": "Годовая подписка",
+    "about_app_rate_section_title": "Оценка приложения",
+    "about_app_rate_section_hint": "Если Beauty Planner вам полезен, пожалуйста, оставьте оценку.",
+    "about_app_rate_app": "Оценить приложение",
+    "review_prompt_title": "Нравится Beauty Planner?",
+    "review_prompt_message": "Пожалуйста, оцените приложение. Это помогает улучшать его и поддерживать разработку.",
+    "review_prompt_action_rate": "Оценить сейчас",
+    "review_prompt_action_later": "Позже",
+    "review_prompt_action_never": "Больше не спрашивать"
 }

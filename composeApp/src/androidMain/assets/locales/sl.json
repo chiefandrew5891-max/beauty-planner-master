@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "opravljeno",
     "guide_client_page_sort_item_4": "v teku",
     "premium_plan_monthly": "Mesečna naročnina",
-    "premium_plan_yearly": "Letna naročnina"
+    "premium_plan_yearly": "Letna naročnina",
+    "about_app_rate_section_title": "Ocenite aplikacijo",
+    "about_app_rate_section_hint": "Če vam je Beauty Planner koristen, prosimo, pustite oceno.",
+    "about_app_rate_app": "Ocenite aplikacijo",
+    "review_prompt_title": "Vam je všeč Beauty Planner?",
+    "review_prompt_message": "Prosimo, ocenite aplikacijo. To pomaga pri izboljšavah in podpira nadaljnji razvoj.",
+    "review_prompt_action_rate": "Oceni zdaj",
+    "review_prompt_action_later": "Pozneje",
+    "review_prompt_action_never": "Ne sprašuj več"
 }

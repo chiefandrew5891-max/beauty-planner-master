@@ -960,5 +960,13 @@
     "guide_client_page_sort_item_3": "已完成",
     "guide_client_page_sort_item_4": "待处理",
     "premium_plan_monthly": "每月订阅",
-    "premium_plan_yearly": "每年订阅"
+    "premium_plan_yearly": "每年订阅",
+    "about_app_rate_section_title": "评价应用",
+    "about_app_rate_section_hint": "如果 Beauty Planner 对您有所帮助，请留下您的评价。",
+    "about_app_rate_app": "评价应用",
+    "review_prompt_title": "喜欢 Beauty Planner 吗？",
+    "review_prompt_message": "请为应用评分。这有助于改进应用并支持后续开发。",
+    "review_prompt_action_rate": "立即评价",
+    "review_prompt_action_later": "稍后",
+    "review_prompt_action_never": "不再提示"
 }

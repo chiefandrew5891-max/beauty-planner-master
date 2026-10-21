@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "المكتملة",
     "guide_client_page_sort_item_4": "المعلقة",
     "premium_plan_monthly": "اشتراك شهري",
-    "premium_plan_yearly": "اشتراك سنوي"
+    "premium_plan_yearly": "اشتراك سنوي",
+    "about_app_rate_section_title": "تقييم التطبيق",
+    "about_app_rate_section_hint": "إذا كان Beauty Planner مفيدًا لك، يرجى ترك تقييم.",
+    "about_app_rate_app": "تقييم التطبيق",
+    "review_prompt_title": "هل يعجبك Beauty Planner؟",
+    "review_prompt_message": "يرجى تقييم التطبيق. هذا يساعدني على التحسين ودعم التطوير.",
+    "review_prompt_action_rate": "تقييم الآن",
+    "review_prompt_action_later": "لاحقًا",
+    "review_prompt_action_never": "عدم السؤال مرة أخرى"
 }

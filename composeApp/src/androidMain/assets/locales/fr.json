@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "terminés",
     "guide_client_page_sort_item_4": "en attente",
     "premium_plan_monthly": "Abonnement mensuel",
-    "premium_plan_yearly": "Abonnement annuel"
+    "premium_plan_yearly": "Abonnement annuel",
+    "about_app_rate_section_title": "Évaluer l'application",
+    "about_app_rate_section_hint": "Si Beauty Planner vous est utile, n'hésitez pas à laisser une note.",
+    "about_app_rate_app": "Évaluer l'application",
+    "review_prompt_title": "Vous aimez Beauty Planner ?",
+    "review_prompt_message": "Veuillez évaluer l'application. Cela aide à l'améliorer et à soutenir le développement.",
+    "review_prompt_action_rate": "Évaluer maintenant",
+    "review_prompt_action_later": "Plus tard",
+    "review_prompt_action_never": "Ne plus demander"
 }

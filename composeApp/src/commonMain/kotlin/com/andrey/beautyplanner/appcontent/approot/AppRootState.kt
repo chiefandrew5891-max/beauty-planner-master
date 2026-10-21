@@ -32,6 +32,8 @@ import kotlinx.coroutines.sync.withLock
 import com.andrey.beautyplanner.remote.MasterScheduleSync
 import com.andrey.beautyplanner.AppointmentSyncUtils
 import com.andrey.beautyplanner.appcontent.getUpcomingAppointments
+import com.andrey.beautyplanner.review.ReviewPromptBridge
+import com.andrey.beautyplanner.review.ReviewPromptManager
 
 @Stable
 class AppRootState(
@@ -83,6 +85,8 @@ class AppRootState(
 
     var calendarViewDate by mutableStateOf(LocalDate(today.year, today.month, 1))
     var selectedDate by mutableStateOf(today)
+
+    var showReviewPromptDialog by mutableStateOf(false)
 
     var homeSearchQuery by mutableStateOf("")
     val homeSearchFocusRequester = FocusRequester()
@@ -315,6 +319,44 @@ class AppRootState(
                     AppSettings.scheduleDateOverrides.isNotEmpty()
 
         return hasAppointments || hasProfileDraft || hasCustomServices || hasScheduleData
+    }
+
+    fun openStoreForReview() {
+        val isIos = getPlatform().backendPlatform == "ios"
+        val url = if (isIos) {
+            // ВАЖНО: подставь свой Apple App ID
+            "https://apps.apple.com/app/idYOUR_APPLE_APP_ID?action=write-review"
+        } else {
+            "market://details?id=com.andrey.beautyplanner"
+        }
+        StoreOpener.open(url)
+    }
+
+    fun onAppSessionStarted() {
+        ReviewPromptManager.onAppLaunch()
+        if (ReviewPromptManager.shouldShowPrompt()) {
+            showReviewPromptDialog = true
+            ReviewPromptManager.markPromptShown()
+        }
+    }
+
+    fun dismissReviewPromptForNow() {
+        showReviewPromptDialog = false
+    }
+
+    fun disableReviewPromptForever() {
+        ReviewPromptManager.disableForever()
+        showReviewPromptDialog = false
+    }
+
+    fun requestInAppReviewFromPrompt() {
+        scope.launch {
+            val shown = ReviewPromptBridge.requestInAppReview()
+            if (!shown) {
+                openStoreForReview()
+            }
+            showReviewPromptDialog = false
+        }
     }
 
     fun openGuestAccountRegistrationScreen() {
@@ -2796,6 +2838,10 @@ fun rememberAppRootState(): AppRootState {
         state.refreshAccessState(nowMillis)
         state.initBilling()
         state.checkForAppUpdatesIfNeeded()
+
+        if (state.currentScreen == Screen.MONTH) {
+            state.onAppSessionStarted()
+        }
     }
 
     DisposableEffect(Unit) {

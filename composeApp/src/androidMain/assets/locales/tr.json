@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "tamamlananlar",
     "guide_client_page_sort_item_4": "bekleyenler",
     "premium_plan_monthly": "Aylık abonelik",
-    "premium_plan_yearly": "Yıllık abonelik"
+    "premium_plan_yearly": "Yıllık abonelik",
+    "about_app_rate_section_title": "Uygulamayı değerlendirin",
+    "about_app_rate_section_hint": "Beauty Planner sizin için faydalıysa lütfen bir değerlendirme bırakın.",
+    "about_app_rate_app": "Uygulamayı değerlendir",
+    "review_prompt_title": "Beauty Planner'ı beğendiniz mi?",
+    "review_prompt_message": "Lütfen uygulamayı değerlendirin. Bu, uygulamayı geliştirmeme ve desteklememe yardımcı olur.",
+    "review_prompt_action_rate": "Şimdi değerlendir",
+    "review_prompt_action_later": "Daha sonra",
+    "review_prompt_action_never": "Tekrar sorma"
 }

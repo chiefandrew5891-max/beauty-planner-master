@@ -1,3 +1,4 @@
+import StoreKit
 import UIKit
 import SwiftUI
 import ComposeApp
@@ -682,6 +683,26 @@ struct ComposeView: UIViewControllerRepresentable {
 
         ProfileImageCropperBridge.register()
         ProfileAvatarUrlProcessorBridge.register()
+
+        ReviewPromptConnector.shared.requestReview = {
+            Task { @MainActor in
+                let activeScenes = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .filter { $0.activationState == .foregroundActive }
+
+                guard let scene = activeScenes.first(where: { scene in
+                    scene.windows.contains(where: { $0.isKeyWindow })
+                }) ?? activeScenes.first else {
+                    return
+                }
+
+                if #available(iOS 18.0, *) {
+                    AppStore.requestReview(in: scene)
+                } else {
+                    SKStoreReviewController.requestReview(in: scene)
+                }
+            }
+        }
 
         return MainViewControllerKt.MainViewController()
     }

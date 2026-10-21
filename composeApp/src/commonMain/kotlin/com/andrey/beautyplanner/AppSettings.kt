@@ -144,6 +144,12 @@ private data class SettingsSnapshot(
     val premiumLastOwnerBackendUserId: String = "",
     val localPremiumFallbackBlocked: Boolean = false,
     val localPremiumFallbackPendingSync: Boolean = false,
+
+    val reviewPromptFirstLaunchAtMillis: Long = 0L,
+    val reviewPromptLaunchCount: Long = 0L,
+    val reviewPromptLastShownAtMillis: Long = 0L,
+    val reviewPromptShownCount: Long = 0L,
+    val reviewPromptDisabled: Boolean = false,
 )
 
 object AppSettings {
@@ -307,6 +313,12 @@ object AppSettings {
 
     var aboutDescription: String = ""
     var aboutUpcoming: String = ""
+
+    var reviewPromptFirstLaunchAtMillis by mutableStateOf(0L)
+    var reviewPromptLaunchCount by mutableStateOf(0L)
+    var reviewPromptLastShownAtMillis by mutableStateOf(0L)
+    var reviewPromptShownCount by mutableStateOf(0L)
+    var reviewPromptDisabled by mutableStateOf(false)
 
     fun recentAuthEmailSuggestions(): List<String> {
         return recentAuthEmails
@@ -861,6 +873,11 @@ object AppSettings {
         premiumLastOwnerBackendUserId = snapshot.premiumLastOwnerBackendUserId
         localPremiumFallbackBlocked = snapshot.localPremiumFallbackBlocked
         localPremiumFallbackPendingSync = snapshot.localPremiumFallbackPendingSync
+        reviewPromptFirstLaunchAtMillis = snapshot.reviewPromptFirstLaunchAtMillis
+        reviewPromptLaunchCount = snapshot.reviewPromptLaunchCount
+        reviewPromptLastShownAtMillis = snapshot.reviewPromptLastShownAtMillis
+        reviewPromptShownCount = snapshot.reviewPromptShownCount
+        reviewPromptDisabled = snapshot.reviewPromptDisabled
 
         val code = languageCodes[selectedLanguage] ?: "en"
         Locales.currentLanguage = code
@@ -949,6 +966,12 @@ object AppSettings {
             premiumLastOwnerBackendUserId = premiumLastOwnerBackendUserId,
             localPremiumFallbackBlocked = localPremiumFallbackBlocked,
             localPremiumFallbackPendingSync = localPremiumFallbackPendingSync,
+
+            reviewPromptFirstLaunchAtMillis = reviewPromptFirstLaunchAtMillis,
+            reviewPromptLaunchCount = reviewPromptLaunchCount,
+            reviewPromptLastShownAtMillis = reviewPromptLastShownAtMillis,
+            reviewPromptShownCount = reviewPromptShownCount,
+            reviewPromptDisabled = reviewPromptDisabled,
         )
 
         runCatching {

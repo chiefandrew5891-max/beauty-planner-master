@@ -327,6 +327,9 @@ fun AppRootContent(
                 },
                 onOpenUserGuide = {
                     state.navigateTo(Screen.USER_GUIDE)
+                },
+                onRateAppClick = {
+                    state.openStoreForReview()
                 }
             )
 

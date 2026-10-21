@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "atlikti",
     "guide_client_page_sort_item_4": "laukiantys",
     "premium_plan_monthly": "Mėnesinė prenumerata",
-    "premium_plan_yearly": "Metinė prenumerata"
+    "premium_plan_yearly": "Metinė prenumerata",
+    "about_app_rate_section_title": "Įvertinkite programėlę",
+    "about_app_rate_section_hint": "Jei Beauty Planner jums naudinga, palikite įvertinimą.",
+    "about_app_rate_app": "Įvertinti programėlę",
+    "review_prompt_title": "Ar patinka Beauty Planner?",
+    "review_prompt_message": "Prašome įvertinti programėlę. Tai padeda ją tobulinti ir palaikyti kūrimą.",
+    "review_prompt_action_rate": "Įvertinti dabar",
+    "review_prompt_action_later": "Vėliau",
+    "review_prompt_action_never": "Daugiau neklausti"
 }

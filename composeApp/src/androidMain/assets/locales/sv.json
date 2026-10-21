@@ -962,5 +962,13 @@
     "guide_client_page_sort_item_3": "slutförda",
     "guide_client_page_sort_item_4": "väntande",
     "premium_plan_monthly": "Månatlig prenumeration",
-    "premium_plan_yearly": "Årlig prenumeration"
+    "premium_plan_yearly": "Årlig prenumeration",
+    "about_app_rate_section_title": "Betygsätt appen",
+    "about_app_rate_section_hint": "Om Beauty Planner är användbar för dig, lämna gärna ett betyg.",
+    "about_app_rate_app": "Betygsätt appen",
+    "review_prompt_title": "Gillar du Beauty Planner?",
+    "review_prompt_message": "Betygsätt gärna appen. Det hjälper till att förbättra den och stödja utvecklingen.",
+    "review_prompt_action_rate": "Betygsätt nu",
+    "review_prompt_action_later": "Senare",
+    "review_prompt_action_never": "Fråga inte igen"
 }
