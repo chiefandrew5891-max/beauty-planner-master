@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material.icons.automirrored.filled.StarHalf
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -1073,29 +1076,127 @@ fun AppRootDialogs(state: AppRootState) {
         )
     }
     if (state.showReviewPromptDialog) {
-        AlertDialog(
-            onDismissRequest = { state.dismissReviewPromptForNow() },
-            title = {
-                Text(Locales.t("review_prompt_title"))
-            },
-            text = {
-                Text(Locales.t("review_prompt_message"))
-            },
-            confirmButton = {
-                TextButton(onClick = { state.requestInAppReviewFromPrompt() }) {
-                    Text(Locales.t("review_prompt_action_rate"))
-                }
-            },
-            dismissButton = {
-                Row {
-                    TextButton(onClick = { state.dismissReviewPromptForNow() }) {
-                        Text(Locales.t("review_prompt_action_later"))
+        AppDialogTheme {
+            val fontScale = AppSettings.getFontScale()
+
+            AlertDialog(
+                onDismissRequest = {
+                    state.dismissReviewPromptForNow()
+                },
+                shape = AppDialogShape,
+                backgroundColor = MaterialTheme.colors.surface,
+                contentColor = MaterialTheme.colors.onSurface,
+                title = null,
+                text = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = Locales.t("review_prompt_title"),
+                            modifier = Modifier.fillMaxWidth(),
+                            fontSize = (20 * fontScale).sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colors.onSurface
+                        )
+
+                        Spacer(Modifier.height(16.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val starColor =
+                                MaterialTheme.colors.onSurface.copy(alpha = 0.28f)
+                            val halfStarColor =
+                                MaterialTheme.colors.onSurface.copy(alpha = 0.18f)
+
+                            repeat(4) {
+                                Icon(
+                                    imageVector = Icons.Filled.Star,
+                                    contentDescription = null,
+                                    tint = starColor
+                                )
+                            }
+
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.StarHalf,
+                                contentDescription = null,
+                                tint = halfStarColor
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        Text(
+                            text = Locales.t("review_prompt_message"),
+                            modifier = Modifier.fillMaxWidth(),
+                            fontSize = (14 * fontScale).sp,
+                            color = MaterialTheme.colors.onSurface
+                        )
                     }
-                    TextButton(onClick = { state.disableReviewPromptForever() }) {
-                        Text(Locales.t("review_prompt_action_never"))
+                },
+                buttons = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                start = 24.dp,
+                                end = 24.dp,
+                                top = 8.dp,
+                                bottom = 16.dp
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                state.requestInAppReviewFromPrompt()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 44.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            contentPadding =
+                                androidx.compose.foundation.layout.PaddingValues(
+                                    horizontal = 18.dp,
+                                    vertical = 10.dp
+                                ),
+                            elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) {
+                            Text(
+                                text = Locales.t("review_prompt_action_rate"),
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextButton(
+                                onClick = {
+                                    state.dismissReviewPromptForNow()
+                                }
+                            ) {
+                                Text(Locales.t("review_prompt_action_later"))
+                            }
+
+                            TextButton(
+                                onClick = {
+                                    state.disableReviewPromptForever()
+                                }
+                            ) {
+                                Text(Locales.t("review_prompt_action_never"))
+                            }
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }

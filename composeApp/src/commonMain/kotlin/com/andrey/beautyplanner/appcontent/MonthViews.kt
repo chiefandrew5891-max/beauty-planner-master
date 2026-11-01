@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -292,13 +295,26 @@ fun MonthCalendarGrid(
                                 onLongClick = { onDateClick(date) }
                             )
                     ) {
-                        Text(
+                        BasicText(
                             text = day.toString(),
-                            fontSize = (18 * fontScale).sp,
-                            fontWeight = if (isSelected || isToday) FontWeight.SemiBold else FontWeight.Normal,
-                            color = textColor,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.Center)
+                            modifier = Modifier.align(Alignment.Center),
+                            style = LocalTextStyle.current.copy(
+                                fontSize = (18 * fontScale).sp,
+                                fontWeight = if (isSelected || isToday) {
+                                    FontWeight.SemiBold
+                                } else {
+                                    FontWeight.Normal
+                                },
+                                color = textColor,
+                                textAlign = TextAlign.Center
+                            ),
+                            maxLines = 1,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 10.sp,
+                                maxFontSize = (18 * fontScale).sp,
+                                stepSize = 0.25.sp
+                            )
                         )
 
                         if (hasAppointments && !isSelected) {
