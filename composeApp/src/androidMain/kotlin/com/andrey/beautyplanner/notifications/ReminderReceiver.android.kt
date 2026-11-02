@@ -49,6 +49,25 @@ class ReminderReceiver : BroadcastReceiver() {
                     }
                 }
 
+                "IMPORTED" -> {
+                    val file = java.io.File(java.io.File(context.filesDir, "sounds"), soundId)
+                    if (file.exists()) {
+                        val uri = androidx.core.content.FileProvider.getUriForFile(
+                            context, "${context.packageName}.soundprovider", file
+                        )
+                        context.grantUriPermission(
+                            "com.android.systemui", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+                        channel.setSound(
+                            uri,
+                            AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .build()
+                        )
+                    }
+                }
+
                 else -> {
                     // DEFAULT: ничего не задаём, система использует стандартный звук канала
                 }
@@ -94,7 +113,7 @@ class ReminderReceiver : BroadcastReceiver() {
 private fun buildChannelId(soundMode: String, soundId: String): String {
     return when (soundMode) {
         "SILENT" -> ReminderReceiver.CHANNEL_ID_SILENT
-        "BUNDLED" -> {
+        "BUNDLED", "IMPORTED" -> {
             val key = soundId.substringBeforeLast(".").ifBlank { "default" }
             "beautyplanner_reminders_$key"
         }
@@ -105,7 +124,7 @@ private fun buildChannelId(soundMode: String, soundId: String): String {
 private fun buildChannelName(soundMode: String, soundId: String): String {
     return when (soundMode) {
         "SILENT" -> "Reminders Silent"
-        "BUNDLED" -> {
+        "BUNDLED", "IMPORTED" -> {
             val key = soundId.substringBeforeLast(".").ifBlank { "default" }
             "Reminders $key"
         }

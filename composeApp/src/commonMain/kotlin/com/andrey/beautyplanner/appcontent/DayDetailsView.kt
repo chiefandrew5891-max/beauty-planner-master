@@ -280,9 +280,8 @@ fun DayDetailsView(
                     val apptEndMin = apptStartMin + durationMin
 
                     val cardBg = when {
-                        date < today -> if (AppSettings.isDarkMode) Color(0xFF1F2A36) else Color(0xFFECECEC)
-                        date > today -> if (AppSettings.isDarkMode) Color(0xFF253548) else Color(0xFFF2F2F2)
-                        else -> if (AppSettings.isDarkMode) Color(0xFF253548) else Color(0xFFF2F2F2)
+                        date < today -> ThemePalette.dayPast(AppSettings.isDarkMode, AppSettings.isCreamTheme)
+                        else -> ThemePalette.dayFuture(AppSettings.isDarkMode, AppSettings.isCreamTheme)
                     }
 
                     val liveStatus = getLiveStatus(

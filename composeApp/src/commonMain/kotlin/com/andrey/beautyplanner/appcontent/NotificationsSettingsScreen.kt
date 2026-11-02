@@ -31,6 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlin.math.roundToInt
 import com.andrey.beautyplanner.notifications.NotificationSoundPreviewPlayer
+import com.andrey.beautyplanner.notifications.NotificationSoundPicker
 import androidx.compose.runtime.DisposableEffect
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -80,18 +81,20 @@ fun NotificationsSettingsScreen() {
     val soundItems = listOf(
         Triple(Locales.t("notif_sound_default"), "DEFAULT", ""),
         Triple(Locales.t("notif_sound_silent"), "SILENT", ""),
-        Triple(Locales.t("notif_sound_1"), "BUNDLED", "sound1.wav"),
-        Triple(Locales.t("notif_sound_2"), "BUNDLED", "sound2.wav"),
-        Triple(Locales.t("notif_sound_3"), "BUNDLED", "sound3.wav"),
-        Triple(Locales.t("notif_sound_4"), "BUNDLED", "sound4.wav"),
-        Triple(Locales.t("notif_sound_5"), "BUNDLED", "sound5.wav"),
-        Triple(Locales.t("notif_sound_6"), "BUNDLED", "sound6.wav"),
-        Triple(Locales.t("notif_sound_7"), "BUNDLED", "sound7.wav"),
-        Triple(Locales.t("notif_sound_8"), "BUNDLED", "sound8.wav"),
-        Triple(Locales.t("notif_sound_9"), "BUNDLED", "sound9.wav"),
-        Triple(Locales.t("notif_sound_10"), "BUNDLED", "sound10.wav"),
-        Triple(Locales.t("notif_sound_11"), "BUNDLED", "sound11.wav")
+        Triple(Locales.t("notif_sound_glow"), "BUNDLED", "sound1.wav"),
+        Triple(Locales.t("notif_sound_chime"), "BUNDLED", "sound2.wav"),
+        Triple(Locales.t("notif_sound_crystal"), "BUNDLED", "sound3.wav"),
+        Triple(Locales.t("notif_sound_tick"), "BUNDLED", "sound4.wav"),
+        Triple(Locales.t("notif_sound_gong"), "BUNDLED", "sound5.wav"),
+        Triple(Locales.t("notif_sound_velvet"), "BUNDLED", "sound6.wav"),
+        Triple(Locales.t("notif_sound_dawn"), "BUNDLED", "sound7.wav"),
+        Triple(Locales.t("notif_sound_spark"), "BUNDLED", "sound8.wav"),
+        Triple(Locales.t("notif_sound_duet"), "BUNDLED", "sound9.wav"),
+        Triple(Locales.t("notif_sound_note"), "BUNDLED", "sound10.wav"),
+        Triple(Locales.t("notif_sound_tap"), "BUNDLED", "sound11.wav"),
+        Triple(Locales.t("notif_sound_pick_device"), "PICK", "")
     )
+    var soundError by remember { mutableStateOf<String?>(null) }
 
     CenteredNarrowContentContainer {
         Column(
@@ -139,27 +142,48 @@ fun NotificationsSettingsScreen() {
                     }
                 )
             }
-            SettingsDropdown(
+            SelectionDialogField(
                 label = Locales.t("notif_sound_label"),
-                selected = soundItems.firstOrNull {
-                    when {
-                        AppSettings.notificationSoundType == "BUNDLED" ->
-                            it.second == "BUNDLED" && it.third == AppSettings.notificationSoundId
+                selected = if (AppSettings.notificationSoundType == "IMPORTED") {
+                    AppSettings.notificationSoundDisplayName.ifBlank { Locales.t("notif_sound_custom") }
+                } else {
+                    soundItems.firstOrNull {
+                        when {
+                            AppSettings.notificationSoundType == "BUNDLED" ->
+                                it.second == "BUNDLED" && it.third == AppSettings.notificationSoundId
 
-                        else ->
-                            it.second == AppSettings.notificationSoundType
-                    }
-                }?.first ?: Locales.t("notif_sound_default"),
+                            else -> it.second == AppSettings.notificationSoundType
+                        }
+                    }?.first ?: Locales.t("notif_sound_default")
+                },
                 items = soundItems.map { it.first },
                 onSelect = { selected ->
                     val chosen = soundItems.firstOrNull { it.first == selected }
-
-                    if (chosen != null) {
+                    if (chosen != null && chosen.second == "PICK") {
+                        soundError = null
+                        NotificationSoundPicker.pick(
+                            onPicked = { id, name ->
+                                AppSettings.notificationSoundType = "IMPORTED"
+                                AppSettings.notificationSoundId = id
+                                AppSettings.notificationSoundDisplayName = name
+                                AppSettings.persist()
+                                NotificationSoundPreviewPlayer.play("IMPORTED", id)
+                            },
+                            onError = { code ->
+                                soundError = when (code) {
+                                    "duration" -> Locales.t("notif_sound_err_duration")
+                                    "format" -> Locales.t("notif_sound_err_format")
+                                    "size" -> Locales.t("notif_sound_err_size")
+                                    else -> Locales.t("notif_sound_err_read")
+                                }
+                            }
+                        )
+                    } else if (chosen != null) {
+                        soundError = null
                         AppSettings.notificationSoundType = chosen.second
                         AppSettings.notificationSoundId = chosen.third
                         AppSettings.notificationSoundDisplayName = chosen.first
                         AppSettings.persist()
-
                         NotificationSoundPreviewPlayer.play(
                             soundType = chosen.second,
                             soundId = chosen.third
@@ -167,6 +191,18 @@ fun NotificationsSettingsScreen() {
                     }
                 }
             )
+            Text(
+                text = Locales.t("notif_sound_pick_hint"),
+                fontSize = (12 * fontScale).sp,
+                color = onSurface.copy(alpha = 0.55f)
+            )
+            soundError?.let {
+                Text(
+                    text = it,
+                    fontSize = (13 * fontScale).sp,
+                    color = MaterialTheme.colors.error
+                )
+            }
             if (
                 AppSettings.notificationSoundType == "BUNDLED" ||
                 AppSettings.notificationSoundType == "IMPORTED"

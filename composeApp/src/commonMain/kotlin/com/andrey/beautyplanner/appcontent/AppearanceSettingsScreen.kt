@@ -50,7 +50,8 @@ fun AppearanceSettingsScreen(state: AppRootState) {
     val languages = AppSettings.languageCodes.keys.toList()
     val themeItems = listOf(
         "light" to Locales.t("theme_light"),
-        "dark" to Locales.t("theme_dark")
+        "dark" to Locales.t("theme_dark"),
+        "cream" to Locales.t("theme_cream")
     )
     val fontItems = listOf(
         "small" to Locales.t("font_small"),
@@ -70,7 +71,10 @@ fun AppearanceSettingsScreen(state: AppRootState) {
 
     var selectedLanguageDraft by remember { mutableStateOf(AppSettings.selectedLanguage) }
     var selectedThemeDraftKey by remember {
-        mutableStateOf(if (AppSettings.isDarkMode) "dark" else "light")
+        mutableStateOf(
+            if (AppSettings.isDarkMode) "dark"
+            else if (AppSettings.isCreamTheme) "cream" else "light"
+        )
     }
     var selectedFontDraftKey by remember {
         mutableStateOf(
@@ -104,7 +108,9 @@ fun AppearanceSettingsScreen(state: AppRootState) {
         }
     }
 
-    val currentThemeKey = if (AppSettings.isDarkMode) "dark" else "light"
+    val currentThemeKey =
+        if (AppSettings.isDarkMode) "dark"
+        else if (AppSettings.isCreamTheme) "cream" else "light"
     val currentFontKey = when (AppSettings.fontSizeMode) {
         "small" -> "small"
         "large" -> "large"
@@ -163,6 +169,7 @@ fun AppearanceSettingsScreen(state: AppRootState) {
                     val selectedKey = themeItems.firstOrNull { it.second == newValue }?.first ?: "light"
                     selectedThemeDraftKey = selectedKey
                     state.currentLiveDarkMode = (selectedKey == "dark")
+                    state.currentLiveCream = (selectedKey == "cream")
                 }
             )
 
@@ -225,6 +232,7 @@ fun AppearanceSettingsScreen(state: AppRootState) {
                         state.showGlobalLoading(Locales.t("loading"))
                         try {
                             AppSettings.isDarkMode = (selectedThemeDraftKey == "dark")
+                            AppSettings.isCreamTheme = (selectedThemeDraftKey == "cream")
                             AppSettings.fontSizeMode = selectedFontDraftKey
                             AppSettings.saveCurrencySynchronously(
                                 selectedCurrencyCodeDraft,
@@ -241,6 +249,7 @@ fun AppearanceSettingsScreen(state: AppRootState) {
                             state.refreshBillingLocalization()
 
                             state.currentLiveDarkMode = AppSettings.isDarkMode
+                            state.currentLiveCream = AppSettings.isCreamTheme
                             state.fontScale = AppSettings.getFontScale()
 
                             selectedLanguageDraft = AppSettings.selectedLanguage

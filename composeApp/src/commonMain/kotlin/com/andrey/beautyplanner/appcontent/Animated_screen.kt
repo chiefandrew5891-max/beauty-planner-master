@@ -4,6 +4,8 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -85,6 +87,7 @@ fun AnimatedSplashScreen(
 
     val backgroundColor = MaterialTheme.colors.background
     val logoColor = if (isLight) Color.Black else Color(0xFF4DA8FF)
+    val fogAlpha = if (isLight) 0.88f else 0.95f
 
     BoxWithConstraints(
         modifier = Modifier
@@ -93,6 +96,22 @@ fun AnimatedSplashScreen(
         contentAlignment = Alignment.Center
     ) {
         val screenWidthDp = maxWidth
+
+        val bgPainter = guidePainterOrNull("splash_bg")
+        if (bgPainter != null) {
+            Image(
+                painter = bgPainter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor.copy(alpha = fogAlpha))
+        )
 
         Column(
             modifier = Modifier.fillMaxSize(),

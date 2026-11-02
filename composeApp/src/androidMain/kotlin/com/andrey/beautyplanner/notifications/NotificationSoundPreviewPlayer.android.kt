@@ -2,7 +2,9 @@ package com.andrey.beautyplanner.notifications
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.net.Uri
 import com.andrey.beautyplanner.AndroidAppContext
+import java.io.File
 
 actual object NotificationSoundPreviewPlayer {
     private var mediaPlayer: MediaPlayer? = null
@@ -10,14 +12,21 @@ actual object NotificationSoundPreviewPlayer {
     actual fun play(soundType: String, soundId: String) {
         stop()
 
-        if (soundType != "BUNDLED" || soundId.isBlank()) return
+        if (soundId.isBlank() || (soundType != "BUNDLED" && soundType != "IMPORTED")) return
 
         val context = AndroidAppContext.context ?: return
-        val resName = soundId.substringBeforeLast(".")
-        val resId = context.resources.getIdentifier(resName, "raw", context.packageName)
-        if (resId == 0) return
 
-        val player = MediaPlayer.create(context, resId) ?: return
+        val player = if (soundType == "IMPORTED") {
+            val file = File(File(context.filesDir, "sounds"), soundId)
+            if (!file.exists()) return
+            MediaPlayer.create(context, Uri.fromFile(file)) ?: return
+        } else {
+            val resName = soundId.substringBeforeLast(".")
+            val resId = context.resources.getIdentifier(resName, "raw", context.packageName)
+            if (resId == 0) return
+            MediaPlayer.create(context, resId) ?: return
+        }
+
         player.setAudioAttributes(
             AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_MEDIA)

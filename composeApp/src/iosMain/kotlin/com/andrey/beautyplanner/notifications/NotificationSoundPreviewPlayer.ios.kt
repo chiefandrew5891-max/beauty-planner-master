@@ -4,20 +4,27 @@ package com.andrey.beautyplanner.notifications
 
 import platform.AVFAudio.AVAudioPlayer
 import platform.Foundation.NSBundle
+import platform.Foundation.NSLibraryDirectory
+import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSURL
+import platform.Foundation.NSUserDomainMask
 
 actual object NotificationSoundPreviewPlayer {
     private var player: AVAudioPlayer? = null
 
     actual fun play(soundType: String, soundId: String) {
         stop()
-        if (soundType != "BUNDLED" || soundId.isBlank()) return
+        if (soundId.isBlank() || (soundType != "BUNDLED" && soundType != "IMPORTED")) return
 
-        val fileName = soundId.substringBeforeLast(".")
-        val extension = soundId.substringAfterLast(".", "")
-
-        val path = NSBundle.mainBundle.pathForResource(fileName, extension) ?: return
-        val url = NSURL.fileURLWithPath(path)
+        val url = if (soundType == "IMPORTED") {
+            val lib = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, true).first() as String
+            NSURL.fileURLWithPath("$lib/Sounds/$soundId")
+        } else {
+            val fileName = soundId.substringBeforeLast(".")
+            val extension = soundId.substringAfterLast(".", "")
+            val path = NSBundle.mainBundle.pathForResource(fileName, extension) ?: return
+            NSURL.fileURLWithPath(path)
+        }
         val audioPlayer = AVAudioPlayer(contentsOfURL = url, error = null) ?: return
 
         audioPlayer.numberOfLoops = 0

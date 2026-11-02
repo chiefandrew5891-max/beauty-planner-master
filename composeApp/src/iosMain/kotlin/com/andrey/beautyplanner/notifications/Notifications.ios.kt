@@ -50,7 +50,7 @@ actual object Notifications {
 
                     val iosSound = when (soundType) {
                         "SILENT" -> null
-                        "BUNDLED" -> {
+                        "BUNDLED", "IMPORTED" -> {
                             if (soundId.isNotBlank()) {
                                 UNNotificationSound.soundNamed(soundId)
                             } else {
@@ -59,7 +59,6 @@ actual object Notifications {
                         }
                         else -> UNNotificationSound.defaultSound()
                     }
-                    setSound(iosSound)
                     setSound(iosSound)
                 }
 

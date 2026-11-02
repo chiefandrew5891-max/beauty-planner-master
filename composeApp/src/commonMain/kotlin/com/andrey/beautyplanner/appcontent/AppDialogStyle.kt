@@ -13,21 +13,7 @@ val AppDialogShape = RoundedCornerShape(16.dp)
 
 @Composable
 fun AppDialogTheme(content: @Composable () -> Unit) {
-    val themeColors = if (AppSettings.isDarkMode) {
-        darkColors(
-            primary = Color(0xFF8AB4F8),
-            onPrimary = Color.Black,
-            surface = Color(0xFF1E1E1E),
-            onSurface = Color.White
-        )
-    } else {
-        lightColors(
-            primary = Color(0xFF4285F4),
-            onPrimary = Color.White,
-            surface = Color.White,
-            onSurface = Color.Black
-        )
-    }
-
-    MaterialTheme(colors = themeColors) { content() }
+    MaterialTheme(
+        colors = ThemePalette.colors(AppSettings.isDarkMode, AppSettings.isCreamTheme)
+    ) { content() }
 }

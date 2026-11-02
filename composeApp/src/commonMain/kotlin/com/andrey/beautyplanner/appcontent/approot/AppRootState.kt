@@ -24,6 +24,7 @@ import com.andrey.beautyplanner.auth.AuthGateway
 import com.andrey.beautyplanner.auth.SignInProvider
 import com.andrey.beautyplanner.auth.SignInResult
 import com.andrey.beautyplanner.auth.AuthUser
+import com.andrey.beautyplanner.appcontent.ThemePalette
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -159,6 +160,7 @@ class AppRootState(
     var shiftBlockedApptId by mutableStateOf<String?>(null)
 
     var currentLiveDarkMode by mutableStateOf(AppSettings.isDarkMode)
+    var currentLiveCream by mutableStateOf(AppSettings.isCreamTheme)
 
     var appUpdateStatus by mutableStateOf(
         AppUpdateStatus(
@@ -200,25 +202,7 @@ class AppRootState(
     var showGuestUpgradeConflictDialog by mutableStateOf(false)
 
     val colors: Colors
-        get() = if (currentLiveDarkMode) {
-            darkColors(
-                primary = Color(0xFF8AB4F8),
-                background = Color(0xFF121212),
-                surface = Color(0xFF1E1E1E),
-                onPrimary = Color.Black,
-                onSurface = Color.White,
-                onBackground = Color.White
-            )
-        } else {
-            lightColors(
-                primary = Color(0xFF4285F4),
-                background = Color.White,
-                surface = Color.White,
-                onPrimary = Color.White,
-                onSurface = Color.Black,
-                onBackground = Color.Black
-            )
-        }
+        get() = ThemePalette.colors(currentLiveDarkMode, currentLiveCream)
 
     var fontScale by mutableStateOf(AppSettings.getFontScale())
 
@@ -943,6 +927,7 @@ class AppRootState(
 
     fun resetLivePreviews() {
         currentLiveDarkMode = AppSettings.isDarkMode
+        currentLiveCream = AppSettings.isCreamTheme
         fontScale = AppSettings.getFontScale()
     }
 

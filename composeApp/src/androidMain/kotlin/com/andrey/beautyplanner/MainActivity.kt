@@ -29,6 +29,12 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import android.media.MediaMetadataRetriever
+import android.provider.OpenableColumns
+import java.io.File
+import com.andrey.beautyplanner.notifications.NotificationSoundPicker
+import com.andrey.beautyplanner.notifications.MAX_CUSTOM_SOUND_BYTES
+import com.andrey.beautyplanner.notifications.MAX_CUSTOM_SOUND_SECONDS
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -138,6 +144,59 @@ class MainActivity : ComponentActivity() {
         }.onFailure {
             onError?.invoke(Locales.t("backup_import_error_read"))
         }
+    }
+
+    private var pendingSoundOnPicked: ((String, String) -> Unit)? = null
+    private var pendingSoundOnError: ((String) -> Unit)? = null
+
+    private val soundLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        val onPicked = pendingSoundOnPicked
+        val onError = pendingSoundOnError
+        pendingSoundOnPicked = null
+        pendingSoundOnError = null
+        if (uri == null) return@registerForActivityResult
+
+        var errorCode: String? = null
+        var soundId = ""
+        var displayName = "custom"
+        try {
+            contentResolver.query(uri, null, null, null, null)?.use { c ->
+                val i = c.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (c.moveToFirst() && i >= 0) displayName = c.getString(i) ?: "custom"
+            }
+            val ext = displayName.substringAfterLast('.', "").lowercase().ifBlank { "mp3" }
+            if (ext !in setOf("mp3", "m4a", "aac", "ogg", "wav")) {
+                errorCode = "format"
+            } else {
+                val dir = File(filesDir, "sounds").apply { mkdirs() }
+                dir.listFiles()?.forEach { it.delete() }
+                soundId = "custom_${System.currentTimeMillis()}.$ext"
+                val target = File(dir, soundId)
+                contentResolver.openInputStream(uri)?.use { input ->
+                    target.outputStream().use { out -> input.copyTo(out) }
+                }
+                val durationMs = MediaMetadataRetriever().run {
+                    try {
+                        setDataSource(target.absolutePath)
+                        extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                            ?.toLongOrNull() ?: 0L
+                    } finally {
+                        release()
+                    }
+                }
+                when {
+                    target.length() > MAX_CUSTOM_SOUND_BYTES -> errorCode = "size"
+                    durationMs <= 0L || durationMs > MAX_CUSTOM_SOUND_SECONDS * 1000L -> errorCode = "duration"
+                }
+                if (errorCode != null) target.delete()
+            }
+        } catch (e: Exception) {
+            errorCode = "read"
+        }
+
+        if (errorCode != null) onError?.invoke(errorCode) else onPicked?.invoke(soundId, displayName)
     }
 
     private var pendingGoogleFallbackResult: CompletableDeferred<GoogleSignInFallbackResult>? = null
@@ -354,6 +413,12 @@ class MainActivity : ComponentActivity() {
             val finalName = if (name.endsWith(".json", ignoreCase = true)) name else "$name.json"
             pendingExportJson = json
             exportLauncher.launch(finalName)
+        }
+
+        NotificationSoundPicker.pickImpl = { onPicked, onError ->
+            pendingSoundOnPicked = onPicked
+            pendingSoundOnError = onError
+            soundLauncher.launch(arrayOf("audio/*"))
         }
 
         BackupFilePicker.importImpl = { onPicked, onError ->

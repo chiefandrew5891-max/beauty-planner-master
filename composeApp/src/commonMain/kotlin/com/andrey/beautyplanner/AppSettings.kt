@@ -62,6 +62,7 @@ private fun defaultServiceTemplates(): List<ServiceTemplate> = listOf(
 @Serializable
 private data class SettingsSnapshot(
     val isDarkMode: Boolean = false,
+    val isCreamTheme: Boolean = false,
     val selectedLanguage: String = "Русский",
     val fontSizeMode: String = "medium",
     val ownerName: String = "",
@@ -162,6 +163,7 @@ object AppSettings {
     var useShortTextCurrency by mutableStateOf(false)
 
     var isDarkMode by mutableStateOf(false)
+    var isCreamTheme by mutableStateOf(false)
     var selectedLanguage by mutableStateOf(
         run {
             val systemLanguageCode = androidx.compose.ui.text.intl.Locale.current.language.lowercase()
@@ -784,6 +786,7 @@ object AppSettings {
             .getOrNull() ?: return
 
         isDarkMode = snapshot.isDarkMode
+        isCreamTheme = snapshot.isCreamTheme
         selectedLanguage = snapshot.selectedLanguage
         fontSizeMode = normalizeFontSizeMode(snapshot.fontSizeMode)
         selectedCurrency = snapshot.selectedCurrency
@@ -886,6 +889,7 @@ object AppSettings {
     fun persist() {
         val snapshot = SettingsSnapshot(
             isDarkMode = isDarkMode,
+            isCreamTheme = isCreamTheme,
             selectedLanguage = selectedLanguage,
             fontSizeMode = fontSizeMode,
             ownerName = ownerName,
