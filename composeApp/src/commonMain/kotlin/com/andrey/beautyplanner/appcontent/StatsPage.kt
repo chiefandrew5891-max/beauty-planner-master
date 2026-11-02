@@ -1,6 +1,8 @@
 package com.andrey.beautyplanner.appcontent
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -12,18 +14,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +48,10 @@ import com.andrey.beautyplanner.Appointment
 import com.andrey.beautyplanner.ClientSuggestion
 import com.andrey.beautyplanner.ClientSuggestions
 import com.andrey.beautyplanner.Locales
+import com.andrey.beautyplanner.getCurrentTimeHm
+import com.andrey.beautyplanner.utils.LiveStatusKey
+import com.andrey.beautyplanner.utils.getLiveStatus
+import com.andrey.beautyplanner.utils.parseHmToMinutes
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
@@ -51,9 +63,12 @@ private enum class StatsPeriod {
 
 private data class ServiceStat(
     val service: String,
-    val count: Int,
+    val appointments: List<Appointment>,
     val revenueByCurrency: Map<String, Double>
-)
+) {
+    val count: Int
+        get() = appointments.size
+}
 
 @Composable
 fun StatsPage(
@@ -78,26 +93,45 @@ fun StatsPage(
         var showToDatePicker by remember { mutableStateOf(false) }
         var showClientPickerDialog by remember { mutableStateOf(false) }
 
-        var customFromDate by remember { mutableStateOf(today.minus(30, DateTimeUnit.DAY)) }
+        var customFromDate by remember {
+            mutableStateOf(today.minus(30, DateTimeUnit.DAY))
+        }
         var customToDate by remember { mutableStateOf(today) }
 
         var clientQuery by remember { mutableStateOf("") }
         var isMultiCurrencyMode by remember { mutableStateOf(false) }
-        var selectedClient by remember { mutableStateOf<ClientSuggestion?>(null) }
+        var selectedClient by remember {
+            mutableStateOf<ClientSuggestion?>(null)
+        }
 
         val allClients = remember(appointments) {
             ClientSuggestions.fromAppointments(appointments, limit = 1000)
         }
 
-        val (fromDate, toDateInclusive) = remember(today, period, customFromDate, customToDate) {
+        val (fromDate, toDateInclusive) = remember(
+            today,
+            period,
+            customFromDate,
+            customToDate
+        ) {
             when (period) {
                 StatsPeriod.DAY -> today to today
                 StatsPeriod.WEEK -> today.minus(6, DateTimeUnit.DAY) to today
                 StatsPeriod.MONTH -> today.minus(30, DateTimeUnit.DAY) to today
                 StatsPeriod.YEAR -> today.minus(365, DateTimeUnit.DAY) to today
                 StatsPeriod.CUSTOM -> {
-                    val safeFrom = if (customFromDate <= customToDate) customFromDate else customToDate
-                    val safeTo = if (customToDate >= customFromDate) customToDate else customFromDate
+                    val safeFrom = if (customFromDate <= customToDate) {
+                        customFromDate
+                    } else {
+                        customToDate
+                    }
+
+                    val safeTo = if (customToDate >= customFromDate) {
+                        customToDate
+                    } else {
+                        customFromDate
+                    }
+
                     safeFrom to safeTo
                 }
             }
@@ -118,11 +152,15 @@ fun StatsPage(
             appointments
                 .asSequence()
                 .mapNotNull { appointment ->
-                    val date = runCatching { LocalDate.parse(appointment.dateString) }.getOrNull()
-                        ?: return@mapNotNull null
+                    val date = runCatching {
+                        LocalDate.parse(appointment.dateString)
+                    }.getOrNull() ?: return@mapNotNull null
+
                     date to appointment
                 }
-                .filter { (date, _) -> date >= fromDate && date <= toDateInclusive }
+                .filter { (date, _) ->
+                    date >= fromDate && date <= toDateInclusive
+                }
                 .map { it.second }
                 .filter { appointment ->
                     if (!isMultiCurrencyMode) {
@@ -135,7 +173,10 @@ fun StatsPage(
                     if (clientFilter.isNullOrBlank()) {
                         true
                     } else {
-                        appointment.clientName.trim().lowercase().contains(clientFilter)
+                        appointment.clientName
+                            .trim()
+                            .lowercase()
+                            .contains(clientFilter)
                     }
                 }
                 .toList()
@@ -144,49 +185,103 @@ fun StatsPage(
         val totalCount = filtered.size
 
         val totalHours = filtered.sumOf { appointment ->
-            if (appointment.durationMinutes > 0) appointment.durationMinutes / 60.0
-            else appointment.durationHours.toDouble()
+            if (appointment.durationMinutes > 0) {
+                appointment.durationMinutes / 60.0
+            } else {
+                appointment.durationHours.toDouble()
+            }
         }.roundToInt()
 
         val revenue = filtered.sumOf { appointment ->
-            appointment.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
+            appointment.price
+                .trim()
+                .replace(",", ".")
+                .toDoubleOrNull() ?: 0.0
         }
 
-        val revenueByCurrency = remember(filtered, AppSettings.selectedCurrency) {
+        val revenueByCurrency = remember(
+            filtered,
+            AppSettings.selectedCurrency
+        ) {
             filtered
-                .groupBy { it.currency.ifBlank { AppSettings.selectedCurrency } }
+                .groupBy {
+                    it.currency.ifBlank {
+                        AppSettings.selectedCurrency
+                    }
+                }
                 .mapValues { (_, items) ->
                     items.sumOf { appointment ->
-                        appointment.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
+                        appointment.price
+                            .trim()
+                            .replace(",", ".")
+                            .toDoubleOrNull() ?: 0.0
                     }
                 }
         }
 
-        val byService = remember(filtered, AppSettings.selectedCurrency) {
-            filtered
+        val nowMinutes = runCatching {
+            parseHmToMinutes(getCurrentTimeHm())
+        }.getOrDefault(0)
+
+        val completedForServices = remember(
+            filtered,
+            today,
+            nowMinutes
+        ) {
+            filtered.filter { appointment ->
+                !appointment.isDeleted &&
+                        runCatching {
+                            getLiveStatus(
+                                appt = appointment,
+                                nowDate = today,
+                                nowMinutes = nowMinutes
+                            ) == LiveStatusKey.DONE
+                        }.getOrDefault(false)
+            }
+        }
+
+        val byService = remember(
+            completedForServices,
+            AppSettings.selectedCurrency
+        ) {
+            completedForServices
                 .groupBy { appointment ->
                     val service = appointment.serviceName
-                    if (service.startsWith("service_")) Locales.t(service) else service
+
+                    if (service.startsWith("service_")) {
+                        Locales.t(service)
+                    } else {
+                        service
+                    }
                 }
-                .map { (service, list) ->
-                    val count = list.size
-                    val serviceRevenueByCurrency = list
-                        .groupBy { it.currency.ifBlank { AppSettings.selectedCurrency } }
-                        .mapValues { (_, currencyList) ->
-                            currencyList.sumOf {
-                                it.price.trim().replace(",", ".").toDoubleOrNull() ?: 0.0
+                .map { (service, appointmentsForService) ->
+                    val serviceRevenueByCurrency = appointmentsForService
+                        .groupBy {
+                            it.currency.ifBlank {
+                                AppSettings.selectedCurrency
+                            }
+                        }
+                        .mapValues { (_, currencyAppointments) ->
+                            currencyAppointments.sumOf {
+                                it.price
+                                    .trim()
+                                    .replace(",", ".")
+                                    .toDoubleOrNull() ?: 0.0
                             }
                         }
 
                     ServiceStat(
                         service = service,
-                        count = count,
+                        appointments = appointmentsForService,
                         revenueByCurrency = serviceRevenueByCurrency
                     )
                 }
                 .sortedWith(
-                    compareByDescending<ServiceStat> { it.revenueByCurrency.values.sum() }
-                        .thenByDescending { it.count }
+                    compareByDescending<ServiceStat> {
+                        it.revenueByCurrency.values.sum()
+                    }.thenByDescending {
+                        it.count
+                    }
                 )
         }
 
@@ -216,7 +311,9 @@ fun StatsPage(
 
                     OutlinedButton(
                         onClick = onOpenPremium,
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                            12.dp
+                        )
                     ) {
                         Text(Locales.t("premium_open_screen_btn"))
                     }
@@ -226,7 +323,9 @@ fun StatsPage(
                     text = Locales.t("stats_filters"),
                     fontSize = (16 * fontScale).sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = primaryText.copy(alpha = if (premiumEnabled) 1f else 0.55f)
+                    color = primaryText.copy(
+                        alpha = if (premiumEnabled) 1f else 0.55f
+                    )
                 )
 
                 Row(
@@ -239,17 +338,27 @@ fun StatsPage(
                     Text(
                         text = Locales.t("multi_currency_mode_all"),
                         fontSize = (15 * fontScale).sp,
-                        color = if (premiumEnabled) primaryText else primaryText.copy(alpha = 0.45f),
+                        color = if (premiumEnabled) {
+                            primaryText
+                        } else {
+                            primaryText.copy(alpha = 0.45f)
+                        },
                         modifier = Modifier.weight(1f)
                     )
 
                     Switch(
                         checked = isMultiCurrencyMode,
-                        onCheckedChange = { if (premiumEnabled) isMultiCurrencyMode = it },
+                        onCheckedChange = {
+                            if (premiumEnabled) {
+                                isMultiCurrencyMode = it
+                            }
+                        },
                         enabled = premiumEnabled,
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colors.primary,
-                            checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                            checkedTrackColor = MaterialTheme.colors.primary.copy(
+                                alpha = 0.5f
+                            )
                         )
                     )
                 }
@@ -267,6 +376,7 @@ fun StatsPage(
                     ) {
                         period = StatsPeriod.DAY
                     }
+
                     PeriodChip(
                         text = Locales.t("stats_period_week"),
                         selected = period == StatsPeriod.WEEK,
@@ -274,6 +384,7 @@ fun StatsPage(
                     ) {
                         period = StatsPeriod.WEEK
                     }
+
                     PeriodChip(
                         text = Locales.t("stats_period_month"),
                         selected = period == StatsPeriod.MONTH,
@@ -281,6 +392,7 @@ fun StatsPage(
                     ) {
                         period = StatsPeriod.MONTH
                     }
+
                     PeriodChip(
                         text = Locales.t("stats_period_year"),
                         selected = period == StatsPeriod.YEAR,
@@ -296,10 +408,16 @@ fun StatsPage(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         OutlinedButton(
-                            onClick = { if (premiumEnabled) period = StatsPeriod.CUSTOM },
+                            onClick = {
+                                if (premiumEnabled) {
+                                    period = StatsPeriod.CUSTOM
+                                }
+                            },
                             enabled = premiumEnabled,
                             modifier = Modifier.fillMaxWidth(0.62f),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                                12.dp
+                            ),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 backgroundColor = if (period == StatsPeriod.CUSTOM) {
                                     MaterialTheme.colors.primary.copy(alpha = 0.08f)
@@ -328,10 +446,16 @@ fun StatsPage(
                     }
                 } else {
                     OutlinedButton(
-                        onClick = { if (premiumEnabled) period = StatsPeriod.CUSTOM },
+                        onClick = {
+                            if (premiumEnabled) {
+                                period = StatsPeriod.CUSTOM
+                            }
+                        },
                         enabled = premiumEnabled,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                            12.dp
+                        ),
                         colors = ButtonDefaults.outlinedButtonColors(
                             backgroundColor = if (period == StatsPeriod.CUSTOM) {
                                 MaterialTheme.colors.primary.copy(alpha = 0.08f)
@@ -364,7 +488,11 @@ fun StatsPage(
                         text = Locales.t("stats_custom_range"),
                         fontSize = (14 * fontScale).sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (premiumEnabled) primaryText else primaryText.copy(alpha = 0.45f)
+                        color = if (premiumEnabled) {
+                            primaryText
+                        } else {
+                            primaryText.copy(alpha = 0.45f)
+                        }
                     )
 
                     Row(
@@ -372,10 +500,16 @@ fun StatsPage(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         OutlinedButton(
-                            onClick = { if (premiumEnabled) showFromDatePicker = true },
+                            onClick = {
+                                if (premiumEnabled) {
+                                    showFromDatePicker = true
+                                }
+                            },
                             enabled = premiumEnabled,
                             modifier = Modifier.weight(1f),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                                12.dp
+                            )
                         ) {
                             Text(
                                 text = "${Locales.t("stats_date_from")}: $customFromDate",
@@ -384,10 +518,16 @@ fun StatsPage(
                         }
 
                         OutlinedButton(
-                            onClick = { if (premiumEnabled) showToDatePicker = true },
+                            onClick = {
+                                if (premiumEnabled) {
+                                    showToDatePicker = true
+                                }
+                            },
                             enabled = premiumEnabled,
                             modifier = Modifier.weight(1f),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                                12.dp
+                            )
                         ) {
                             Text(
                                 text = "${Locales.t("stats_date_to")}: $customToDate",
@@ -403,20 +543,32 @@ fun StatsPage(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         OutlinedButton(
-                            onClick = { if (premiumEnabled) showClientPickerDialog = true },
+                            onClick = {
+                                if (premiumEnabled) {
+                                    showClientPickerDialog = true
+                                }
+                            },
                             enabled = premiumEnabled,
                             modifier = Modifier.fillMaxWidth(0.62f),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                                12.dp
+                            )
                         ) {
                             Text(Locales.t("stats_client_filter_button"))
                         }
                     }
                 } else {
                     OutlinedButton(
-                        onClick = { if (premiumEnabled) showClientPickerDialog = true },
+                        onClick = {
+                            if (premiumEnabled) {
+                                showClientPickerDialog = true
+                            }
+                        },
                         enabled = premiumEnabled,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                            12.dp
+                        )
                     ) {
                         Text(Locales.t("stats_client_filter_button"))
                     }
@@ -427,7 +579,9 @@ fun StatsPage(
                         modifier = Modifier.fillMaxWidth(),
                         elevation = 0.dp,
                         backgroundColor = MaterialTheme.colors.surface,
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                            12.dp
+                        )
                     ) {
                         Column(
                             modifier = Modifier
@@ -445,7 +599,11 @@ fun StatsPage(
                                 text = clientQuery,
                                 fontSize = (15 * fontScale).sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = if (premiumEnabled) primaryText else primaryText.copy(alpha = 0.45f)
+                                color = if (premiumEnabled) {
+                                    primaryText
+                                } else {
+                                    primaryText.copy(alpha = 0.45f)
+                                }
                             )
                         }
                     }
@@ -467,7 +625,9 @@ fun StatsPage(
                 Text(
                     text = "${Locales.t("stats_range")}: $fromDate — $toDateInclusive",
                     fontSize = (13 * fontScale).sp,
-                    color = hintText.copy(alpha = if (premiumEnabled) 1f else 0.55f)
+                    color = hintText.copy(
+                        alpha = if (premiumEnabled) 1f else 0.55f
+                    )
                 )
 
                 Divider()
@@ -476,7 +636,10 @@ fun StatsPage(
                     if (!isMultiCurrencyMode) {
                         StatRow(
                             label = Locales.t("stats_revenue"),
-                            value = formatMoney(revenue, AppSettings.selectedCurrency),
+                            value = formatMoney(
+                                revenue,
+                                AppSettings.selectedCurrency
+                            ),
                             primaryText = primaryText
                         )
                     } else {
@@ -518,7 +681,7 @@ fun StatsPage(
                         byService.forEach { serviceStat ->
                             ServiceRow(
                                 service = serviceStat.service,
-                                count = serviceStat.count,
+                                appointments = serviceStat.appointments,
                                 revenueByCurrency = serviceStat.revenueByCurrency,
                                 isMultiCurrencyMode = isMultiCurrencyMode,
                                 selectedCurrency = AppSettings.selectedCurrency,
@@ -545,8 +708,11 @@ fun StatsPage(
         if (premiumEnabled && showClientPickerDialog) {
             ClientPickerDialog(
                 clients = allClients,
-                selectedClientName = selectedClient?.displayName ?: clientQuery.takeIf { it.isNotBlank() },
-                onDismiss = { showClientPickerDialog = false },
+                selectedClientName = selectedClient?.displayName
+                    ?: clientQuery.takeIf { it.isNotBlank() },
+                onDismiss = {
+                    showClientPickerDialog = false
+                },
                 onClear = {
                     clientQuery = ""
                     selectedClient = null
@@ -565,7 +731,9 @@ fun StatsPage(
                 title = Locales.t("stats_pick_start_date"),
                 initialSelectedDate = customFromDate,
                 initialMonthDate = customFromDate,
-                onDismiss = { showFromDatePicker = false },
+                onDismiss = {
+                    showFromDatePicker = false
+                },
                 onConfirm = { picked ->
                     customFromDate = picked
                     showFromDatePicker = false
@@ -578,7 +746,9 @@ fun StatsPage(
                 title = Locales.t("stats_pick_end_date"),
                 initialSelectedDate = customToDate,
                 initialMonthDate = customToDate,
-                onDismiss = { showToDatePicker = false },
+                onDismiss = {
+                    showToDatePicker = false
+                },
                 onConfirm = { picked ->
                     customToDate = picked
                     showToDatePicker = false
@@ -602,7 +772,10 @@ private fun PeriodChip(
             onClick = onClick,
             enabled = enabled,
             modifier = modifier,
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
+            contentPadding = PaddingValues(
+                horizontal = 14.dp,
+                vertical = 0.dp
+            ),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
             elevation = ButtonDefaults.elevation(defaultElevation = 0.dp)
         ) {
@@ -613,7 +786,10 @@ private fun PeriodChip(
             onClick = onClick,
             enabled = enabled,
             modifier = modifier,
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
+            contentPadding = PaddingValues(
+                horizontal = 14.dp,
+                vertical = 0.dp
+            ),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
         ) {
             Text(text, maxLines = 1)
@@ -636,6 +812,7 @@ private fun StatRow(
             fontWeight = FontWeight.Medium,
             color = primaryText
         )
+
         Text(
             text = value,
             fontWeight = FontWeight.SemiBold,
@@ -684,7 +861,7 @@ private fun RevenueByCurrencyBlock(
 @Composable
 private fun ServiceRow(
     service: String,
-    count: Int,
+    appointments: List<Appointment>,
     revenueByCurrency: Map<String, Double>,
     isMultiCurrencyMode: Boolean,
     selectedCurrency: String,
@@ -692,6 +869,10 @@ private fun ServiceRow(
     primaryText: Color,
     secondaryText: Color
 ) {
+    var expanded by remember(service) {
+        mutableStateOf(false)
+    }
+
     val revenueText = if (!isMultiCurrencyMode) {
         formatMoney(
             revenueByCurrency[selectedCurrency] ?: 0.0,
@@ -701,37 +882,108 @@ private fun ServiceRow(
         formatMoneyCompactList(revenueByCurrency)
     }
 
+    val sortedAppointments = remember(appointments) {
+        appointments.sortedWith(
+            compareByDescending<Appointment> {
+                it.dateString
+            }.thenByDescending {
+                it.time
+            }
+        )
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                }
+                .padding(vertical = 6.dp)
         ) {
-            Text(
-                text = service,
-                fontWeight = FontWeight.SemiBold,
-                color = primaryText,
-                modifier = Modifier.weight(1f)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = service,
+                    fontWeight = FontWeight.SemiBold,
+                    color = primaryText,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = revenueText,
+                    color = primaryText,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Icon(
+                    imageVector = if (expanded) {
+                        Icons.Default.KeyboardArrowUp
+                    } else {
+                        Icons.Default.KeyboardArrowDown
+                    },
+                    contentDescription = null,
+                    tint = secondaryText,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
 
             Text(
-                text = revenueText,
-                color = primaryText,
-                fontWeight = FontWeight.SemiBold
+                text = "${Locales.t("stats_procedures_done")}: ${appointments.size}",
+                color = secondaryText,
+                fontSize = (13 * fontScale).sp
             )
         }
 
-        Text(
-            text = "${Locales.t("stats_procedures_done")}: $count",
-            color = secondaryText,
-            fontSize = (13 * fontScale).sp
-        )
+        AnimatedVisibility(
+            visible = expanded
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 12.dp,
+                        top = 4.dp,
+                        bottom = 8.dp
+                    ),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
+            ) {
+                sortedAppointments.forEach { appointment ->
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = appointment.clientName,
+                            fontSize = (14 * fontScale).sp,
+                            fontWeight = FontWeight.Medium,
+                            color = AppSettings.clientDisplayColor(
+                                name = appointment.clientName,
+                                phone = appointment.phone,
+                                defaultColor = primaryText
+                            )
+                        )
+
+                        Text(
+                            text = "${appointment.dateString} • ${appointment.time}",
+                            fontSize = (12 * fontScale).sp,
+                            color = secondaryText
+                        )
+                    }
+                }
+            }
+        }
 
         if (isMultiCurrencyMode && revenueByCurrency.size > 1) {
             Spacer(modifier = Modifier.height(4.dp))
+
             revenueByCurrency
                 .toList()
                 .sortedBy { it.first }
@@ -751,11 +1003,13 @@ private fun formatMoney(
     currencyCode: String
 ): String {
     val rounded = (value * 100).roundToInt() / 100.0
+
     val text = if (rounded % 1.0 == 0.0) {
         rounded.toInt().toString()
     } else {
         rounded.toString()
     }
+
     return AppSettings.formatMoneyAmount(
         amount = text,
         currencyCode = currencyCode
@@ -766,6 +1020,7 @@ private fun formatMoneyCompactList(
     revenueByCurrency: Map<String, Double>
 ): String {
     if (revenueByCurrency.isEmpty()) return "0"
+
     return revenueByCurrency
         .toList()
         .sortedBy { it.first }

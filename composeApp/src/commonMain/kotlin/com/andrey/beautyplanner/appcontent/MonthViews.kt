@@ -19,6 +19,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.Dp
+import androidx.compose.runtime.mutableStateOf
 import com.andrey.beautyplanner.Locales
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -130,12 +132,16 @@ fun MonthCalendarGrid(
     today: LocalDate,
     selectedDate: LocalDate,
     appointments: List<Appointment> = emptyList(),
+    useCompactWidth: Boolean = true,
+    horizontalOuterPadding: Dp = 24.dp,
     onWeekdaysRowTopChanged: ((Int) -> Unit)? = null,
     onSwipeToPreviousMonth: (() -> Unit)? = null,
     onSwipeToNextMonth: (() -> Unit)? = null,
     onDateClick: (LocalDate) -> Unit
 ) {
-    val isLeap = monthDate.year % 4 == 0 && (monthDate.year % 100 != 0 || monthDate.year % 400 == 0)
+    val isLeap = monthDate.year % 4 == 0 &&
+            (monthDate.year % 100 != 0 || monthDate.year % 400 == 0)
+
     val daysInMonth = when (monthDate.monthNumber) {
         1, 3, 5, 7, 8, 10, 12 -> 31
         4, 6, 9, 11 -> 30
@@ -165,11 +171,14 @@ fun MonthCalendarGrid(
         contentAlignment = Alignment.TopCenter
     ) {
         val compactCalendarWidth = 560.dp
-        val horizontalOuterPadding = 24.dp
-        val effectiveWidth = if (maxWidth > compactCalendarWidth) {
-            compactCalendarWidth
+        val availableWidth = (
+                maxWidth - horizontalOuterPadding * 2
+                ).coerceAtLeast(0.dp)
+
+        val effectiveWidth = if (useCompactWidth) {
+            availableWidth.coerceAtMost(compactCalendarWidth)
         } else {
-            maxWidth - horizontalOuterPadding * 2
+            availableWidth
         }
 
         val cellSize = effectiveWidth / 7
@@ -194,6 +203,7 @@ fun MonthCalendarGrid(
                                 horizontalDragAccumulated <= -swipeThresholdPx -> {
                                     onSwipeToNextMonth?.invoke()
                                 }
+
                                 horizontalDragAccumulated >= swipeThresholdPx -> {
                                     onSwipeToPreviousMonth?.invoke()
                                 }
@@ -211,10 +221,13 @@ fun MonthCalendarGrid(
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
-                        onWeekdaysRowTopChanged?.invoke(coordinates.boundsInRoot().top.toInt())
+                        onWeekdaysRowTopChanged?.invoke(
+                            coordinates.boundsInRoot().top.toInt()
+                        )
                     }
             ) {
                 val weekdays = listOf("mon", "tue", "wed", "thu", "fri", "sat", "sun")
+
                 weekdays.forEach { day ->
                     Box(
                         modifier = Modifier
@@ -289,7 +302,9 @@ fun MonthCalendarGrid(
                             .clip(RoundedCornerShape(14.dp))
                             .background(backgroundColor)
                             .combinedClickable(
-                                interactionSource = remember { MutableInteractionSource() },
+                                interactionSource = remember {
+                                    MutableInteractionSource()
+                                },
                                 indication = LocalIndication.current,
                                 onClick = { onDateClick(date) },
                                 onLongClick = { onDateClick(date) }
