@@ -8,12 +8,34 @@
 
 /* Begin PBXBuildFile section */
 		C090EBA2F62696DFCB9918D2 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486B6BB2FC618AABBBEEE0EA /* Pods_iosApp.framework */; };
+		FCBFD5AA30993A8500DAD796 /* sound11.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A930993A8500DAD796 /* sound11.wav */; };
+		FCBFD5AB30993A8500DAD796 /* sound1.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD59F30993A8500DAD796 /* sound1.wav */; };
+		FCBFD5AC30993A8500DAD796 /* sound2.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A030993A8500DAD796 /* sound2.wav */; };
+		FCBFD5AD30993A8500DAD796 /* sound3.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A130993A8500DAD796 /* sound3.wav */; };
+		FCBFD5AE30993A8500DAD796 /* sound4.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A230993A8500DAD796 /* sound4.wav */; };
+		FCBFD5AF30993A8500DAD796 /* sound9.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A730993A8500DAD796 /* sound9.wav */; };
+		FCBFD5B030993A8500DAD796 /* sound6.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A430993A8500DAD796 /* sound6.wav */; };
+		FCBFD5B130993A8500DAD796 /* sound7.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A530993A8500DAD796 /* sound7.wav */; };
+		FCBFD5B230993A8500DAD796 /* sound5.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A330993A8500DAD796 /* sound5.wav */; };
+		FCBFD5B330993A8500DAD796 /* sound8.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A630993A8500DAD796 /* sound8.wav */; };
+		FCBFD5B430993A8500DAD796 /* sound10.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCBFD5A830993A8500DAD796 /* sound10.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		486B6BB2FC618AABBBEEE0EA /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AEFC3B2EC2F1E5ADD8F455 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 		CFA013C1B1C4C9382CDD680A /* BeautyPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeautyPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCBFD59F30993A8500DAD796 /* sound1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound1.wav; sourceTree = "<group>"; };
+		FCBFD5A030993A8500DAD796 /* sound2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound2.wav; sourceTree = "<group>"; };
+		FCBFD5A130993A8500DAD796 /* sound3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound3.wav; sourceTree = "<group>"; };
+		FCBFD5A230993A8500DAD796 /* sound4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound4.wav; sourceTree = "<group>"; };
+		FCBFD5A330993A8500DAD796 /* sound5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound5.wav; sourceTree = "<group>"; };
+		FCBFD5A430993A8500DAD796 /* sound6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound6.wav; sourceTree = "<group>"; };
+		FCBFD5A530993A8500DAD796 /* sound7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound7.wav; sourceTree = "<group>"; };
+		FCBFD5A630993A8500DAD796 /* sound8.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound8.wav; sourceTree = "<group>"; };
+		FCBFD5A730993A8500DAD796 /* sound9.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound9.wav; sourceTree = "<group>"; };
+		FCBFD5A830993A8500DAD796 /* sound10.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound10.wav; sourceTree = "<group>"; };
+		FCBFD5A930993A8500DAD796 /* sound11.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound11.wav; sourceTree = "<group>"; };
 		FD618FAC6C346E137ED6168A /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +105,17 @@
 		C8E0E3342ACBDEA175B7849A = {
 			isa = PBXGroup;
 			children = (
+				FCBFD59F30993A8500DAD796 /* sound1.wav */,
+				FCBFD5A030993A8500DAD796 /* sound2.wav */,
+				FCBFD5A130993A8500DAD796 /* sound3.wav */,
+				FCBFD5A230993A8500DAD796 /* sound4.wav */,
+				FCBFD5A330993A8500DAD796 /* sound5.wav */,
+				FCBFD5A430993A8500DAD796 /* sound6.wav */,
+				FCBFD5A530993A8500DAD796 /* sound7.wav */,
+				FCBFD5A630993A8500DAD796 /* sound8.wav */,
+				FCBFD5A730993A8500DAD796 /* sound9.wav */,
+				FCBFD5A830993A8500DAD796 /* sound10.wav */,
+				FCBFD5A930993A8500DAD796 /* sound11.wav */,
 				B79ED0598D73058ED093C5ED /* Configuration */,
 				EA4B819013078B2E0B649720 /* iosApp */,
 				1D34F2F12024C355B95709A9 /* Products */,
@@ -156,6 +189,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCBFD5AA30993A8500DAD796 /* sound11.wav in Resources */,
+				FCBFD5AB30993A8500DAD796 /* sound1.wav in Resources */,
+				FCBFD5AC30993A8500DAD796 /* sound2.wav in Resources */,
+				FCBFD5AD30993A8500DAD796 /* sound3.wav in Resources */,
+				FCBFD5AE30993A8500DAD796 /* sound4.wav in Resources */,
+				FCBFD5AF30993A8500DAD796 /* sound9.wav in Resources */,
+				FCBFD5B030993A8500DAD796 /* sound6.wav in Resources */,
+				FCBFD5B130993A8500DAD796 /* sound7.wav in Resources */,
+				FCBFD5B230993A8500DAD796 /* sound5.wav in Resources */,
+				FCBFD5B330993A8500DAD796 /* sound8.wav in Resources */,
+				FCBFD5B430993A8500DAD796 /* sound10.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

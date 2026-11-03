@@ -8,6 +8,9 @@ import platform.Foundation.NSLibraryDirectory
 import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
+import platform.AVFAudio.AVAudioSession
+import platform.AVFAudio.AVAudioSessionCategoryPlayback
+import platform.AVFAudio.setActive
 
 actual object NotificationSoundPreviewPlayer {
     private var player: AVAudioPlayer? = null
@@ -24,6 +27,11 @@ actual object NotificationSoundPreviewPlayer {
             val extension = soundId.substringAfterLast(".", "")
             val path = NSBundle.mainBundle.pathForResource(fileName, extension) ?: return
             NSURL.fileURLWithPath(path)
+        }
+
+        AVAudioSession.sharedInstance().apply {
+            setCategory(AVAudioSessionCategoryPlayback, error = null)
+            setActive(true, error = null)
         }
         val audioPlayer = AVAudioPlayer(contentsOfURL = url, error = null) ?: return
 
