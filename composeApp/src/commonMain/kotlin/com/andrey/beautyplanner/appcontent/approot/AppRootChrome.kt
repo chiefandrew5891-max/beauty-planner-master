@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
@@ -75,6 +78,7 @@ import com.andrey.beautyplanner.appcontent.subscriptionStateLabel
 import com.andrey.beautyplanner.AccessManager
 import com.andrey.beautyplanner.PremiumFeature
 import com.andrey.beautyplanner.AccessTier
+import com.andrey.beautyplanner.appcontent.ThemePalette
 import kotlinx.datetime.Clock
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
@@ -758,7 +762,26 @@ fun AppRootChrome(
                         )
                     }
             ) {
+                val headerBg = ThemePalette.headerBackground(
+                    state.currentLiveDarkMode,
+                    state.currentLiveCream,
+                    MaterialTheme.colors.surface
+                )
+                val headerIcon = ThemePalette.headerIcon(
+                    state.currentLiveDarkMode,
+                    state.currentLiveCream,
+                    MaterialTheme.colors.primary
+                )
+
                 Box(modifier = Modifier.fillMaxSize()) {
+                    Spacer(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .fillMaxWidth()
+                            .windowInsetsTopHeight(WindowInsets.statusBars)
+                            .background(headerBg)
+                    )
+
                     Scaffold(
                         modifier = Modifier.statusBarsPadding(),
                         topBar = {
@@ -769,7 +792,7 @@ fun AppRootChrome(
 
                                 isAuthEmailScreen -> {
                                     TopAppBar(
-                                        backgroundColor = MaterialTheme.colors.surface,
+                                        backgroundColor = headerBg,
                                         elevation = 2.dp,
                                         contentPadding = PaddingValues(horizontal = 8.dp)
                                     ) {
@@ -783,7 +806,7 @@ fun AppRootChrome(
                                                 Icon(
                                                     imageVector = Icons.AutoMirrored.Filled.Reply,
                                                     contentDescription = Locales.t("cd_back"),
-                                                    tint = MaterialTheme.colors.primary
+                                                    tint = headerIcon
                                                 )
                                             }
                                         }
@@ -794,7 +817,7 @@ fun AppRootChrome(
                                     val showBackButton = !isHomeScreen
 
                                     TopAppBar(
-                                        backgroundColor = MaterialTheme.colors.surface,
+                                        backgroundColor = headerBg,
                                         elevation = 2.dp,
                                         contentPadding = PaddingValues(horizontal = 8.dp)
                                     ) {
@@ -822,7 +845,7 @@ fun AppRootChrome(
                                                     } else {
                                                         Locales.t("cd_menu")
                                                     },
-                                                    tint = MaterialTheme.colors.primary
+                                                    tint = headerIcon
                                                 )
                                             }
 
@@ -874,7 +897,7 @@ fun AppRootChrome(
                                                         Icon(
                                                             imageVector = Icons.Default.Home,
                                                             contentDescription = Locales.t("nav_main"),
-                                                            tint = MaterialTheme.colors.primary,
+                                                            tint = headerIcon,
                                                             modifier = Modifier.size(24.dp)
                                                         )
                                                     }
@@ -895,9 +918,9 @@ fun AppRootChrome(
                                                         imageVector = Icons.Default.Settings,
                                                         contentDescription = Locales.t("cd_settings"),
                                                         tint = if (state.currentScreen == Screen.SETTINGS) {
-                                                            MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                                                            headerIcon.copy(alpha = 0.5f)
                                                         } else {
-                                                            MaterialTheme.colors.primary
+                                                            headerIcon
                                                         }
                                                     )
                                                 }

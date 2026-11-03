@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.compose.runtime.SideEffect
 import androidx.lifecycle.lifecycleScope
 import android.content.Intent
 import com.andrey.beautyplanner.auth.GoogleSignInFallbackBridge
@@ -456,6 +457,12 @@ class MainActivity : ComponentActivity() {
         maybeRequestPostNotificationsPermission()
 
         setContent {
+            val darkTheme = AppSettings.isDarkMode
+            SideEffect {
+                val controller = WindowCompat.getInsetsController(window, window.decorView)
+                controller.isAppearanceLightStatusBars = !darkTheme
+                controller.isAppearanceLightNavigationBars = !darkTheme
+            }
             App()
         }
     }

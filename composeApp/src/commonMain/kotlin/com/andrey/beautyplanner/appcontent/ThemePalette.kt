@@ -52,4 +52,17 @@ object ThemePalette {
         cream -> Color(0xFFF7EDE2)
         else -> Color(0xFFF2F2F2)
     }
+    // Фон шапки приложения
+    fun headerBackground(dark: Boolean, cream: Boolean, surface: Color): Color = when {
+        dark -> surface
+        cream -> Color(0xFFF3E7DA)
+        else -> surface
+    }
+
+    // Иконки шапки: домой, назад, меню, шестерёнка, поиск
+    fun headerIcon(dark: Boolean, cream: Boolean, primary: Color): Color = when {
+        dark -> primary
+        cream -> Color(0xFF6F4E37)
+        else -> primary
+    }
 }
