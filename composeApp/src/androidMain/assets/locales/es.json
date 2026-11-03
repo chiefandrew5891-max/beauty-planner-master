@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Error al iniciar sesión. Por favor, inténtelo de nuevo.",
     "privacy_policy_title": "Política de privacidad para Beauty Planner",
     "privacy_policy_last_updated": "Última actualización: Julio de 2026",
-    "privacy_policy_intro": "Esta Política de privacidad explica cómo KISELOV ANDRII (\"nosotros\", \"nuestro\" o el \"Desarrollador\") procesa los datos cuando utilizas la aplicación móvil Beauty Planner.",
+    "privacy_policy_intro": "Esta Política de privacidad explica cómo KYSELOV ANDRII (\"nosotros\", \"nuestro\" o el \"Desarrollador\") procesa los datos cuando utilizas la aplicación móvil Beauty Planner.",
     "privacy_policy_section_1_title": "1. Qué datos se procesan",
     "privacy_policy_section_1_p1": "Beauty Planner almacena y procesa los datos que introduces al utilizar la aplicación, incluyendo el nombre del cliente, el número de teléfono del cliente, la fecha y hora de la cita, el nombre del servicio, el precio, los comentarios, el estado del pago, los servicios personalizados, la configuración del horario y otros datos relacionados.",
     "privacy_policy_section_1_p2": "Para las funciones de cuenta y autenticación, la aplicación puede procesar identificadores de usuario (por ejemplo, el UID de Firebase), la dirección de correo electrónico, el nombre para mostrar y el proveedor de inicio de sesión (por ejemplo, Google, Apple, correo electrónico/contraseña o modo anónimo).",

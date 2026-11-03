@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Inloggningen misslyckades. Försök igen.",
     "privacy_policy_title": "Integritetspolicy för Beauty Planner",
     "privacy_policy_last_updated": "Senast uppdaterad: juli 2026",
-    "privacy_policy_intro": "Denna integritetspolicy förklarar hur KISELOV ANDRII (\"vi\", \"vår\" eller \"Utvecklare\") behandlar data när du använder mobilapplikationen Beauty Planner.",
+    "privacy_policy_intro": "Denna integritetspolicy förklarar hur KYSELOV ANDRII (\"vi\", \"vår\" eller \"Utvecklare\") behandlar data när du använder mobilapplikationen Beauty Planner.",
     "privacy_policy_section_1_title": "1. Vilka data som behandlas",
     "privacy_policy_section_1_p1": "Beauty Planner lagrar och behandlar data du anger när du använder appen, inklusive klientnamn, klientens telefonnummer, bokningsdatum och -tid, tjänstenamn, pris, kommentarer, betalningsstatus, anpassade tjänster, schemainställningar och andra relaterade data.",
     "privacy_policy_section_1_p2": "För konto- och autentiseringsfunktioner kan appen behandla användaridentifierare (till exempel Firebase UID), e-postadress, visningsnamn och inloggningsleverantör (till exempel Google, Apple, e-post/lösenord eller anonymt läge).",

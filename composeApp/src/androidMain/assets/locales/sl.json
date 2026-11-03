@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Prijava ni uspela. Poskusite znova.",
     "privacy_policy_title": "Pravilnik o zasebnosti za Beauty Planner",
     "privacy_policy_last_updated": "Zadnja posodobitev: julij 2026",
-    "privacy_policy_intro": "Ta pravilnik o zasebnosti pojasnjuje, kako KISELOV ANDRII (»mi«, »naš« ali »razvijalec«) obdeluje podatke, ko uporabljate mobilno aplikacijo Beauty Planner.",
+    "privacy_policy_intro": "Ta pravilnik o zasebnosti pojasnjuje, kako KYSELOV ANDRII (»mi«, »naš« ali »razvijalec«) obdeluje podatke, ko uporabljate mobilno aplikacijo Beauty Planner.",
     "privacy_policy_section_1_title": "1. Kateri podatki se obdelujejo",
     "privacy_policy_section_1_p1": "Beauty Planner shranjuje in obdeluje podatke, ki jih vnesete med uporabo aplikacije, vključno z imenom stranke, telefonsko številko stranke, datumom in časom termina, imenom storitve, ceno, komentarji, statusom plačila, storitvami po meri, nastavitvami urnika in drugimi povezanimi podatki.",
     "privacy_policy_section_1_p2": "Za funkcije računa in preverjanja pristnosti lahko aplikacija obdeluje uporabniške identifikatorje (na primer Firebase UID), e-poštni naslov, prikazano ime in ponudnika prijave (na primer Google, Apple, e-pošta/geslo ali anonimni način).",

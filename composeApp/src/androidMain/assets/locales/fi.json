@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Kirjautuminen epäonnistui. Yritä uudelleen.",
     "privacy_policy_title": "Beauty Planner -tietosuojakäytäntö",
     "privacy_policy_last_updated": "Viimeksi päivitetty: heinäkuu 2026",
-    "privacy_policy_intro": "Tämä tietosuojakäytäntö selittää, kuinka KISELOV ANDRII (\"me\", \"meidän\" tai \"Kehittäjä\") käsittelee tietoja, kun käytät Beauty Planner -mobiilisovellusta.",
+    "privacy_policy_intro": "Tämä tietosuojakäytäntö selittää, kuinka KYSELOV ANDRII (\"me\", \"meidän\" tai \"Kehittäjä\") käsittelee tietoja, kun käytät Beauty Planner -mobiilisovellusta.",
     "privacy_policy_section_1_title": "1. Mitä tietoja käsitellään",
     "privacy_policy_section_1_p1": "Beauty Planner tallentaa ja käsittelee tietoja, joita syötät sovellusta käyttäessäsi, mukaan lukien asiakkaan nimi, asiakkaan puhelinnumero, tapaamisen päivämäärä ja kellonaika, palvelun nimi, hinta, kommentit, maksun tila, mukautetut palvelut, aikatauluasetukset ja muut asiaan liittyvät tiedot.",
     "privacy_policy_section_1_p2": "Tili- ja tunnistautumisominaisuuksia varten sovellus voi käsitellä käyttäjätunnisteita (esimerkiksi Firebase UID), sähköpostiosoitetta, näyttönimeä ja sisäänkirjautumisen tarjoajaa (esimerkiksi Google, Apple, sähköposti/salasana tai anonyymi tila).",

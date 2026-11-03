@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Gagal masuk. Silakan coba lagi.",
     "privacy_policy_title": "Kebijakan Privasi untuk Beauty Planner",
     "privacy_policy_last_updated": "Terakhir Diperbarui: Juli 2026",
-    "privacy_policy_intro": "Kebijakan Privasi ini menjelaskan bagaimana KISELOV ANDRII (\"kami\", \"milik kami\", atau \"Pengembang\") memproses data saat Anda menggunakan aplikasi seluler Beauty Planner.",
+    "privacy_policy_intro": "Kebijakan Privasi ini menjelaskan bagaimana KYSELOV ANDRII (\"kami\", \"milik kami\", atau \"Pengembang\") memproses data saat Anda menggunakan aplikasi seluler Beauty Planner.",
     "privacy_policy_section_1_title": "1. Data apa saja yang diproses",
     "privacy_policy_section_1_p1": "Beauty Planner menyimpan dan memproses data yang Anda masukkan saat menggunakan aplikasi, termasuk nama klien, nomor telepon klien, tanggal dan waktu janji temu, nama layanan, harga, komentar, status pembayaran, layanan kustom, pengaturan jadwal, dan data terkait lainnya.",
     "privacy_policy_section_1_p2": "Untuk fitur akun dan autentikasi, aplikasi dapat memproses pengidentifikasi pengguna (misalnya Firebase UID), alamat email, nama tampilan, and penyedia masuk (misalnya Google, Apple, email/kata sandi, atau mode anonim).",

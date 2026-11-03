@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "サインインに失敗しました。もう一度お試しください。",
     "privacy_policy_title": "Beauty Planner プライバシーポリシー",
     "privacy_policy_last_updated": "最終更新日：2026年7月",
-    "privacy_policy_intro": "本プライバシーポリシーは、お客様が Beauty Planner モバイルアプリケーションをご利用になる際に、KISELOV ANDRII（以下「当方」、「当方の」または「開発者」）がどのようにデータを処理するかを説明するものです。",
+    "privacy_policy_intro": "本プライバシーポリシーは、お客様が Beauty Planner モバイルアプリケーションをご利用になる際に、KYSELOV ANDRII（以下「当方」、「当方の」または「開発者」）がどのようにデータを処理するかを説明するものです。",
     "privacy_policy_section_1_title": "1. 処理されるデータについて",
     "privacy_policy_section_1_p1": "Beauty Planner は、アプリの利用中に入力されたデータを保存および処理します。これには、顧客名、顧客の電話番号、予約日時、サービス名、料金、コメント、支払い状況、カスタムサービス、スケジュール設定、およびその他の関連データが含まれます。",
     "privacy_policy_section_1_p2": "アカウントおよび認証機能の場合、アプリはユーザー識別子（例：Firebase UID）、メールアドレス、表示名、およびサインインプロバイダー（例：Google、Apple、メールアドレス/パスワード、または匿名モード）を処理することがあります。",

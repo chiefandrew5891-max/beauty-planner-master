@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Sisselogimine ebaõnnestus. Palun proovige uuesti.",
     "privacy_policy_title": "Privacy Policy for Beauty Planner",
     "privacy_policy_last_updated": "Last Updated: July 2026",
-    "privacy_policy_intro": "This Privacy Policy explains how KISELOV ANDRII (\"we\", \"our\", or \"Developer\") processes data when you use the Beauty Planner mobile application.",
+    "privacy_policy_intro": "This Privacy Policy explains how KYSELOV ANDRII (\"we\", \"our\", or \"Developer\") processes data when you use the Beauty Planner mobile application.",
     "privacy_policy_section_1_title": "1. What data is processed",
     "privacy_policy_section_1_p1": "Beauty Planner stores and processes data you enter while using the app, including client name, client phone number, appointment date and time, service name, price, comments, payment status, custom services, schedule settings, and other related data.",
     "privacy_policy_section_1_p2": "For account and authentication features, the app may process user identifiers (for example Firebase UID), email address, display name, and sign-in provider (for example Google, Apple, email/password, or anonymous mode).",

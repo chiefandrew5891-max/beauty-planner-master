@@ -485,7 +485,7 @@
     "auth_error_sign_in_failed": "Prihlásenie zlyhalo. Skúste to prosím znova.",
     "privacy_policy_title": "Zásady ochrany osobných údajov pre Beauty Planner",
     "privacy_policy_last_updated": "Posledná aktualizácia: júl 2026",
-    "privacy_policy_intro": "Tieto zásady ochrany osobných údajov vysvetľujú, ako KISELOV ANDRII („my“, „nás“ alebo „Vývojár“) spracúva údaje, keď používate mobilnú aplikáciu Beauty Planner.",
+    "privacy_policy_intro": "Tieto zásady ochrany osobných údajov vysvetľujú, ako KYSELOV ANDRII („my“, „nás“ alebo „Vývojár“) spracúva údaje, keď používate mobilnú aplikáciu Beauty Planner.",
     "privacy_policy_section_1_title": "1. Aké údaje sa spracúvajú",
     "privacy_policy_section_1_p1": "Beauty Planner uchováva a spracúva údaje, ktoré zadáte počas používania aplikácie, vrátane mena klienta, telefónneho čísla klienta, dátumu a času stretnutia, názvu služby, ceny, poznámok, stavu platby, vlastných služieb, nastavení rozvrhu a ďalších relevantných údajov.",
     "privacy_policy_section_1_p2": "Pre funkcie účtu a autentifikácie môže aplikácia spracúvať identifikátory používateľa (napríklad Firebase UID), e-mailovú adresu, zobrazované meno a poskytovateľa prihlásenia (napríklad Google, Apple, e-mail/heslo alebo anonymný režim).",
