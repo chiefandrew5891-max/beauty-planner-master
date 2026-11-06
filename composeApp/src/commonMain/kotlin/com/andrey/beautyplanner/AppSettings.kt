@@ -135,6 +135,7 @@ private data class SettingsSnapshot(
     val cloudSettingsUpdatedAtMillis: Long = 0L,
 
     val lastUpdateCheckAtMillis: Long = 0L,
+    val lastLoggedPurchaseKey: String = "",
     val lastKnownUpdateAvailable: Boolean = false,
     val lastKnownLatestVersion: String = "",
     val lastKnownLatestBuild: String = "",
@@ -303,6 +304,7 @@ object AppSettings {
     var cachedHasPremium by mutableStateOf(false)
     var cachedSubscriptionState by mutableStateOf("NONE")
     var lastUpdateCheckAtMillis by mutableStateOf(0L)
+    var lastLoggedPurchaseKey by mutableStateOf("")
     var lastKnownUpdateAvailable by mutableStateOf(false)
     var lastKnownLatestVersion by mutableStateOf("")
     var lastKnownLatestBuild by mutableStateOf("")
@@ -864,6 +866,7 @@ object AppSettings {
         cloudSettingsUpdatedAtMillis = snapshot.cloudSettingsUpdatedAtMillis
 
         lastUpdateCheckAtMillis = snapshot.lastUpdateCheckAtMillis
+        lastLoggedPurchaseKey = snapshot.lastLoggedPurchaseKey
         lastKnownUpdateAvailable = snapshot.lastKnownUpdateAvailable
         lastKnownLatestVersion = snapshot.lastKnownLatestVersion
         lastKnownLatestBuild = snapshot.lastKnownLatestBuild
@@ -958,6 +961,7 @@ object AppSettings {
             developerPremiumOverrideOwnerUserId = developerPremiumOverrideOwnerUserId,
             cloudSettingsUpdatedAtMillis = cloudSettingsUpdatedAtMillis,
             lastUpdateCheckAtMillis = lastUpdateCheckAtMillis,
+            lastLoggedPurchaseKey = lastLoggedPurchaseKey,
             lastKnownUpdateAvailable = lastKnownUpdateAvailable,
             lastKnownLatestVersion = lastKnownLatestVersion,
             lastKnownLatestBuild = lastKnownLatestBuild,

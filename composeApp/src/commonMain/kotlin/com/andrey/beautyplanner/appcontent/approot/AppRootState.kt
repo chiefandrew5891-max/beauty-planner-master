@@ -2276,6 +2276,7 @@ class AppRootState(
                         val purchaseKey = result.transactionId.ifBlank { result.purchaseToken }
                         if (purchaseKey.isNotBlank() && AppSettings.lastLoggedPurchaseKey != purchaseKey) {
                             AppSettings.lastLoggedPurchaseKey = purchaseKey
+                            AppSettings.persist()
                             AppAnalytics.log(
                                 AnalyticsEvents.PURCHASE,
                                 mapOf(
@@ -2526,7 +2527,6 @@ class AppRootState(
     ) {
         premiumRequiredMessage = message
         premiumReturnScreen = returnTo
-        AppAnalytics.log(AnalyticsEvents.PREMIUM_SCREEN_VIEW)
 
         if (currentScreen != Screen.PREMIUM_ACCESS) {
             screenHistory = screenHistory + currentScreen

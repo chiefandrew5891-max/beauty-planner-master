@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseCore
 import FirebaseAnalytics
+import ComposeApp
 import AVFoundation // 1. Импортируем фреймворк для работы со звуком
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
@@ -10,10 +11,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
-            AppAnalytics.shared.handler = { name, params in
-                Analytics.logEvent(name, parameters: params as? [String: Any])
-                return KotlinUnit()
-            }
+        }
+
+        AppAnalytics.shared.handler = { name, params in
+            Analytics.logEvent(name, parameters: params as? [String: Any])
+            return KotlinUnit()
         }
 
         StoreKitBridge.startObservingTransactions()
