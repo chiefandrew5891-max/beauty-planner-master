@@ -13,9 +13,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             FirebaseApp.configure()
         }
 
-        AppAnalytics.shared.handler = { name, params in
+        AppAnalytics().handler = { name, params in
             Analytics.logEvent(name, parameters: params as? [String: Any])
-            return KotlinUnit()
         }
 
         StoreKitBridge.startObservingTransactions()
