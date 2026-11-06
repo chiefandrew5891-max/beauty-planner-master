@@ -19,6 +19,7 @@ googleServices = "4.4.2"
 firebaseAuth = "23.2.0"
 firebaseFunctions = "21.1.0"
 firebaseFirestore = "25.1.4"
+firebaseAnalytics = "24.0.0"
 
 kotlinxSerialization = "1.6.3"
 kotlinxDatetime = "0.6.0"
@@ -60,6 +61,7 @@ googlePlayBilling = { module = "com.android.billingclient:billing-ktx", version.
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuth" }
 firebase-functions-ktx = { module = "com.google.firebase:firebase-functions-ktx", version.ref = "firebaseFunctions" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }

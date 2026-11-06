@@ -39,6 +39,8 @@ import com.andrey.beautyplanner.appcontent.*
 import com.andrey.beautyplanner.auth.SignInProvider
 import com.andrey.beautyplanner.utils.LiveStatusKey
 import com.andrey.beautyplanner.utils.getLiveStatus
+import com.andrey.beautyplanner.analytics.AnalyticsEvents
+import com.andrey.beautyplanner.analytics.AppAnalytics
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -779,37 +781,42 @@ fun AppRootContent(
                 }
             )
 
-            Screen.PREMIUM_ACCESS -> PremiumAccessScreen(
-                accessState = state.accessState,
-                message = state.premiumRequiredMessage,
-                billingUiState = state.billingUiState,
-                accountLabel = when {
-                    state.currentAuthUser?.provider == SignInProvider.ANONYMOUS ->
-                        Locales.t("premium_guest_account_label")
-
-                    state.currentAuthUser?.email?.isNotBlank() == true ->
-                        state.currentAuthUser?.email ?: ""
-
-                    state.currentAuthUser?.displayName?.isNotBlank() == true ->
-                        state.currentAuthUser?.displayName ?: ""
-
-                    else ->
-                        Locales.t("billing_account_binding_unknown")
-                },
-                isGuestUser = state.currentAuthUser?.provider == SignInProvider.ANONYMOUS,
-                onContinueFree = {
-                    state.closePremiumScreen()
-                },
-                onUnlockPremium = { productId ->
-                    state.buyPremium(productId)
-                },
-                onRestorePurchases = {
-                    state.restorePremium()
-                },
-                onOpenPrivacyPolicy = {
-                    state.navigateTo(Screen.PRIVACY_POLICY)
+            Screen.PREMIUM_ACCESS -> {
+                LaunchedEffect(Unit) {
+                    AppAnalytics.log(AnalyticsEvents.PREMIUM_SCREEN_VIEW)
                 }
-            )
+                PremiumAccessScreen(
+                    accessState = state.accessState,
+                    message = state.premiumRequiredMessage,
+                    billingUiState = state.billingUiState,
+                    accountLabel = when {
+                        state.currentAuthUser?.provider == SignInProvider.ANONYMOUS ->
+                            Locales.t("premium_guest_account_label")
+
+                        state.currentAuthUser?.email?.isNotBlank() == true ->
+                            state.currentAuthUser?.email ?: ""
+
+                        state.currentAuthUser?.displayName?.isNotBlank() == true ->
+                            state.currentAuthUser?.displayName ?: ""
+
+                        else ->
+                            Locales.t("billing_account_binding_unknown")
+                    },
+                    isGuestUser = state.currentAuthUser?.provider == SignInProvider.ANONYMOUS,
+                    onContinueFree = {
+                        state.closePremiumScreen()
+                    },
+                    onUnlockPremium = { productId ->
+                        state.buyPremium(productId)
+                    },
+                    onRestorePurchases = {
+                        state.restorePremium()
+                    },
+                    onOpenPrivacyPolicy = {
+                        state.navigateTo(Screen.PRIVACY_POLICY)
+                    }
+                )
+            }
 
             Screen.BACKUP_SETTINGS -> BackupSettingsScreen(
                 onExport = {
@@ -1104,6 +1111,10 @@ fun AppRootContent(
                     state.saveAll()
 
                     if (isNewAppointment) {
+                        AppAnalytics.log(
+                            AnalyticsEvents.APPOINTMENT_CREATED,
+                            mapOf("source" to "manual")
+                        )
                         val nowForAccess = Clock.System.now().toEpochMilliseconds()
                         val isPremiumActive = AccessManager.isPremiumAccessActive(nowForAccess)
                         val isTrialActive = state.accessState.isTrialActive

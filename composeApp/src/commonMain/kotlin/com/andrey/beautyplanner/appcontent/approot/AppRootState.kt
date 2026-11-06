@@ -35,6 +35,8 @@ import com.andrey.beautyplanner.AppointmentSyncUtils
 import com.andrey.beautyplanner.appcontent.getUpcomingAppointments
 import com.andrey.beautyplanner.review.ReviewPromptBridge
 import com.andrey.beautyplanner.review.ReviewPromptManager
+import com.andrey.beautyplanner.analytics.AnalyticsEvents
+import com.andrey.beautyplanner.analytics.AppAnalytics
 
 @Stable
 class AppRootState(
@@ -2251,6 +2253,15 @@ class AppRootState(
                     errorMessage = null
                 )
 
+                AppAnalytics.log(
+                    AnalyticsEvents.BEGIN_CHECKOUT,
+                    mapOf(
+                        "item_id" to product.productId,
+                        "currency" to (product.priceCurrencyCode ?: ""),
+                        "value" to ((product.priceAmountMicros ?: 0L) / 1_000_000.0)
+                    )
+                )
+
                 val accountId = currentAuthUser?.uid?.ifBlank { null }
                     ?: AppSettings.backendUserId.ifBlank { null }
                     ?: IdentityManager.getOrCreateInstallId()
@@ -2262,6 +2273,19 @@ class AppRootState(
                     )
                 ) {
                     is PurchaseResult.Success -> {
+                        val purchaseKey = result.transactionId.ifBlank { result.purchaseToken }
+                        if (purchaseKey.isNotBlank() && AppSettings.lastLoggedPurchaseKey != purchaseKey) {
+                            AppSettings.lastLoggedPurchaseKey = purchaseKey
+                            AppAnalytics.log(
+                                AnalyticsEvents.PURCHASE,
+                                mapOf(
+                                    "transaction_id" to purchaseKey,
+                                    "item_id" to result.productId,
+                                    "currency" to (product.priceCurrencyCode ?: ""),
+                                    "value" to ((product.priceAmountMicros ?: 0L) / 1_000_000.0)
+                                )
+                            )
+                        }
                         val platformCode = getPlatform().backendPlatform.uppercase().let {
                             if (it == "IOS") "APP_STORE" else "PLAY"
                         }
@@ -2502,6 +2526,7 @@ class AppRootState(
     ) {
         premiumRequiredMessage = message
         premiumReturnScreen = returnTo
+        AppAnalytics.log(AnalyticsEvents.PREMIUM_SCREEN_VIEW)
 
         if (currentScreen != Screen.PREMIUM_ACCESS) {
             screenHistory = screenHistory + currentScreen
