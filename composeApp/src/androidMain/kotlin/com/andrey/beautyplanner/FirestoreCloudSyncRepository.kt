@@ -5,6 +5,8 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.coroutines.withTimeout
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 
 class FirestoreCloudSyncRepository(
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -13,12 +15,26 @@ class FirestoreCloudSyncRepository(
     private fun userRoot(userId: String) =
         firestore.collection("users").document(userId)
 
-    override suspend fun pullAll(userId: String): CloudSyncPullResult {
-        CloudSyncLogger.log("pullAll: start userId=$userId")
+    override suspend fun pullAll(userId: String, sinceMillis: Long): CloudSyncPullResult {
+        CloudSyncLogger.log("pullAll: start userId=$userId since=$sinceMillis")
 
-        val appointmentsSnapshot = withTimeout(15_000) {
-            userRoot(userId).collection("appointments").get().await()
+        val baseQuery = userRoot(userId).collection("appointments")
+        val appointmentsQuery = if (sinceMillis > 0L) {
+            baseQuery.whereGreaterThanOrEqualTo(
+                "syncedAt",
+                Timestamp(sinceMillis / 1000, ((sinceMillis % 1000) * 1_000_000).toInt())
+            )
+        } else {
+            baseQuery
         }
+
+        val appointmentsSnapshot = withTimeout(60_000) {
+            appointmentsQuery.get().await()
+        }
+
+        val maxSyncedAtMillis = appointmentsSnapshot.documents.maxOfOrNull {
+            it.getTimestamp("syncedAt")?.toDate()?.time ?: 0L
+        } ?: 0L
 
         val appointments = appointmentsSnapshot.documents.mapNotNull { snapshot ->
             val payload = snapshot.getString("payload") ?: return@mapNotNull null
@@ -53,7 +69,8 @@ class FirestoreCloudSyncRepository(
 
         return CloudSyncPullResult(
             appointments = appointments,
-            settings = settings
+            settings = settings,
+            maxSyncedAtMillis = maxSyncedAtMillis
         )
     }
 
@@ -83,7 +100,8 @@ class FirestoreCloudSyncRepository(
                         "updatedAtMillis" to appointment.updatedAtMillis,
                         "isDeleted" to appointment.isDeleted,
                         "paymentStatus" to appointment.paymentStatus,
-                        "payload" to payload
+                        "payload" to payload,
+                        "syncedAt" to FieldValue.serverTimestamp()
                     )
                 )
             }

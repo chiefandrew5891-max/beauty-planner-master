@@ -38,5 +38,6 @@ data class CloudSettingsSnapshot(
 @Serializable
 data class CloudSyncPullResult(
     val appointments: List<Appointment> = emptyList(),
-    val settings: CloudSettingsSnapshot? = null
+    val settings: CloudSettingsSnapshot? = null,
+    val maxSyncedAtMillis: Long = 0L
 )

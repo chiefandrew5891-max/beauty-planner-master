@@ -1,7 +1,7 @@
 package com.andrey.beautyplanner
 
 interface CloudSyncRepository {
-    suspend fun pullAll(userId: String): CloudSyncPullResult
+    suspend fun pullAll(userId: String, sinceMillis: Long = 0L): CloudSyncPullResult
 
     suspend fun pushAppointments(
         userId: String,

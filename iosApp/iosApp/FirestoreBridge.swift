@@ -9,17 +9,34 @@ final class FirestoreBridge {
 
     static func pullAll(
         userId: String,
+        sinceMillis: Int64,
         completion: @escaping ([String: String]?, String?) -> Void
     ) {
         let root = userRoot(userId)
 
-        root.collection("appointments").getDocuments { snapshot, error in
+        var query: Query = root.collection("appointments")
+        if sinceMillis > 0 {
+            query = query.whereField(
+                "syncedAt",
+                isGreaterThanOrEqualTo: Timestamp(date: Date(timeIntervalSince1970: Double(sinceMillis) / 1000.0))
+            )
+        }
+
+        query.getDocuments { snapshot, error in
             if let error = error {
                 completion(nil, error.localizedDescription)
                 return
             }
 
             let docs = snapshot?.documents ?? []
+
+            var maxSyncedAt: Int64 = 0
+            for doc in docs {
+                if let ts = doc.data()["syncedAt"] as? Timestamp {
+                    let ms = Int64(ts.dateValue().timeIntervalSince1970 * 1000.0)
+                    if ms > maxSyncedAt { maxSyncedAt = ms }
+                }
+            }
             let payloads: [String] = docs.compactMap { doc in
                 doc.data()["payload"] as? String
             }
@@ -59,7 +76,8 @@ final class FirestoreBridge {
                     completion(
                         [
                             "appointments": appointmentsJson,
-                            "settings": settingsJson
+                            "settings": settingsJson,
+                            "maxSyncedAt": String(maxSyncedAt)
                         ],
                         nil
                     )
@@ -107,7 +125,8 @@ final class FirestoreBridge {
                     "updatedAtMillis": updatedAtMillis,
                     "isDeleted": isDeleted,
                     "paymentStatus": appointment["paymentStatus"] ?? "",
-                    "payload": appointment["payload"] ?? ""
+                    "payload": appointment["payload"] ?? "",
+                    "syncedAt": FieldValue.serverTimestamp()
                 ]
 
                 batch.setData(docData, forDocument: collection.document(id))

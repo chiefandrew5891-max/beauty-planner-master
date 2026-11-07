@@ -479,8 +479,8 @@ struct ComposeView: UIViewControllerRepresentable {
                 deferred.complete(value: mapped)
             }
         }
-        CloudSyncBridgeConnector().pullAll = { userId, deferred in
-            FirestoreBridge.pullAll(userId: userId) { result, error in
+        CloudSyncBridgeConnector().pullAll = { userId, sinceMillis, deferred in
+            FirestoreBridge.pullAll(userId: userId, sinceMillis: Int64(sinceMillis) ?? 0) { result, error in
                 if let error = error {
                     deferred.completeExceptionally(
                         exception: KotlinIllegalStateException(message: error)

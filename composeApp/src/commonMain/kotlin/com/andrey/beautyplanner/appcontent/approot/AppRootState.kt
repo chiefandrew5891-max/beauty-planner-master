@@ -2059,7 +2059,12 @@ class AppRootState(
         )
 
         val repository = CloudSyncRepositoryProvider.repository
-        val remote = repository.pullAll(userId)
+        val wm = CloudSyncWatermark.parse(AppSettings.cloudSyncWatermark, userId)
+        val fullPullDue = wm.pullSyncedAtMillis <= 0L ||
+                nowMillis - wm.lastFullPullAtMillis >= 24L * 60L * 60L * 1000L
+        val sinceMillis = if (fullPullDue) 0L else wm.pullSyncedAtMillis
+        val isFullPull = sinceMillis == 0L
+        val remote = repository.pullAll(userId, sinceMillis)
 
         val mergedAppointments = CloudSyncCoordinator.mergeLocalAndRemoteAppointments(
             local = appointments.toList(),
@@ -2094,18 +2099,45 @@ class AppRootState(
             profileKey = LocalProfileManager.currentProfileKey()
         )
 
-        if (premiumEligible) {
-            repository.pushAll(
-                userId = userId,
-                appointments = appointments.toList(),
-                settings = AppSettings.exportCloudSettingsSnapshot(nowMillis)
-            )
-        } else {
+        val remoteById = remote.appointments.associateBy { it.id }
+        val changedAppointments = appointments.filter { local ->
+            val remoteItem = remoteById[local.id]
+            val newerThanRemote =
+                remoteItem == null || local.updatedAtMillis > remoteItem.updatedAtMillis
+            if (isFullPull) newerThanRemote
+            else local.updatedAtMillis > wm.lastPushAtMillis && newerThanRemote
+        }
+
+        CloudSyncLogger.log(
+            "performCloudSyncIfEligible: fullPull=$isFullPull pulled=${remote.appointments.size} push=${changedAppointments.size} of ${appointments.size}"
+        )
+
+        if (changedAppointments.isNotEmpty()) {
             repository.pushAppointments(
                 userId = userId,
-                appointments = appointments.toList()
+                appointments = changedAppointments
             )
         }
+
+        if (premiumEligible) {
+            repository.pushSettings(
+                userId = userId,
+                settings = AppSettings.exportCloudSettingsSnapshot(nowMillis)
+            )
+        }
+
+        val newPullWatermark = when {
+            remote.maxSyncedAtMillis > 0L -> maxOf(wm.pullSyncedAtMillis, remote.maxSyncedAtMillis)
+            isFullPull -> maxOf(wm.pullSyncedAtMillis, nowMillis - 24L * 60L * 60L * 1000L)
+            else -> wm.pullSyncedAtMillis
+        }
+        AppSettings.cloudSyncWatermark = CloudSyncWatermark(
+            userId = userId,
+            pullSyncedAtMillis = newPullWatermark,
+            lastPushAtMillis = nowMillis,
+            lastFullPullAtMillis = if (isFullPull) nowMillis else wm.lastFullPullAtMillis
+        ).encode()
+        AppSettings.persist()
 
         val visibleAppointments = AppointmentSyncUtils.visibleAppointments(appointments.toList())
         val mins = AppSettings.reminderMinutesComputed()

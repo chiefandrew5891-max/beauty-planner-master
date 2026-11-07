@@ -7,12 +7,12 @@ import kotlinx.serialization.encodeToString
 actual object CloudSyncRepositoryProvider {
     actual val repository: CloudSyncRepository = object : CloudSyncRepository {
 
-        override suspend fun pullAll(userId: String): CloudSyncPullResult {
+        override suspend fun pullAll(userId: String, sinceMillis: Long): CloudSyncPullResult {
             val deferred = CompletableDeferred<Map<String, String>>()
             val loader = CloudSyncBridgeConnector.pullAll
                 ?: error("iOS cloud sync bridge is not connected.")
 
-            loader.invoke(userId, deferred)
+            loader.invoke(userId, sinceMillis.toString(), deferred)
             val result = deferred.await()
 
             val appointmentsPayload = result["appointments"].orEmpty()
@@ -39,7 +39,8 @@ actual object CloudSyncRepositoryProvider {
 
             return CloudSyncPullResult(
                 appointments = appointments,
-                settings = settings
+                settings = settings,
+                maxSyncedAtMillis = result["maxSyncedAt"]?.toLongOrNull() ?: 0L
             )
         }
 
